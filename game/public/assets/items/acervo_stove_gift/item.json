@@ -1,0 +1,92 @@
+{
+  "id": 9070207,
+  "classname": "acervo_stove_gift",
+  "name": "Fogão de Presente",
+  "type": 3,
+  "kind": "stove",
+  "priceGold": 200,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 32,
+  "parts": [
+    {
+      "file": "rotation-0.png",
+      "width": 166,
+      "height": 117,
+      "left": -83,
+      "top": -34,
+      "rotation": 0
+    },
+    {
+      "file": "rotation-1.png",
+      "width": 166,
+      "height": 117,
+      "left": -83,
+      "top": -34,
+      "rotation": 1
+    }
+  ],
+  "source": {
+    "acervo": "cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/4286853/002.jpg",
+    "sha256": "e7c896c7a734ce60d5b660c9db973d8b51ae6db1b4cb6c79d224c7b08dd2607a",
+    "artist": "Sabrina Contino",
+    "page": "https://www.behance.net/gallery/4286853/Cafe-Mania",
+    "method": "Recorte da arte original com transparência e calibração geométrica.",
+    "name": "Nome descritivo do projeto; nome oficial do item não confirmado.",
+    "priceGold": "Preço de projeto; valor histórico não confirmado.",
+    "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+    "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+    "calibration": {
+      "tile": [
+        160,
+        80
+      ],
+      "origin": "back",
+      "front": {
+        "points": {
+          "left": {
+            "x": 2.0019607843137255,
+            "y": 68.49406055163705
+          },
+          "back": {
+            "x": 133.81673964118147,
+            "y": 1.2611472287274665
+          },
+          "right": {
+            "x": 268.9980392156863,
+            "y": 68.25273404960235
+          },
+          "foot": {
+            "x": 133.81673964118147,
+            "y": 205
+          },
+          "groundLeft": {
+            "x": 2.0019607843137255,
+            "y": 133.88921808368752
+          },
+          "groundRight": {
+            "x": 268.9980392156863,
+            "y": 134.70102653193922
+          }
+        },
+        "options": {
+          "width": 1,
+          "height": 32,
+          "support": 1
+        },
+        "mode": "planes",
+        "transform": {
+          "k": 133.81673964118147,
+          "aL": 0.6069122195081684,
+          "aR": 0.5917978318880432,
+          "bL": 0.0022484921264619984,
+          "bR": -0.001122523907226669,
+          "c": 0.5993550256981058,
+          "x": -81.21501446297616,
+          "y": -33.05676081515506
+        }
+      }
+    }
+  }
+}

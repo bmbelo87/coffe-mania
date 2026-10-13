@@ -1,0 +1,26 @@
+{
+  "id": 9090101,
+  "classname": "original_black_piano",
+  "name": "Piano Preto",
+  "type": 3,
+  "kind": "decor",
+  "priceGold": 500,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 129,
+  "parts": [
+    {
+      "file": "rotation-0.png",
+      "width": 158,
+      "height": 158,
+      "left": -79,
+      "top": -89
+    }
+  ],
+  "source": {
+    "art": "behance/artes/4286853/001.jpg · recorte 01.png fornecido pelo responsável.",
+    "calibration": "Escala uniforme para largura de um tile; apoio frontal em y=70. Decoração sem funções de cozinha.",
+    "priceGold": "Preço de projeto; não confirmado pela configuração histórica."
+  }
+}

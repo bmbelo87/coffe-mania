@@ -1,0 +1,62 @@
+{
+  "id": 9030102,
+  "classname": "original_gold_table",
+  "name": "Mesa Preta e Dourada",
+  "type": 3,
+  "kind": "table",
+  "priceGold": 500,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 49.2,
+  "parts": [
+    {
+      "file": "rotation-0.png",
+      "width": 167,
+      "height": 129,
+      "left": -84,
+      "top": -52
+    }
+  ],
+  "source": {
+    "art": "behance/artes/4286853/001.jpg · recorte 07.png fornecido pelo responsável.",
+    "calibration": {
+      "tile": [
+        160,
+        80
+      ],
+      "origin": "back",
+      "topHeight": 49.2,
+      "support": 0.88,
+      "points": {
+        "left": {
+          "x": 7,
+          "y": 73
+        },
+        "back": {
+          "x": 135,
+          "y": 6
+        },
+        "right": {
+          "x": 265,
+          "y": 72
+        },
+        "foot": {
+          "x": 134,
+          "y": 202
+        }
+      },
+      "transform": {
+        "k": 135,
+        "aL": 0.625,
+        "aR": 0.6153846153846154,
+        "bL": 0.019775388673514194,
+        "bR": -0.014588115213989394,
+        "c": 0.6347947723911913,
+        "x": -84.375,
+        "y": -55.67844610527156
+      }
+    },
+    "priceGold": "Preço de projeto; não confirmado pela configuração histórica."
+  }
+}

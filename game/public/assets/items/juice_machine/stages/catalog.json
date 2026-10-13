@@ -1,0 +1,136 @@
+{
+  "stages": [
+    {
+      "stage": 1,
+      "preview": "stage-1.png",
+      "frame": {
+        "file": "../rotation-0.png",
+        "width": 162,
+        "height": 239,
+        "left": -81,
+        "top": -158
+      },
+      "source": "Recorte original 4432119/003, 05.png."
+    },
+    {
+      "stage": 2,
+      "preview": "stage-2.png",
+      "frame": {
+        "file": "stage-2-room.png",
+        "width": 170,
+        "height": 278,
+        "left": -82,
+        "top": -194
+      },
+      "calibration": {
+        "normalizationWidth": 220,
+        "base": {
+          "left": {
+            "x": 1.0367965367965368,
+            "y": 204.42906246656395
+          },
+          "front": {
+            "x": 68.5,
+            "y": 238
+          },
+          "right": {
+            "x": 163.1775956284153,
+            "y": 201.4184183937145
+          },
+          "rms": 0.12671072598047697
+        },
+        "transform": {
+          "k": 68.5,
+          "aL": 1.1858316221765914,
+          "aR": 0.8449728731386356,
+          "bL": 0.021328162037091314,
+          "bR": 0.021328162037091092,
+          "c": 1.1486463202461754,
+          "x": -81.22946611909651,
+          "y": -194.8388033181305
+        }
+      },
+      "source": "imagegen: evolução baseada nas referências do responsável; exterior sem contorno branco, RGBA transparente."
+    },
+    {
+      "stage": 3,
+      "preview": "stage-3.png",
+      "frame": {
+        "file": "stage-3-room.png",
+        "width": 163,
+        "height": 266,
+        "left": -82,
+        "top": -183
+      },
+      "calibration": {
+        "normalizationWidth": 220,
+        "base": {
+          "left": {
+            "x": 1.9439252336448598,
+            "y": 222.91929319642287
+          },
+          "front": {
+            "x": 62.5,
+            "y": 255
+          },
+          "right": {
+            "x": 165.9625550660793,
+            "y": 204.42048460780376
+          },
+          "rms": 0.10146248077251094
+        },
+        "transform": {
+          "k": 62.5,
+          "aL": 1.321089590246161,
+          "aR": 0.7732266030826876,
+          "bL": 0.11594275844302704,
+          "bR": 0.1159427584430271,
+          "c": 1.0279998459207673,
+          "x": -82.56809939038506,
+          "y": -189.38638311248485
+        }
+      },
+      "source": "imagegen: evolução baseada nas referências do responsável; exterior sem contorno branco, RGBA transparente."
+    },
+    {
+      "stage": 4,
+      "preview": "stage-4.png",
+      "frame": {
+        "file": "stage-4-room.png",
+        "width": 162,
+        "height": 231,
+        "left": -81,
+        "top": -149
+      },
+      "calibration": {
+        "normalizationWidth": 220,
+        "base": {
+          "left": {
+            "x": 1.1580310880829017,
+            "y": 200.67189929106047
+          },
+          "front": {
+            "x": 70.5,
+            "y": 242
+          },
+          "right": {
+            "x": 161.0787037037037,
+            "y": 198.45969799085063
+          },
+          "rms": 1.253592348243835
+        },
+        "transform": {
+          "k": 70.5,
+          "aL": 1.1537024583426736,
+          "aR": 0.8832098134423717,
+          "bL": 0.013084884793315599,
+          "bR": 0.013084884793315543,
+          "c": 0.945910110913708,
+          "x": -81.33602331315849,
+          "y": -149.83273121904608
+        }
+      },
+      "source": "imagegen: evolução baseada nas referências do responsável; exterior sem contorno branco, RGBA transparente."
+    }
+  ]
+}

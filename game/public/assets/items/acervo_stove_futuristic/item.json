@@ -1,0 +1,92 @@
+{
+  "id": 9070206,
+  "classname": "acervo_stove_futuristic",
+  "name": "Fogão Futurista Cinza e Ciano",
+  "type": 3,
+  "kind": "stove",
+  "priceGold": 200,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 32,
+  "parts": [
+    {
+      "file": "rotation-0.png",
+      "width": 166,
+      "height": 114,
+      "left": -83,
+      "top": -31,
+      "rotation": 0
+    },
+    {
+      "file": "rotation-1.png",
+      "width": 166,
+      "height": 114,
+      "left": -83,
+      "top": -31,
+      "rotation": 1
+    }
+  ],
+  "source": {
+    "acervo": "cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/4286853/006.jpg",
+    "sha256": "c1404a7d3de3a27bd630081a82f7fa0be327b60b9fe56ac003748bad0e2ac2ec",
+    "artist": "Sabrina Contino",
+    "page": "https://www.behance.net/gallery/4286853/Cafe-Mania",
+    "method": "Recorte da arte original com transparência e calibração geométrica.",
+    "name": "Nome descritivo do projeto; nome oficial do item não confirmado.",
+    "priceGold": "Preço de projeto; valor histórico não confirmado.",
+    "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+    "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+    "calibration": {
+      "tile": [
+        160,
+        80
+      ],
+      "origin": "back",
+      "front": {
+        "points": {
+          "left": {
+            "x": 2.0019607843137255,
+            "y": 63.25179342154377
+          },
+          "back": {
+            "x": 133.71265983455078,
+            "y": -4.7122133138152265
+          },
+          "right": {
+            "x": 265.9980392156863,
+            "y": 62.16930335905836
+          },
+          "foot": {
+            "x": 133.71265983455078,
+            "y": 222
+          },
+          "groundLeft": {
+            "x": 2.0019607843137255,
+            "y": 169.6780781866275
+          },
+          "groundRight": {
+            "x": 265.9980392156863,
+            "y": 169.63609115737682
+          }
+        },
+        "options": {
+          "width": 1,
+          "height": 32,
+          "support": 1
+        },
+        "mode": "planes",
+        "transform": {
+          "k": 133.71265983455078,
+          "aL": 0.607391810816268,
+          "aR": 0.6047531509094978,
+          "bL": 0.009043412418807295,
+          "bR": -0.0040446399768730434,
+          "c": 0.6060724808628829,
+          "x": -81.21597458596747,
+          "y": -30.35327591504043
+        }
+      }
+    }
+  }
+}

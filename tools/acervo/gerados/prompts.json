@@ -1,0 +1,44 @@
+[
+  {
+    "file": "counter_50_front.png",
+    "prompt": "Reconstruct ONLY the original Café Mania 2010 'Anos 50' food serving counter shown in the supplied tiny screenshot. The reference image is an EDIT TARGET for faithful restoration: isolate the counter, erase the shop UI, price, border and text completely. Preserve its exact design: a low single-tile square retro diner counter in 2:1 orthographic isometric perspective, pale almost-white light-gray square countertop with rounded silver edge, shallow red inset side panels on light silver-blue metallic cabinet/base, little dark foot stubs. Front side facing lower-right and adjacent side lower-left, same viewpoint as reference. IMPORTANT this is a serving counter, NOT a dining table: solid low box base, no tall table legs. Top diamond has edges exactly +/-26.565 degrees, verticals perfectly vertical, no perspective convergence. Clear simple cartoon/vector-painted original Café Mania shading, no realism, no new decorative details, no outline sticker. EMPTY countertop. One isolated sprite, comfortably centered, complete feet. REAL transparent RGBA background, no ground, no shadow cast outside the object, no white halo, no sticker border, no UI or labels. Match original silhouette faithfully, draw sharp at high resolution for later reduction.",
+    "transparent_background": true,
+    "method": "image_gen built-in",
+    "reference": "Ver tools/acervo/moveis.json para a imagem histórica."
+  },
+  {
+    "file": "table_50_red.png",
+    "prompt": "Faithfully restore ONLY the MIDDLE RED SQUARE TABLE in the attached original Café Mania Anos 50 shop screenshot. Ignore the beige checkered table at left and cyan round table at right. Draw precisely this one original item isolated: plain flat rich-red square tabletop with a slim dark-red rim/thickness, four slender straight metallic pale silver-blue legs, square top in 2:1 orthographic isometric projection with edges at +/-26.565 degrees and perfectly vertical legs. Original cute simplified Café Mania cartoon shading, only 2-3 broad tones per face, no textures, no realistic rendered metal or glossy bevels, no extra fixtures or invented details. View matches the middle red table in the source. High quality crisp raster sprite, complete object centered with margins. No text, labels, currency, shop border, floor, shadow outside sprite, white sticker outline or halos. Genuine RGBA transparency everywhere outside the table.",
+    "transparent_background": true,
+    "method": "image_gen built-in",
+    "reference": "Ver tools/acervo/moveis.json para a imagem histórica."
+  },
+  {
+    "file": "counter_italy_front.png",
+    "prompt": "Reconstruct ONLY the Café Mania original Italian food serving counter pictured in this supplied 82x84 shop card. The shop card is a reference for exact design, not to be replicated. Isolate furniture, remove coin, 2000 price, Italian flag, yellow rounded UI border and all white background. The furniture is the 'Pequena Itália' serving counter: a square low dark reddish-brown wooden cabinet, flat solid chocolate-brown square top, narrow dark-red wooden corner posts/legs, dark almost-charcoal ribbed/louver panels filling the sides, a tiny green accent on one side. IMPORTANT no dining table or long thin table legs: this is a squat box cabinet with closed side panels. Match the original silhouette, shape and small accents, no handles or doors added unless visible. 2:1 orthographic isometric, top edges exactly +/-26.565°, all vertical lines vertical. Facing exactly as the item in reference. Original clean cartoon Café Mania illustration, broad simple color patches and light painted shading, not photorealism, no ornate wood grain or artistic redesign. One single sprite complete and centered on genuine transparent RGBA background; no floor, UI, halo, glow, cast shadows outside the sprite or white sticker borders.",
+    "transparent_background": true,
+    "method": "image_gen built-in",
+    "reference": "Ver tools/acervo/moveis.json para a imagem histórica."
+  },
+  {
+    "file": "chair_50_red_front.png",
+    "prompt": "Faithfully reconstruct ONLY THE THIRD ITEM from left to right in the supplied Café Mania Anos 50 shop screenshot: the RED RETRO DINER CHAIR with silver frame. Do not draw the bench at left, turquoise chair second or red sofa fourth. This reference is the exact historical design. One red chair: roundish square red upholstered seat, narrow tubular pale silver-blue metal legs/frame, slightly curved small red upholstered backrest, a visible pale metallic stripe/support near one edge of the backrest as shown. Four slender legs, no thick wood posts, no armrests, no buttons/tufting. Seat/back match original rounded simple cartoon shapes. View exactly as third chair in original, looking at seat and FRONT of backrest, facing lower-left. 2:1 orthographic isometric (diagonal seat edges +/-26.565 degrees), legs perfectly vertical and no perspective convergence. Crisp original Café Mania simplified cartoon style, broad 2-3 tone shading, not realistic 3D or glossy chrome. Draw complete chair with margin for cutout, centered, high resolution. Genuine RGBA alpha transparent background, nothing else: no price, coins, flag, text, UI border, floor, outside cast shadow, glow, halo or sticker outline.",
+    "transparent_background": true,
+    "method": "image_gen built-in",
+    "reference": "Ver tools/acervo/moveis.json para a imagem histórica."
+  },
+  {
+    "file": "chair_50_red_back.png",
+    "prompt": "Make ONE opposite/back camera view of EXACTLY this same red Café Mania retro diner chair supplied as edit target. Rotate the chair itself by 180 degrees about the vertical axis while keeping the isometric camera, lighting direction and scale identical. We must see the BACK outer surface of the red backrest in the foreground, partially occluding the red seat behind it, unlike the original front view. Keep the same rounded rectangular red backrest with wide pale silver-blue vertical band, rounded red seat, pale silver-blue narrow metallic frame and straight vertical legs. No design changes, new details, extra bars through the seat, thickened legs or new arms. 2:1 orthographic isometric, diagonal seat edges +/-26.565 degrees, same original cartoon shading and palette, all pieces attached correctly. Single complete isolated furniture sprite with padding. No floor, text, UI, cast shadow outside sprite, glow, white halo or sticker border. Genuine RGBA transparent background.",
+    "transparent_background": true,
+    "method": "image_gen built-in",
+    "reference": "Ver tools/acervo/moveis.json para a imagem histórica."
+  },
+  {
+    "file": "table_50_round.png",
+    "prompt": "Restore ONLY THE RIGHTMOST item in the supplied original Café Mania Anos 50 shop card: the ROUND CYAN TABLE. The reference item must be recreated faithfully. This is a simple low retro diner dining table with a smooth circular bright light-cyan turquoise flat top, narrow darker teal edge/thickness, and a single pale silver-gray short central pedestal with a wide round low gray circular foot. The top is a clean horizontal ellipse in the original orthographic 2:1 isometric projection, ellipse width exactly twice height, no foreshortened perspective, pedestal vertical. Match the source color, silhouette, simple cartoon painted shading and height/width ratio; no 3D photorealistic gloss, bevel embellishments or new details. Do not include the beige square table at left or red square table middle. No text, prices, coins, UI borders, floor, outside shadows, glow, white halo or sticker outlines. Single complete isolated furniture sprite, generous margins, high quality on genuine RGBA transparent background.",
+    "transparent_background": true,
+    "method": "image_gen built-in",
+    "reference": "Ver tools/acervo/moveis.json para a imagem histórica."
+  }
+]

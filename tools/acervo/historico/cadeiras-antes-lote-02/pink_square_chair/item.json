@@ -1,0 +1,51 @@
+{
+  "classname": "pink_square_chair",
+  "id": 9040001,
+  "name": "Cadeira Rosa",
+  "priceGold": 200,
+  "type": 3,
+  "kind": "chair",
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 97.4,
+  "parts": [
+    {
+      "left": -41,
+      "top": -79,
+      "width": 82,
+      "height": 139,
+      "file": "rotation-0.png",
+      "rotation": 0
+    },
+    {
+      "left": -41,
+      "top": -79,
+      "width": 82,
+      "height": 139,
+      "file": "rotation-1.png",
+      "rotation": 1
+    },
+    {
+      "left": -41,
+      "top": -62,
+      "width": 82,
+      "height": 122,
+      "file": "rotation-2.png",
+      "rotation": 2
+    },
+    {
+      "left": -41,
+      "top": -62,
+      "width": 82,
+      "height": 122,
+      "file": "rotation-3.png",
+      "rotation": 3
+    }
+  ],
+  "source": {
+    "art": "Reconstrução geométrica inspirada nas capturas do Café Mania fornecidas pelo responsável.",
+    "calibration": "Tile 160×80, origem traseira. Alturas referenciadas em white_cloth_table e classic_chair.",
+    "priceGold": "Valor escolhido para o projeto; não confirmado na configuração histórica."
+  }
+}

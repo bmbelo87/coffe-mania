@@ -1,0 +1,39 @@
+[
+  {
+    "id": 9040201,
+    "classname": "acervo_chair_yellow_black",
+    "name": "Poltrona Amarela e Preta",
+    "kind": "chair",
+    "priceGold": 200,
+    "original": "cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/4286853/006.jpg",
+    "artist": "Sabrina Contino",
+    "page": "https://www.behance.net/gallery/4286853/Cafe-Mania",
+    "generated": "lote-02/chair_yellow_front-v2",
+    "backGenerated": "lote-02/chair_yellow_back-v2",
+    "mirrorByCode": true,
+    "poseOrder": [
+      1,
+      0,
+      2,
+      3
+    ],
+    "cleanSpecks": 16,
+    "registration": {
+      "scale": 0.071,
+      "anchor": [
+        800,
+        760
+      ],
+      "floorY": 8
+    },
+    "backRegistration": {
+      "scale": 0.071,
+      "anchor": [
+        690,
+        780
+      ],
+      "floorY": 8
+    },
+    "artMethod": "Frente e costas reconstruídas com imagegen a partir dos dois recortes originais, preservando proporções por escala uniforme; vistas complementares espelhadas no código."
+  }
+]

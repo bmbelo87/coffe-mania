@@ -51,6 +51,54 @@ func finishJob(t *testing.T, app core.App, stoveID string) {
 	}
 }
 
+func TestCatalogStoveAndCounter(t *testing.T) {
+	app, owner := newCookingTestApp(t)
+	stove, err := app.FindFirstRecordByData("player_stoves", "user", owner)
+	if err != nil {
+		t.Fatal(err)
+	}
+	unit, err := app.FindFirstRecordByData("player_inventory", "stove_id", stove.Id)
+	if err != nil {
+		t.Fatal(err)
+	}
+	stove.Set("item_id", 9090103)
+	unit.Set("item_id", 9090103)
+	for _, row := range []*core.Record{stove, unit} {
+		if err := app.Save(row); err != nil {
+			t.Fatal(err)
+		}
+	}
+	counter, err := app.FindFirstRecordByFilter("player_inventory", "user={:user} && item_id={:item}", dbx.Params{"user": owner, "item": starterCounterItemID})
+	if err != nil {
+		t.Fatal(err)
+	}
+	counter.Set("item_id", 9030103)
+	if err := app.Save(counter); err != nil {
+		t.Fatal(err)
+	}
+	if err := startCooking(app, owner, stove.Id, "passion_fruit_mousse", types.NowDateTime()); err != nil {
+		t.Fatalf("catalogue stove cannot cook: %v", err)
+	}
+	finishJob(t, app, stove.Id)
+	if err := serveCooking(app, owner, stove.Id, types.NowDateTime()); err != nil {
+		t.Fatal(err)
+	}
+	food, err := app.FindFirstRecordByData("room_food", "user", owner)
+	if err != nil || food.GetString("counter") != counter.Id || food.GetInt("portions") != 22 {
+		t.Fatalf("striped counter did not receive the dish: %v", err)
+	}
+	if err := cleanStove(app, owner, stove.Id); err != nil {
+		t.Fatal(err)
+	}
+	stove.Set("item_id", 3020069)
+	if err := app.Save(stove); err != nil {
+		t.Fatal(err)
+	}
+	if err := startCooking(app, owner, stove.Id, "passion_fruit_mousse", types.NowDateTime()); !errors.Is(err, errStoveNotOwned) {
+		t.Fatalf("non-stove catalogue item must be rejected: %v", err)
+	}
+}
+
 func TestMousseGoesToCounterAndPaysPerPortion(t *testing.T) {
 	app, userID := newCookingTestApp(t)
 	stove, err := app.FindFirstRecordByData("player_stoves", "user", userID)

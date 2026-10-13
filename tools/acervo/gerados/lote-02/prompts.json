@@ -1,0 +1,63 @@
+{
+  "records": [
+    {
+      "asset": "chair_yellow_front-v2.png",
+      "tool": "imagegen integrado",
+      "prompt": "Faithfully redraw this EXACT original Café Mania yellow-and-black armchair in high resolution, keeping the SAME FRONT CAMERA VIEW and exact design from the reference. This is not a redesign. Preserve the broad black cushioned back and rounded black seat, the TWO large curved golden-yellow side shells shaped like rounded hooks/pac-man jaws, tiny black oval inset on visible left arm shell, crisp yellow edge highlights and black lower supporting base. Preserve the proportions and a comfortably wide black seat: do not squeeze the furniture or stretch it tall. The curved yellow shells are side armrests, not thin poles or wings. Keep all parts firmly attached as a single solid seat. Original clean vector-painted Café Mania shading, broad simple color patches, no realism, no extra details or legs. Same front view as image: backrest at upper-right, open seat facing down-left. Correct orthographic 2:1 isometric, top-plane diagonal edges +/-26.565 degrees, upright verticals, no perspective distortion. Draw ONE whole isolated sprite with clear margins and full base. Genuine RGBA alpha transparency outside object, no background, floor, outside cast shadow, glow, halo, white sticker border or text.",
+      "references": [
+        "recortes/chair_yellow_front.png"
+      ]
+    },
+    {
+      "asset": "chair_yellow_back-v2.png",
+      "tool": "imagegen integrado",
+      "prompt": "Use case: stylized-concept. Asset type: Café Mania game furniture sprite on REAL RGBA TRANSPARENT background. Input 1 is the exact original BACK pose to reproduce, input 2 is the matched high resolution FRONT pose of this same chair. Produce ONE isolated back-view chair matching input 1 extremely closely: rear broad curved matte black shell, two sculpted vivid yellow curved side shells with upward tips and little black oval inset, no conventional wooden legs, short integrated black base. Exact same proportions, simple flat cel shaded 2010 Vostu vector cartoon, no outlines, no 3D photorealism. Camera orthographic 2:1 dimetric, straight verticals, ground-axis slopes +/-26.565 degrees. Rear backrest lies on lower right of image, seating opening faces upper left (NW); this is rotation 2, do NOT mirror input 1. Preserve broad rear shell, tapered yellow rim, original asymmetric highlights. Entire object in frame with comfortable transparent padding. No floor, no shadow cast on floor, no background, no white contour, no text. Truly transparent alpha.",
+      "references": [
+        "recortes/chair_yellow_back.png",
+        "gerados/lote-02/chair_yellow_front-v2.png"
+      ]
+    },
+    {
+      "asset": "table_italy_green.png",
+      "tool": "imagegen integrado",
+      "prompt": "Faithfully recreate ONE isolated round GREEN AND WHITE CHECKERED TABLE from this Café Mania screenshot. Use the green round table near center as the exact design reference. Keep its cylindrical shape: a round flat circular tabletop covered in alternating green-and-white gingham checks in isometric projection; the same cloth hangs in several large scalloped folds down the sides, with dark green-gray folds between the curtain sections; beneath it there is a pale icy blue/white pleated cloth skirt/base showing around the bottom. Match precisely the original top pattern scale, light/lime green versus forest-green shading, white checks, irregular curtain scallops and silhouette. No chairs, people or neighboring red table. Reconstruct only the small bottom region hidden by the neighboring table while preserving all visible design. Simple original Café Mania cartoon painted shading, NO photorealistic cloth texture, no creative redesign. Orthographic 2:1 isometric: top ellipse width twice height, vertical cylinder upright. One complete clean sprite centered with margin. Remove the room, floor, walls, UI and every other object. REAL transparent RGBA background, no ground, external cast shadow, halo, glow, white outline or sticker border.",
+      "references": [
+        "fontes/lote-02/referencia-mesas-cadeiras-anexada.png"
+      ]
+    },
+    {
+      "asset": "table_italy_red-v2.png",
+      "tool": "imagegen integrado",
+      "prompt": "Use case: precise-object-edit. Asset type: Café Mania round red checkered table sprite, REAL RGBA TRANSPARENT. Input is the exact APPROVED GREEN TABLE; recolor this ONE same table to the original Italian RED variant, changing ONLY green cloth areas and their green shadows to vivid red and darker red shadows. All green becomes red: alternating white checker squares stay white, pale ice blue underskirt stays exact same, seams, scalloped folds, wrinkles, lighting, silhouette, tabletop ellipse, checker counts, checker sizes, projection, camera, scale and composition ALL unchanged. Do not redraw a different table, do not move or add folds/checks, do not change round tabletop dimensions or vertical drop. Match flat cel shaded vector-game style. Retain full object and transparent padding. Real alpha background preserved, no outline, no white border, no floor, no fake checkerboard background, no text.",
+      "references": [
+        "fontes/lote-02/mesa-xadrez-verde-aprovada.png"
+      ]
+    },
+    {
+      "asset": "table_italy_square.png",
+      "tool": "imagegen integrado",
+      "prompt": "Reconstruct ONE original Café Mania SQUARE ITALIAN TABLE exactly as the table at upper-right of the reference screenshot, excluding all chairs. Match that furniture faithfully: square wooden dining table with four narrow warm orange-brown legs, vivid deep RED under-tablecloth with the SAME folded red corner ties/bows hanging prominently at the corners, and a pale icy-mint/off-white square overlay cloth with subtle translucent teal-gray triangular folded edges and a large circular very-light-teal ornate floral scroll medallion printed at the center. Keep its exact original silhouette, cloth drape/folds, bow placement, pale cyan-white colors, red color, wood leg color and 2010 Café Mania clean 2D cartoon-painted shading. No photorealistic fabric, new embellishments, plates or creative redesign. The full square top is a diamond with edges +/-26.565 degrees, orthographic 2:1 isometric; legs upright and vertical. We must restore the parts partly hidden by the two red chairs, producing an empty table alone, same camera as reference. Single complete sprite centered with generous margins, crisp high-resolution raster. Remove floor, walls, people, chairs, any other tables and UI. Genuine RGBA transparent background with no outside cast shadow, glow, halo, border or white sticker.",
+      "references": [
+        "fontes/lote-02/referencia-mesas-cadeiras-anexada.png"
+      ]
+    },
+    {
+      "asset": "chair_italy_green_front-v2.png",
+      "tool": "imagegen integrado",
+      "prompt": "Recreate ONE FRONT VIEW of the original Café Mania GREEN-SEAT wooden dining chair. Reference 1 is a screenshot showing the chair in the room; reference 2 is the original back-facing chair extracted from that screenshot and specifies the exact design and colors. Preserve exactly that warm orange/reddish-brown wood palette, thin straight four wooden legs, slender two vertical back posts, TWO thin horizontal middle rungs and a wide oval-ended rounded wooden top rail with a darker brown face and narrow light orange highlight across the upper-left edge. Seat is round green upholstered padding with a darker forest-green rim and a lighter green patch. NO extra third middle rung, no broad giant rectangular slats, no curved furniture redesign, no modern rounded thick legs, no high-gloss realism. Match the tall slender shape and original clean 2D Café Mania shading. This view faces down-right; we see the seat unobstructed and the INNER FRONT of the wooden back, matching the green chair near left in screenshot (reconstruct the part hidden by table). Maintain orthographic 2:1 isometric, straight vertical posts, and +/-26.565° horizontal planes. One complete sprite centered with margins. Remove floor, shadows outside chair, scene, other furniture, captions, glow, halo or sticker borders. Genuine transparent RGBA background.",
+      "references": [
+        "fontes/lote-02/referencia-mesas-cadeiras-anexada.png",
+        "recortes/lote02_chair_italy_green_back_original.png"
+      ]
+    },
+    {
+      "asset": "chair_italy_red_front-v2.png",
+      "tool": "imagegen integrado",
+      "prompt": "Edit only the upholstery color of this Café Mania wooden chair. Change the GREEN round seat cushion to the bright RED cushion of the original Italian Estofada chair (red highlight, scarlet face, dark crimson edge). Keep absolutely everything else identical: same orange-brown wood colors, exact silhouette, backrest with oval-ended top rail and two thin middle rungs, straight legs, width, height, camera, front-facing down-right orientation and original cartoon shading. Do not add pieces or change the geometry. One isolated complete sprite with the existing genuine RGBA transparent background. No scene, floor, outside shadow, glow, white halo or sticker border.",
+      "references": [
+        "gerados/lote-02/chair_italy_green_front-v2.png"
+      ]
+    }
+  ],
+  "approvedGreen": "table_italy_green-approved.png é a cópia exata do anexo aprovado; o bruto table_italy_green.png permanece preservado."
+}

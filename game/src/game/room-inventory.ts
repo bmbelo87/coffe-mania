@@ -24,7 +24,7 @@ export function sellGold(item: RoomCatalogItem, snapshot: RoomSnapshot): number 
   return Math.floor(item.priceGold * (snapshot.sellPercent ?? 30) / 100);
 }
 export interface ItemManifest extends RoomCatalogItem {
-  itemHeight: number; parts: (IndoorArtFrame & { rotation?: number })[];
+  itemHeight: number; parts: (IndoorArtFrame & { rotation?: number; flipX?: boolean })[];
   wallpaperRotation?: 0 | 1; door?: IndoorArtEntry['door'];
   /** Folha de sprites em grade; cada quadro tem `gutter` px transparentes em volta. */
   animation?: { file: string; fps: number; frames: number; columns: number; frameWidth: number; frameHeight: number; gutter: number; resolution?: number };
@@ -36,11 +36,12 @@ export function groupItemParts(parts: ItemManifest['parts']): { rotation: number
   for (const part of parts) {
     const rotation = part.rotation ?? 0;
     if (!Number.isInteger(rotation) || rotation < 0 || rotation > 3 || ![part.left, part.top].every(Number.isFinite) ||
-      ![part.width, part.height].every((n) => Number.isInteger(n) && n > 0)) throw new Error('Parte de item inválida.');
+      ![part.width, part.height].every((n) => Number.isInteger(n) && n > 0) ||
+      (part.flipX !== undefined && typeof part.flipX !== 'boolean')) throw new Error('Parte de item inválida.');
     const group = groups.get(rotation) ?? []; group.push(part); groups.set(rotation, group);
   }
   return [...groups.entries()].sort(([a], [b]) => a - b).map(([rotation, group]) => {
-    if (group.length === 1) return { rotation, frame: group[0], parts: group };
+    if (group.length === 1 && !group[0].flipX) return { rotation, frame: group[0], parts: group };
     const left = Math.floor(Math.min(...group.map((part) => part.left))), top = Math.floor(Math.min(...group.map((part) => part.top)));
     const width = Math.ceil(Math.max(...group.map((part) => part.left + part.width))) - left;
     const height = Math.ceil(Math.max(...group.map((part) => part.top + part.height))) - top;
@@ -76,11 +77,17 @@ export async function loadRoomItemArt(snapshot: RoomSnapshot, legacy?: ArtProvid
       textures.set(frame.file, texture);
     }
     const frames = groupItemParts(parts).map((pose) => {
-      if (pose.parts.length === 1) return pose.frame;
+      if (pose.parts.length === 1 && !pose.parts[0].flipX) return pose.frame;
       const canvas = document.createElement('canvas'); canvas.width = pose.frame.width; canvas.height = pose.frame.height;
       const context = canvas.getContext('2d'); if (!context) throw new Error('Não foi possível montar o item.');
-      for (const part of pose.parts) context.drawImage(textures.get(part.file)!.source.resource as CanvasImageSource,
-        part.left - pose.frame.left, part.top - pose.frame.top, part.width, part.height);
+      // The manifest owns the mirrored registration. Bake once so drawing and alpha picking share the pose.
+      for (const part of pose.parts) {
+        context.save();
+        context.translate(part.left - pose.frame.left + (part.flipX ? part.width : 0), part.top - pose.frame.top);
+        if (part.flipX) context.scale(-1, 1);
+        context.drawImage(textures.get(part.file)!.source.resource as CanvasImageSource, 0, 0, part.width, part.height);
+        context.restore();
+      }
       const file = `assembled:${manifest.classname}:${pose.rotation}`;
       const texture = Texture.from(canvas); texture.source.scaleMode = 'nearest';
       texture.source.autoGenerateMipmaps = true; textures.set(file, texture);

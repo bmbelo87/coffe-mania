@@ -1,0 +1,73 @@
+{
+  "id": 9030302,
+  "classname": "acervo_lote02_table_italy_green_check",
+  "name": "Mesa Xadrez Verde",
+  "type": 3,
+  "kind": "table",
+  "priceGold": 4000,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 49.2,
+  "parts": [
+    {
+      "file": "rotation-0.png",
+      "width": 146,
+      "height": 131,
+      "left": -73,
+      "top": -48,
+      "rotation": 0
+    },
+    {
+      "file": "rotation-1.png",
+      "width": 146,
+      "height": 131,
+      "left": -73,
+      "top": -48,
+      "rotation": 1
+    }
+  ],
+  "source": {
+    "acervo": "anexos-usuario/lote-02/mesa-xadrez-verde-aprovada.png",
+    "sha256": "9fa62931f58260b6061f77c82edaa5f034431f214c5dee9481c4ff9d80748132",
+    "artist": "Vostu — referência fornecida pelo responsável",
+    "page": "https://jogandocafemania.blogspot.com/2010/08/mamma-mia.html",
+    "method": "Imagem completa gerada com imagegen e aprovada pelo responsável; exportação por escala uniforme, sem remontar tampo ou pregas.",
+    "name": "Nome confirmado no post Mamma Mia! de 26/08/2010.",
+    "priceGold": "4000 ouro, visíveis na segunda ficha da referência P013_02.",
+    "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+    "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+    "batch": "02",
+    "calibration": {
+      "tile": [
+        160,
+        80
+      ],
+      "origin": "back",
+      "front": {
+        "mode": "uniform",
+        "registration": {
+          "scale": 0.14136291600633916,
+          "anchor": [
+            767,
+            956
+          ],
+          "floorY": 80
+        },
+        "transform": {
+          "k": 0,
+          "aL": 0.14136291600633916,
+          "aR": 0.14136291600633916,
+          "bL": 0,
+          "bR": 0,
+          "c": 0.14136291600633916,
+          "x": -108.42535657686213,
+          "y": -55.14294770206024
+        },
+        "options": {
+          "height": 49.2
+        }
+      }
+    }
+  }
+}

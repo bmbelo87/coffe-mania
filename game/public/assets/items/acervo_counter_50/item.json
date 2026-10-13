@@ -1,0 +1,92 @@
+{
+  "id": 9060201,
+  "classname": "acervo_counter_50",
+  "name": "Balcão — Anos 50",
+  "type": 3,
+  "kind": "counter",
+  "priceGold": 2100,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 32,
+  "parts": [
+    {
+      "file": "rotation-0.png",
+      "width": 171,
+      "height": 116,
+      "left": -85,
+      "top": -36,
+      "rotation": 0
+    },
+    {
+      "file": "rotation-1.png",
+      "width": 171,
+      "height": 116,
+      "left": -86,
+      "top": -36,
+      "rotation": 1
+    }
+  ],
+  "source": {
+    "acervo": "cafe-mania-acervo-documentado/cafe-mania-acervo/imagens/decoracao/P019_09_balcao-anos-50_beef29c7.png",
+    "sha256": "beef29c710a7ad49df8af5ff24b9f95249aca7884db880b74662e34f66906dcf",
+    "artist": "Autoria não informada na prancha fornecida.",
+    "page": "https://dicas-cafemania.blogspot.com/2010/09/anos-50.html",
+    "method": "Reconstrução com imagegen de referência pequena; aproximação visual, não extração do PNG original.",
+    "name": "Nome descritivo do projeto; nome oficial do item não confirmado.",
+    "priceGold": "Preço em ouro visível na ficha da referência: 2100.",
+    "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+    "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+    "calibration": {
+      "tile": [
+        160,
+        80
+      ],
+      "origin": "back",
+      "front": {
+        "points": {
+          "left": {
+            "x": 258,
+            "y": 375
+          },
+          "back": {
+            "x": 769,
+            "y": 106
+          },
+          "right": {
+            "x": 1275,
+            "y": 375
+          },
+          "foot": {
+            "x": 764,
+            "y": 921
+          },
+          "groundLeft": {
+            "x": 307,
+            "y": 672
+          },
+          "groundRight": {
+            "x": 1240,
+            "y": 663
+          }
+        },
+        "options": {
+          "width": 1,
+          "height": 32,
+          "support": 0.93
+        },
+        "mode": "planes",
+        "transform": {
+          "k": 769,
+          "aL": 0.15655577299412915,
+          "aR": 0.15810276679841898,
+          "bL": 0.00454319687298968,
+          "bR": -0.0045880901227227655,
+          "c": 0.15732926989627405,
+          "x": -120.39138943248531,
+          "y": -52.17062100433411
+        }
+      }
+    }
+  }
+}

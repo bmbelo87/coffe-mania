@@ -527,6 +527,2494 @@
         }
       ],
       "wallpaperRotation": 1
+    },
+    {
+      "classname": "wood_inlay_table",
+      "id": 9030001,
+      "name": "Mesa de Madeira com Moldura",
+      "priceGold": 500,
+      "type": 3,
+      "kind": "table",
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 49.2,
+      "parts": [
+        {
+          "left": -82,
+          "top": -52,
+          "width": 164,
+          "height": 128,
+          "file": "rotation-0.png",
+          "rotation": 0
+        },
+        {
+          "left": -82,
+          "top": -52,
+          "width": 164,
+          "height": 128,
+          "file": "rotation-1.png",
+          "rotation": 1
+        },
+        {
+          "left": -82,
+          "top": -52,
+          "width": 164,
+          "height": 128,
+          "file": "rotation-2.png",
+          "rotation": 2
+        },
+        {
+          "left": -82,
+          "top": -52,
+          "width": 164,
+          "height": 128,
+          "file": "rotation-3.png",
+          "rotation": 3
+        }
+      ],
+      "source": {
+        "art": "Reconstrução geométrica inspirada nas capturas do Café Mania fornecidas pelo responsável.",
+        "calibration": "Tile 160×80, origem traseira. Alturas referenciadas em white_cloth_table e classic_chair.",
+        "priceGold": "Valor escolhido para o projeto; não confirmado na configuração histórica."
+      }
+    },
+    {
+      "id": 9030101,
+      "classname": "original_glass_table",
+      "name": "Mesa de Vidro com Madeira",
+      "type": 3,
+      "kind": "table",
+      "priceGold": 500,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 49.2,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 164,
+          "height": 120,
+          "left": -81,
+          "top": -50
+        }
+      ],
+      "source": {
+        "art": "behance/artes/4286853/001.jpg · recorte 04.png fornecido pelo responsável.",
+        "calibration": {
+          "tile": [
+            160,
+            80
+          ],
+          "origin": "back",
+          "topHeight": 49.2,
+          "support": 0.75,
+          "points": {
+            "left": {
+              "x": 3,
+              "y": 66
+            },
+            "back": {
+              "x": 130,
+              "y": 2
+            },
+            "right": {
+              "x": 257,
+              "y": 66
+            },
+            "groundLeft": {
+              "x": 35,
+              "y": 132
+            },
+            "foot": {
+              "x": 132,
+              "y": 182
+            },
+            "groundRight": {
+              "x": 228,
+              "y": 132
+            }
+          },
+          "transform": {
+            "k": 130,
+            "aL": 0.6299212598425197,
+            "aR": 0.6299212598425197,
+            "bL": 0.0024800049600099405,
+            "bR": -0.0024800049600099405,
+            "c": 0.6299212598425197,
+            "x": -81.88976377952756,
+            "y": -50.78224316448633
+          },
+          "mode": "planes",
+          "surface": 1,
+          "groundAnchor": {
+            "x": 1.2598425196850371,
+            "y": 69.37007874015748
+          }
+        },
+        "priceGold": "Preço de projeto; não confirmado pela configuração histórica."
+      }
+    },
+    {
+      "id": 9030102,
+      "classname": "original_gold_table",
+      "name": "Mesa Preta e Dourada",
+      "type": 3,
+      "kind": "table",
+      "priceGold": 500,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 49.2,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 167,
+          "height": 129,
+          "left": -84,
+          "top": -52
+        }
+      ],
+      "source": {
+        "art": "behance/artes/4286853/001.jpg · recorte 07.png fornecido pelo responsável.",
+        "calibration": {
+          "tile": [
+            160,
+            80
+          ],
+          "origin": "back",
+          "topHeight": 49.2,
+          "support": 0.88,
+          "points": {
+            "left": {
+              "x": 7,
+              "y": 73
+            },
+            "back": {
+              "x": 135,
+              "y": 6
+            },
+            "right": {
+              "x": 265,
+              "y": 72
+            },
+            "foot": {
+              "x": 134,
+              "y": 202
+            }
+          },
+          "transform": {
+            "k": 135,
+            "aL": 0.625,
+            "aR": 0.6153846153846154,
+            "bL": 0.019775388673514194,
+            "bR": -0.014588115213989394,
+            "c": 0.6347947723911913,
+            "x": -84.375,
+            "y": -55.67844610527156
+          }
+        },
+        "priceGold": "Preço de projeto; não confirmado pela configuração histórica."
+      }
+    },
+    {
+      "id": 9030103,
+      "classname": "original_striped_table",
+      "name": "Balcão com Toalha Listrada",
+      "type": 3,
+      "kind": "counter",
+      "priceGold": 500,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 31,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 160,
+          "height": 116,
+          "left": -82,
+          "top": -35
+        }
+      ],
+      "source": {
+        "art": "behance/artes/4286853/001.jpg · recorte 08.png fornecido pelo responsável.",
+        "calibration": {
+          "tile": [
+            160,
+            80
+          ],
+          "origin": "back",
+          "topHeight": 31,
+          "support": 1,
+          "points": {
+            "left": {
+              "x": 24,
+              "y": 73
+            },
+            "back": {
+              "x": 136,
+              "y": 17
+            },
+            "right": {
+              "x": 248,
+              "y": 73
+            },
+            "groundLeft": {
+              "x": 6,
+              "y": 142
+            },
+            "foot": {
+              "x": 133,
+              "y": 205
+            },
+            "groundRight": {
+              "x": 262,
+              "y": 139
+            }
+          },
+          "transform": {
+            "k": 136,
+            "aL": 0.6071428571428571,
+            "aR": 0.6071428571428571,
+            "bL": 0,
+            "bR": 0,
+            "c": 0.6071428571428571,
+            "x": -82.57142857142857,
+            "y": -35.32142857142857
+          },
+          "mode": "planes",
+          "surface": 0.85,
+          "groundAnchor": {
+            "x": -1.8214285714285694,
+            "y": 79.08928571428572
+          }
+        },
+        "priceGold": "Preço de projeto; não confirmado pela configuração histórica."
+      }
+    },
+    {
+      "id": 9030201,
+      "classname": "acervo_table_50_red",
+      "name": "Mesa Vermelha — Anos 50",
+      "type": 3,
+      "kind": "table",
+      "priceGold": 1000,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 49.2,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 171,
+          "height": 150,
+          "left": -85,
+          "top": -68,
+          "rotation": 0
+        },
+        {
+          "file": "rotation-1.png",
+          "width": 171,
+          "height": 150,
+          "left": -86,
+          "top": -68,
+          "rotation": 1
+        }
+      ],
+      "source": {
+        "acervo": "cafe-mania-acervo-documentado/cafe-mania-acervo/imagens/decoracao/P019_02_mesas-anos-50_0e88a4c8.png",
+        "sha256": "0e88a4c8c4210418830c8891dbf4b29bac85052082b83e4243c6468d18b71fdc",
+        "artist": "Autoria não informada na prancha fornecida.",
+        "page": "https://dicas-cafemania.blogspot.com/2010/09/anos-50.html",
+        "method": "Reconstrução com imagegen de referência pequena; aproximação visual, não extração do PNG original.",
+        "name": "Nome descritivo do projeto; nome oficial do item não confirmado.",
+        "priceGold": "Preço em ouro visível na ficha central da referência: 1000.",
+        "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+        "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+        "calibration": {
+          "tile": [
+            160,
+            80
+          ],
+          "origin": "back",
+          "front": {
+            "points": {
+              "left": {
+                "x": 360,
+                "y": 366
+              },
+              "back": {
+                "x": 770,
+                "y": 152
+              },
+              "right": {
+                "x": 1173,
+                "y": 366
+              },
+              "foot": {
+                "x": 770,
+                "y": 829
+              },
+              "groundLeft": {
+                "x": 387,
+                "y": 663
+              },
+              "groundRight": {
+                "x": 1150,
+                "y": 663
+              }
+            },
+            "options": {
+              "width": 1,
+              "height": 49.2,
+              "support": 0.93
+            },
+            "mode": "planes",
+            "transform": {
+              "k": 770,
+              "aL": 0.1951219512195122,
+              "aR": 0.19851116625310175,
+              "bL": 0.005167667242852905,
+              "bR": -0.005257428212331744,
+              "c": 0.196816558736307,
+              "x": -150.2439024390244,
+              "y": -83.0952207049154
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 9030202,
+      "classname": "acervo_table_50_round",
+      "name": "Mesa Redonda Ciano — Anos 50",
+      "type": 3,
+      "kind": "table",
+      "priceGold": 2000,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 49.2,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 142,
+          "height": 105,
+          "left": -71,
+          "top": -46,
+          "rotation": 0
+        },
+        {
+          "file": "rotation-1.png",
+          "width": 142,
+          "height": 105,
+          "left": -71,
+          "top": -46,
+          "rotation": 1
+        }
+      ],
+      "source": {
+        "acervo": "cafe-mania-acervo-documentado/cafe-mania-acervo/imagens/decoracao/P019_02_mesas-anos-50_0e88a4c8.png",
+        "sha256": "0e88a4c8c4210418830c8891dbf4b29bac85052082b83e4243c6468d18b71fdc",
+        "artist": "Autoria não informada na prancha fornecida.",
+        "page": "https://dicas-cafemania.blogspot.com/2010/09/anos-50.html",
+        "method": "Reconstrução com imagegen de referência pequena; aproximação visual, não extração do PNG original.",
+        "name": "Nome descritivo do projeto; nome oficial do item não confirmado.",
+        "priceGold": "Preço em ouro visível na ficha direita da referência: 2000.",
+        "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+        "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+        "calibration": {
+          "tile": [
+            160,
+            80
+          ],
+          "origin": "back",
+          "front": {
+            "points": {
+              "left": {
+                "x": 457,
+                "y": 381
+              },
+              "back": {
+                "x": 887,
+                "y": 192
+              },
+              "right": {
+                "x": 1317,
+                "y": 381
+              },
+              "foot": {
+                "x": 887,
+                "y": 790
+              }
+            },
+            "options": {
+              "width": 0.85,
+              "height": 49.2,
+              "support": 0.38
+            },
+            "mode": "single",
+            "transform": {
+              "k": 887,
+              "aL": 0.15813953488372093,
+              "aR": 0.15813953488372093,
+              "bL": -0.00674496383293148,
+              "bR": 0.00674496383293148,
+              "c": 0.1645484949832776,
+              "x": -140.26976744186047,
+              "y": -68.81052811697909
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 9030301,
+      "classname": "acervo_lote02_table_italy_red_check",
+      "name": "Mesa Xadrez Vermelho",
+      "type": 3,
+      "kind": "table",
+      "priceGold": 4000,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 49.2,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 148,
+          "height": 131,
+          "left": -74,
+          "top": -48,
+          "rotation": 0
+        },
+        {
+          "file": "rotation-1.png",
+          "width": 148,
+          "height": 131,
+          "left": -74,
+          "top": -48,
+          "rotation": 1
+        }
+      ],
+      "source": {
+        "acervo": "anexos-usuario/lote-02/mesa-xadrez-verde-aprovada.png",
+        "sha256": "9fa62931f58260b6061f77c82edaa5f034431f214c5dee9481c4ff9d80748132",
+        "artist": "Vostu — referência fornecida pelo responsável",
+        "page": "https://jogandocafemania.blogspot.com/2010/08/mamma-mia.html",
+        "method": "Variante vermelha gerada com imagegen a partir da mesa verde aprovada; mesmo formato, projeção e pregas.",
+        "name": "Nome confirmado no post Mamma Mia! de 26/08/2010.",
+        "priceGold": "4000 ouro, visíveis na terceira ficha da referência P013_02.",
+        "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+        "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+        "batch": "02",
+        "calibration": {
+          "tile": [
+            160,
+            80
+          ],
+          "origin": "back",
+          "front": {
+            "mode": "uniform",
+            "registration": {
+              "scale": 0.14136291600633916,
+              "anchor": [
+                767,
+                956
+              ],
+              "floorY": 80
+            },
+            "transform": {
+              "k": 0,
+              "aL": 0.14136291600633916,
+              "aR": 0.14136291600633916,
+              "bL": 0,
+              "bR": 0,
+              "c": 0.14136291600633916,
+              "x": -108.42535657686213,
+              "y": -55.14294770206024
+            },
+            "options": {
+              "height": 49.2
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 9030302,
+      "classname": "acervo_lote02_table_italy_green_check",
+      "name": "Mesa Xadrez Verde",
+      "type": 3,
+      "kind": "table",
+      "priceGold": 4000,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 49.2,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 146,
+          "height": 131,
+          "left": -73,
+          "top": -48,
+          "rotation": 0
+        },
+        {
+          "file": "rotation-1.png",
+          "width": 146,
+          "height": 131,
+          "left": -73,
+          "top": -48,
+          "rotation": 1
+        }
+      ],
+      "source": {
+        "acervo": "anexos-usuario/lote-02/mesa-xadrez-verde-aprovada.png",
+        "sha256": "9fa62931f58260b6061f77c82edaa5f034431f214c5dee9481c4ff9d80748132",
+        "artist": "Vostu — referência fornecida pelo responsável",
+        "page": "https://jogandocafemania.blogspot.com/2010/08/mamma-mia.html",
+        "method": "Imagem completa gerada com imagegen e aprovada pelo responsável; exportação por escala uniforme, sem remontar tampo ou pregas.",
+        "name": "Nome confirmado no post Mamma Mia! de 26/08/2010.",
+        "priceGold": "4000 ouro, visíveis na segunda ficha da referência P013_02.",
+        "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+        "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+        "batch": "02",
+        "calibration": {
+          "tile": [
+            160,
+            80
+          ],
+          "origin": "back",
+          "front": {
+            "mode": "uniform",
+            "registration": {
+              "scale": 0.14136291600633916,
+              "anchor": [
+                767,
+                956
+              ],
+              "floorY": 80
+            },
+            "transform": {
+              "k": 0,
+              "aL": 0.14136291600633916,
+              "aR": 0.14136291600633916,
+              "bL": 0,
+              "bR": 0,
+              "c": 0.14136291600633916,
+              "x": -108.42535657686213,
+              "y": -55.14294770206024
+            },
+            "options": {
+              "height": 49.2
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 9030303,
+      "classname": "acervo_lote02_table_italian_red",
+      "name": "Mesa Italiana Vermelha",
+      "type": 3,
+      "kind": "table",
+      "priceGold": 500,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 49.2,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 192,
+          "height": 131,
+          "left": -96,
+          "top": -52,
+          "rotation": 0
+        },
+        {
+          "file": "rotation-1.png",
+          "width": 192,
+          "height": 131,
+          "left": -96,
+          "top": -52,
+          "rotation": 1
+        }
+      ],
+      "source": {
+        "acervo": "anexos-usuario/lote-02/referencia-mesas-cadeiras.png",
+        "sha256": "41474371823198210b8521aa0150366fcf198358d236b7388b2b690503a9cd7f",
+        "artist": "Vostu — referência fornecida pelo responsável",
+        "page": "https://jogandocafemania.blogspot.com/2010/08/mamma-mia.html",
+        "method": "Base e regiões ocultas reconstruídas com imagegen; tampo e medalhão recortados do screenshot original e compostos no mesmo plano.",
+        "name": "Nome confirmado no post Mamma Mia! de 26/08/2010.",
+        "priceGold": "Preço de projeto em ouro. A referência histórica cobra 6 caféGranas; compra de móveis com caféGrana não implementada.",
+        "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+        "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+        "batch": "02",
+        "calibration": {
+          "tile": [
+            160,
+            80
+          ],
+          "origin": "back",
+          "front": {
+            "points": {
+              "left": {
+                "x": 234,
+                "y": 373
+              },
+              "back": {
+                "x": 769,
+                "y": 82
+              },
+              "right": {
+                "x": 1298,
+                "y": 373
+              },
+              "foot": {
+                "x": 789,
+                "y": 930
+              },
+              "groundLeft": {
+                "x": 270,
+                "y": 668
+              },
+              "groundRight": {
+                "x": 1260,
+                "y": 676
+              }
+            },
+            "options": {
+              "width": 1,
+              "height": 49.2,
+              "support": 0.92
+            },
+            "mode": "planes",
+            "transform": {
+              "k": 769,
+              "aL": 0.14953271028037382,
+              "aR": 0.15122873345935728,
+              "bL": 0.007029514138562398,
+              "bR": -0.007109243977563101,
+              "c": 0.15038072186986556,
+              "x": -114.99065420560747,
+              "y": -66.93691556588347
+            },
+            "overlay": {
+              "crop": "lote02_table_italy_square_surface",
+              "points": {
+                "left": {
+                  "x": 41,
+                  "y": 135
+                },
+                "back": {
+                  "x": 284,
+                  "y": 13
+                },
+                "right": {
+                  "x": 524,
+                  "y": 135
+                },
+                "foot": {
+                  "x": 284,
+                  "y": 385
+                },
+                "groundLeft": {
+                  "x": 40,
+                  "y": 268
+                },
+                "groundRight": {
+                  "x": 525,
+                  "y": 270
+                }
+              },
+              "transform": {
+                "k": 284,
+                "aL": 0.3292181069958848,
+                "aR": 0.3333333333333333,
+                "bL": 0.0017104438686514623,
+                "bR": -0.0017318244170096142,
+                "c": 0.33127572016460904,
+                "x": -93.49794238683127,
+                "y": -53.992350420836935
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "classname": "pink_square_chair",
+      "id": 9040001,
+      "name": "Cadeira Rosa",
+      "priceGold": 200,
+      "type": 3,
+      "kind": "chair",
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 97.4,
+      "parts": [
+        {
+          "left": -41,
+          "top": -79,
+          "width": 82,
+          "height": 139,
+          "file": "rotation-0.png",
+          "rotation": 0
+        },
+        {
+          "left": -41,
+          "top": -79,
+          "width": 82,
+          "height": 139,
+          "file": "rotation-1.png",
+          "rotation": 1
+        },
+        {
+          "left": -41,
+          "top": -62,
+          "width": 82,
+          "height": 122,
+          "file": "rotation-2.png",
+          "rotation": 2
+        },
+        {
+          "left": -41,
+          "top": -62,
+          "width": 82,
+          "height": 122,
+          "file": "rotation-3.png",
+          "rotation": 3
+        }
+      ],
+      "source": {
+        "art": "Reconstrução geométrica inspirada nas capturas do Café Mania fornecidas pelo responsável.",
+        "calibration": "Tile 160×80, origem traseira. Alturas referenciadas em white_cloth_table e classic_chair.",
+        "priceGold": "Valor escolhido para o projeto; não confirmado na configuração histórica."
+      }
+    },
+    {
+      "id": 9040101,
+      "classname": "original_gold_armchair",
+      "name": "Poltrona Dourada",
+      "type": 3,
+      "kind": "chair",
+      "priceGold": 200,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 97.4,
+      "parts": [
+        {
+          "file": "front.png",
+          "width": 82,
+          "height": 91,
+          "left": -41,
+          "top": -28,
+          "rotation": 0,
+          "flipX": true
+        },
+        {
+          "file": "front.png",
+          "width": 82,
+          "height": 91,
+          "left": -41,
+          "top": -28,
+          "rotation": 1
+        },
+        {
+          "file": "back.png",
+          "width": 82,
+          "height": 76,
+          "left": -41,
+          "top": -13,
+          "rotation": 2,
+          "flipX": true
+        },
+        {
+          "file": "back.png",
+          "width": 82,
+          "height": 76,
+          "left": -41,
+          "top": -13,
+          "rotation": 3
+        }
+      ],
+      "source": {
+        "art": "behance/artes/4286853/001.jpg · recortes 05.png (costas) e 06.png (frente) fornecidos pelo responsável.",
+        "calibration": "Sequência SE → SW → NW → NE. Frente e costas originais, escala uniforme e offsets preservados; duas direções complementares espelhadas no código.",
+        "priceGold": "Preço de projeto; não confirmado pela configuração histórica."
+      }
+    },
+    {
+      "id": 9040201,
+      "classname": "acervo_chair_yellow_black",
+      "name": "Poltrona Amarela e Preta",
+      "type": 3,
+      "kind": "chair",
+      "priceGold": 200,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 97.4,
+      "parts": [
+        {
+          "file": "front.png",
+          "width": 94,
+          "height": 89,
+          "left": -36,
+          "top": -48,
+          "rotation": 0,
+          "flipX": true
+        },
+        {
+          "file": "front.png",
+          "width": 94,
+          "height": 89,
+          "left": -58,
+          "top": -48,
+          "rotation": 1
+        },
+        {
+          "file": "back.png",
+          "width": 92,
+          "height": 84,
+          "left": -47,
+          "top": -48,
+          "rotation": 2
+        },
+        {
+          "file": "back.png",
+          "width": 92,
+          "height": 84,
+          "left": -45,
+          "top": -48,
+          "rotation": 3,
+          "flipX": true
+        }
+      ],
+      "source": {
+        "acervo": "cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/4286853/006.jpg",
+        "sha256": "c1404a7d3de3a27bd630081a82f7fa0be327b60b9fe56ac003748bad0e2ac2ec",
+        "artist": "Sabrina Contino",
+        "page": "https://www.behance.net/gallery/4286853/Cafe-Mania",
+        "method": "Frente e costas reconstruídas com imagegen a partir dos dois recortes originais, preservando proporções por escala uniforme; vistas complementares espelhadas no código.",
+        "name": "Nome descritivo do projeto; nome oficial do item não confirmado.",
+        "priceGold": "Preço de projeto; valor histórico não confirmado.",
+        "views": "Frente e costas reconstruídas com imagegen; duas vistas complementares por espelhamento.",
+        "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+        "batch": "02",
+        "calibration": {
+          "tile": [
+            160,
+            80
+          ],
+          "origin": "back",
+          "front": {
+            "mode": "uniform",
+            "registration": {
+              "scale": 0.071,
+              "anchor": [
+                800,
+                760
+              ],
+              "floorY": 8
+            },
+            "transform": {
+              "k": 0,
+              "aL": 0.071,
+              "aR": 0.071,
+              "bL": 0,
+              "bR": 0,
+              "c": 0.071,
+              "x": -56.8,
+              "y": -45.959999999999994
+            },
+            "options": {
+              "height": 32
+            }
+          },
+          "back": {
+            "mode": "uniform",
+            "registration": {
+              "scale": 0.071,
+              "anchor": [
+                690,
+                780
+              ],
+              "floorY": 8
+            },
+            "transform": {
+              "k": 0,
+              "aL": 0.071,
+              "aR": 0.071,
+              "bL": 0,
+              "bR": 0,
+              "c": 0.071,
+              "x": -48.989999999999995,
+              "y": -47.379999999999995
+            },
+            "options": {
+              "height": 32
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 9040202,
+      "classname": "acervo_chair_50_red",
+      "name": "Cadeira Vermelha — Anos 50",
+      "type": 3,
+      "kind": "chair",
+      "priceGold": 1300,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 97.4,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 112,
+          "height": 130,
+          "left": -67,
+          "top": -65,
+          "rotation": 0
+        },
+        {
+          "file": "rotation-1.png",
+          "width": 112,
+          "height": 130,
+          "left": -45,
+          "top": -65,
+          "rotation": 1
+        },
+        {
+          "file": "rotation-2.png",
+          "width": 89,
+          "height": 114,
+          "left": -44,
+          "top": -49,
+          "rotation": 2
+        },
+        {
+          "file": "rotation-3.png",
+          "width": 89,
+          "height": 114,
+          "left": -45,
+          "top": -49,
+          "rotation": 3
+        }
+      ],
+      "source": {
+        "acervo": "cafe-mania-acervo-documentado/cafe-mania-acervo/imagens/decoracao/P019_03_cadeiras-anos-50_a5c35e76.png",
+        "sha256": "a5c35e7660cedc13165210bb0e54d16b2df705c73ba2b870aee8362d40244219",
+        "artist": "Autoria não informada na prancha fornecida.",
+        "page": "https://dicas-cafemania.blogspot.com/2010/09/anos-50.html",
+        "method": "Reconstrução com imagegen de referência pequena; aproximação visual, não extração do PNG original.",
+        "name": "Nome descritivo do projeto; nome oficial do item não confirmado.",
+        "priceGold": "Preço em ouro visível na terceira ficha da referência: 1300.",
+        "views": "Frente e costas reconstruídas com imagegen; duas vistas complementares por espelhamento.",
+        "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+        "calibration": {
+          "tile": [
+            160,
+            80
+          ],
+          "origin": "back",
+          "front": {
+            "points": {
+              "left": {
+                "x": 411,
+                "y": 643
+              },
+              "back": {
+                "x": 713,
+                "y": 484
+              },
+              "right": {
+                "x": 1014,
+                "y": 643
+              },
+              "foot": {
+                "x": 710,
+                "y": 1135
+              },
+              "groundLeft": {
+                "x": 411,
+                "y": 990
+              },
+              "groundRight": {
+                "x": 1020,
+                "y": 972
+              }
+            },
+            "options": {
+              "width": 0.48,
+              "height": 32,
+              "support": 0.54
+            },
+            "mode": "planes",
+            "transform": {
+              "k": 713,
+              "aL": 0.1271523178807947,
+              "aR": 0.12757475083056477,
+              "bL": 0.003479476697195616,
+              "bR": -0.0034910364204421146,
+              "c": 0.12736353435567974,
+              "x": -90.65960264900663,
+              "y": -75.32481751324946
+            }
+          },
+          "back": {
+            "points": {
+              "left": {
+                "x": 342,
+                "y": 618
+              },
+              "back": {
+                "x": 646,
+                "y": 460
+              },
+              "right": {
+                "x": 945,
+                "y": 618
+              },
+              "foot": {
+                "x": 641,
+                "y": 1075
+              },
+              "groundLeft": {
+                "x": 346,
+                "y": 927
+              },
+              "groundRight": {
+                "x": 940,
+                "y": 922
+              }
+            },
+            "options": {
+              "width": 0.48,
+              "height": 32,
+              "support": 0.54
+            },
+            "mode": "planes",
+            "transform": {
+              "k": 646,
+              "aL": 0.12631578947368421,
+              "aR": 0.12842809364548494,
+              "bL": 0.0030419959421525145,
+              "bR": -0.0030928654395129263,
+              "c": 0.1273719415595846,
+              "x": -81.60000000000001,
+              "y": -71.75622249603943
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 9040301,
+      "classname": "acervo_lote02_chair_italy_green",
+      "name": "Banco Verde",
+      "type": 3,
+      "kind": "chair",
+      "priceGold": 1200,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 97.4,
+      "parts": [
+        {
+          "file": "front.png",
+          "width": 93,
+          "height": 146,
+          "left": -54,
+          "top": -86,
+          "rotation": 0
+        },
+        {
+          "file": "front.png",
+          "width": 93,
+          "height": 146,
+          "left": -39,
+          "top": -86,
+          "rotation": 1,
+          "flipX": true
+        },
+        {
+          "file": "back.png",
+          "width": 92,
+          "height": 120,
+          "left": -41,
+          "top": -58,
+          "rotation": 2
+        },
+        {
+          "file": "back.png",
+          "width": 92,
+          "height": 120,
+          "left": -51,
+          "top": -58,
+          "rotation": 3,
+          "flipX": true
+        }
+      ],
+      "source": {
+        "acervo": "anexos-usuario/lote-02/referencia-mesas-cadeiras.png",
+        "sha256": "41474371823198210b8521aa0150366fcf198358d236b7388b2b690503a9cd7f",
+        "artist": "Vostu — referência fornecida pelo responsável",
+        "page": "https://jogandocafemania.blogspot.com/2010/08/mamma-mia.html",
+        "method": "Costas recortadas do screenshot original; frente reconstruída com imagegen usando o mesmo desenho e paleta.",
+        "name": "Nome confirmado no post Mamma Mia! de 26/08/2010.",
+        "priceGold": "1200 ouro, visíveis na primeira ficha da referência P013_03.",
+        "views": "Frente reconstruída com imagegen e costas recortadas da referência; duas vistas complementares por espelhamento.",
+        "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+        "batch": "02",
+        "calibration": {
+          "tile": [
+            160,
+            80
+          ],
+          "origin": "back",
+          "front": {
+            "points": {
+              "left": {
+                "x": 324,
+                "y": 860
+              },
+              "back": {
+                "x": 629,
+                "y": 684
+              },
+              "right": {
+                "x": 927,
+                "y": 847
+              },
+              "foot": {
+                "x": 548,
+                "y": 1327
+              },
+              "groundLeft": {
+                "x": 275,
+                "y": 1107
+              },
+              "groundRight": {
+                "x": 897,
+                "y": 1174
+              }
+            },
+            "options": {
+              "width": 0.44,
+              "height": 32,
+              "support": 0.54
+            },
+            "mode": "planes",
+            "transform": {
+              "k": 629,
+              "aL": 0.11540983606557376,
+              "aR": 0.1181208053691275,
+              "bL": 0.009674414577881027,
+              "bR": -0.004807876768215286,
+              "c": 0.11676532071735063,
+              "x": -72.59278688524589,
+              "y": -95.552686140155
+            }
+          },
+          "back": {
+            "points": {
+              "left": {
+                "x": 12,
+                "y": 174
+              },
+              "back": {
+                "x": 111,
+                "y": 124
+              },
+              "right": {
+                "x": 194,
+                "y": 166
+              },
+              "foot": {
+                "x": 125,
+                "y": 302
+              },
+              "groundLeft": {
+                "x": 18,
+                "y": 247
+              },
+              "groundRight": {
+                "x": 219,
+                "y": 256
+              }
+            },
+            "options": {
+              "width": 0.44,
+              "height": 32,
+              "support": 0.54
+            },
+            "mode": "planes",
+            "transform": {
+              "k": 111,
+              "aL": 0.3555555555555555,
+              "aR": 0.4240963855421686,
+              "bL": 0.01910402552972834,
+              "bR": 0.014786858276479437,
+              "c": 0.38982597054886203,
+              "x": -39.46666666666666,
+              "y": -60.05896718185873
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 9040302,
+      "classname": "acervo_lote02_chair_italy_red",
+      "name": "Cadeira Estofada",
+      "type": 3,
+      "kind": "chair",
+      "priceGold": 1200,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 97.4,
+      "parts": [
+        {
+          "file": "front.png",
+          "width": 93,
+          "height": 146,
+          "left": -54,
+          "top": -86,
+          "rotation": 0
+        },
+        {
+          "file": "front.png",
+          "width": 93,
+          "height": 146,
+          "left": -39,
+          "top": -86,
+          "rotation": 1,
+          "flipX": true
+        },
+        {
+          "file": "back.png",
+          "width": 92,
+          "height": 121,
+          "left": -41,
+          "top": -59,
+          "rotation": 2
+        },
+        {
+          "file": "back.png",
+          "width": 92,
+          "height": 121,
+          "left": -51,
+          "top": -59,
+          "rotation": 3,
+          "flipX": true
+        }
+      ],
+      "source": {
+        "acervo": "anexos-usuario/lote-02/referencia-mesas-cadeiras.png",
+        "sha256": "41474371823198210b8521aa0150366fcf198358d236b7388b2b690503a9cd7f",
+        "artist": "Vostu — referência fornecida pelo responsável",
+        "page": "https://jogandocafemania.blogspot.com/2010/08/mamma-mia.html",
+        "method": "Costas recortadas do screenshot original; frente reconstruída com imagegen usando o mesmo desenho e paleta.",
+        "name": "Nome confirmado no post Mamma Mia! de 26/08/2010.",
+        "priceGold": "1200 ouro, visíveis na segunda ficha da referência P013_03.",
+        "views": "Frente reconstruída com imagegen e costas recortadas da referência; duas vistas complementares por espelhamento.",
+        "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+        "batch": "02",
+        "calibration": {
+          "tile": [
+            160,
+            80
+          ],
+          "origin": "back",
+          "front": {
+            "points": {
+              "left": {
+                "x": 324,
+                "y": 860
+              },
+              "back": {
+                "x": 629,
+                "y": 684
+              },
+              "right": {
+                "x": 927,
+                "y": 847
+              },
+              "foot": {
+                "x": 548,
+                "y": 1327
+              },
+              "groundLeft": {
+                "x": 275,
+                "y": 1107
+              },
+              "groundRight": {
+                "x": 897,
+                "y": 1174
+              }
+            },
+            "options": {
+              "width": 0.44,
+              "height": 32,
+              "support": 0.54
+            },
+            "mode": "planes",
+            "transform": {
+              "k": 629,
+              "aL": 0.11540983606557376,
+              "aR": 0.1181208053691275,
+              "bL": 0.009674414577881027,
+              "bR": -0.004807876768215286,
+              "c": 0.11676532071735063,
+              "x": -72.59278688524589,
+              "y": -95.552686140155
+            }
+          },
+          "back": {
+            "points": {
+              "left": {
+                "x": 12,
+                "y": 175
+              },
+              "back": {
+                "x": 111,
+                "y": 125
+              },
+              "right": {
+                "x": 194,
+                "y": 168
+              },
+              "foot": {
+                "x": 125,
+                "y": 300
+              },
+              "groundLeft": {
+                "x": 18,
+                "y": 247
+              },
+              "groundRight": {
+                "x": 219,
+                "y": 258
+              }
+            },
+            "options": {
+              "width": 0.44,
+              "height": 32,
+              "support": 0.54
+            },
+            "mode": "planes",
+            "transform": {
+              "k": 111,
+              "aL": 0.3555555555555555,
+              "aR": 0.4240963855421686,
+              "bL": 0.01910402552972834,
+              "bR": 0.010090159836131679,
+              "c": 0.38982597054886203,
+              "x": -39.46666666666666,
+              "y": -60.4487931524076
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 9050101,
+      "classname": "original_water_floor",
+      "name": "Piso de Água (Mosaico)",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 160,
+          "height": 80,
+          "left": -80,
+          "top": 0
+        }
+      ],
+      "source": {
+        "art": "behance/artes/43063757/010.jpg · recorte 01.png fornecido pelo responsável.",
+        "calibration": "Bloco original reduzido a um tile 160×80, máscara em losango. Repetição do bloco; não é extração de cada subtile original.",
+        "priceGold": "Preço de projeto; não confirmado pela configuração histórica."
+      }
+    },
+    {
+      "id": 9050102,
+      "classname": "original_stone_floor",
+      "name": "Piso de Pedras (Mosaico)",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 160,
+          "height": 80,
+          "left": -80,
+          "top": 0
+        }
+      ],
+      "source": {
+        "art": "behance/artes/43063757/010.jpg · recorte 02.png fornecido pelo responsável.",
+        "calibration": "Bloco original reduzido a um tile 160×80, máscara em losango. Repetição do bloco; não é extração de cada subtile original.",
+        "priceGold": "Preço de projeto; não confirmado pela configuração histórica."
+      }
+    },
+    {
+      "id": 9050103,
+      "classname": "original_pool_floor",
+      "name": "Piso de Piscina (Mosaico)",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 160,
+          "height": 80,
+          "left": -80,
+          "top": 0
+        }
+      ],
+      "source": {
+        "art": "behance/artes/43063757/010.jpg · recorte 03.png fornecido pelo responsável.",
+        "calibration": "Bloco original reduzido a um tile 160×80, máscara em losango. Repetição do bloco; não é extração de cada subtile original.",
+        "priceGold": "Preço de projeto; não confirmado pela configuração histórica."
+      }
+    },
+    {
+      "id": 9050104,
+      "classname": "original_sand_floor",
+      "name": "Piso de Areia (Mosaico)",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 160,
+          "height": 80,
+          "left": -80,
+          "top": 0
+        }
+      ],
+      "source": {
+        "art": "behance/artes/43063757/010.jpg · recorte 04.png fornecido pelo responsável.",
+        "calibration": "Bloco original reduzido a um tile 160×80, máscara em losango. Repetição do bloco; não é extração de cada subtile original.",
+        "priceGold": "Preço de projeto; não confirmado pela configuração histórica."
+      }
+    },
+    {
+      "id": 9050105,
+      "classname": "original_grass_floor",
+      "name": "Piso com Grama (Mosaico)",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 160,
+          "height": 80,
+          "left": -80,
+          "top": 0
+        }
+      ],
+      "source": {
+        "art": "behance/artes/43063757/010.jpg · recorte 05.png fornecido pelo responsável.",
+        "calibration": "Bloco original reduzido a um tile 160×80, máscara em losango. Repetição do bloco; não é extração de cada subtile original.",
+        "priceGold": "Preço de projeto; não confirmado pela configuração histórica."
+      }
+    },
+    {
+      "id": 9060201,
+      "classname": "acervo_counter_50",
+      "name": "Balcão — Anos 50",
+      "type": 3,
+      "kind": "counter",
+      "priceGold": 2100,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 32,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 171,
+          "height": 116,
+          "left": -85,
+          "top": -36,
+          "rotation": 0
+        },
+        {
+          "file": "rotation-1.png",
+          "width": 171,
+          "height": 116,
+          "left": -86,
+          "top": -36,
+          "rotation": 1
+        }
+      ],
+      "source": {
+        "acervo": "cafe-mania-acervo-documentado/cafe-mania-acervo/imagens/decoracao/P019_09_balcao-anos-50_beef29c7.png",
+        "sha256": "beef29c710a7ad49df8af5ff24b9f95249aca7884db880b74662e34f66906dcf",
+        "artist": "Autoria não informada na prancha fornecida.",
+        "page": "https://dicas-cafemania.blogspot.com/2010/09/anos-50.html",
+        "method": "Reconstrução com imagegen de referência pequena; aproximação visual, não extração do PNG original.",
+        "name": "Nome descritivo do projeto; nome oficial do item não confirmado.",
+        "priceGold": "Preço em ouro visível na ficha da referência: 2100.",
+        "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+        "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+        "calibration": {
+          "tile": [
+            160,
+            80
+          ],
+          "origin": "back",
+          "front": {
+            "points": {
+              "left": {
+                "x": 258,
+                "y": 375
+              },
+              "back": {
+                "x": 769,
+                "y": 106
+              },
+              "right": {
+                "x": 1275,
+                "y": 375
+              },
+              "foot": {
+                "x": 764,
+                "y": 921
+              },
+              "groundLeft": {
+                "x": 307,
+                "y": 672
+              },
+              "groundRight": {
+                "x": 1240,
+                "y": 663
+              }
+            },
+            "options": {
+              "width": 1,
+              "height": 32,
+              "support": 0.93
+            },
+            "mode": "planes",
+            "transform": {
+              "k": 769,
+              "aL": 0.15655577299412915,
+              "aR": 0.15810276679841898,
+              "bL": 0.00454319687298968,
+              "bR": -0.0045880901227227655,
+              "c": 0.15732926989627405,
+              "x": -120.39138943248531,
+              "y": -52.17062100433411
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 9060202,
+      "classname": "acervo_counter_italy",
+      "name": "Balcão Pequena Itália",
+      "type": 3,
+      "kind": "counter",
+      "priceGold": 2000,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 32,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 167,
+          "height": 114,
+          "left": -83,
+          "top": -35,
+          "rotation": 0
+        },
+        {
+          "file": "rotation-1.png",
+          "width": 167,
+          "height": 114,
+          "left": -84,
+          "top": -35,
+          "rotation": 1
+        }
+      ],
+      "source": {
+        "acervo": "anexos-usuario/lote-02/balcao-pequena-italia-oficial.png",
+        "sha256": "7434abd11d1672120e859f768c73bb023b579a3967e901c0807d425c203bc056",
+        "artist": "Vostu — arquivo oficial fornecido pelo responsável",
+        "page": "https://jogandocafemania.blogspot.com/2010/08/mamma-mia.html",
+        "method": "Recorte da arte original com transparência e calibração geométrica.",
+        "name": "Nome confirmado no post Mamma Mia! de 26/08/2010.",
+        "priceGold": "Preço em ouro visível na ficha da referência: 2000.",
+        "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+        "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+        "calibration": {
+          "tile": [
+            160,
+            80
+          ],
+          "origin": "back",
+          "front": {
+            "points": {
+              "left": {
+                "x": 2,
+                "y": 110
+              },
+              "back": {
+                "x": 215,
+                "y": 3
+              },
+              "right": {
+                "x": 426,
+                "y": 110
+              },
+              "foot": {
+                "x": 211,
+                "y": 343
+              },
+              "groundLeft": {
+                "x": 20,
+                "y": 255
+              },
+              "groundRight": {
+                "x": 419,
+                "y": 248
+              }
+            },
+            "options": {
+              "width": 1,
+              "height": 32,
+              "support": 0.93
+            },
+            "mode": "planes",
+            "transform": {
+              "k": 215,
+              "aL": 0.3755868544600939,
+              "aR": 0.3791469194312796,
+              "bL": 0.0017758540055797523,
+              "bR": -0.0017926867449691297,
+              "c": 0.37736688694568676,
+              "x": -80.75117370892018,
+              "y": -33.513909272036706
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 9070201,
+      "classname": "acervo_stove_red_gold",
+      "name": "Fogão Vermelho e Dourado",
+      "type": 3,
+      "kind": "stove",
+      "priceGold": 200,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 32,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 167,
+          "height": 120,
+          "left": -83,
+          "top": -36,
+          "rotation": 0
+        },
+        {
+          "file": "rotation-1.png",
+          "width": 167,
+          "height": 120,
+          "left": -84,
+          "top": -36,
+          "rotation": 1
+        }
+      ],
+      "source": {
+        "acervo": "StuffsArtboard-1-copy.webp",
+        "sha256": "d9bd004b8829829900c56a9fde200bd74785243115c48c6fefd91ffbd94f1beb",
+        "artist": "Autoria não informada na prancha fornecida.",
+        "page": null,
+        "method": "Recorte da arte original com transparência e calibração geométrica.",
+        "name": "Nome descritivo do projeto; nome oficial do item não confirmado.",
+        "priceGold": "Preço de projeto; valor histórico não confirmado.",
+        "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+        "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+        "calibration": {
+          "tile": [
+            160,
+            80
+          ],
+          "origin": "back",
+          "front": {
+            "points": {
+              "left": {
+                "x": 2.0355648535564854,
+                "y": 35.725530676069276
+              },
+              "back": {
+                "x": 69.50738225898472,
+                "y": 2.8085735779780734
+              },
+              "right": {
+                "x": 134.31410256410257,
+                "y": 36.072291744116605
+              },
+              "foot": {
+                "x": 69.50738225898472,
+                "y": 107
+              },
+              "groundLeft": {
+                "x": 2.0355648535564854,
+                "y": 67.90940844157029
+              },
+              "groundRight": {
+                "x": 134.31410256410257,
+                "y": 74.2044121471365
+              }
+            },
+            "options": {
+              "width": 1,
+              "height": 32,
+              "support": 1
+            },
+            "mode": "planes",
+            "transform": {
+              "k": 69.50738225898472,
+              "aL": 1.1856802302995895,
+              "aR": 1.2344398794345766,
+              "bL": -0.0024974143917573244,
+              "bR": -0.0038745461584628327,
+              "c": 1.210060054867083,
+              "x": -82.4135290043546,
+              "y": -35.22495396107942
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 9070202,
+      "classname": "acervo_stove_silver_garland",
+      "name": "Fogão Prateado com Guirlanda",
+      "type": 3,
+      "kind": "stove",
+      "priceGold": 200,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 32,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 167,
+          "height": 123,
+          "left": -84,
+          "top": -40,
+          "rotation": 0
+        },
+        {
+          "file": "rotation-1.png",
+          "width": 167,
+          "height": 123,
+          "left": -83,
+          "top": -40,
+          "rotation": 1
+        }
+      ],
+      "source": {
+        "acervo": "StuffsArtboard-1-copy.webp",
+        "sha256": "d9bd004b8829829900c56a9fde200bd74785243115c48c6fefd91ffbd94f1beb",
+        "artist": "Autoria não informada na prancha fornecida.",
+        "page": null,
+        "method": "Recorte da arte original com transparência e calibração geométrica.",
+        "name": "Nome descritivo do projeto; nome oficial do item não confirmado.",
+        "priceGold": "Preço de projeto; valor histórico não confirmado.",
+        "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+        "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+        "calibration": {
+          "tile": [
+            160,
+            80
+          ],
+          "origin": "back",
+          "front": {
+            "points": {
+              "left": {
+                "x": 2.7160493827160495,
+                "y": 39.90734289922986
+              },
+              "back": {
+                "x": 67.36023877742677,
+                "y": 6.289617033597949
+              },
+              "right": {
+                "x": 135.93859649122808,
+                "y": 39.637334286680336
+              },
+              "foot": {
+                "x": 67.36023877742677,
+                "y": 108
+              },
+              "groundLeft": {
+                "x": 2.7160493827160495,
+                "y": 71.90402906418308
+              },
+              "groundRight": {
+                "x": 135.93859649122808,
+                "y": 72.22281122183443
+              }
+            },
+            "options": {
+              "width": 1,
+              "height": 32,
+              "support": 1
+            },
+            "mode": "planes",
+            "transform": {
+              "k": 67.36023877742677,
+              "aL": 1.2375435557174101,
+              "aR": 1.166548786919989,
+              "bL": 0.006343318232682527,
+              "bR": -0.0012466884471488138,
+              "c": 1.2020461713186996,
+              "x": -83.3612294105905,
+              "y": -39.987697505091994
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 9070203,
+      "classname": "acervo_stove_black_red",
+      "name": "Fogão Preto com Resistência Vermelha",
+      "type": 3,
+      "kind": "stove",
+      "priceGold": 200,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 32,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 167,
+          "height": 118,
+          "left": -83,
+          "top": -34,
+          "rotation": 0
+        },
+        {
+          "file": "rotation-1.png",
+          "width": 167,
+          "height": 118,
+          "left": -84,
+          "top": -34,
+          "rotation": 1
+        }
+      ],
+      "source": {
+        "acervo": "StuffsArtboard-1-copy.webp",
+        "sha256": "d9bd004b8829829900c56a9fde200bd74785243115c48c6fefd91ffbd94f1beb",
+        "artist": "Autoria não informada na prancha fornecida.",
+        "page": null,
+        "method": "Recorte da arte original com transparência e calibração geométrica.",
+        "name": "Nome descritivo do projeto; nome oficial do item não confirmado.",
+        "priceGold": "Preço de projeto; valor histórico não confirmado.",
+        "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+        "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+        "calibration": {
+          "tile": [
+            160,
+            80
+          ],
+          "origin": "back",
+          "front": {
+            "points": {
+              "left": {
+                "x": 2.3050314465408803,
+                "y": 33.015376769295194
+              },
+              "back": {
+                "x": 65.40730050549898,
+                "y": 1.3044543282411354
+              },
+              "right": {
+                "x": 124.02232142857143,
+                "y": 31.050966856258313
+              },
+              "foot": {
+                "x": 65.40730050549898,
+                "y": 92
+              },
+              "groundLeft": {
+                "x": 2.3050314465408803,
+                "y": 61.966328342010044
+              },
+              "groundRight": {
+                "x": 124.02232142857143,
+                "y": 63.81574969026215
+              }
+            },
+            "options": {
+              "width": 1,
+              "height": 32,
+              "support": 1
+            },
+            "mode": "planes",
+            "transform": {
+              "k": 65.40730050549898,
+              "aL": 1.267783253962768,
+              "aR": 1.3648378647683779,
+              "bL": 0.02759682151453402,
+              "bR": 0.014405035463159188,
+              "c": 1.316310559365573,
+              "x": -82.9222802677821,
+              "y": -35.52210060427168
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 9070204,
+      "classname": "acervo_stove_silver_grill",
+      "name": "Fogão Prateado com Grelha",
+      "type": 3,
+      "kind": "stove",
+      "priceGold": 200,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 32,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 166,
+          "height": 118,
+          "left": -83,
+          "top": -34,
+          "rotation": 0
+        },
+        {
+          "file": "rotation-1.png",
+          "width": 166,
+          "height": 118,
+          "left": -83,
+          "top": -34,
+          "rotation": 1
+        }
+      ],
+      "source": {
+        "acervo": "StuffsArtboard-1-copy.webp",
+        "sha256": "d9bd004b8829829900c56a9fde200bd74785243115c48c6fefd91ffbd94f1beb",
+        "artist": "Autoria não informada na prancha fornecida.",
+        "page": null,
+        "method": "Recorte da arte original com transparência e calibração geométrica.",
+        "name": "Nome descritivo do projeto; nome oficial do item não confirmado.",
+        "priceGold": "Preço de projeto; valor histórico não confirmado.",
+        "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+        "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+        "calibration": {
+          "tile": [
+            160,
+            80
+          ],
+          "origin": "back",
+          "front": {
+            "points": {
+              "left": {
+                "x": 2.127450980392157,
+                "y": 32.75671133610336
+              },
+              "back": {
+                "x": 65.16819932669125,
+                "y": 1.1143009618850073
+              },
+              "right": {
+                "x": 123.83333333333333,
+                "y": 30.922707561348233
+              },
+              "foot": {
+                "x": 65.16819932669125,
+                "y": 92
+              },
+              "groundLeft": {
+                "x": 2.127450980392157,
+                "y": 62.00368179672841
+              },
+              "groundRight": {
+                "x": 123.83333333333333,
+                "y": 63.80342963925656
+              }
+            },
+            "options": {
+              "width": 1,
+              "height": 32,
+              "support": 1
+            },
+            "mode": "planes",
+            "transform": {
+              "k": 65.16819932669125,
+              "aL": 1.2690204684839614,
+              "aR": 1.3636719894126959,
+              "bL": 0.02621110336223975,
+              "bR": 0.012985845762354509,
+              "c": 1.3163462289483285,
+              "x": -82.69977883981392,
+              "y": -35.17493627757377
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 9070205,
+      "classname": "acervo_stove_white_gold",
+      "name": "Fogão Branco e Dourado",
+      "type": 3,
+      "kind": "stove",
+      "priceGold": 200,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 32,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 167,
+          "height": 120,
+          "left": -84,
+          "top": -36,
+          "rotation": 0
+        },
+        {
+          "file": "rotation-1.png",
+          "width": 167,
+          "height": 120,
+          "left": -83,
+          "top": -36,
+          "rotation": 1
+        }
+      ],
+      "source": {
+        "acervo": "StuffsArtboard-1-copy.webp",
+        "sha256": "d9bd004b8829829900c56a9fde200bd74785243115c48c6fefd91ffbd94f1beb",
+        "artist": "Autoria não informada na prancha fornecida.",
+        "page": null,
+        "method": "Recorte da arte original com transparência e calibração geométrica.",
+        "name": "Nome descritivo do projeto; nome oficial do item não confirmado.",
+        "priceGold": "Preço de projeto; valor histórico não confirmado.",
+        "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+        "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+        "calibration": {
+          "tile": [
+            160,
+            80
+          ],
+          "origin": "back",
+          "front": {
+            "points": {
+              "left": {
+                "x": 2.6910828025477707,
+                "y": 33.901563305823906
+              },
+              "back": {
+                "x": 65.60506325017602,
+                "y": 2.507893818962252
+              },
+              "right": {
+                "x": 124.93111111111111,
+                "y": 32.63139990720714
+              },
+              "foot": {
+                "x": 65.60506325017602,
+                "y": 96
+              },
+              "groundLeft": {
+                "x": 2.6910828025477707,
+                "y": 63.5872275276876
+              },
+              "groundRight": {
+                "x": 124.93111111111111,
+                "y": 64.91221945680675
+              }
+            },
+            "options": {
+              "width": 1,
+              "height": 32,
+              "support": 1
+            },
+            "mode": "planes",
+            "transform": {
+              "k": 65.60506325017602,
+              "aL": 1.2715774686453791,
+              "aR": 1.3484801850871015,
+              "bL": 0.017907180580279514,
+              "bR": 0.009057381664426045,
+              "c": 1.3100288268662403,
+              "x": -83.42192025797881,
+              "y": -36.46021491216178
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 9070206,
+      "classname": "acervo_stove_futuristic",
+      "name": "Fogão Futurista Cinza e Ciano",
+      "type": 3,
+      "kind": "stove",
+      "priceGold": 200,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 32,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 166,
+          "height": 114,
+          "left": -83,
+          "top": -31,
+          "rotation": 0
+        },
+        {
+          "file": "rotation-1.png",
+          "width": 166,
+          "height": 114,
+          "left": -83,
+          "top": -31,
+          "rotation": 1
+        }
+      ],
+      "source": {
+        "acervo": "cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/4286853/006.jpg",
+        "sha256": "c1404a7d3de3a27bd630081a82f7fa0be327b60b9fe56ac003748bad0e2ac2ec",
+        "artist": "Sabrina Contino",
+        "page": "https://www.behance.net/gallery/4286853/Cafe-Mania",
+        "method": "Recorte da arte original com transparência e calibração geométrica.",
+        "name": "Nome descritivo do projeto; nome oficial do item não confirmado.",
+        "priceGold": "Preço de projeto; valor histórico não confirmado.",
+        "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+        "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+        "calibration": {
+          "tile": [
+            160,
+            80
+          ],
+          "origin": "back",
+          "front": {
+            "points": {
+              "left": {
+                "x": 2.0019607843137255,
+                "y": 63.25179342154377
+              },
+              "back": {
+                "x": 133.71265983455078,
+                "y": -4.7122133138152265
+              },
+              "right": {
+                "x": 265.9980392156863,
+                "y": 62.16930335905836
+              },
+              "foot": {
+                "x": 133.71265983455078,
+                "y": 222
+              },
+              "groundLeft": {
+                "x": 2.0019607843137255,
+                "y": 169.6780781866275
+              },
+              "groundRight": {
+                "x": 265.9980392156863,
+                "y": 169.63609115737682
+              }
+            },
+            "options": {
+              "width": 1,
+              "height": 32,
+              "support": 1
+            },
+            "mode": "planes",
+            "transform": {
+              "k": 133.71265983455078,
+              "aL": 0.607391810816268,
+              "aR": 0.6047531509094978,
+              "bL": 0.009043412418807295,
+              "bR": -0.0040446399768730434,
+              "c": 0.6060724808628829,
+              "x": -81.21597458596747,
+              "y": -30.35327591504043
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 9070207,
+      "classname": "acervo_stove_gift",
+      "name": "Fogão de Presente",
+      "type": 3,
+      "kind": "stove",
+      "priceGold": 200,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 32,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 166,
+          "height": 117,
+          "left": -83,
+          "top": -34,
+          "rotation": 0
+        },
+        {
+          "file": "rotation-1.png",
+          "width": 166,
+          "height": 117,
+          "left": -83,
+          "top": -34,
+          "rotation": 1
+        }
+      ],
+      "source": {
+        "acervo": "cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/4286853/002.jpg",
+        "sha256": "e7c896c7a734ce60d5b660c9db973d8b51ae6db1b4cb6c79d224c7b08dd2607a",
+        "artist": "Sabrina Contino",
+        "page": "https://www.behance.net/gallery/4286853/Cafe-Mania",
+        "method": "Recorte da arte original com transparência e calibração geométrica.",
+        "name": "Nome descritivo do projeto; nome oficial do item não confirmado.",
+        "priceGold": "Preço de projeto; valor histórico não confirmado.",
+        "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+        "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+        "calibration": {
+          "tile": [
+            160,
+            80
+          ],
+          "origin": "back",
+          "front": {
+            "points": {
+              "left": {
+                "x": 2.0019607843137255,
+                "y": 68.49406055163705
+              },
+              "back": {
+                "x": 133.81673964118147,
+                "y": 1.2611472287274665
+              },
+              "right": {
+                "x": 268.9980392156863,
+                "y": 68.25273404960235
+              },
+              "foot": {
+                "x": 133.81673964118147,
+                "y": 205
+              },
+              "groundLeft": {
+                "x": 2.0019607843137255,
+                "y": 133.88921808368752
+              },
+              "groundRight": {
+                "x": 268.9980392156863,
+                "y": 134.70102653193922
+              }
+            },
+            "options": {
+              "width": 1,
+              "height": 32,
+              "support": 1
+            },
+            "mode": "planes",
+            "transform": {
+              "k": 133.81673964118147,
+              "aL": 0.6069122195081684,
+              "aR": 0.5917978318880432,
+              "bL": 0.0022484921264619984,
+              "bR": -0.001122523907226669,
+              "c": 0.5993550256981058,
+              "x": -81.21501446297616,
+              "y": -33.05676081515506
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 9090101,
+      "classname": "original_black_piano",
+      "name": "Piano Preto",
+      "type": 3,
+      "kind": "decor",
+      "priceGold": 500,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 129,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 158,
+          "height": 158,
+          "left": -79,
+          "top": -89
+        }
+      ],
+      "source": {
+        "art": "behance/artes/4286853/001.jpg · recorte 01.png fornecido pelo responsável.",
+        "calibration": "Escala uniforme para largura de um tile; apoio frontal em y=70. Decoração sem funções de cozinha.",
+        "priceGold": "Preço de projeto; não confirmado pela configuração histórica."
+      }
+    },
+    {
+      "id": 9090102,
+      "classname": "original_cream_piano",
+      "name": "Piano Creme",
+      "type": 3,
+      "kind": "decor",
+      "priceGold": 500,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 129,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 158,
+          "height": 158,
+          "left": -79,
+          "top": -89
+        }
+      ],
+      "source": {
+        "art": "behance/artes/4286853/001.jpg · recorte 02.png fornecido pelo responsável.",
+        "calibration": "Escala uniforme para largura de um tile; apoio frontal em y=70. Decoração sem funções de cozinha.",
+        "priceGold": "Preço de projeto; não confirmado pela configuração histórica."
+      }
+    },
+    {
+      "id": 9090103,
+      "classname": "original_barbecue",
+      "name": "Fogão Churrasqueira",
+      "type": 3,
+      "kind": "stove",
+      "priceGold": 500,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 85,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 158,
+          "height": 124,
+          "left": -79,
+          "top": -45
+        }
+      ],
+      "source": {
+        "art": "behance/artes/4286853/001.jpg · recorte 03.png fornecido pelo responsável.",
+        "calibration": "Fogão: escala original preservada, sprite deslocado 10 px para baixo; apoio frontal em y=80.",
+        "priceGold": "Preço de projeto; não confirmado pela configuração histórica."
+      }
+    },
+    {
+      "id": 9100001,
+      "classname": "juice_machine",
+      "name": "Máquina de Sucos",
+      "type": 3,
+      "kind": "juice_machine",
+      "priceGold": 500,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 158,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 162,
+          "height": 239,
+          "left": -81,
+          "top": -158
+        }
+      ],
+      "source": {
+        "art": "4432119/003.png, recorte 05.png fornecido pelo responsável.",
+        "calibration": {
+          "base": {
+            "left": {
+              "x": 2.8350785340314135,
+              "y": 265.89268605966436
+            },
+            "front": {
+              "x": 121.23724807390882,
+              "y": 324.3593643991147
+            },
+            "right": {
+              "x": 215.5,
+              "y": 274.1532011256599
+            },
+            "rms": 0.07146036675535077
+          },
+          "transform": {
+            "k": 121.23724807390882,
+            "aL": 0.6756632949454215,
+            "aR": 0.848691538973165,
+            "bL": -0.02884321336599166,
+            "bR": -0.028843213365991605,
+            "c": 0.7425614088587734,
+            "x": -81.9155585037327,
+            "y": -157.3598747906415
+          }
+        },
+        "priceGold": "Preço de colocação definido pelo projeto; destravamento original de 20 caféGranas implementado separadamente."
+      }
     }
   ]
 }

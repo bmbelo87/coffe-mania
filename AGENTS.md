@@ -22,6 +22,8 @@ A pasta ripped/ contém material de referência do jogo disponibilizado nesta ed
 
 No Discord do projeto existem imagens dos assets em PNG. Esses arquivos precisam ser obtidos e processados manualmente: selecionar a arte, recortar, preservar transparência, calibrar tamanho e offsets e cadastrar as partes no manifesto do item. O endereço do Discord deve ser fornecido pelo responsável pelo projeto; não invente um link.
 
+Os ícones atualmente usados em `game/public/assets/ui/` pertencem à atualização mais nova do Café Mania e são o padrão visual da interface. Não os misture nem os substitua por ícones antigos do acervo de referências. Os recortes antigos de ícones ficam separados como referência histórica; essa restrição não se aplica aos assets de móveis, personagens e demais elementos do jogo, que podem ser reaproveitados.
+
 **Até o momento, nenhum arquivo .swf desse jogo foi descoberto.** Essa informação se refere ao jogo e aos assets compartilhados no Discord; não a referências de outros jogos. Planeje o fluxo de assets a partir dos PNGs disponíveis, sem exigir um SWF para continuar o desenvolvimento.
 
 Use o Asset Studio em tools/asset-positioner/ para esse processamento:

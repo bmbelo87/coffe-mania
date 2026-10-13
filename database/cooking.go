@@ -142,7 +142,7 @@ func startCooking(app core.App, userID, stoveID, recipeID string, now types.Date
 		if err != nil || stove.GetString("user") != userID {
 			return errStoveNotOwned
 		}
-		if stove.GetInt("item_id") != starterStoveItemID {
+		if item, ok := roomcatalog.ByID(stove.GetInt("item_id")); !ok || item.Kind != "stove" {
 			return errStoveNotOwned
 		}
 		if stove.GetBool("dirty") {

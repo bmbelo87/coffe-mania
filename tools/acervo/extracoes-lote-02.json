@@ -1,0 +1,1014 @@
+[
+  {
+    "id": "lote02_table_zen",
+    "source": "fontes/lote-02/blog-A0059.png",
+    "original": "cafe-mania-acervo-documentado/cafe-mania-acervo/imagens/decoracao/P027_14_table-zen-150x150_3e63cb9c.jpg",
+    "rect": [
+      0,
+      0,
+      150,
+      150
+    ],
+    "background": true,
+    "transparentSeeds": [
+      [
+        60,
+        52
+      ],
+      [
+        90,
+        52
+      ],
+      [
+        35,
+        97
+      ],
+      [
+        105,
+        97
+      ]
+    ]
+  },
+  {
+    "id": "lote02_stove_japanese",
+    "source": "fontes/lote-02/blog-A0062.png",
+    "original": "cafe-mania-acervo-documentado/cafe-mania-acervo/imagens/decoracao/P027_17_stove-japanese-150x150_3f7c7578.jpg",
+    "rect": [
+      0,
+      0,
+      150,
+      150
+    ],
+    "background": true
+  },
+  {
+    "id": "lote02_counter_shoji",
+    "source": "fontes/lote-02/blog-A0063.png",
+    "original": "cafe-mania-acervo-documentado/cafe-mania-acervo/imagens/decoracao/P027_18_serving-shoji-150x150_669f3254.jpg",
+    "rect": [
+      0,
+      0,
+      150,
+      150
+    ],
+    "background": true
+  },
+  {
+    "id": "lote02_counter_bordo",
+    "source": "fontes/lote-02/blog-A0064.png",
+    "original": "cafe-mania-acervo-documentado/cafe-mania-acervo/imagens/decoracao/P027_19_serving-bordo-150x150_c9a02bfa.jpg",
+    "rect": [
+      0,
+      0,
+      150,
+      150
+    ],
+    "background": true
+  },
+  {
+    "id": "lote02_chair_akira_front",
+    "source": "fontes/lote-02/blog-A0080.png",
+    "original": "cafe-mania-acervo-documentado/cafe-mania-acervo/imagens/decoracao/P027_35_chair-akira-150x150_ee009564.jpg",
+    "rect": [
+      0,
+      0,
+      150,
+      150
+    ],
+    "background": true
+  },
+  {
+    "id": "lote02_stove_roman",
+    "source": "fontes/lote-02/behance-13034859-4.png",
+    "original": "cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/13034859/004.jpg",
+    "rect": [
+      248,
+      209,
+      227,
+      186
+    ],
+    "background": true
+  },
+  {
+    "id": "lote02_stove_m",
+    "source": "fontes/lote-02/behance-13034859-11.png",
+    "original": "cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/13034859/011.jpg",
+    "rect": [
+      40,
+      402,
+      440,
+      323
+    ],
+    "background": true
+  },
+  {
+    "id": "lote02_table_green_flower",
+    "source": "fontes/lote-02/extra-49023909-5.png",
+    "original": "cafe-mania-acervo-complementar-2/cafe-mania-acervo-2/artes/49023909/005.png",
+    "rect": [
+      160,
+      1390,
+      220,
+      190
+    ],
+    "background": true
+  },
+  {
+    "id": "lote02_table_glass_pink",
+    "source": "fontes/lote-02/extra-49023909-5.png",
+    "original": "cafe-mania-acervo-complementar-2/cafe-mania-acervo-2/artes/49023909/005.png",
+    "rect": [
+      395,
+      1390,
+      200,
+      165
+    ],
+    "background": true
+  },
+  {
+    "id": "lote02_table_drum",
+    "source": "fontes/lote-02/extra-49023909-5.png",
+    "original": "cafe-mania-acervo-complementar-2/cafe-mania-acervo-2/artes/49023909/005.png",
+    "rect": [
+      632,
+      1390,
+      165,
+      190
+    ],
+    "background": true
+  },
+  {
+    "id": "lote02_table_green_monster",
+    "source": "fontes/lote-02/extra-49023909-5.png",
+    "original": "cafe-mania-acervo-complementar-2/cafe-mania-acervo-2/artes/49023909/005.png",
+    "rect": [
+      810,
+      1385,
+      225,
+      190
+    ],
+    "background": true
+  },
+  {
+    "id": "lote02_chair_green_flower_front",
+    "source": "fontes/lote-02/extra-49023909-5.png",
+    "original": "cafe-mania-acervo-complementar-2/cafe-mania-acervo-2/artes/49023909/005.png",
+    "rect": [
+      200,
+      1560,
+      150,
+      250
+    ],
+    "background": true,
+    "transparentSeeds": [
+      [
+        51,
+        100
+      ]
+    ]
+  },
+  {
+    "id": "lote02_chair_green_monster_front",
+    "source": "fontes/lote-02/extra-49023909-5.png",
+    "original": "cafe-mania-acervo-complementar-2/cafe-mania-acervo-2/artes/49023909/005.png",
+    "rect": [
+      850,
+      1560,
+      170,
+      250
+    ],
+    "background": true
+  },
+  {
+    "id": "lote02_chair_teal_monster_front",
+    "source": "fontes/lote-02/extra-49023909-5.png",
+    "original": "cafe-mania-acervo-complementar-2/cafe-mania-acervo-2/artes/49023909/005.png",
+    "rect": [
+      1070,
+      1560,
+      145,
+      250
+    ],
+    "background": true
+  },
+  {
+    "id": "lote02_counter_italy_official",
+    "source": "fontes/lote-02/balcao-pequena-italia-oficial-anexado.png",
+    "original": "anexos-usuario/lote-02/balcao-pequena-italia-oficial.png",
+    "rect": [
+      0,
+      0,
+      534,
+      348
+    ],
+    "background": true
+  },
+  {
+    "id": "lote02_table_italy_red_original",
+    "source": "fontes/lote-02/referencia-mesas-cadeiras-anexada.png",
+    "original": "anexos-usuario/lote-02/referencia-mesas-cadeiras.png",
+    "rect": [
+      350,
+      550,
+      390,
+      340
+    ],
+    "removeBlueFloor": true,
+    "polygons": [
+      [
+        [
+          22,
+          85
+        ],
+        [
+          36,
+          64
+        ],
+        [
+          65,
+          42
+        ],
+        [
+          103,
+          25
+        ],
+        [
+          153,
+          17
+        ],
+        [
+          199,
+          15
+        ],
+        [
+          250,
+          21
+        ],
+        [
+          296,
+          36
+        ],
+        [
+          333,
+          57
+        ],
+        [
+          357,
+          85
+        ],
+        [
+          372,
+          122
+        ],
+        [
+          374,
+          184
+        ],
+        [
+          373,
+          209
+        ],
+        [
+          366,
+          243
+        ],
+        [
+          347,
+          269
+        ],
+        [
+          318,
+          284
+        ],
+        [
+          272,
+          301
+        ],
+        [
+          242,
+          305
+        ],
+        [
+          210,
+          318
+        ],
+        [
+          178,
+          319
+        ],
+        [
+          155,
+          307
+        ],
+        [
+          126,
+          308
+        ],
+        [
+          88,
+          297
+        ],
+        [
+          61,
+          282
+        ],
+        [
+          36,
+          265
+        ],
+        [
+          24,
+          239
+        ],
+        [
+          19,
+          202
+        ],
+        [
+          18,
+          163
+        ],
+        [
+          20,
+          107
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lote02_chair_italy_green_back_original",
+    "source": "fontes/lote-02/referencia-mesas-cadeiras-anexada.png",
+    "original": "anexos-usuario/lote-02/referencia-mesas-cadeiras.png",
+    "rect": [
+      950,
+      530,
+      250,
+      330
+    ],
+    "removeBlueFloor": true,
+    "polygons": [
+      [
+        [
+          103,
+          56
+        ],
+        [
+          208,
+          12
+        ],
+        [
+          227,
+          15
+        ],
+        [
+          235,
+          38
+        ],
+        [
+          234,
+          64
+        ],
+        [
+          222,
+          87
+        ],
+        [
+          116,
+          127
+        ],
+        [
+          98,
+          119
+        ],
+        [
+          94,
+          110
+        ],
+        [
+          94,
+          74
+        ]
+      ],
+      [
+        [
+          107,
+          124
+        ],
+        [
+          122,
+          119
+        ],
+        [
+          140,
+          305
+        ],
+        [
+          125,
+          314
+        ],
+        [
+          113,
+          309
+        ]
+      ],
+      [
+        [
+          202,
+          92
+        ],
+        [
+          218,
+          86
+        ],
+        [
+          224,
+          268
+        ],
+        [
+          211,
+          273
+        ],
+        [
+          198,
+          256
+        ]
+      ],
+      [
+        [
+          120,
+          169
+        ],
+        [
+          205,
+          128
+        ],
+        [
+          205,
+          138
+        ],
+        [
+          123,
+          181
+        ]
+      ],
+      [
+        [
+          124,
+          212
+        ],
+        [
+          204,
+          172
+        ],
+        [
+          206,
+          183
+        ],
+        [
+          127,
+          224
+        ]
+      ],
+      [
+        [
+          12,
+          180
+        ],
+        [
+          18,
+          168
+        ],
+        [
+          45,
+          152
+        ],
+        [
+          86,
+          135
+        ],
+        [
+          116,
+          128
+        ],
+        [
+          145,
+          132
+        ],
+        [
+          177,
+          144
+        ],
+        [
+          198,
+          161
+        ],
+        [
+          201,
+          181
+        ],
+        [
+          197,
+          201
+        ],
+        [
+          169,
+          222
+        ],
+        [
+          127,
+          241
+        ],
+        [
+          98,
+          244
+        ],
+        [
+          42,
+          224
+        ],
+        [
+          15,
+          210
+        ]
+      ],
+      [
+        [
+          14,
+          205
+        ],
+        [
+          38,
+          216
+        ],
+        [
+          38,
+          255
+        ],
+        [
+          26,
+          260
+        ],
+        [
+          13,
+          255
+        ]
+      ]
+    ],
+    "removeLightBackdrop": true,
+    "woodWindows": [
+      [
+        [
+          108,
+          110
+        ],
+        [
+          220,
+          78
+        ],
+        [
+          235,
+          290
+        ],
+        [
+          108,
+          295
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lote02_chair_italy_red_back_original",
+    "source": "fontes/lote-02/referencia-mesas-cadeiras-anexada.png",
+    "original": "anexos-usuario/lote-02/referencia-mesas-cadeiras.png",
+    "rect": [
+      1400,
+      285,
+      255,
+      330
+    ],
+    "removeBlueFloor": true,
+    "polygons": [
+      [
+        [
+          105,
+          58
+        ],
+        [
+          210,
+          14
+        ],
+        [
+          229,
+          17
+        ],
+        [
+          237,
+          40
+        ],
+        [
+          236,
+          66
+        ],
+        [
+          224,
+          89
+        ],
+        [
+          118,
+          129
+        ],
+        [
+          100,
+          121
+        ],
+        [
+          96,
+          112
+        ],
+        [
+          96,
+          76
+        ]
+      ],
+      [
+        [
+          109,
+          136
+        ],
+        [
+          124,
+          131
+        ],
+        [
+          142,
+          317
+        ],
+        [
+          127,
+          326
+        ],
+        [
+          115,
+          321
+        ]
+      ],
+      [
+        [
+          204,
+          104
+        ],
+        [
+          220,
+          98
+        ],
+        [
+          226,
+          280
+        ],
+        [
+          213,
+          285
+        ],
+        [
+          200,
+          268
+        ]
+      ],
+      [
+        [
+          122,
+          177
+        ],
+        [
+          207,
+          136
+        ],
+        [
+          207,
+          146
+        ],
+        [
+          125,
+          189
+        ]
+      ],
+      [
+        [
+          126,
+          220
+        ],
+        [
+          206,
+          180
+        ],
+        [
+          208,
+          191
+        ],
+        [
+          129,
+          232
+        ]
+      ],
+      [
+        [
+          14,
+          192
+        ],
+        [
+          20,
+          180
+        ],
+        [
+          47,
+          164
+        ],
+        [
+          88,
+          147
+        ],
+        [
+          118,
+          140
+        ],
+        [
+          147,
+          144
+        ],
+        [
+          179,
+          156
+        ],
+        [
+          200,
+          173
+        ],
+        [
+          203,
+          193
+        ],
+        [
+          199,
+          213
+        ],
+        [
+          171,
+          234
+        ],
+        [
+          129,
+          253
+        ],
+        [
+          100,
+          256
+        ],
+        [
+          44,
+          236
+        ],
+        [
+          17,
+          222
+        ]
+      ],
+      [
+        [
+          16,
+          220
+        ],
+        [
+          40,
+          231
+        ],
+        [
+          40,
+          270
+        ],
+        [
+          28,
+          275
+        ],
+        [
+          15,
+          270
+        ]
+      ]
+    ],
+    "removeLightBackdrop": true,
+    "woodWindows": [
+      [
+        [
+          108,
+          110
+        ],
+        [
+          220,
+          78
+        ],
+        [
+          235,
+          290
+        ],
+        [
+          108,
+          295
+        ]
+      ]
+    ],
+    "exclusions": [
+      [
+        [
+          145,
+          117
+        ],
+        [
+          161,
+          110
+        ],
+        [
+          161,
+          135
+        ],
+        [
+          145,
+          141
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lote02_table_italy_green_visible",
+    "source": "fontes/lote-02/referencia-mesas-cadeiras-anexada.png",
+    "original": "anexos-usuario/lote-02/referencia-mesas-cadeiras.png",
+    "rect": [
+      620,
+      425,
+      380,
+      345
+    ],
+    "retainCanvas": true,
+    "removeBlueFloor": true,
+    "polygons": [
+      [
+        [
+          12,
+          102
+        ],
+        [
+          18,
+          70
+        ],
+        [
+          37,
+          49
+        ],
+        [
+          75,
+          27
+        ],
+        [
+          119,
+          13
+        ],
+        [
+          161,
+          10
+        ],
+        [
+          213,
+          13
+        ],
+        [
+          258,
+          25
+        ],
+        [
+          300,
+          42
+        ],
+        [
+          331,
+          64
+        ],
+        [
+          355,
+          89
+        ],
+        [
+          363,
+          111
+        ],
+        [
+          363,
+          185
+        ],
+        [
+          354,
+          232
+        ],
+        [
+          340,
+          264
+        ],
+        [
+          316,
+          281
+        ],
+        [
+          276,
+          300
+        ],
+        [
+          229,
+          312
+        ],
+        [
+          189,
+          327
+        ],
+        [
+          142,
+          325
+        ],
+        [
+          107,
+          314
+        ],
+        [
+          76,
+          310
+        ],
+        [
+          52,
+          292
+        ],
+        [
+          29,
+          273
+        ],
+        [
+          18,
+          249
+        ],
+        [
+          13,
+          215
+        ]
+      ]
+    ],
+    "exclusions": [
+      [
+        [
+          0,
+          138
+        ],
+        [
+          108,
+          187
+        ],
+        [
+          112,
+          345
+        ],
+        [
+          0,
+          345
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lote02_table_italy_square_surface",
+    "source": "fontes/lote-02/referencia-mesas-cadeiras-anexada.png",
+    "original": "anexos-usuario/lote-02/referencia-mesas-cadeiras.png",
+    "rect": [
+      1050,
+      140,
+      550,
+      395
+    ],
+    "retainCanvas": true,
+    "polygons": [
+      [
+        [
+          41,
+          135
+        ],
+        [
+          284,
+          13
+        ],
+        [
+          524,
+          135
+        ],
+        [
+          284,
+          257
+        ]
+      ]
+    ],
+    "removeNonCloth": true
+  }
+]

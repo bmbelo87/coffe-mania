@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Acervo Café Mania</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#182027;color:#e6e9ed;font:15px system-ui}header{padding:20px;position:sticky;top:0;background:#182027f5;z-index:1;border-bottom:1px solid #45525b}h1{margin:0 0 8px;font-size:24px}p{margin:8px 0}a{color:#8fdbf7}nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}input,select,button{font:inherit;padding:9px;border:1px solid #576772;border-radius:5px;background:#28343d;color:inherit}input{flex:1;min-width:180px}main{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;padding:20px}.card{background:#28343d;padding:12px;border-radius:8px;min-width:0}.image{display:flex;align-items:center;justify-content:center;height:230px;background:repeating-conic-gradient(#cdd2d4 0% 25%,#eef0f0 0% 50%) 0/20px 20px}.image img{max-width:100%;max-height:100%;object-fit:contain}.card p{overflow-wrap:anywhere}.muted{font-size:12px;color:#afbdc6}.warning{color:#ffcf8c}.views{display:flex;flex-wrap:wrap;gap:5px;background:#b9c1c5;padding:10px;min-height:160px;align-items:center}.views img{object-fit:contain;max-width:45%;image-rendering:auto}button{cursor:pointer}.empty{padding:20px}
+</style></head><body>
+<header><h1>Acervo Café Mania</h1><p id="statistics"></p><p>Artes originais, referências históricas e móveis preparados para o jogo. O quadriculado aparece apenas nesta prévia.</p><p><a href="../asset-positioner/furniture.html">Oficina de móveis</a> · <a href="../asset-positioner/index.html">Asset Studio</a> · <a href="../../docs/acervo-moveis.md">Origem e calibração dos móveis</a> · <a href="../../docs/acervo-moveis-lote-02.md">Lote 02</a></p>
+<nav><input id="search" type="search" placeholder="Nome, autor, pasta ou tipo de móvel" aria-label="Pesquisar acervo"><select id="collection" aria-label="Coleção"><option value="">Todas as coleções</option><option>Behance HQ</option><option>Blogs</option><option>Complementar</option><option>Artboards</option><option>Anexos do projeto</option></select><select id="category" aria-label="Categoria"><option value="">Todos os assuntos</option><option>Fogões</option><option>Balcões</option><option>Mesas</option><option>Cadeiras</option><option>Interface</option></select><button id="registered">Ver móveis cadastrados</button></nav></header>
+<main id="gallery"></main><script src="catalogo.js"></script><script>
+const archive=globalThis.CafeReferenceArchive,$=id=>document.getElementById(id);let registered=false;
+$('statistics').textContent=`${archive.statistics.files} imagens · ${archive.statistics.unique} fontes únicas · ${archive.statistics.registered} móveis preparados neste lote`;
+const plain=s=>(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+function element(tag,text,cls){const e=document.createElement(tag);if(text)e.textContent=text;if(cls)e.className=cls;return e;}
+function link(text,url){const a=element('a',text);a.href=url;a.target='_blank';a.rel='noopener';return a;}
+function render(){const query=plain($('search').value),collection=$('collection').value,category=$('category').value;const target=$('gallery');target.replaceChildren();
+ for(const item of registered?archive.items:archive.entries){
+  if(query&&!plain(JSON.stringify(item)).includes(query))continue;
+  if(!registered&&((collection&&item.collection!==collection)||(category&&!item.categories.includes(category))))continue;
+  const card=element('article',null,'card');card.append(element('strong',registered?item.name:item.title||item.id));
+  const image=element('div',null,registered?'views':'image');
+  for(const part of registered?item.parts:[item]){const img=new Image();img.loading='lazy';img.src=part.url;if(part.flipX)img.style.transform='scaleX(-1)';img.alt=registered?`${item.name} — rotação ${part.rotation}`:item.description||item.id;image.append(img);}card.append(image);
+  if(registered){card.append(element('p',`${item.kind} · ${item.views} vistas`),element('p',item.source.views,'muted'),link('Abrir manifesto',`../../game/public/assets/items/${item.classname}/item.json`));}
+  else{card.append(element('p',item.description||item.file,'muted'),element('p',`${item.collection} · ${item.width||'?'}×${item.height||'?'} · ${item.artist||'Autor não informado'}`,'muted'));if(item.usedBy)card.append(element('p',`${item.status} · ${item.usedBy.length} móveis cadastrados`));if(item.restriction)card.append(element('p',item.restriction,'warning'));if(item.duplicateOf)card.append(element('p',`Duplicata de ${item.duplicateOf}`,'muted'));card.append(link('Abrir original',item.url));if(item.source)card.append(document.createTextNode(' · '),link('Fonte histórica',item.source));}
+  target.append(card);
+ }if(!target.childElementCount)target.append(element('p','Nenhum resultado. As categorias são sugestões pelos metadados; pesquise também nas pranchas.','empty'));
+}
+for(const id of ['search','collection','category'])$(id).addEventListener('input',render);
+$('registered').onclick=()=>{registered=!registered;$('registered').textContent=registered?'Ver referências':'Ver móveis cadastrados';render();};render();
+</script></body></html>

@@ -1,0 +1,26 @@
+{
+  "id": 9050101,
+  "classname": "original_water_floor",
+  "name": "Piso de Água (Mosaico)",
+  "type": 0,
+  "kind": "decor",
+  "priceGold": 10,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 0,
+  "parts": [
+    {
+      "file": "rotation-0.png",
+      "width": 160,
+      "height": 80,
+      "left": -80,
+      "top": 0
+    }
+  ],
+  "source": {
+    "art": "behance/artes/43063757/010.jpg · recorte 01.png fornecido pelo responsável.",
+    "calibration": "Bloco original reduzido a um tile 160×80, máscara em losango. Repetição do bloco; não é extração de cada subtile original.",
+    "priceGold": "Preço de projeto; não confirmado pela configuração histórica."
+  }
+}

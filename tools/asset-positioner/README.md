@@ -1,4 +1,4 @@
-# Asset Studio — Coffe Mania 0.1.0
+# Asset Studio — Coffe Mania 0.2.0
 
 Ferramenta simples, local e independente do jogo. No Windows, dê dois cliques em **abrir.cmd**, ou abra **index.html** no Chrome, Edge ou Firefox. Não precisa de Python, npm, servidor ou internet. Os arquivos permanecem no seu dispositivo.
 
@@ -156,3 +156,50 @@ Copie o PNG para `game/public/assets/items/<classname>/` e transfira `file`, `wi
 - **Enquadrar**: mostra a área exportável e a imagem inteira.
 
 Limites de proteção: exportação de até 8192 px por lado e 16 milhões de pixels. A altura automática aceita até 4096 px; o recorte manual permite áreas diferentes.
+
+## Oficina de móveis do Café Mania
+
+Abra **Oficina de móveis** na barra de ferramentas, ou [furniture.html](furniture.html) diretamente no navegador. Funciona também offline. A oficina usa o tile deste jogo, **160×80**, com origem no vértice traseiro e arestas a **26,565°**; não usa as medidas do Restaurant City como padrão.
+
+Os botões **Mesa de madeira** e **Cadeira rosa** montam reconstruções geométricas inspiradas nas capturas fornecidas pelo responsável. Tampo, assento, encosto, espessura, recuo, largura dos pés e cores têm controles separados. A mesa começa com tampo a 49,2 px acima do chão, acompanhando a mesa branca cadastrada (centro em y=−9,2); o assento começa a 32 px e o encosto a 97,4 px, aproximados pela cadeira clássica cadastrada. Esses números são calibrações deste projeto, não especificações históricas oficiais. **Comparar mesa e cadeira juntas** e **Sobrepor item atual do jogo** ajudam a conferir as proporções. O zoom só altera a visualização.
+
+Para adaptar outro PNG, importe ou escolha um recorte e marque os cantos **esquerdo, traseiro e direito do tampo/assento**, depois o **apoio frontal mais próximo**. Defina a largura do plano, sua altura e a pegada dos pés. Para alinhar também as arestas dos pés ou da estrutura, marque os **apoios esquerdo e direito**. A correção por dois planos fixa o tampo e o chão separadamente, mantendo a continuidade entre eles e as verticais da arte. Assim, aumentar a altura não muda a angulação dos pés. Medir o topo do encosto como assento produz uma calibração errada. Sombras, braços e pontas de toalha não devem determinar esses pontos.
+
+A mesa de vidro e o balcão listrado usam a calibração por dois planos. O balcão acompanha o suporte de pratos do runtime, com o centro do tampo em y=9; seus seis pontos medem a estrutura, e não as pontas da toalha. O fogão churrasqueira mantém a escala original e usa o registro da fonte deslocado 10 px para baixo, com apoio frontal em y=80. Na oficina, marcar um ponto no fogão passa do registro fixo para a calibração editável.
+
+As exportações de arte têm **alpha RGBA real**. Fundo quadriculado, guias e referência sobreposta ficam somente na prévia. **Exportar gabarito PNG** salva apenas as linhas transparentes, separado da arte. **Exportar pacote ZIP** inclui quatro vistas da reconstrução, `item.json` com offsets e `calibration.json`; um PNG importado exporta somente a vista disponível. **Exportar item.json** sozinho descreve somente a rotação exibida. O projeto salvo incorpora a imagem original e os parâmetros, permitindo continuar offline. Classe, ID e preço são editáveis: use um ID livre e trate preço como regra do projeto.
+
+### Biblioteca e itens já cadastrados
+
+Os **75 PNGs** de `_recortes` estão preservados em `references/originals/`, com origem, dimensões e contagem de pixels alpha em `references/library.js`. Eles incluem móveis, pisos/salas, alimentos/bebidas e ícones. **Exportar recorte original** permite reutilizar qualquer um sem a transformação de móveis. Alimentos e ícones não foram convertidos automaticamente em receitas ou objetos de chão.
+
+**Assets do jogo**, o filtro inicial, omite os 23 recortes de ícones antigos. Eles aparecem somente em **Ícones antigos · referência**, identificados como material histórico e sem exportação de manifesto de móvel. Os ícones mais novos já usados em `game/public/assets/ui/` continuam sendo o padrão da interface; o acervo antigo não deve substituí-los nem ser misturado a eles. Móveis, personagens e demais assets podem ser reaproveitados independentemente da época de origem.
+
+Foram cadastrados 14 itens novos em `game/public/assets/items/`:
+
+- Reconstruções: `wood_inlay_table` e `pink_square_chair`, ambas com quatro rotações.
+- Mesas originais: `original_glass_table` e `original_gold_table`. Uma imagem é reutilizada nas rotações; não existem quatro vistas originais dessas mesas no acervo.
+- Balcão: `original_striped_table` é **Balcão com Toalha Listrada**, com `kind: counter`. A classe e o ID foram preservados para manter as unidades existentes.
+- `original_gold_armchair`: frente e costas originais com espelhamento para quatro direções. Largura e apoio seguem a cadeira clássica; ainda requer conferência do encaixe do avatar sentado no jogo.
+- Decorações: `original_black_piano` e `original_cream_piano`.
+- Fogão: `original_barbecue` é **Fogão Churrasqueira**, com `kind: stove`, e usa as regras normais de cozimento. A classe e o ID foram preservados.
+- Pisos: `original_water_floor`, `original_stone_floor`, `original_pool_floor`, `original_sand_floor`, `original_grass_floor`. Cada bloco original foi reduzido e mascarado para um tile em mosaico; não foi reconstruída a repetição dos subtiles da folha.
+
+Para importar novamente de uma pasta de fontes, sem alterar o outro projeto:
+
+```powershell
+node scripts/import-cafe-originals.mjs "C:/caminho/para/_recortes"
+npm run assets:room
+```
+
+O importador recusa sobrescrever PNGs e manifestos existentes que tenham conteúdo diferente; o índice derivado `references/library.js` é regenerado. Ele inclui as fontes incorporadas para exportar e salvar projetos offline sem reamostrar o original. A origem e a calibração estão em `source` nos manifestos. Nenhum preço foi atribuído como valor oficial do jogo original. Reinicie os serviços Go para carregar o catálogo sincronizado; a ferramenta não escreve no banco nem altera o inventário de contas existentes.
+
+Para aplicar as calibrações corrigidas a exports anteriores dessas três classes, acrescente `--update=original_glass_table,original_striped_table,original_barbecue` ao comando de importação. Essa opção autoriza somente os exports dessas classes; as fontes continuam preservadas e a cópia anterior fica em `.runtime/asset-audit/geometry-before/`. Não é necessário alterar os outros itens.
+
+Verificação específica da geometria: `node --test tests/tools/furniture.test.mjs`. A validação de manifests e dimensões continua em `npm run assets:room`.
+
+A **Máquina de Sucos** foi cadastrada separadamente, com os 12 recortes de bebidas e serviço compartilhado de NPCs. Consulte [sucos.md](../../docs/sucos.md) para os nomes históricos, valores confirmados e calibrações do projeto. Os ícones antigos continuam restritos à biblioteca de referência.
+
+O [navegador do acervo](../acervo/index.html) indexa as 666 imagens em `artes-referencia/`, com pesquisa, fontes e visualização dos itens preparados. Funciona por arquivo local ou em `/acervo/` no servidor de ferramentas. O primeiro lote adiciona 13 móveis com 30 vistas à Oficina; a calibração e os limites das reconstruções e espelhamentos estão em [acervo-moveis.md](../../docs/acervo-moveis.md). Execute `node scripts/index-reference-art.mjs` para atualizar o índice depois de adicionar ou recalibrar esses itens.
+
+O [lote 02](../../docs/acervo-moveis-lote-02.md) acrescenta três mesas e duas cadeiras italianas e revisa balcão, cadeira rosa e poltronas. Os manifestos aceitam `flipX: true` por parte: o carregador espelha a imagem uma vez e mantém os offsets da vista. A biblioteca offline incorpora os pixels já espelhados para importar a mesma pose do jogo.

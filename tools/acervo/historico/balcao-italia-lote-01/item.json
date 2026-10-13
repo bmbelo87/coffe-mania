@@ -1,0 +1,92 @@
+{
+  "id": 9060202,
+  "classname": "acervo_counter_italy",
+  "name": "Balcão Pequena Itália",
+  "type": 3,
+  "kind": "counter",
+  "priceGold": 2000,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 32,
+  "parts": [
+    {
+      "file": "rotation-0.png",
+      "width": 171,
+      "height": 115,
+      "left": -86,
+      "top": -36,
+      "rotation": 0
+    },
+    {
+      "file": "rotation-1.png",
+      "width": 171,
+      "height": 115,
+      "left": -85,
+      "top": -36,
+      "rotation": 1
+    }
+  ],
+  "source": {
+    "acervo": "cafe-mania-acervo-documentado/cafe-mania-acervo/imagens/decoracao/P013_08_balcao_77df90d8.png",
+    "sha256": "77df90d82495baa035ae0f3d05a786b0533a625ef61a042292632d147680ed0a",
+    "artist": "Autoria não informada na prancha fornecida.",
+    "page": "https://jogandocafemania.blogspot.com/2010/08/mamma-mia.html",
+    "method": "Reconstrução com imagegen de referência pequena; aproximação visual, não extração do PNG original.",
+    "name": "Nome confirmado no post Mamma Mia! de 26/08/2010.",
+    "priceGold": "Preço em ouro visível na ficha da referência: 2000.",
+    "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+    "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+    "calibration": {
+      "tile": [
+        160,
+        80
+      ],
+      "origin": "back",
+      "front": {
+        "points": {
+          "left": {
+            "x": 188,
+            "y": 406
+          },
+          "back": {
+            "x": 695,
+            "y": 134
+          },
+          "right": {
+            "x": 1206,
+            "y": 406
+          },
+          "foot": {
+            "x": 690,
+            "y": 982
+          },
+          "groundLeft": {
+            "x": 215,
+            "y": 736
+          },
+          "groundRight": {
+            "x": 1180,
+            "y": 736
+          }
+        },
+        "options": {
+          "width": 1,
+          "height": 32,
+          "support": 0.93
+        },
+        "mode": "planes",
+        "transform": {
+          "k": 695,
+          "aL": 0.15779092702169625,
+          "aR": 0.15655577299412915,
+          "bL": 0.005426333732055741,
+          "bR": -0.005383857538458436,
+          "c": 0.15717335000791272,
+          "x": -109.66469428007889,
+          "y": -56.83253084483904
+        }
+      }
+    }
+  }
+}

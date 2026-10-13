@@ -1,0 +1,152 @@
+{
+  "id": 9040202,
+  "classname": "acervo_chair_50_red",
+  "name": "Cadeira Vermelha — Anos 50",
+  "type": 3,
+  "kind": "chair",
+  "priceGold": 1300,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 97.4,
+  "parts": [
+    {
+      "file": "rotation-0.png",
+      "width": 112,
+      "height": 130,
+      "left": -67,
+      "top": -65,
+      "rotation": 0
+    },
+    {
+      "file": "rotation-1.png",
+      "width": 112,
+      "height": 130,
+      "left": -45,
+      "top": -65,
+      "rotation": 1
+    },
+    {
+      "file": "rotation-2.png",
+      "width": 89,
+      "height": 114,
+      "left": -44,
+      "top": -49,
+      "rotation": 2
+    },
+    {
+      "file": "rotation-3.png",
+      "width": 89,
+      "height": 114,
+      "left": -45,
+      "top": -49,
+      "rotation": 3
+    }
+  ],
+  "source": {
+    "acervo": "cafe-mania-acervo-documentado/cafe-mania-acervo/imagens/decoracao/P019_03_cadeiras-anos-50_a5c35e76.png",
+    "sha256": "a5c35e7660cedc13165210bb0e54d16b2df705c73ba2b870aee8362d40244219",
+    "artist": "Autoria não informada na prancha fornecida.",
+    "page": "https://dicas-cafemania.blogspot.com/2010/09/anos-50.html",
+    "method": "Reconstrução com imagegen de referência pequena; aproximação visual, não extração do PNG original.",
+    "name": "Nome descritivo do projeto; nome oficial do item não confirmado.",
+    "priceGold": "Preço em ouro visível na terceira ficha da referência: 1300.",
+    "views": "Frente e costas reconstruídas com imagegen; duas vistas complementares por espelhamento.",
+    "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+    "calibration": {
+      "tile": [
+        160,
+        80
+      ],
+      "origin": "back",
+      "front": {
+        "points": {
+          "left": {
+            "x": 411,
+            "y": 643
+          },
+          "back": {
+            "x": 713,
+            "y": 484
+          },
+          "right": {
+            "x": 1014,
+            "y": 643
+          },
+          "foot": {
+            "x": 710,
+            "y": 1135
+          },
+          "groundLeft": {
+            "x": 411,
+            "y": 990
+          },
+          "groundRight": {
+            "x": 1020,
+            "y": 972
+          }
+        },
+        "options": {
+          "width": 0.48,
+          "height": 32,
+          "support": 0.54
+        },
+        "mode": "planes",
+        "transform": {
+          "k": 713,
+          "aL": 0.1271523178807947,
+          "aR": 0.12757475083056477,
+          "bL": 0.003479476697195616,
+          "bR": -0.0034910364204421146,
+          "c": 0.12736353435567974,
+          "x": -90.65960264900663,
+          "y": -75.32481751324946
+        }
+      },
+      "back": {
+        "points": {
+          "left": {
+            "x": 342,
+            "y": 618
+          },
+          "back": {
+            "x": 646,
+            "y": 460
+          },
+          "right": {
+            "x": 945,
+            "y": 618
+          },
+          "foot": {
+            "x": 641,
+            "y": 1075
+          },
+          "groundLeft": {
+            "x": 346,
+            "y": 927
+          },
+          "groundRight": {
+            "x": 940,
+            "y": 922
+          }
+        },
+        "options": {
+          "width": 0.48,
+          "height": 32,
+          "support": 0.54
+        },
+        "mode": "planes",
+        "transform": {
+          "k": 646,
+          "aL": 0.12631578947368421,
+          "aR": 0.12842809364548494,
+          "bL": 0.0030419959421525145,
+          "bR": -0.0030928654395129263,
+          "c": 0.1273719415595846,
+          "x": -81.60000000000001,
+          "y": -71.75622249603943
+        }
+      }
+    }
+  }
+}

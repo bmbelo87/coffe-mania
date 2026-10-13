@@ -1,0 +1,136 @@
+{
+  "id": 9040201,
+  "classname": "acervo_chair_yellow_black",
+  "name": "Poltrona Amarela e Preta",
+  "type": 3,
+  "kind": "chair",
+  "priceGold": 200,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 97.4,
+  "parts": [
+    {
+      "file": "rotation-0.png",
+      "width": 91,
+      "height": 112,
+      "left": -55,
+      "top": -56,
+      "rotation": 0
+    },
+    {
+      "file": "rotation-1.png",
+      "width": 91,
+      "height": 112,
+      "left": -36,
+      "top": -56,
+      "rotation": 1
+    },
+    {
+      "file": "rotation-2.png",
+      "width": 65,
+      "height": 113,
+      "left": -32,
+      "top": -56,
+      "rotation": 2
+    },
+    {
+      "file": "rotation-3.png",
+      "width": 65,
+      "height": 113,
+      "left": -33,
+      "top": -56,
+      "rotation": 3
+    }
+  ],
+  "source": {
+    "acervo": "cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/4286853/006.jpg",
+    "sha256": "c1404a7d3de3a27bd630081a82f7fa0be327b60b9fe56ac003748bad0e2ac2ec",
+    "artist": "Sabrina Contino",
+    "page": "https://www.behance.net/gallery/4286853/Cafe-Mania",
+    "method": "Recorte da arte original com transparência e calibração geométrica.",
+    "name": "Nome descritivo do projeto; nome oficial do item não confirmado.",
+    "priceGold": "Preço de projeto; valor histórico não confirmado.",
+    "views": "Frente e costas originais; duas vistas complementares por espelhamento.",
+    "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+    "calibration": {
+      "tile": [
+        160,
+        80
+      ],
+      "origin": "back",
+      "front": {
+        "points": {
+          "left": {
+            "x": 84,
+            "y": 143
+          },
+          "back": {
+            "x": 152,
+            "y": 106
+          },
+          "right": {
+            "x": 224,
+            "y": 141
+          },
+          "foot": {
+            "x": 83,
+            "y": 236
+          }
+        },
+        "options": {
+          "width": 0.3,
+          "height": 32,
+          "support": 0.28
+        },
+        "mode": "single",
+        "transform": {
+          "k": 152,
+          "aL": 0.3529411764705883,
+          "aR": 0.33333333333333337,
+          "bL": 0.07672975982185454,
+          "bR": -0.05954085149249769,
+          "c": 0.46534118021313814,
+          "x": -53.64705882352942,
+          "y": -64.98908859551453
+        }
+      },
+      "back": {
+        "points": {
+          "left": {
+            "x": 24,
+            "y": 143
+          },
+          "back": {
+            "x": 114,
+            "y": 97
+          },
+          "right": {
+            "x": 220,
+            "y": 145
+          },
+          "foot": {
+            "x": 83,
+            "y": 226
+          }
+        },
+        "options": {
+          "width": 0.3,
+          "height": 32,
+          "support": 0.28
+        },
+        "mode": "single",
+        "transform": {
+          "k": 114,
+          "aL": 0.2666666666666667,
+          "aR": 0.22641509433962267,
+          "bL": 0.09732914375490964,
+          "bR": -0.09115297395841053,
+          "c": 0.4512961508248233,
+          "x": -30.400000000000006,
+          "y": -58.87124901806756
+        }
+      }
+    }
+  }
+}

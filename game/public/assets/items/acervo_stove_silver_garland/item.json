@@ -1,0 +1,92 @@
+{
+  "id": 9070202,
+  "classname": "acervo_stove_silver_garland",
+  "name": "Fogão Prateado com Guirlanda",
+  "type": 3,
+  "kind": "stove",
+  "priceGold": 200,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 32,
+  "parts": [
+    {
+      "file": "rotation-0.png",
+      "width": 167,
+      "height": 123,
+      "left": -84,
+      "top": -40,
+      "rotation": 0
+    },
+    {
+      "file": "rotation-1.png",
+      "width": 167,
+      "height": 123,
+      "left": -83,
+      "top": -40,
+      "rotation": 1
+    }
+  ],
+  "source": {
+    "acervo": "StuffsArtboard-1-copy.webp",
+    "sha256": "d9bd004b8829829900c56a9fde200bd74785243115c48c6fefd91ffbd94f1beb",
+    "artist": "Autoria não informada na prancha fornecida.",
+    "page": null,
+    "method": "Recorte da arte original com transparência e calibração geométrica.",
+    "name": "Nome descritivo do projeto; nome oficial do item não confirmado.",
+    "priceGold": "Preço de projeto; valor histórico não confirmado.",
+    "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+    "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+    "calibration": {
+      "tile": [
+        160,
+        80
+      ],
+      "origin": "back",
+      "front": {
+        "points": {
+          "left": {
+            "x": 2.7160493827160495,
+            "y": 39.90734289922986
+          },
+          "back": {
+            "x": 67.36023877742677,
+            "y": 6.289617033597949
+          },
+          "right": {
+            "x": 135.93859649122808,
+            "y": 39.637334286680336
+          },
+          "foot": {
+            "x": 67.36023877742677,
+            "y": 108
+          },
+          "groundLeft": {
+            "x": 2.7160493827160495,
+            "y": 71.90402906418308
+          },
+          "groundRight": {
+            "x": 135.93859649122808,
+            "y": 72.22281122183443
+          }
+        },
+        "options": {
+          "width": 1,
+          "height": 32,
+          "support": 1
+        },
+        "mode": "planes",
+        "transform": {
+          "k": 67.36023877742677,
+          "aL": 1.2375435557174101,
+          "aR": 1.166548786919989,
+          "bL": 0.006343318232682527,
+          "bR": -0.0012466884471488138,
+          "c": 1.2020461713186996,
+          "x": -83.3612294105905,
+          "y": -39.987697505091994
+        }
+      }
+    }
+  }
+}

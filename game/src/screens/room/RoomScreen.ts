@@ -37,6 +37,8 @@ import {
   type CookScreenTextures,
 } from './CookScreenModal';
 import { CookProgressBar } from './CookProgressBar';
+import {JuiceScreenModal} from './JuiceScreenModal';
+import {JuiceClient,loadJuiceArt,loadJuiceMachineArt,type JuiceStock} from '../../game/juices';
 import { CookProgressCallout } from './CookProgressCallout';
 import { ReadyDishCallout } from './ReadyDishCallout';
 import { SpoiledDishCallout } from './SpoiledDishCallout';
@@ -67,7 +69,7 @@ import { rotatedArt, type ArtProvider } from '../../game/indoor-art';
 import { ActorView } from './ActorView';
 import { AvatarActorView } from './AvatarActorView';
 import { NpcEmotion } from './NpcEmotion';
-import { RoomDepthSorter, setItemOverlayDepth } from './RoomDepthSorter';
+import { RoomDepthSorter, setItemOverlayDepth, setSeatedActorRoomDepth } from './RoomDepthSorter';
 import { OutsideNpcManager, type PreparedNpcView } from './OutsideNpcManager';
 import { createProceduralWallView, type WallWallpaper } from './ProceduralWallView';
 import { TopBars, type TopBarsTextures } from './TopBars';
@@ -331,6 +333,12 @@ export class RoomScreen implements Screen {
   /** Pratos nos balcões, por unidade de inventário do balcão. */
   private readonly counterDishViews = new Map<string, { view: Sprite; label: Text }>();
   private sharedFoods: SharedFood[] = [];
+  private sharedJuices: JuiceStock[] = [];
+  private readonly juiceClient = new JuiceClient();
+  private juiceModal?: JuiceScreenModal;
+  private readonly juiceRequests = new Map<string, {view:Container;nonce:string}>();
+  private readonly servingJuice = new Set<string>();
+  private juiceTooltip?: Text;
   private readonly sharedCookingViews = new Map<string, Sprite>();
   /** "Luz em volta do prato" temperado (FAQ oficial), por fogão. */
   private readonly spiceGlows = new Map<string, Graphics>();
@@ -768,6 +776,11 @@ export class RoomScreen implements Screen {
 
     this.readyCallout.view.zIndex = POPUP_DRAW_PRIORITY + 2;
     this.world.addChild(this.readyCallout.view);
+    if (options.realtime) {
+      const frame=this.artProvider?.art.get('juice_machine')?.frames[0];
+      this.juiceModal=new JuiceScreenModal(this.juiceClient,frame?this.artProvider?.textureFor(frame.file):undefined,state=>{if(!this.destroyed)this.setPlayerState(state);});
+      this.view.addChild(this.juiceModal.view);
+    }
     if (options.spiceTextures) {
       this.spoiledCallout = new SpoiledDishCallout(options.spiceTextures.icons.sage, options.spiceTextures.stove.callout);
       this.spoiledCallout.view.zIndex = POPUP_DRAW_PRIORITY + 2;
@@ -910,6 +923,8 @@ export class RoomScreen implements Screen {
     // Uma lista vazia é omitida no evento; num evento "food" ela significa balcões vazios.
     if (event.type === 'food') this.sharedFoods = event.foods ?? [];
     else if (event.foods) this.sharedFoods = event.foods;
+    if(event.type==='juices'){this.sharedJuices=event.juices??[];this.updateJuiceMachineViews();void this.juiceModal?.refresh();}
+    else if(event.juices){this.sharedJuices=event.juices;this.updateJuiceMachineViews();}
     if (event.type === 'error') {
       this.target.clear();
       this.showNotice(event.message ?? 'Ação recusada.');
@@ -929,6 +944,29 @@ export class RoomScreen implements Screen {
     this.applyRoomSnapshot({ ...this.roomSnapshot, revision: world.revision, inventory: [...units.values()].filter((unit) => this.roomSnapshot!.canEdit !== false || unit.placed) }, false);
     if (world.cooking) this.acceptSharedCooking(world.cooking);
     this.sharedFoods = world.foods ?? [];
+    this.sharedJuices = world.juices ?? [];
+    this.updateJuiceMachineViews();
+  }
+
+  private updateJuiceMachineViews(): void {
+    for (const [item, views] of this.itemViews) {
+      if (item.kind !== 'juice_machine') continue;
+      const stage = this.sharedJuices.find(stock => stock.machineId === item.inventoryUnitId)?.stage ?? 1;
+      if (stage === 1 && views.every(view => view.label !== 'juice-machine-evolved')) continue;
+      void loadJuiceMachineArt().then(art => {
+        if (this.destroyed) return;
+        const currentStage = this.sharedJuices.find(stock => stock.machineId === item.inventoryUnitId)?.stage ?? 1;
+        const variant = art.find(value => value.stage === currentStage);
+        if (!variant) return;
+        for (const view of views) {
+          if (view.destroyed || !(view instanceof Sprite)) continue;
+          view.texture = variant.texture; view.width = variant.frame.width; view.height = variant.frame.height;
+          view.position.set(tileToScreenX(item.tx, item.ty) + variant.frame.left, tileToScreenY(item.tx, item.ty) + variant.frame.top);
+          view.hitArea = alphaHitArea(variant.texture);
+          view.label = currentStage > 1 ? 'juice-machine-evolved' : 'juice-machine-original';
+        }
+      }).catch(() => { /* The original sprite remains available when a variant cannot be loaded. */ });
+    }
   }
 
   private recipeArt(id: string): RecipeArt | undefined {
@@ -1026,11 +1064,14 @@ export class RoomScreen implements Screen {
       if (this.realtime!.connected) entry.actor.syncAuthoritative(state.tx, state.ty, state.direction, state.outside, state.move, now);
       else { entry.actor.speedX = 0; entry.actor.speedY = 0; }
       if (state.state === 'entering' && entry.actor.tileX >= 1 && entry.actor.tileY >= 1) entry.actor.outside = false;
-      const action = state.state === 'eating' ? CLIP.EAT : state.state === 'seated' ? CLIP.SIT :
+      const action = state.state === 'eating' ? CLIP.EAT : ['seated','thirsty','drinking'].includes(state.state) ? CLIP.SIT :
         state.state === 'cooking' || state.state === 'serving' || state.state === 'cleaning' || state.state === 'placing' ? CLIP.COOKING : null;
       entry.view.setActionClip?.(action, state.action ? now - state.action.startedAt : undefined);
       entry.view.setCarrying?.(isCarrying(state));
       this.advanceActorView(entry.view, deltaMs);
+      const seatedChair = !state.move && ['seated','eating','thirsty','drinking'].includes(state.state) && state.chairId
+        ? this.model.items.find(item => item.kind === 'chair' && item.inventoryUnitId === state.chairId) : undefined;
+      setSeatedActorRoomDepth(entry.view.view, entry.actor, seatedChair);
       this.updateLiveEmotion(id, state, entry.view.view, now);
       const table = state.tableId && this.model.items.find((item) => item.inventoryUnitId === state.tableId);
       const mealTexture = state.food ? this.recipeArt(state.food.recipeId)?.stage2 : undefined;
@@ -1048,6 +1089,75 @@ export class RoomScreen implements Screen {
     }
     this.updateSharedStoves(now);
     this.updateCounterDishes();
+    this.updateJuiceRequests();
+  }
+
+  private updateJuiceRequests(): void {
+    const shown = new Set<string>();
+    for (const [id, entry] of this.liveActors) {
+      const state = entry.state;
+      if (state.state !== 'thirsty' || !state.juiceRequestId)
+        continue;
+      shown.add(id);
+      let request = this.juiceRequests.get(id);
+      if (request && request.nonce !== state.juiceRequestId) {
+        request.view.destroy({ children: true });
+        this.juiceRequests.delete(id);
+        request = undefined;
+      }
+      if (!request) {
+        const view = new Container();
+        view.label = 'juice-request:' + id;
+        view.zIndex = POPUP_DRAW_PRIORITY + 5;
+        view.addChild(new Graphics().roundRect(-26, -72, 52, 70, 12).fill(0xffffff).stroke({ color: 0x835f3b, width: 2 }).poly([-10, -2, 0, 9, 10, -2]).fill(0xffffff));
+        const text = new Text({ text: 'Suco!', style: { fontFamily: FONT_FAMILY, fontSize: 16, fill: 0x985327 } });
+        text.anchor.set(.5);
+        text.position.set(0, -14);
+        view.addChild(text);
+        view.eventMode = 'static';
+        view.cursor = 'pointer';
+        view.hitArea = new Rectangle(-30, -75, 60, 90);
+        view.on('pointertap', event => { event.stopPropagation(); void this.serveCustomerJuice(id); });
+        this.world.addChild(view);
+        request = { view, nonce: state.juiceRequestId };
+        this.juiceRequests.set(id, request);
+        const recipeId = this.sharedJuices.find(stock => stock.portions > 0)?.recipeId ?? 'orange';
+        void loadJuiceArt().then(art => { if (this.destroyed || view.destroyed)
+          return; const texture = art.textures.get(recipeId); if (!texture)
+          return; const image = new Sprite(texture); image.scale.set(Math.min(35 / image.width, 43 / image.height)); image.position.set(-image.width / 2, -64); view.addChild(image); }).catch(() => { });
+      }
+      request.view.position.set(entry.actor.x, entry.actor.y - 160);
+      request.view.renderable = !this.storeBar?.isOpen && !this.isModalOpen;
+    }
+    for (const [id, request] of this.juiceRequests)
+      if (!shown.has(id)) {
+        request.view.destroy({ children: true });
+        this.juiceRequests.delete(id);
+      }
+  }
+  private async serveCustomerJuice(actorId: string): Promise<void> {
+    if (this.isModalOpen || this.storeBar?.isOpen || this.roomSnapshot?.canEdit === false || this.servingJuice.has(actorId))
+      return;
+    const state = this.liveActors.get(actorId)?.state, stock = this.sharedJuices.find(value => value.unlocked && value.portions > 0);
+    if (!state?.juiceRequestId || state.state !== 'thirsty')
+      return;
+    if (!stock) {
+      this.showNotice('Prepare mais suco na máquina para atender este cliente.');
+      return;
+    }
+    this.servingJuice.add(actorId);
+    try {
+      const snapshot = await this.juiceClient.act('serve', stock.machineId, { actorId, juiceRequestId: state.juiceRequestId });
+      if (!this.destroyed)
+        this.setPlayerState(snapshot.playerState);
+    }
+    catch (error) {
+      if (!this.destroyed)
+        this.showNotice(error instanceof Error ? error.message : 'Não foi possível servir o suco.');
+    }
+    finally {
+      this.servingJuice.delete(actorId);
+    }
   }
 
   private updateLiveEmotion(id: string, state: SharedActor, actorView: Container, now: number): void {
@@ -2041,7 +2151,7 @@ export class RoomScreen implements Screen {
   }
 
   private get isModalOpen(): boolean {
-    return Boolean(this.cookModal?.isOpen || this.spiceModal?.isOpen || this.wardrobeModal?.isOpen || this.settingsModal?.isOpen || this.devModal?.isOpen || this.sellModal?.isOpen);
+    return Boolean(this.juiceModal?.isOpen || this.cookModal?.isOpen || this.spiceModal?.isOpen || this.wardrobeModal?.isOpen || this.settingsModal?.isOpen || this.devModal?.isOpen || this.sellModal?.isOpen);
   }
 
   /** Atores em cena, o jogador primeiro. Usado nos testes. */
@@ -2111,11 +2221,21 @@ export class RoomScreen implements Screen {
     this.paintItem(item);
     const views = this.world.children.filter((view) => !previous.has(view));
     this.itemViews.set(item, views);
+    if(item.kind==='juice_machine')for(const view of views){
+      view.eventMode='static';view.cursor='pointer';
+      view.on('pointertap',(event:FederatedPointerEvent)=>{if(this.storeBar?.isOpen||this.dragCancelledTap||this.isModalOpen||this.roomSnapshot?.canEdit===false||!item.inventoryUnitId)return;event.stopPropagation();void this.juiceModal?.open(item.inventoryUnitId);});
+      view.on('pointerover',()=>{
+        if(this.isModalOpen||this.storeBar?.isOpen)return;const stock=this.sharedJuices.find(value=>value.machineId===item.inventoryUnitId);
+        this.juiceTooltip?.destroy();this.juiceTooltip=new Text({text:!stock?.unlocked?'Máquina trancada · clique para abrir':stock.portions?`Suco pronto · ${stock.portions} copos restantes`:'Máquina vazia',style:{fontFamily:FONT_FAMILY,fontSize:22,fill:0xffffff,stroke:{color:0x382414,width:4}}});
+        this.juiceTooltip.position.set(tileToScreenX(item.tx,item.ty)-80,tileToScreenY(item.tx,item.ty)-180);this.juiceTooltip.zIndex=POPUP_DRAW_PRIORITY+6;this.world.addChild(this.juiceTooltip);
+      });view.on('pointerout',()=>{this.juiceTooltip?.destroy();this.juiceTooltip=undefined;});
+    }
     if (this.roomSnapshot) for (const view of views) this.bindStoreItem(view, () => item.wallpaperUnitId ?? item.inventoryUnitId);
     if (this.realtime && item.kind === 'chair' && item.inventoryUnitId) for (const view of views) view.on('pointertap', (event: FederatedPointerEvent) => {
       if (this.storeBar?.isOpen || this.dragCancelledTap || this.isModalOpen) return;
       event.stopPropagation(); void this.realtime!.command('sit', { chairId: item.inventoryUnitId }).catch((error: unknown) => console.info('[room]', error));
     });
+    if (item.kind === 'juice_machine') this.updateJuiceMachineViews();
   }
 
   private paintItem(item: RoomItem): void {
@@ -2992,6 +3112,8 @@ export class RoomScreen implements Screen {
     this.topBars?.destroy();
     this.clearCookingProcess();
     this.cookModal?.destroy();
+    this.juiceModal?.destroy();
+    this.juiceRequests.forEach(request=>request.view.destroy({children:true}));this.juiceRequests.clear();
     this.spiceModal?.destroy();
     this.devModal?.destroy();
     this.sellModal?.destroy();

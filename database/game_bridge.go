@@ -90,6 +90,10 @@ func publicWorld(app core.App, owner string) (gamewire.World, error) {
 		return w, err
 	}
 	w.Cooking, _ = json.Marshal(cooking)
+	w.Juices, err = publicJuices(app, owner)
+	if err != nil {
+		return w, err
+	}
 	foods, err := app.FindRecordsByFilter("room_food", "user={:owner}", "created", 0, 0, dbx.Params{"owner": owner})
 	if err != nil {
 		return w, err
@@ -110,6 +114,16 @@ func persistenceOperation(app core.App, op gamewire.Operation) gamewire.Result {
 	var body any
 	var err error
 	switch op.Action {
+	case "juice_unlock", "juice_prepare", "juice_serve", "juice_recharge":
+		var command juiceCommand
+		if json.Unmarshal(op.Body, &command) != nil {
+			return fail(400, "Pedido inválido.")
+		}
+		err = mutateJuice(app, op.Owner, op.Action, command, types.NowDateTime())
+		if err != nil {
+			return fail(409, err.Error())
+		}
+		body, err = snapshotJuices(app, op.Owner, types.NowDateTime())
 	case "dev":
 		if !devToolsEnabled() {
 			return fail(403, "Ferramentas de desenvolvimento desabilitadas no servidor.")
@@ -172,7 +186,7 @@ func persistenceOperation(app core.App, op gamewire.Operation) gamewire.Result {
 			return fail(400, err.Error())
 		case errors.Is(err, errAlreadySpiced), errors.Is(err, errSpiceNotUsable), errors.Is(err, errNoSpice):
 			return fail(409, err.Error())
-		case errors.Is(err, errRoomNotSellable), errors.Is(err, errRoomGold), errors.Is(err, errRoomConflict), errors.Is(err, errRoomOperation), errors.Is(err, errRoomBusy), errors.Is(err, errCounterBusy), errors.Is(err, errKitchenLimit), errors.Is(err, errStoveOccupied), errors.Is(err, errDishNotReady), errors.Is(err, errCookingCannotCancel), errors.Is(err, errNoCounter),
+		case errors.Is(err, errJuiceConflict), errors.Is(err, errRoomNotSellable), errors.Is(err, errRoomGold), errors.Is(err, errRoomConflict), errors.Is(err, errRoomOperation), errors.Is(err, errRoomBusy), errors.Is(err, errCounterBusy), errors.Is(err, errKitchenLimit), errors.Is(err, errStoveOccupied), errors.Is(err, errDishNotReady), errors.Is(err, errCookingCannotCancel), errors.Is(err, errNoCounter),
 			errors.Is(err, errStoveDirty), errors.Is(err, errStoveClean), errors.Is(err, errDishSpoiled):
 			return fail(409, err.Error())
 		default:
@@ -190,7 +204,7 @@ func persistenceOperation(app core.App, op gamewire.Operation) gamewire.Result {
 	}
 	result := gamewire.Result{Status: status, Body: data, World: &w}
 	// Developer tools may change popularity or level; the room adopts them immediately.
-	if op.Action == "dev" {
+	if op.Action == "dev" || strings.HasPrefix(op.Action, "juice_") {
 		if business, err := ownerBusiness(app, op.Owner); err == nil {
 			result.Business = &business
 		}

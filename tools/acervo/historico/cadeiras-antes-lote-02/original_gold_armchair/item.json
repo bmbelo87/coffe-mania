@@ -1,0 +1,51 @@
+{
+  "id": 9040101,
+  "classname": "original_gold_armchair",
+  "name": "Poltrona Dourada",
+  "type": 3,
+  "kind": "chair",
+  "priceGold": 200,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 97.4,
+  "parts": [
+    {
+      "file": "rotation-0.png",
+      "width": 82,
+      "height": 91,
+      "left": -41,
+      "top": -28,
+      "rotation": 0
+    },
+    {
+      "file": "rotation-1.png",
+      "width": 82,
+      "height": 91,
+      "left": -41,
+      "top": -28,
+      "rotation": 1
+    },
+    {
+      "file": "rotation-2.png",
+      "width": 82,
+      "height": 76,
+      "left": -41,
+      "top": -13,
+      "rotation": 2
+    },
+    {
+      "file": "rotation-3.png",
+      "width": 82,
+      "height": 76,
+      "left": -41,
+      "top": -13,
+      "rotation": 3
+    }
+  ],
+  "source": {
+    "art": "behance/artes/4286853/001.jpg · recortes 05.png (costas) e 06.png (frente) fornecidos pelo responsável.",
+    "calibration": "Quatro vistas: frente, frente espelhada, costas espelhada, costas. Escala uniforme para 83 px, apoio em y=63; conferir postura sentada no runtime.",
+    "priceGold": "Preço de projeto; não confirmado pela configuração histórica."
+  }
+}

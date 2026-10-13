@@ -84,6 +84,171 @@
       "id": 9000002,
       "classname": "mafia_wall",
       "manifest": "mafia_wall/item.json"
+    },
+    {
+      "id": 9030001,
+      "classname": "wood_inlay_table",
+      "manifest": "wood_inlay_table/item.json"
+    },
+    {
+      "id": 9030101,
+      "classname": "original_glass_table",
+      "manifest": "original_glass_table/item.json"
+    },
+    {
+      "id": 9030102,
+      "classname": "original_gold_table",
+      "manifest": "original_gold_table/item.json"
+    },
+    {
+      "id": 9030103,
+      "classname": "original_striped_table",
+      "manifest": "original_striped_table/item.json"
+    },
+    {
+      "id": 9030201,
+      "classname": "acervo_table_50_red",
+      "manifest": "acervo_table_50_red/item.json"
+    },
+    {
+      "id": 9030202,
+      "classname": "acervo_table_50_round",
+      "manifest": "acervo_table_50_round/item.json"
+    },
+    {
+      "id": 9030301,
+      "classname": "acervo_lote02_table_italy_red_check",
+      "manifest": "acervo_lote02_table_italy_red_check/item.json"
+    },
+    {
+      "id": 9030302,
+      "classname": "acervo_lote02_table_italy_green_check",
+      "manifest": "acervo_lote02_table_italy_green_check/item.json"
+    },
+    {
+      "id": 9030303,
+      "classname": "acervo_lote02_table_italian_red",
+      "manifest": "acervo_lote02_table_italian_red/item.json"
+    },
+    {
+      "id": 9040001,
+      "classname": "pink_square_chair",
+      "manifest": "pink_square_chair/item.json"
+    },
+    {
+      "id": 9040101,
+      "classname": "original_gold_armchair",
+      "manifest": "original_gold_armchair/item.json"
+    },
+    {
+      "id": 9040201,
+      "classname": "acervo_chair_yellow_black",
+      "manifest": "acervo_chair_yellow_black/item.json"
+    },
+    {
+      "id": 9040202,
+      "classname": "acervo_chair_50_red",
+      "manifest": "acervo_chair_50_red/item.json"
+    },
+    {
+      "id": 9040301,
+      "classname": "acervo_lote02_chair_italy_green",
+      "manifest": "acervo_lote02_chair_italy_green/item.json"
+    },
+    {
+      "id": 9040302,
+      "classname": "acervo_lote02_chair_italy_red",
+      "manifest": "acervo_lote02_chair_italy_red/item.json"
+    },
+    {
+      "id": 9050101,
+      "classname": "original_water_floor",
+      "manifest": "original_water_floor/item.json"
+    },
+    {
+      "id": 9050102,
+      "classname": "original_stone_floor",
+      "manifest": "original_stone_floor/item.json"
+    },
+    {
+      "id": 9050103,
+      "classname": "original_pool_floor",
+      "manifest": "original_pool_floor/item.json"
+    },
+    {
+      "id": 9050104,
+      "classname": "original_sand_floor",
+      "manifest": "original_sand_floor/item.json"
+    },
+    {
+      "id": 9050105,
+      "classname": "original_grass_floor",
+      "manifest": "original_grass_floor/item.json"
+    },
+    {
+      "id": 9060201,
+      "classname": "acervo_counter_50",
+      "manifest": "acervo_counter_50/item.json"
+    },
+    {
+      "id": 9060202,
+      "classname": "acervo_counter_italy",
+      "manifest": "acervo_counter_italy/item.json"
+    },
+    {
+      "id": 9070201,
+      "classname": "acervo_stove_red_gold",
+      "manifest": "acervo_stove_red_gold/item.json"
+    },
+    {
+      "id": 9070202,
+      "classname": "acervo_stove_silver_garland",
+      "manifest": "acervo_stove_silver_garland/item.json"
+    },
+    {
+      "id": 9070203,
+      "classname": "acervo_stove_black_red",
+      "manifest": "acervo_stove_black_red/item.json"
+    },
+    {
+      "id": 9070204,
+      "classname": "acervo_stove_silver_grill",
+      "manifest": "acervo_stove_silver_grill/item.json"
+    },
+    {
+      "id": 9070205,
+      "classname": "acervo_stove_white_gold",
+      "manifest": "acervo_stove_white_gold/item.json"
+    },
+    {
+      "id": 9070206,
+      "classname": "acervo_stove_futuristic",
+      "manifest": "acervo_stove_futuristic/item.json"
+    },
+    {
+      "id": 9070207,
+      "classname": "acervo_stove_gift",
+      "manifest": "acervo_stove_gift/item.json"
+    },
+    {
+      "id": 9090101,
+      "classname": "original_black_piano",
+      "manifest": "original_black_piano/item.json"
+    },
+    {
+      "id": 9090102,
+      "classname": "original_cream_piano",
+      "manifest": "original_cream_piano/item.json"
+    },
+    {
+      "id": 9090103,
+      "classname": "original_barbecue",
+      "manifest": "original_barbecue/item.json"
+    },
+    {
+      "id": 9100001,
+      "classname": "juice_machine",
+      "manifest": "juice_machine/item.json"
     }
   ]
 }

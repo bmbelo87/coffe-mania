@@ -25,6 +25,14 @@ type Food struct {
 	Counter  string `json:"counterId,omitempty"`
 	Portions int    `json:"portions,omitempty"`
 }
+
+type JuiceStock struct {
+	MachineID string `json:"machineId"`
+	RecipeID  string `json:"recipeId"`
+	Portions  int    `json:"portions"`
+	Unlocked  bool   `json:"unlocked"`
+	Stage     int    `json:"stage"`
+}
 type World struct {
 	RoomID   string          `json:"roomId"`
 	Revision int             `json:"revision"`
@@ -33,6 +41,7 @@ type World struct {
 	Units    []Unit          `json:"units"`
 	Foods    []Food          `json:"foods"`
 	Cooking  json.RawMessage `json:"cooking,omitempty"`
+	Juices   []JuiceStock    `json:"juices"`
 }
 type Movement struct {
 	From      Tile  `json:"from"`
@@ -74,8 +83,9 @@ type Actor struct {
 	Path   []Tile `json:"path,omitempty"`
 	Visits int    `json:"visits,omitempty"`
 	// A customer's verdict is applied once: Ate marks a served meal, Judged a recorded visit.
-	Ate    bool `json:"ate,omitempty"`
-	Judged bool `json:"judged,omitempty"`
+	Ate            bool   `json:"ate,omitempty"`
+	Judged         bool   `json:"judged,omitempty"`
+	JuiceRequestID string `json:"juiceRequestId,omitempty"`
 }
 
 // Business is the owner's private progress that drives the room: customer frequency
@@ -118,6 +128,7 @@ type Event struct {
 	Revision  int             `json:"revision,omitempty"`
 	Cooking   json.RawMessage `json:"cooking,omitempty"`
 	Foods     []Food          `json:"foods,omitempty"`
+	Juices    []JuiceStock    `json:"juices,omitempty"`
 	RequestID string          `json:"requestId,omitempty"`
 	Message   string          `json:"message,omitempty"`
 }

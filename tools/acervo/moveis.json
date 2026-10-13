@@ -1,0 +1,316 @@
+[
+  {
+    "id": 9070201,
+    "classname": "acervo_stove_red_gold",
+    "name": "Fogão Vermelho e Dourado",
+    "kind": "stove",
+    "crop": "stove_red_gold"
+  },
+  {
+    "id": 9070202,
+    "classname": "acervo_stove_silver_garland",
+    "name": "Fogão Prateado com Guirlanda",
+    "kind": "stove",
+    "crop": "stove_silver_garland"
+  },
+  {
+    "id": 9070203,
+    "classname": "acervo_stove_black_red",
+    "name": "Fogão Preto com Resistência Vermelha",
+    "kind": "stove",
+    "crop": "stove_black_red"
+  },
+  {
+    "id": 9070204,
+    "classname": "acervo_stove_silver_grill",
+    "name": "Fogão Prateado com Grelha",
+    "kind": "stove",
+    "crop": "stove_silver_grill"
+  },
+  {
+    "id": 9070205,
+    "classname": "acervo_stove_white_gold",
+    "name": "Fogão Branco e Dourado",
+    "kind": "stove",
+    "crop": "stove_white_gold"
+  },
+  {
+    "id": 9070206,
+    "classname": "acervo_stove_futuristic",
+    "name": "Fogão Futurista Cinza e Ciano",
+    "kind": "stove",
+    "crop": "stove_futuristic",
+    "artist": "Sabrina Contino",
+    "page": "https://www.behance.net/gallery/4286853/Cafe-Mania"
+  },
+  {
+    "id": 9070207,
+    "classname": "acervo_stove_gift",
+    "name": "Fogão de Presente",
+    "kind": "stove",
+    "crop": "stove_gift",
+    "artist": "Sabrina Contino",
+    "page": "https://www.behance.net/gallery/4286853/Cafe-Mania"
+  },
+  {
+    "id": 9040201,
+    "classname": "acervo_chair_yellow_black",
+    "name": "Poltrona Amarela e Preta",
+    "kind": "chair",
+    "crop": "chair_yellow_front",
+    "backCrop": "chair_yellow_back",
+    "artist": "Sabrina Contino",
+    "page": "https://www.behance.net/gallery/4286853/Cafe-Mania",
+    "points": {
+      "left": [
+        84,
+        143
+      ],
+      "back": [
+        152,
+        106
+      ],
+      "right": [
+        224,
+        141
+      ],
+      "foot": [
+        83,
+        236
+      ]
+    },
+    "backPoints": {
+      "left": [
+        24,
+        143
+      ],
+      "back": [
+        114,
+        97
+      ],
+      "right": [
+        220,
+        145
+      ],
+      "foot": [
+        83,
+        226
+      ]
+    },
+    "surface": 0.3,
+    "support": 0.28
+  },
+  {
+    "id": 9040202,
+    "classname": "acervo_chair_50_red",
+    "name": "Cadeira Vermelha — Anos 50",
+    "kind": "chair",
+    "generated": "chair_50_red_front",
+    "backGenerated": "chair_50_red_back",
+    "original": "cafe-mania-acervo-documentado/cafe-mania-acervo/imagens/decoracao/P019_03_cadeiras-anos-50_a5c35e76.png",
+    "page": "https://dicas-cafemania.blogspot.com/2010/09/anos-50.html",
+    "priceGold": 1300,
+    "priceSource": "Preço em ouro visível na terceira ficha da referência: 1300.",
+    "points": {
+      "left": [
+        411,
+        643
+      ],
+      "back": [
+        713,
+        484
+      ],
+      "right": [
+        1014,
+        643
+      ],
+      "foot": [
+        710,
+        1135
+      ],
+      "groundLeft": [
+        411,
+        990
+      ],
+      "groundRight": [
+        1020,
+        972
+      ]
+    },
+    "backPoints": {
+      "left": [
+        342,
+        618
+      ],
+      "back": [
+        646,
+        460
+      ],
+      "right": [
+        945,
+        618
+      ],
+      "foot": [
+        641,
+        1075
+      ],
+      "groundLeft": [
+        346,
+        927
+      ],
+      "groundRight": [
+        940,
+        922
+      ]
+    },
+    "surface": 0.48,
+    "support": 0.54
+  },
+  {
+    "id": 9030201,
+    "classname": "acervo_table_50_red",
+    "name": "Mesa Vermelha — Anos 50",
+    "kind": "table",
+    "generated": "table_50_red",
+    "original": "cafe-mania-acervo-documentado/cafe-mania-acervo/imagens/decoracao/P019_02_mesas-anos-50_0e88a4c8.png",
+    "page": "https://dicas-cafemania.blogspot.com/2010/09/anos-50.html",
+    "priceGold": 1000,
+    "priceSource": "Preço em ouro visível na ficha central da referência: 1000.",
+    "points": {
+      "left": [
+        360,
+        366
+      ],
+      "back": [
+        770,
+        152
+      ],
+      "right": [
+        1173,
+        366
+      ],
+      "foot": [
+        770,
+        829
+      ],
+      "groundLeft": [
+        387,
+        663
+      ],
+      "groundRight": [
+        1150,
+        663
+      ]
+    },
+    "support": 0.93
+  },
+  {
+    "id": 9030202,
+    "classname": "acervo_table_50_round",
+    "name": "Mesa Redonda Ciano — Anos 50",
+    "kind": "table",
+    "generated": "table_50_round",
+    "original": "cafe-mania-acervo-documentado/cafe-mania-acervo/imagens/decoracao/P019_02_mesas-anos-50_0e88a4c8.png",
+    "page": "https://dicas-cafemania.blogspot.com/2010/09/anos-50.html",
+    "priceGold": 2000,
+    "priceSource": "Preço em ouro visível na ficha direita da referência: 2000.",
+    "points": {
+      "left": [
+        457,
+        381
+      ],
+      "back": [
+        887,
+        192
+      ],
+      "right": [
+        1317,
+        381
+      ],
+      "foot": [
+        887,
+        790
+      ]
+    },
+    "surface": 0.85,
+    "support": 0.38
+  },
+  {
+    "id": 9060201,
+    "classname": "acervo_counter_50",
+    "name": "Balcão — Anos 50",
+    "kind": "counter",
+    "generated": "counter_50_front",
+    "original": "cafe-mania-acervo-documentado/cafe-mania-acervo/imagens/decoracao/P019_09_balcao-anos-50_beef29c7.png",
+    "page": "https://dicas-cafemania.blogspot.com/2010/09/anos-50.html",
+    "priceGold": 2100,
+    "priceSource": "Preço em ouro visível na ficha da referência: 2100.",
+    "points": {
+      "left": [
+        258,
+        375
+      ],
+      "back": [
+        769,
+        106
+      ],
+      "right": [
+        1275,
+        375
+      ],
+      "foot": [
+        764,
+        921
+      ],
+      "groundLeft": [
+        307,
+        672
+      ],
+      "groundRight": [
+        1240,
+        663
+      ]
+    },
+    "support": 0.93
+  },
+  {
+    "id": 9060202,
+    "classname": "acervo_counter_italy",
+    "name": "Balcão Pequena Itália",
+    "kind": "counter",
+    "original": "anexos-usuario/lote-02/balcao-pequena-italia-oficial.png",
+    "page": "https://jogandocafemania.blogspot.com/2010/08/mamma-mia.html",
+    "priceGold": 2000,
+    "priceSource": "Preço em ouro visível na ficha da referência: 2000.",
+    "nameSource": "Nome confirmado no post Mamma Mia! de 26/08/2010.",
+    "crop": "lote02_counter_italy_official",
+    "artist": "Vostu — arquivo oficial fornecido pelo responsável",
+    "points": {
+      "left": [
+        2,
+        110
+      ],
+      "back": [
+        215,
+        3
+      ],
+      "right": [
+        426,
+        110
+      ],
+      "foot": [
+        211,
+        343
+      ],
+      "groundLeft": [
+        20,
+        255
+      ],
+      "groundRight": [
+        419,
+        248
+      ]
+    },
+    "support": 0.93
+  }
+]

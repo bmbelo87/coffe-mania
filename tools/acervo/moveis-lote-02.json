@@ -1,0 +1,259 @@
+[
+  {
+    "id": 9030301,
+    "classname": "acervo_lote02_table_italy_red_check",
+    "name": "Mesa Xadrez Vermelho",
+    "kind": "table",
+    "original": "anexos-usuario/lote-02/mesa-xadrez-verde-aprovada.png",
+    "artist": "Vostu — referência fornecida pelo responsável",
+    "priceGold": 4000,
+    "priceSource": "4000 ouro, visíveis na terceira ficha da referência P013_02.",
+    "nameSource": "Nome confirmado no post Mamma Mia! de 26/08/2010.",
+    "page": "https://jogandocafemania.blogspot.com/2010/08/mamma-mia.html",
+    "generated": "lote-02/table_italy_red-v2",
+    "registration": {
+      "scale": 0.14136291600633916,
+      "anchor": [
+        767,
+        956
+      ],
+      "floorY": 80
+    },
+    "cleanSpecks": 16,
+    "artMethod": "Variante vermelha gerada com imagegen a partir da mesa verde aprovada; mesmo formato, projeção e pregas."
+  },
+  {
+    "id": 9030302,
+    "classname": "acervo_lote02_table_italy_green_check",
+    "name": "Mesa Xadrez Verde",
+    "kind": "table",
+    "original": "anexos-usuario/lote-02/mesa-xadrez-verde-aprovada.png",
+    "artist": "Vostu — referência fornecida pelo responsável",
+    "priceGold": 4000,
+    "priceSource": "4000 ouro, visíveis na segunda ficha da referência P013_02.",
+    "nameSource": "Nome confirmado no post Mamma Mia! de 26/08/2010.",
+    "page": "https://jogandocafemania.blogspot.com/2010/08/mamma-mia.html",
+    "artMethod": "Imagem completa gerada com imagegen e aprovada pelo responsável; exportação por escala uniforme, sem remontar tampo ou pregas.",
+    "cleanSpecks": 16,
+    "generated": "lote-02/table_italy_green-approved",
+    "registration": {
+      "scale": 0.14136291600633916,
+      "anchor": [
+        767,
+        956
+      ],
+      "floorY": 80
+    }
+  },
+  {
+    "id": 9030303,
+    "classname": "acervo_lote02_table_italian_red",
+    "name": "Mesa Italiana Vermelha",
+    "kind": "table",
+    "generated": "lote-02/table_italy_square",
+    "original": "anexos-usuario/lote-02/referencia-mesas-cadeiras.png",
+    "artist": "Vostu — referência fornecida pelo responsável",
+    "priceGold": 500,
+    "priceSource": "Preço de projeto em ouro. A referência histórica cobra 6 caféGranas; compra de móveis com caféGrana não implementada.",
+    "nameSource": "Nome confirmado no post Mamma Mia! de 26/08/2010.",
+    "page": "https://jogandocafemania.blogspot.com/2010/08/mamma-mia.html",
+    "artMethod": "Base e regiões ocultas reconstruídas com imagegen; tampo e medalhão recortados do screenshot original e compostos no mesmo plano.",
+    "points": {
+      "left": [
+        234,
+        373
+      ],
+      "back": [
+        769,
+        82
+      ],
+      "right": [
+        1298,
+        373
+      ],
+      "foot": [
+        789,
+        930
+      ],
+      "groundLeft": [
+        270,
+        668
+      ],
+      "groundRight": [
+        1260,
+        676
+      ]
+    },
+    "surfaceCrop": "lote02_table_italy_square_surface",
+    "surfacePoints": {
+      "left": [
+        41,
+        135
+      ],
+      "back": [
+        284,
+        13
+      ],
+      "right": [
+        524,
+        135
+      ],
+      "foot": [
+        284,
+        385
+      ],
+      "groundLeft": [
+        40,
+        268
+      ],
+      "groundRight": [
+        525,
+        270
+      ]
+    },
+    "support": 0.92,
+    "cleanSpecks": 16
+  },
+  {
+    "id": 9040301,
+    "classname": "acervo_lote02_chair_italy_green",
+    "name": "Banco Verde",
+    "kind": "chair",
+    "generated": "lote-02/chair_italy_green_front-v2",
+    "backCrop": "lote02_chair_italy_green_back_original",
+    "original": "anexos-usuario/lote-02/referencia-mesas-cadeiras.png",
+    "artist": "Vostu — referência fornecida pelo responsável",
+    "priceGold": 1200,
+    "priceSource": "1200 ouro, visíveis na primeira ficha da referência P013_03.",
+    "nameSource": "Nome confirmado no post Mamma Mia! de 26/08/2010.",
+    "page": "https://jogandocafemania.blogspot.com/2010/08/mamma-mia.html",
+    "artMethod": "Costas recortadas do screenshot original; frente reconstruída com imagegen usando o mesmo desenho e paleta.",
+    "points": {
+      "left": [
+        324,
+        860
+      ],
+      "back": [
+        629,
+        684
+      ],
+      "right": [
+        927,
+        847
+      ],
+      "foot": [
+        548,
+        1327
+      ],
+      "groundLeft": [
+        275,
+        1107
+      ],
+      "groundRight": [
+        897,
+        1174
+      ]
+    },
+    "backPoints": {
+      "left": [
+        12,
+        174
+      ],
+      "back": [
+        111,
+        124
+      ],
+      "right": [
+        194,
+        166
+      ],
+      "foot": [
+        125,
+        302
+      ],
+      "groundLeft": [
+        18,
+        247
+      ],
+      "groundRight": [
+        219,
+        256
+      ]
+    },
+    "surface": 0.44,
+    "support": 0.54,
+    "cleanSpecks": 16,
+    "mirrorByCode": true
+  },
+  {
+    "id": 9040302,
+    "classname": "acervo_lote02_chair_italy_red",
+    "name": "Cadeira Estofada",
+    "kind": "chair",
+    "generated": "lote-02/chair_italy_red_front-v2",
+    "backCrop": "lote02_chair_italy_red_back_original",
+    "original": "anexos-usuario/lote-02/referencia-mesas-cadeiras.png",
+    "artist": "Vostu — referência fornecida pelo responsável",
+    "priceGold": 1200,
+    "priceSource": "1200 ouro, visíveis na segunda ficha da referência P013_03.",
+    "nameSource": "Nome confirmado no post Mamma Mia! de 26/08/2010.",
+    "page": "https://jogandocafemania.blogspot.com/2010/08/mamma-mia.html",
+    "artMethod": "Costas recortadas do screenshot original; frente reconstruída com imagegen usando o mesmo desenho e paleta.",
+    "points": {
+      "left": [
+        324,
+        860
+      ],
+      "back": [
+        629,
+        684
+      ],
+      "right": [
+        927,
+        847
+      ],
+      "foot": [
+        548,
+        1327
+      ],
+      "groundLeft": [
+        275,
+        1107
+      ],
+      "groundRight": [
+        897,
+        1174
+      ]
+    },
+    "backPoints": {
+      "left": [
+        12,
+        175
+      ],
+      "back": [
+        111,
+        125
+      ],
+      "right": [
+        194,
+        168
+      ],
+      "foot": [
+        125,
+        300
+      ],
+      "groundLeft": [
+        18,
+        247
+      ],
+      "groundRight": [
+        219,
+        258
+      ]
+    },
+    "surface": 0.44,
+    "support": 0.54,
+    "cleanSpecks": 16,
+    "mirrorByCode": true
+  }
+]

@@ -374,6 +374,17 @@ func mutateRoom(app core.App, userID, action string, command roomCommand) (roomS
 			if !ok || roomcatalog.Layer(item) == "structure" {
 				return errRoomPosition
 			}
+			if item.Kind == "juice_machine" && (action == "store" || action == "sell") {
+				row, lookupErr := tx.FindFirstRecordByData("juice_state", "user", userID)
+				if lookupErr == nil {
+					stock, _ := juiceData(row)
+					if stock[unit.Id].Portions > 0 {
+						return errJuiceConflict
+					}
+				} else if !errors.Is(lookupErr, sql.ErrNoRows) {
+					return lookupErr
+				}
+			}
 			// A stove keeps cooking while it moves (the dish goes with it); it cannot be stored.
 			if stoveID := unit.GetString("stove_id"); stoveID != "" && (action == "store" || action == "sell") {
 				_, err := tx.FindFirstRecordByData("stove_cooking", "stove", stoveID)
@@ -583,7 +594,7 @@ func registerRoomRoutes(e *core.ServeEvent) {
 					return r.NotFoundError(err.Error(), nil)
 				case errors.Is(err, errRoomPosition):
 					return r.BadRequestError(err.Error(), nil)
-				case errors.Is(err, errRoomNotSellable), errors.Is(err, errRoomGold), errors.Is(err, errRoomConflict), errors.Is(err, errRoomOperation), errors.Is(err, errRoomBusy), errors.Is(err, errCounterBusy), errors.Is(err, errKitchenLimit):
+				case errors.Is(err, errJuiceConflict), errors.Is(err, errRoomNotSellable), errors.Is(err, errRoomGold), errors.Is(err, errRoomConflict), errors.Is(err, errRoomOperation), errors.Is(err, errRoomBusy), errors.Is(err, errCounterBusy), errors.Is(err, errKitchenLimit):
 					return apis.NewApiError(http.StatusConflict, err.Error(), nil)
 				default:
 					return r.InternalServerError("Não foi possível salvar esta operação.", err)

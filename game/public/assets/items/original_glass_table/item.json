@@ -1,0 +1,76 @@
+{
+  "id": 9030101,
+  "classname": "original_glass_table",
+  "name": "Mesa de Vidro com Madeira",
+  "type": 3,
+  "kind": "table",
+  "priceGold": 500,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 49.2,
+  "parts": [
+    {
+      "file": "rotation-0.png",
+      "width": 164,
+      "height": 120,
+      "left": -81,
+      "top": -50
+    }
+  ],
+  "source": {
+    "art": "behance/artes/4286853/001.jpg · recorte 04.png fornecido pelo responsável.",
+    "calibration": {
+      "tile": [
+        160,
+        80
+      ],
+      "origin": "back",
+      "topHeight": 49.2,
+      "support": 0.75,
+      "points": {
+        "left": {
+          "x": 3,
+          "y": 66
+        },
+        "back": {
+          "x": 130,
+          "y": 2
+        },
+        "right": {
+          "x": 257,
+          "y": 66
+        },
+        "groundLeft": {
+          "x": 35,
+          "y": 132
+        },
+        "foot": {
+          "x": 132,
+          "y": 182
+        },
+        "groundRight": {
+          "x": 228,
+          "y": 132
+        }
+      },
+      "transform": {
+        "k": 130,
+        "aL": 0.6299212598425197,
+        "aR": 0.6299212598425197,
+        "bL": 0.0024800049600099405,
+        "bR": -0.0024800049600099405,
+        "c": 0.6299212598425197,
+        "x": -81.88976377952756,
+        "y": -50.78224316448633
+      },
+      "mode": "planes",
+      "surface": 1,
+      "groundAnchor": {
+        "x": 1.2598425196850371,
+        "y": 69.37007874015748
+      }
+    },
+    "priceGold": "Preço de projeto; não confirmado pela configuração histórica."
+  }
+}

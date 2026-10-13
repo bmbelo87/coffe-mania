@@ -1,0 +1,52 @@
+{
+  "id": 9100001,
+  "classname": "juice_machine",
+  "name": "Máquina de Sucos",
+  "type": 3,
+  "kind": "juice_machine",
+  "priceGold": 500,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 158,
+  "parts": [
+    {
+      "file": "rotation-0.png",
+      "width": 162,
+      "height": 239,
+      "left": -81,
+      "top": -158
+    }
+  ],
+  "source": {
+    "art": "4432119/003.png, recorte 05.png fornecido pelo responsável.",
+    "calibration": {
+      "base": {
+        "left": {
+          "x": 2.8350785340314135,
+          "y": 265.89268605966436
+        },
+        "front": {
+          "x": 121.23724807390882,
+          "y": 324.3593643991147
+        },
+        "right": {
+          "x": 215.5,
+          "y": 274.1532011256599
+        },
+        "rms": 0.07146036675535077
+      },
+      "transform": {
+        "k": 121.23724807390882,
+        "aL": 0.6756632949454215,
+        "aR": 0.848691538973165,
+        "bL": -0.02884321336599166,
+        "bR": -0.028843213365991605,
+        "c": 0.7425614088587734,
+        "x": -81.9155585037327,
+        "y": -157.3598747906415
+      }
+    },
+    "priceGold": "Preço de colocação definido pelo projeto; destravamento original de 20 caféGranas implementado separadamente."
+  }
+}

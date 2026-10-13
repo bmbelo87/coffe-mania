@@ -1,0 +1,92 @@
+{
+  "id": 9070201,
+  "classname": "acervo_stove_red_gold",
+  "name": "Fogão Vermelho e Dourado",
+  "type": 3,
+  "kind": "stove",
+  "priceGold": 200,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 32,
+  "parts": [
+    {
+      "file": "rotation-0.png",
+      "width": 167,
+      "height": 120,
+      "left": -83,
+      "top": -36,
+      "rotation": 0
+    },
+    {
+      "file": "rotation-1.png",
+      "width": 167,
+      "height": 120,
+      "left": -84,
+      "top": -36,
+      "rotation": 1
+    }
+  ],
+  "source": {
+    "acervo": "StuffsArtboard-1-copy.webp",
+    "sha256": "d9bd004b8829829900c56a9fde200bd74785243115c48c6fefd91ffbd94f1beb",
+    "artist": "Autoria não informada na prancha fornecida.",
+    "page": null,
+    "method": "Recorte da arte original com transparência e calibração geométrica.",
+    "name": "Nome descritivo do projeto; nome oficial do item não confirmado.",
+    "priceGold": "Preço de projeto; valor histórico não confirmado.",
+    "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+    "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+    "calibration": {
+      "tile": [
+        160,
+        80
+      ],
+      "origin": "back",
+      "front": {
+        "points": {
+          "left": {
+            "x": 2.0355648535564854,
+            "y": 35.725530676069276
+          },
+          "back": {
+            "x": 69.50738225898472,
+            "y": 2.8085735779780734
+          },
+          "right": {
+            "x": 134.31410256410257,
+            "y": 36.072291744116605
+          },
+          "foot": {
+            "x": 69.50738225898472,
+            "y": 107
+          },
+          "groundLeft": {
+            "x": 2.0355648535564854,
+            "y": 67.90940844157029
+          },
+          "groundRight": {
+            "x": 134.31410256410257,
+            "y": 74.2044121471365
+          }
+        },
+        "options": {
+          "width": 1,
+          "height": 32,
+          "support": 1
+        },
+        "mode": "planes",
+        "transform": {
+          "k": 69.50738225898472,
+          "aL": 1.1856802302995895,
+          "aR": 1.2344398794345766,
+          "bL": -0.0024974143917573244,
+          "bR": -0.0038745461584628327,
+          "c": 1.210060054867083,
+          "x": -82.4135290043546,
+          "y": -35.22495396107942
+        }
+      }
+    }
+  }
+}

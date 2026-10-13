@@ -12,6 +12,7 @@ export type RoomItemKind =
   | 'chair'
   | 'stove'
   | 'counter'
+  | 'juice_machine'
   | 'bush'
   | 'panel'
   | 'letterbox'
@@ -88,6 +89,7 @@ export const ITEM_STYLES: Record<RoomItemKind, RoomItemStyle> = {
   panel: { height: 90 * ROOM_ASSET_SCALE, topColor: 0xefc84a, leftColor: 0xd0aa36, rightColor: 0xb0902c, blocks: true, inset: 0.7 },
   letterbox: { height: 52 * ROOM_ASSET_SCALE, topColor: 0xc9503f, leftColor: 0xa93f31, rightColor: 0x8c3326, blocks: true, inset: 0.5 },
   decor: { height: 44 * ROOM_ASSET_SCALE, topColor: 0xd9c9a8, leftColor: 0xbaa985, rightColor: 0xa2916f, blocks: true, inset: 0.72 },
+  juice_machine: { height: 160, topColor: 0xffb539, leftColor: 0xe9e9e9, rightColor: 0xbac6ce, blocks: true, inset: 1 },
 };
 
 /** Colocações iniciais da sala. */

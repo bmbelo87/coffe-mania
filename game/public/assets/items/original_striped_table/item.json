@@ -1,0 +1,76 @@
+{
+  "id": 9030103,
+  "classname": "original_striped_table",
+  "name": "Balcão com Toalha Listrada",
+  "type": 3,
+  "kind": "counter",
+  "priceGold": 500,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 31,
+  "parts": [
+    {
+      "file": "rotation-0.png",
+      "width": 160,
+      "height": 116,
+      "left": -82,
+      "top": -35
+    }
+  ],
+  "source": {
+    "art": "behance/artes/4286853/001.jpg · recorte 08.png fornecido pelo responsável.",
+    "calibration": {
+      "tile": [
+        160,
+        80
+      ],
+      "origin": "back",
+      "topHeight": 31,
+      "support": 1,
+      "points": {
+        "left": {
+          "x": 24,
+          "y": 73
+        },
+        "back": {
+          "x": 136,
+          "y": 17
+        },
+        "right": {
+          "x": 248,
+          "y": 73
+        },
+        "groundLeft": {
+          "x": 6,
+          "y": 142
+        },
+        "foot": {
+          "x": 133,
+          "y": 205
+        },
+        "groundRight": {
+          "x": 262,
+          "y": 139
+        }
+      },
+      "transform": {
+        "k": 136,
+        "aL": 0.6071428571428571,
+        "aR": 0.6071428571428571,
+        "bL": 0,
+        "bR": 0,
+        "c": 0.6071428571428571,
+        "x": -82.57142857142857,
+        "y": -35.32142857142857
+      },
+      "mode": "planes",
+      "surface": 0.85,
+      "groundAnchor": {
+        "x": -1.8214285714285694,
+        "y": 79.08928571428572
+      }
+    },
+    "priceGold": "Preço de projeto; não confirmado pela configuração histórica."
+  }
+}

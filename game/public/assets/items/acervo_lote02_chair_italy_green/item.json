@@ -1,0 +1,155 @@
+{
+  "id": 9040301,
+  "classname": "acervo_lote02_chair_italy_green",
+  "name": "Banco Verde",
+  "type": 3,
+  "kind": "chair",
+  "priceGold": 1200,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 97.4,
+  "parts": [
+    {
+      "file": "front.png",
+      "width": 93,
+      "height": 146,
+      "left": -54,
+      "top": -86,
+      "rotation": 0
+    },
+    {
+      "file": "front.png",
+      "width": 93,
+      "height": 146,
+      "left": -39,
+      "top": -86,
+      "rotation": 1,
+      "flipX": true
+    },
+    {
+      "file": "back.png",
+      "width": 92,
+      "height": 120,
+      "left": -41,
+      "top": -58,
+      "rotation": 2
+    },
+    {
+      "file": "back.png",
+      "width": 92,
+      "height": 120,
+      "left": -51,
+      "top": -58,
+      "rotation": 3,
+      "flipX": true
+    }
+  ],
+  "source": {
+    "acervo": "anexos-usuario/lote-02/referencia-mesas-cadeiras.png",
+    "sha256": "41474371823198210b8521aa0150366fcf198358d236b7388b2b690503a9cd7f",
+    "artist": "Vostu — referência fornecida pelo responsável",
+    "page": "https://jogandocafemania.blogspot.com/2010/08/mamma-mia.html",
+    "method": "Costas recortadas do screenshot original; frente reconstruída com imagegen usando o mesmo desenho e paleta.",
+    "name": "Nome confirmado no post Mamma Mia! de 26/08/2010.",
+    "priceGold": "1200 ouro, visíveis na primeira ficha da referência P013_03.",
+    "views": "Frente reconstruída com imagegen e costas recortadas da referência; duas vistas complementares por espelhamento.",
+    "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+    "batch": "02",
+    "calibration": {
+      "tile": [
+        160,
+        80
+      ],
+      "origin": "back",
+      "front": {
+        "points": {
+          "left": {
+            "x": 324,
+            "y": 860
+          },
+          "back": {
+            "x": 629,
+            "y": 684
+          },
+          "right": {
+            "x": 927,
+            "y": 847
+          },
+          "foot": {
+            "x": 548,
+            "y": 1327
+          },
+          "groundLeft": {
+            "x": 275,
+            "y": 1107
+          },
+          "groundRight": {
+            "x": 897,
+            "y": 1174
+          }
+        },
+        "options": {
+          "width": 0.44,
+          "height": 32,
+          "support": 0.54
+        },
+        "mode": "planes",
+        "transform": {
+          "k": 629,
+          "aL": 0.11540983606557376,
+          "aR": 0.1181208053691275,
+          "bL": 0.009674414577881027,
+          "bR": -0.004807876768215286,
+          "c": 0.11676532071735063,
+          "x": -72.59278688524589,
+          "y": -95.552686140155
+        }
+      },
+      "back": {
+        "points": {
+          "left": {
+            "x": 12,
+            "y": 174
+          },
+          "back": {
+            "x": 111,
+            "y": 124
+          },
+          "right": {
+            "x": 194,
+            "y": 166
+          },
+          "foot": {
+            "x": 125,
+            "y": 302
+          },
+          "groundLeft": {
+            "x": 18,
+            "y": 247
+          },
+          "groundRight": {
+            "x": 219,
+            "y": 256
+          }
+        },
+        "options": {
+          "width": 0.44,
+          "height": 32,
+          "support": 0.54
+        },
+        "mode": "planes",
+        "transform": {
+          "k": 111,
+          "aL": 0.3555555555555555,
+          "aR": 0.4240963855421686,
+          "bL": 0.01910402552972834,
+          "bR": 0.014786858276479437,
+          "c": 0.38982597054886203,
+          "x": -39.46666666666666,
+          "y": -60.05896718185873
+        }
+      }
+    }
+  }
+}

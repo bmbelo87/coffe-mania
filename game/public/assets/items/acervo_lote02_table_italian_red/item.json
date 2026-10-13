@@ -1,0 +1,132 @@
+{
+  "id": 9030303,
+  "classname": "acervo_lote02_table_italian_red",
+  "name": "Mesa Italiana Vermelha",
+  "type": 3,
+  "kind": "table",
+  "priceGold": 500,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 49.2,
+  "parts": [
+    {
+      "file": "rotation-0.png",
+      "width": 192,
+      "height": 131,
+      "left": -96,
+      "top": -52,
+      "rotation": 0
+    },
+    {
+      "file": "rotation-1.png",
+      "width": 192,
+      "height": 131,
+      "left": -96,
+      "top": -52,
+      "rotation": 1
+    }
+  ],
+  "source": {
+    "acervo": "anexos-usuario/lote-02/referencia-mesas-cadeiras.png",
+    "sha256": "41474371823198210b8521aa0150366fcf198358d236b7388b2b690503a9cd7f",
+    "artist": "Vostu — referência fornecida pelo responsável",
+    "page": "https://jogandocafemania.blogspot.com/2010/08/mamma-mia.html",
+    "method": "Base e regiões ocultas reconstruídas com imagegen; tampo e medalhão recortados do screenshot original e compostos no mesmo plano.",
+    "name": "Nome confirmado no post Mamma Mia! de 26/08/2010.",
+    "priceGold": "Preço de projeto em ouro. A referência histórica cobra 6 caféGranas; compra de móveis com caféGrana não implementada.",
+    "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+    "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+    "batch": "02",
+    "calibration": {
+      "tile": [
+        160,
+        80
+      ],
+      "origin": "back",
+      "front": {
+        "points": {
+          "left": {
+            "x": 234,
+            "y": 373
+          },
+          "back": {
+            "x": 769,
+            "y": 82
+          },
+          "right": {
+            "x": 1298,
+            "y": 373
+          },
+          "foot": {
+            "x": 789,
+            "y": 930
+          },
+          "groundLeft": {
+            "x": 270,
+            "y": 668
+          },
+          "groundRight": {
+            "x": 1260,
+            "y": 676
+          }
+        },
+        "options": {
+          "width": 1,
+          "height": 49.2,
+          "support": 0.92
+        },
+        "mode": "planes",
+        "transform": {
+          "k": 769,
+          "aL": 0.14953271028037382,
+          "aR": 0.15122873345935728,
+          "bL": 0.007029514138562398,
+          "bR": -0.007109243977563101,
+          "c": 0.15038072186986556,
+          "x": -114.99065420560747,
+          "y": -66.93691556588347
+        },
+        "overlay": {
+          "crop": "lote02_table_italy_square_surface",
+          "points": {
+            "left": {
+              "x": 41,
+              "y": 135
+            },
+            "back": {
+              "x": 284,
+              "y": 13
+            },
+            "right": {
+              "x": 524,
+              "y": 135
+            },
+            "foot": {
+              "x": 284,
+              "y": 385
+            },
+            "groundLeft": {
+              "x": 40,
+              "y": 268
+            },
+            "groundRight": {
+              "x": 525,
+              "y": 270
+            }
+          },
+          "transform": {
+            "k": 284,
+            "aL": 0.3292181069958848,
+            "aR": 0.3333333333333333,
+            "bL": 0.0017104438686514623,
+            "bR": -0.0017318244170096142,
+            "c": 0.33127572016460904,
+            "x": -93.49794238683127,
+            "y": -53.992350420836935
+          }
+        }
+      }
+    }
+  }
+}

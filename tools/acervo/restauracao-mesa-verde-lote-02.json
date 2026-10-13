@@ -1,0 +1,16 @@
+{
+  "source": "anexos-usuario/lote-02/referencia-mesas-cadeiras.png",
+  "originalVisible": "recortes/lote02_table_italy_green_visible.png",
+  "hiddenRegionGeneration": "gerados/lote-02/table_italy_green.png",
+  "transform": {
+    "k": 0,
+    "aL": 0.3509471585244267,
+    "aR": 0.3509471585244267,
+    "bL": 0,
+    "bR": 0,
+    "c": 0.3557800224466891,
+    "x": -81.3519441674975,
+    "y": -14.904601571268238
+  },
+  "output": "recortes/lote02_table_italy_green_repaired.png"
+}

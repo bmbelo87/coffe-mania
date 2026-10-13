@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Peças modulares — Sucos!</title>
+<style>
+  *{box-sizing:border-box}body{margin:0;padding:24px;background:#edf2ef;color:#254b59;font:15px Arial,sans-serif}main{max-width:960px;margin:auto}
+  h1{font-size:24px;margin:0 0 8px}p{line-height:1.5}nav{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}button,select{padding:9px 14px;border:1px solid #6aa5b2;border-radius:6px;background:white;color:#174d70;cursor:pointer}
+  button[aria-pressed=true]{background:#007eac;color:white}label{display:flex;align-items:center;gap:8px}.display{min-height:360px;padding:32px 12px;overflow:auto;border:1px solid #b2cacb;border-radius:8px;background:repeating-conic-gradient(#dbe2df 0% 25%,#f5f7f6 0% 50%) 50%/24px 24px;display:flex;align-items:center;justify-content:center}
+  canvas{display:block;max-width:100%;height:auto}.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:20px}.part{padding:12px;border:1px solid #b6cccc;border-radius:8px;background:white}.part img{max-width:100%;height:90px;object-fit:contain;display:block;margin:0 auto 10px}.part a{display:block;line-height:1.5;color:#006f98;overflow-wrap:anywhere}.note{font-size:13px;color:#47686c}
+</style>
+<main>
+  <h1>Peças modulares do menu Sucos!</h1>
+  <p>Escolha uma prévia e confira o encaixe. Os PNGs separados e suas versões em 2× estão abaixo. O quadriculado pertence somente à visualização.</p>
+  <nav>
+    <button data-mode="blank" aria-pressed="true">Painel vazio</button>
+    <button data-mode="tabs">Encaixe das abas</button>
+    <button data-mode="parts">Peças e assets existentes</button>
+    <button data-mode="evolution">Cartão de evolução</button>
+    <label>Aba selecionada <select id="active"><option>Simples</option><option>Elaborados</option><option>Poderosos</option><option>Exóticos</option></select></label>
+  </nav>
+  <div class="display"><canvas id="preview"></canvas></div>
+  <p class="note" id="status">Carregando arquivos locais…</p>
+  <div class="gallery" id="gallery"></div>
+  <p><a href="layout.json">Medidas e posições</a> · <a href="prompts.json">Prompts de geração</a> · <a href="MONTAGEM.md">Guia de montagem</a></p>
+</main>
+<script src="layout.js"></script>
+<script>
+const L=globalThis.JuiceModularLayout,canvas=document.querySelector('#preview'),ctx=canvas.getContext('2d'),images=new Map();let mode='blank';
+const load=file=>new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>{images.set(file,image);resolve(image)};image.onerror=()=>reject(Error('Não carregou: '+file));image.src=file});
+function draw(file,x,y,w,h,contain=false){const image=images.get(file);if(!image)return;if(contain){const scale=Math.min(w/image.width,h/image.height),width=image.width*scale,height=image.height*scale;ctx.drawImage(image,x+(w-width)/2,y+(h-height)/2,width,height)}else ctx.drawImage(image,x,y,w,h)}
+function evolution(x,y){const parts=L.parts.filter(p=>p.id.startsWith('evolution'));for(const p of parts)draw(p.file,x+p.x-28,y+p.y-314,p.width,p.height,Boolean(p.preserveAspect));ctx.fillStyle=L.evolutionCaption.color;ctx.font=L.evolutionCaption.fontSize+'px Arial';ctx.textAlign='center';ctx.textBaseline='top';L.evolutionCaption.text.split('\n').forEach((line,index)=>ctx.fillText(line,x+77,y+141+index*12));}
+function render(){
+  const card=mode==='evolution',w=card?154:594,h=card?174:528;canvas.width=w*2;canvas.height=h*2;canvas.style.width=(card?308:w)+'px';ctx.scale(2,2);ctx.clearRect(0,0,w,h);
+  if(card){evolution(0,0);return}
+  ctx.translate(0,20);draw('painel-vazio.png',0,0,594,508);
+  if(mode==='blank')return;
+  const active=Number(document.querySelector('#active').value);
+  L.tabs.positions.forEach((slot,index)=>{const file=index===active?'aba-ativa.png':index>=2?'aba-bloqueada.png':'aba-inativa.png';draw(file,slot.x,slot.y,slot.width,slot.height);ctx.font='bold 14px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=index===active?'#fff':index>=2?'#777':'#629fa8';ctx.shadowColor=index===active?'#62a8b1':'transparent';ctx.shadowBlur=0;ctx.shadowOffsetY=1;ctx.fillText(L.tabs.labels[index],slot.x+65,slot.y+15);ctx.shadowOffsetY=0;});
+  if(mode!=='parts')return;
+  const frame=L.parts.find(p=>p.id==='machine-window');draw(frame.file,frame.x,frame.y,frame.width,frame.height);evolution(28,314);
+  const logo=L.existing.logo,machine=L.existing.machine;draw(logo.file,logo.x,logo.y,logo.width,logo.height,true);draw(machine.file,machine.x,machine.y,machine.width,machine.height,true);
+  const close=L.existing.close,image=images.get(close.file);ctx.drawImage(image,close.frame.x,close.frame.y,close.frame.width,close.frame.height,close.x,close.y,close.width,close.height);
+  L.existing.drinks.ids.forEach((id,index)=>{const y=L.existing.drinks.rows[index];draw(index===1?'linha-suco-servindo.png':'linha-suco.png',199,y,362,77);draw(L.existing.drinks.folder+id+'.png',204,y-3,60,80,true)});
+}
+document.querySelectorAll('#active option').forEach((option,index)=>option.value=index);
+document.querySelectorAll('[data-mode]').forEach(button=>button.onclick=()=>{mode=button.dataset.mode;document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',b===button));render()});document.querySelector('#active').onchange=render;
+const files=[...L.parts.map(p=>p.file),L.existing.logo.file,L.existing.machine.file,L.existing.close.file,...L.existing.drinks.ids.map(id=>L.existing.drinks.folder+id+'.png')];
+Promise.all(files.map(load)).then(()=>{window.previewReady=true;window.setPreview=(value,active=0)=>{mode=value;document.querySelector('#active').value=active;render()};window.renderPreview=render;render();document.querySelector('#status').textContent='Arquivos locais carregados. A borda inferior aberta da aba ativa sobrepõe o corpo em 2 px.'}).catch(error=>{window.previewError=error.message;document.querySelector('#status').textContent=error.message});
+for(const part of L.parts){const item=document.createElement('div');item.className='part';const image=document.createElement('img');image.src=part.file;image.alt=part.id;item.append(image);for(const [file,label]of[[part.file,part.file+' · '+part.width+'×'+part.height],[part.file.replace('.png','@2x.png'),'PNG em 2×']]){const link=document.createElement('a');link.href=file;link.download=file;link.textContent=label;item.append(link)}document.querySelector('#gallery').append(item)}
+</script>
+</html>

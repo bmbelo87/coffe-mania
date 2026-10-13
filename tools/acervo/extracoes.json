@@ -1,0 +1,13 @@
+[
+  {"id":"stove_red_gold","source":"fontes/artboard-maquinas.png","original":"StuffsArtboard-1-copy.webp","rect":[45,555,145,135]},
+  {"id":"stove_silver_garland","source":"fontes/artboard-maquinas.png","original":"StuffsArtboard-1-copy.webp","rect":[190,555,145,135]},
+  {"id":"stove_black_red","source":"fontes/artboard-maquinas.png","original":"StuffsArtboard-1-copy.webp","rect":[335,555,135,135]},
+  {"id":"stove_silver_grill","source":"fontes/artboard-maquinas.png","original":"StuffsArtboard-1-copy.webp","rect":[470,555,140,135]},
+  {"id":"stove_white_gold","source":"fontes/artboard-maquinas.png","original":"StuffsArtboard-1-copy.webp","rect":[610,555,140,135]},
+  {"id":"stove_futuristic","source":"fontes/behance-4286853-006.png","original":"cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/4286853/006.jpg","rect":[960,30,315,255],"background":true},
+  {"id":"chair_yellow_back","source":"fontes/behance-4286853-006.png","original":"cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/4286853/006.jpg","rect":[360,25,280,265],"background":true},
+  {"id":"chair_yellow_front","source":"fontes/behance-4286853-006.png","original":"cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/4286853/006.jpg","rect":[640,20,280,270],"background":true},
+  {"id":"stove_gift","source":"fontes/behance-4286853-002.png","original":"cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/4286853/002.jpg","rect":[1080,25,300,255],"background":true},
+  {"id":"chair_blue_front","source":"fontes/behance-4286853-002.png","original":"cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/4286853/002.jpg","rect":[10,305,320,225],"background":true},
+  {"id":"chair_blue_back","source":"fontes/behance-4286853-002.png","original":"cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/4286853/002.jpg","rect":[345,305,280,225],"background":true}
+]

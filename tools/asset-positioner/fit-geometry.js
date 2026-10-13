@@ -270,15 +270,25 @@
     const left = Math.floor(b.minX + 1e-6), top = Math.floor(b.minY + 1e-6);
     const outWidth = Math.ceil(b.maxX - 1e-6) - left, outHeight = Math.ceil(b.maxY - 1e-6) - top;
     validateOutput(outWidth, outHeight);
-    const out = new Uint8ClampedArray(outWidth * outHeight * 4);
     const identity = t.aL === 1 && t.aR === 1 && t.c === 1 && t.bL === 0 && t.bR === 0 && Number.isInteger(t.x) && Number.isInteger(t.y);
     if (identity) {
+      const out = new Uint8ClampedArray(outWidth * outHeight * 4);
       for (let y = 0; y < height; y++) {
         const start = ((y + t.y - top) * outWidth + (t.x - left)) * 4;
         out.set(rgba.subarray(y * width * 4, (y + 1) * width * 4), start);
       }
       return { data: out, width: outWidth, height: outHeight, left, top };
     }
+    return renderMapped(rgba, width, height, { bounds: b, inverse: p => inverse(t, p) }, { filter });
+  }
+
+  /** Reamostragem comum para mapas invertíveis, inclusive encaixes por planos sem fundo opaco. */
+  function renderMapped(rgba, width, height, mapping, { filter = 'smooth' } = {}) {
+    const b = mapping.bounds;
+    const left = Math.floor(b.minX + 1e-6), top = Math.floor(b.minY + 1e-6);
+    const outWidth = Math.ceil(b.maxX - 1e-6) - left, outHeight = Math.ceil(b.maxY - 1e-6) - top;
+    validateOutput(outWidth, outHeight);
+    const out = new Uint8ClampedArray(outWidth * outHeight * 4);
     const pixel = filter === 'pixel';
     const n = pixel ? 1 : outWidth * outHeight > 1000000 ? 2 : 3;
     const read = (x, y, acc, w) => {
@@ -292,7 +302,7 @@
         acc.fill(0);
         for (let sy = 0; sy < n; sy++) {
           for (let sx = 0; sx < n; sx++) {
-            const s = inverse(t, { x: left + i + (sx + .5) / n, y: top + j + (sy + .5) / n });
+            const s = mapping.inverse({ x: left + i + (sx + .5) / n, y: top + j + (sy + .5) / n });
             if (s.x < 0 || s.y < 0 || s.x >= width || s.y >= height) continue;
             if (pixel) { read(Math.floor(s.x), Math.floor(s.y), acc, 1); continue; }
             const fx = s.x - .5, fy = s.y - .5, x0 = Math.floor(fx), y0 = Math.floor(fy), wx = fx - x0, wy = fy - y0;
@@ -324,6 +334,6 @@
 
   globalThis.AssetFitGeometry = Object.freeze({
     TILE_ANGLE, angle, footprintCorners, detect, alphaChannel, rectTransform, map, inverse,
-    transformedBounds, validTransform, solve, evaluate, render, alphaBox,
+    transformedBounds, validTransform, solve, evaluate, render, renderMapped, alphaBox,
   });
 })();

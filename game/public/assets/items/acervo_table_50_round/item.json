@@ -1,0 +1,84 @@
+{
+  "id": 9030202,
+  "classname": "acervo_table_50_round",
+  "name": "Mesa Redonda Ciano — Anos 50",
+  "type": 3,
+  "kind": "table",
+  "priceGold": 2000,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 49.2,
+  "parts": [
+    {
+      "file": "rotation-0.png",
+      "width": 142,
+      "height": 105,
+      "left": -71,
+      "top": -46,
+      "rotation": 0
+    },
+    {
+      "file": "rotation-1.png",
+      "width": 142,
+      "height": 105,
+      "left": -71,
+      "top": -46,
+      "rotation": 1
+    }
+  ],
+  "source": {
+    "acervo": "cafe-mania-acervo-documentado/cafe-mania-acervo/imagens/decoracao/P019_02_mesas-anos-50_0e88a4c8.png",
+    "sha256": "0e88a4c8c4210418830c8891dbf4b29bac85052082b83e4243c6468d18b71fdc",
+    "artist": "Autoria não informada na prancha fornecida.",
+    "page": "https://dicas-cafemania.blogspot.com/2010/09/anos-50.html",
+    "method": "Reconstrução com imagegen de referência pequena; aproximação visual, não extração do PNG original.",
+    "name": "Nome descritivo do projeto; nome oficial do item não confirmado.",
+    "priceGold": "Preço em ouro visível na ficha direita da referência: 2000.",
+    "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+    "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+    "calibration": {
+      "tile": [
+        160,
+        80
+      ],
+      "origin": "back",
+      "front": {
+        "points": {
+          "left": {
+            "x": 457,
+            "y": 381
+          },
+          "back": {
+            "x": 887,
+            "y": 192
+          },
+          "right": {
+            "x": 1317,
+            "y": 381
+          },
+          "foot": {
+            "x": 887,
+            "y": 790
+          }
+        },
+        "options": {
+          "width": 0.85,
+          "height": 49.2,
+          "support": 0.38
+        },
+        "mode": "single",
+        "transform": {
+          "k": 887,
+          "aL": 0.15813953488372093,
+          "aR": 0.15813953488372093,
+          "bL": -0.00674496383293148,
+          "bR": 0.00674496383293148,
+          "c": 0.1645484949832776,
+          "x": -140.26976744186047,
+          "y": -68.81052811697909
+        }
+      }
+    }
+  }
+}

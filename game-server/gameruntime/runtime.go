@@ -282,6 +282,10 @@ func (m *Manager) Operate(ctx context.Context, op gamewire.Operation) (gamewire.
 			body, _ := json.Marshal(map[string]string{"message": message})
 			return gamewire.Result{Status: 409, Body: body}
 		}
+		if message := r.validateJuiceOperation(&op); message != "" {
+			body, _ := json.Marshal(map[string]string{"message": message})
+			return gamewire.Result{Status: 409, Body: body}
+		}
 		var stoveBody struct {
 			StoveID string `json:"stoveId"`
 		}
@@ -299,6 +303,7 @@ func (m *Manager) Operate(ctx context.Context, op gamewire.Operation) (gamewire.
 		}
 		if result.Status >= 200 && result.Status < 300 && result.World != nil {
 			r.updateWorld(*result.World)
+			r.finishJuiceOperation(op, time.Now())
 			if result.Business != nil {
 				r.business = *result.Business
 			}
@@ -772,6 +777,7 @@ func (r *room) releaseSeat(a *entity) {
 	a.ChairID = ""
 	a.TableID = ""
 	a.Food = nil
+	a.JuiceRequestID = ""
 }
 func (r *room) route(a *entity, dest Tile, now time.Time) bool {
 	start := Tile{X: a.X, Y: a.Y}
@@ -1122,7 +1128,11 @@ func (r *room) updateWorld(w gamewire.World) {
 	}
 	cookingChanged := string(w.Cooking) != string(r.world.Cooking)
 	foodsChanged := fmt.Sprint(w.Foods) != fmt.Sprint(r.world.Foods)
+	juicesChanged := fmt.Sprint(w.Juices) != fmt.Sprint(r.world.Juices)
 	r.world = w
+	if juicesChanged {
+		r.broadcast(gamewire.Event{Type: "juices", Juices: w.Juices}, "")
+	}
 	doorChanged := false
 	for _, u := range changes {
 		if item, _ := roomcatalog.ByID(u.ItemID); item.Kind == "door" {
@@ -1414,6 +1424,10 @@ func (r *room) advanceNPC(a *entity, now time.Time) bool {
 			r.standNPC(a, now)
 		}
 	case "eating":
+		if !r.requestJuice(a, now) {
+			r.standNPC(a, now)
+		}
+	case "thirsty", "drinking":
 		r.standNPC(a, now)
 	case "leaving":
 		if a.Outside {

@@ -23,7 +23,7 @@ const items = readdirSync(directory, { withFileTypes: true }).filter((entry) => 
   if (item.classname !== entry.name || !/^[a-z][a-z0-9_]*$/.test(item.classname) ||
     !Number.isSafeInteger(item.id) || item.id <= 0 || typeof item.name !== 'string' ||
     ![0, 1, 2, 3].includes(item.type) || !Number.isSafeInteger(item.priceGold) || item.priceGold < 0 || typeof item.purchasable !== 'boolean' ||
-    !['wall', 'window', 'door', 'table', 'chair', 'stove', 'counter', 'bush', 'panel', 'letterbox', 'decor'].includes(item.kind) ||
+    !['wall', 'window', 'door', 'table', 'chair', 'stove', 'counter', 'juice_machine', 'bush', 'panel', 'letterbox', 'decor'].includes(item.kind) ||
     ![item.sizeX, item.sizeY].every((n) => Number.isInteger(n) && n >= 1 && n <= 8) ||
     !Array.isArray(item.parts) || item.parts.length === 0 || !Number.isFinite(item.itemHeight) || item.itemHeight < 0 ||
     (item.type === 2 && item.kind !== 'door') ||
@@ -33,7 +33,8 @@ const items = readdirSync(directory, { withFileTypes: true }).filter((entry) => 
   for (const part of item.parts) {
     if (!/^[a-zA-Z0-9_-]+\.png$/.test(part.file) || ![part.left, part.top].every(Number.isFinite) ||
       ![part.width, part.height].every((n) => Number.isInteger(n) && n > 0) ||
-      (part.rotation !== undefined && (!Number.isInteger(part.rotation) || part.rotation < 0 || part.rotation > 3))) throw new Error(`Parte inválida: ${entry.name}`);
+      (part.rotation !== undefined && (!Number.isInteger(part.rotation) || part.rotation < 0 || part.rotation > 3)) ||
+      (part.flipX !== undefined && typeof part.flipX !== 'boolean')) throw new Error(`Parte inválida: ${entry.name}`);
     const png = readFileSync(resolve(directory, entry.name, part.file));
     if (png.readUInt32BE(16) !== part.width || png.readUInt32BE(20) !== part.height) throw new Error(`Dimensões incorretas: ${entry.name}/${part.file}`);
   }

@@ -1,0 +1,26 @@
+{
+  "id": 9090103,
+  "classname": "original_barbecue",
+  "name": "Fogão Churrasqueira",
+  "type": 3,
+  "kind": "stove",
+  "priceGold": 500,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 85,
+  "parts": [
+    {
+      "file": "rotation-0.png",
+      "width": 158,
+      "height": 124,
+      "left": -79,
+      "top": -45
+    }
+  ],
+  "source": {
+    "art": "behance/artes/4286853/001.jpg · recorte 03.png fornecido pelo responsável.",
+    "calibration": "Fogão: escala original preservada, sprite deslocado 10 px para baixo; apoio frontal em y=80.",
+    "priceGold": "Preço de projeto; não confirmado pela configuração histórica."
+  }
+}

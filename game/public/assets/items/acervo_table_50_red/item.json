@@ -1,0 +1,92 @@
+{
+  "id": 9030201,
+  "classname": "acervo_table_50_red",
+  "name": "Mesa Vermelha — Anos 50",
+  "type": 3,
+  "kind": "table",
+  "priceGold": 1000,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 49.2,
+  "parts": [
+    {
+      "file": "rotation-0.png",
+      "width": 171,
+      "height": 150,
+      "left": -85,
+      "top": -68,
+      "rotation": 0
+    },
+    {
+      "file": "rotation-1.png",
+      "width": 171,
+      "height": 150,
+      "left": -86,
+      "top": -68,
+      "rotation": 1
+    }
+  ],
+  "source": {
+    "acervo": "cafe-mania-acervo-documentado/cafe-mania-acervo/imagens/decoracao/P019_02_mesas-anos-50_0e88a4c8.png",
+    "sha256": "0e88a4c8c4210418830c8891dbf4b29bac85052082b83e4243c6468d18b71fdc",
+    "artist": "Autoria não informada na prancha fornecida.",
+    "page": "https://dicas-cafemania.blogspot.com/2010/09/anos-50.html",
+    "method": "Reconstrução com imagegen de referência pequena; aproximação visual, não extração do PNG original.",
+    "name": "Nome descritivo do projeto; nome oficial do item não confirmado.",
+    "priceGold": "Preço em ouro visível na ficha central da referência: 1000.",
+    "views": "Vista da referência e espelhamento horizontal para a segunda direção. As rotações 2 e 3 reutilizam estas vistas; costas ainda não disponíveis.",
+    "gameplay": "Usa a função básica existente para este kind. Não atribui bônus, evolução ou capacidade especial pela aparência.",
+    "calibration": {
+      "tile": [
+        160,
+        80
+      ],
+      "origin": "back",
+      "front": {
+        "points": {
+          "left": {
+            "x": 360,
+            "y": 366
+          },
+          "back": {
+            "x": 770,
+            "y": 152
+          },
+          "right": {
+            "x": 1173,
+            "y": 366
+          },
+          "foot": {
+            "x": 770,
+            "y": 829
+          },
+          "groundLeft": {
+            "x": 387,
+            "y": 663
+          },
+          "groundRight": {
+            "x": 1150,
+            "y": 663
+          }
+        },
+        "options": {
+          "width": 1,
+          "height": 49.2,
+          "support": 0.93
+        },
+        "mode": "planes",
+        "transform": {
+          "k": 770,
+          "aL": 0.1951219512195122,
+          "aR": 0.19851116625310175,
+          "bL": 0.005167667242852905,
+          "bR": -0.005257428212331744,
+          "c": 0.196816558736307,
+          "x": -150.2439024390244,
+          "y": -83.0952207049154
+        }
+      }
+    }
+  }
+}

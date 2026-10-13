@@ -1,6 +1,7 @@
 import type { CookingSnapshot } from './cooking';
 import type { RoomUnit } from './room-inventory';
 import type { Tile } from '../world/iso';
+import type { JuiceStock } from './juices';
 
 /** Prato de um balcão; `counterId` é a unidade do balcão no inventário (vazio em pratos antigos). */
 export interface SharedFood { id: string; recipeId: string; counterId?: string; portions?: number }
@@ -12,15 +13,18 @@ export interface SharedActor {
   move?: { from: Tile; to: Tile; startedAt: number; duration: number };
   chairId?: string; tableId?: string; food?: SharedFood; actionRemaining?: number;
   action?: SharedAction; emotion?: SharedEmotion;
+  juiceRequestId?: string;
 }
 export interface SharedWorld {
   roomId: string; revision: number; tilesX: number; tilesY: number;
   units: RoomUnit[]; foods: SharedFood[]; cooking?: CookingSnapshot;
+  juices?: JuiceStock[];
 }
 export interface RoomEvent {
-  type: 'welcome' | 'actors' | 'world' | 'food' | 'ack' | 'error'; epoch: string; seq: number; serverNow: number;
+  type: 'welcome' | 'actors' | 'world' | 'food' | 'juices' | 'ack' | 'error'; epoch: string; seq: number; serverNow: number;
   selfId?: string; world?: SharedWorld; actors?: SharedActor[]; removed?: string[];
   units?: RoomUnit[]; revision?: number; foods?: SharedFood[]; cooking?: CookingSnapshot;
+  juices?: JuiceStock[];
   requestId?: string; message?: string;
 }
 
@@ -85,7 +89,7 @@ export class RoomRealtime {
           this.serverAnchor = event.serverNow; this.localAnchor = performance.now();
           for (const state of event.actors ?? []) {
             const old = this.actors.get(state.id);
-            this.actors.set(state.id, { ...old, ...state, move: state.move, chairId: state.chairId, tableId: state.tableId, food: state.food, action: state.action, emotion: state.emotion });
+            this.actors.set(state.id, { ...old, ...state, move: state.move, chairId: state.chairId, tableId: state.tableId, food: state.food, action: state.action, emotion: state.emotion, juiceRequestId: state.juiceRequestId });
           }
           for (const id of event.removed ?? []) this.actors.delete(id);
           if (event.requestId) {

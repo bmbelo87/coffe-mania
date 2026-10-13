@@ -35,6 +35,7 @@ func main() {
 		}
 		startRoomActivityWatchdog(e.App)
 		registerCookingRoutes(e)
+		registerJuiceRoutes(e)
 		registerDevRoutes(e)
 		registerRoomRoutes(e)
 		publicDir := os.Getenv("COFFE_PUBLIC_DIR")

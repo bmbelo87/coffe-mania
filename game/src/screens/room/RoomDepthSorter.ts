@@ -68,6 +68,14 @@ export function setItemOverlayDepth(view: Container, item: RoomItem, relativeDep
   setItemRoomDepth(view, item, depth + relativeDepth);
 }
 
+/** Occupants use the supporting chair's intrinsic layer while seated. PNG margins and
+ * a cached walking tile must not put the backrest ahead of its own occupant. */
+export function setSeatedActorRoomDepth(view: Container, actor: Actor, chair?: RoomItem): void {
+  if (!chair) { setActorRoomDepth(view, actor); return; }
+  const depth = itemDepth(chair.tx, chair.ty, DEPTH_BIAS_ITEM, chair.occlusionAnchor) + 1;
+  setItemRoomDepth(view, chair, depth);
+}
+
 export class RoomDepthSorter {
   private previous: Array<{ view: Container; signature: string }> = [];
   private ordered: Container[] = [];
