@@ -76,6 +76,11 @@
       "manifest": "young_wizard/item.json"
     },
     {
+      "id": 3400002,
+      "classname": "grandma_chef",
+      "manifest": "grandma_chef/item.json"
+    },
+    {
       "id": 9000001,
       "classname": "mafia_tile_floor",
       "manifest": "mafia_tile_floor/item.json"

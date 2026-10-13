@@ -7,13 +7,19 @@ Needs ffmpeg on PATH (or --ffmpeg), numpy and scipy.
 
 What it does
 - Reads every frame of the video and finds the foreground of each: pixels that differ from
-  the background (the median of the frame border) and belong to a large connected piece,
-  which also drops the watermark. Light areas of the art that are fully enclosed (highlights,
-  pale cheeks) stay; enclosed holes that look like background (the lenses of glasses, gaps
-  between wings) are cut.
+  the background (the median of the frame border) and belong to a large-enough connected
+  piece. This drops a watermark that blends into the background (low contrast against it,
+  like white text on the light background the tool expects); a watermark that contrasts
+  sharply with a dark or busy background survives the same filter, so pass --blank-rect with
+  its fixed on-screen box (common for stock/AI-generated clips) to erase it before anything
+  else runs. Light areas of the art that are fully enclosed (highlights, pale cheeks) stay;
+  enclosed holes that look like background (the lenses of glasses, gaps between wings) are cut.
 - Cleans the edge without touching the inside: the outer 2 px, which mix the art with the
-  white of the video, take the color of the nearest inner pixel, and the alpha is a small
-  blur of the mask pulled 1 px inward, so no white fringe is left.
+  background of the video, take the color of the nearest inner pixel, and the alpha is a
+  small blur of the mask pulled 1 px inward, so no fringe is left. A pixel the video itself
+  rendered blended with the background (steam, glass) gets a matching fractional alpha and
+  its color un-mixed from the backdrop, instead of the solid, tinted color baked into the
+  video frame; tune with --alpha-ramp.
 - Finds the two frames that look most alike (the body and the props around it, such as a
   flying ball, each scored on its own) and loops between them. The body's last --crossfade
   frames dissolve into the ones just before the start, so the end flows into the beginning
@@ -52,6 +58,20 @@ def run_ffmpeg(ffmpeg: str, video: Path, folder: Path) -> list[Path]:
     return sorted(folder.glob('f*.png'))
 
 
+def blank_rect(paths: list[Path], rect: tuple[int, int, int, int]) -> None:
+    """Paints a fixed on-screen box (a watermark that survives the background filter) with
+    each frame's own border color, before masks, loop search and crop ever see it."""
+    left, top, width, height = rect
+    for path in paths:
+        image = Image.open(path).convert('RGB')
+        pixels = np.asarray(image)
+        border = np.concatenate([pixels[0], pixels[-1], pixels[:, 0], pixels[:, -1]])
+        background = np.median(border, axis=0).round().astype(np.uint8)
+        pixels = pixels.copy()
+        pixels[top:top + height, left:left + width] = background
+        Image.fromarray(pixels).save(path)
+
+
 def source_fps(ffmpeg: str, video: Path) -> float:
     probe = Path(ffmpeg).with_name('ffprobe' + Path(ffmpeg).suffix)
     rate = subprocess.run([str(probe) if probe.exists() else 'ffprobe', '-v', 'error', '-select_streams', 'v:0',
@@ -61,10 +81,13 @@ def source_fps(ffmpeg: str, video: Path) -> float:
     return float(num) / float(den or 1)
 
 
-def find_loop(regions: list[np.ndarray], min_share: float, crossfade: int, step: int) -> tuple[int, int]:
+def find_loop(regions: list[np.ndarray], min_share: float, max_share: float, crossfade: int, step: int) -> tuple[int, int]:
     """The pair of frames (start, end) that look most alike, end - start a multiple of the
-    output step and covering at least min_share of the video, so playing start..end-1 and then
-    start again is no bigger a change than one ordinary frame.
+    output step and covering between min_share and max_share of the video, so playing
+    start..end-1 and then start again is no bigger a change than one ordinary frame. The
+    ceiling keeps a long, mostly-static video from winning just because its frames drift
+    close together somewhere past the middle; drop it (set to 1) for a clip that is one
+    short, deliberate loop start to finish.
 
     Each region (the body, the props flying around it) is scored against its own ordinary
     frame-to-frame change: a small fast prop would otherwise be drowned by the large body."""
@@ -73,7 +96,7 @@ def find_loop(regions: list[np.ndarray], min_share: float, crossfade: int, step:
     steps = [max(1e-6, float(np.abs(flat[1:] - flat[:-1]).mean())) for flat in flats]
     best = (math.inf, 0, count)
     for start in range(crossfade, count):
-        for end in range(start + int(min_share * count), count):
+        for end in range(start + int(min_share * count), min(count, start + int(max_share * count) + 1)):
             if (end - start) % step:
                 continue
             difference = max(float(np.abs(flat[start] - flat[end]).mean()) / ordinary for flat, ordinary in zip(flats, steps))
@@ -94,6 +117,10 @@ def foreground(rgb: np.ndarray, threshold: int, min_area: int) -> np.ndarray:
     background = np.median(border, axis=0)
     distance = np.abs(rgb.astype(int) - background).max(axis=2)
     mask = distance > threshold
+    # Bridges the 1 px gaps that video compression noise punches into thin parts (a shoe tip,
+    # a strand of hair): without this a gap below min_area splits them off as their own tiny
+    # piece and they get dropped, leaving a bite out of the silhouette.
+    mask = ndi.binary_closing(mask, structure=np.ones((3, 3)))
     labels, count = ndi.label(mask, structure=np.ones((3, 3)))
     if count:
         sizes = ndi.sum(mask, labels, range(1, count + 1))
@@ -114,16 +141,41 @@ def foreground(rgb: np.ndarray, threshold: int, min_area: int) -> np.ndarray:
     return mask
 
 
-def clean_edges(rgb: np.ndarray, mask: np.ndarray) -> np.ndarray:
-    """RGBA with inner colors pushed to the edge and a soft alpha, no white fringe."""
+def clean_edges(rgb: np.ndarray, mask: np.ndarray, threshold: int, ramp: float,
+                 translucent: np.ndarray | None) -> np.ndarray:
+    """RGBA with inner colors pushed to the edge, no fringe, and the background bleed removed
+    from a chosen region the video rendered genuinely semi-transparent (steam, glass, a soft
+    glow): there, a pixel exactly at the mask threshold reads as background and one
+    --alpha-ramp past it reads fully opaque, so the whole range gets a matching fractional
+    alpha instead of being forced opaque with the backdrop's color still mixed in (steam over
+    a dark backdrop would otherwise come out as a flat dark-grey silhouette instead of soft and
+    light). translucent is a boolean mask, fixed in frame coordinates, marking that region:
+    outside it every pixel stays fully opaque once inside the silhouette, because solid art can
+    sit just as close to the background color as the real translucent effect does (dark shoes
+    on a dark backdrop, say) and would otherwise be wrongly lightened the same way."""
+    border = np.concatenate([rgb[0], rgb[-1], rgb[:, 0], rgb[:, -1]])
+    background = np.median(border, axis=0)
     inner = ndi.binary_erosion(mask, iterations=2)
     if not inner.any():
         inner = mask
     _, nearest = ndi.distance_transform_edt(~inner, return_indices=True)
-    colors = rgb[nearest[0], nearest[1]]
+    colors = rgb[nearest[0], nearest[1]].astype(np.float32)
     pulled_in = ndi.binary_erosion(mask, iterations=1)
-    alpha = np.clip(ndi.gaussian_filter(pulled_in.astype(float), 0.8) * 1.15, 0, 1)
-    out = np.dstack([colors, (alpha * 255).round().astype(np.uint8)])
+    # edge_alpha is ~1 across the inside and falls off over ~1 px right at the silhouette, same
+    # as before (prevents a background-colored fringe there). translucency is 1 everywhere
+    # outside the chosen region (no effect) and partial inside it wherever the video rendered
+    # the pixel blended with the background; the two multiply so a hard edge still looks hard
+    # and the real soft effect gets its own, lower opacity.
+    edge_alpha = np.clip(ndi.gaussian_filter(pulled_in.astype(float), 0.8) * 1.15, 0, 1)
+    translucency = np.ones(mask.shape, dtype=np.float32)
+    if translucent is not None and translucent.any():
+        distance = np.abs(rgb.astype(np.float32) - background).max(axis=2)
+        translucency[translucent] = np.clip((distance[translucent] - threshold) / max(ramp, 1e-6), 0, 1)
+    alpha = np.where(mask, edge_alpha * translucency, 0.0)
+    safe_alpha = np.maximum(alpha, 0.06)[..., None]
+    unmixed = np.clip((colors - (1 - safe_alpha) * background) / safe_alpha, 0, 255)
+    out_rgb = np.where(alpha[..., None] > 0.06, unmixed, colors)
+    out = np.dstack([out_rgb, (alpha * 255).round()])
     return out.astype(np.uint8)
 
 
@@ -139,8 +191,20 @@ def main() -> None:
     parser.add_argument('--height', type=float, default=200, help='character height in room pixels (the tile is 160 x 80)')
     parser.add_argument('--feet', type=float, default=54, help='y of the feet below the top corner of the tile (its center is 40)')
     parser.add_argument('--threshold', type=int, default=36)
+    parser.add_argument('--alpha-ramp', type=float, default=90,
+                         help='distance past --threshold at which a pixel is treated as fully opaque; lower it '
+                              '(e.g. to the gap between --threshold and the translucent effect\'s own distance, '
+                              'measured with a quick script) to recover a steam/glow/glass pixel\'s true partial '
+                              'alpha instead of the solid, backdrop-tinted color the video baked in')
+    parser.add_argument('--translucent-rect', metavar='X,Y,W,H',
+                         help='box, in source video pixels, where --alpha-ramp applies (the steam/glow); '
+                              'without it no pixel is made translucent')
+    parser.add_argument('--blank-rect', metavar='X,Y,W,H',
+                         help='fixed-position watermark box, in source video pixels, erased before any processing')
     parser.add_argument('--resolution', type=int, default=2, help='sheet pixels per room pixel')
     parser.add_argument('--crossfade', type=int, default=4, help='video frames dissolved into the start of the loop')
+    parser.add_argument('--min-loop-share', type=float, default=0.6, help='shortest fraction of the video the loop may span')
+    parser.add_argument('--max-loop-share', type=float, default=1.0, help='longest fraction of the video the loop may span')
     parser.add_argument('--ffmpeg', default=shutil.which('ffmpeg') or 'ffmpeg')
     parser.add_argument('--out', type=Path, default=Path(__file__).resolve().parents[2] / 'game/public/assets/items')
     args = parser.parse_args()
@@ -149,6 +213,8 @@ def main() -> None:
         paths = run_ffmpeg(args.ffmpeg, args.video, Path(temp))
         if not paths:
             sys.exit('O ffmpeg não extraiu quadros.')
+        if args.blank_rect:
+            blank_rect(paths, tuple(int(value) for value in args.blank_rect.split(',')))
         step = max(1, round(source_fps(args.ffmpeg, args.video) / args.fps))
 
         # Pass 1: masks and the common crop box.
@@ -171,10 +237,18 @@ def main() -> None:
             bodies.append(np.asarray(Image.fromarray(body.astype(np.uint8)).resize((64, 128), Image.BILINEAR), dtype=np.float32))
             pixels[body_rect[1] - top:body_rect[3] - top, body_rect[0] - left:body_rect[2] - left] = 0
             props.append(np.asarray(Image.fromarray(pixels.astype(np.uint8)).resize((96, 192), Image.BILINEAR), dtype=np.float32))
-        loop_start, loop_end = find_loop([np.stack(bodies), np.stack(props)], 0.6, args.crossfade, step)
+        loop_start, loop_end = find_loop([np.stack(bodies), np.stack(props)], args.min_loop_share, args.max_loop_share,
+                                          args.crossfade, step)
+
+        translucent = None
+        if args.translucent_rect:
+            x, y, w, h = (int(value) for value in args.translucent_rect.split(','))
+            translucent = np.zeros_like(masks[0])
+            translucent[y:y + h, x:x + w] = True
 
         def premultiplied(index: int) -> np.ndarray:
-            rgba = clean_edges(np.asarray(Image.open(paths[index]).convert('RGB')), masks[index])[top:bottom, left:right]
+            rgba = clean_edges(np.asarray(Image.open(paths[index]).convert('RGB')), masks[index],
+                                args.threshold, args.alpha_ramp, translucent)[top:bottom, left:right]
             rgba = rgba.astype(np.float32) / 255
             rgba[..., :3] *= rgba[..., 3:4]
             return rgba

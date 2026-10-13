@@ -4,6 +4,24 @@ Mudanças desta distribuição, da versão mais nova para a mais antiga. A numer
 
 Seções usadas: **Adicionado**, **Alterado**, **Corrigido**, **Removido** e **Observações** (limites conhecidos e o que ficou para depois).
 
+## [0.4.0] — Vovó Chef (2026-10-13)
+
+### Adicionado
+
+- Item animado **Vovó Chef** (`grandma_chef`, 800 caféOuros): a vovó segurando um omelete com molho e vapor saindo do prato. A animação foi extraída de um vídeo com fundo azul-escuro e roda a 15 quadros por segundo, como o Pequeno Bruxo.
+- Opções novas em `tools/video-to-item/video_to_item.py`:
+  - `--blank-rect`: apaga uma marca d'água fixa antes do recorte;
+  - `--translucent-rect` com `--alpha-ramp`: dentro da área indicada, devolve a transparência ao que o vídeo desenhou misturado ao fundo (vapor, vidro, brilho) e tira a cor do fundo desses pixels;
+  - `--min-loop-share` e `--max-loop-share`: limitam o comprimento do trecho repetido.
+
+### Alterado
+
+- O recorte do `video_to_item.py` fecha falhas de 1 px antes de separar as partes da imagem. Com isso, pontas finas, como a do sapato, não se soltam da figura nem somem.
+
+### Observações
+
+- A transparência só é recuperada dentro de `--translucent-rect`. Fora dessa área, uma arte sólida com cor próxima à do fundo, como os sapatos escuros sobre o azul-escuro, seria clareada como se fosse vapor.
+
 ## [0.3.0] — Expansões do café e café inicial de 2014 (2026-10-13)
 
 ### Adicionado

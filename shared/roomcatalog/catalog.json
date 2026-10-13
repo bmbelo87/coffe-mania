@@ -486,6 +486,37 @@
       }
     },
     {
+      "id": 3400002,
+      "classname": "grandma_chef",
+      "name": "Vovó Chef",
+      "type": 3,
+      "kind": "decor",
+      "priceGold": 800,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 180,
+      "parts": [
+        {
+          "file": "frame-000.png",
+          "width": 189,
+          "height": 207,
+          "left": -95,
+          "top": -151
+        }
+      ],
+      "animation": {
+        "file": "animation.webp",
+        "fps": 15,
+        "frames": 72,
+        "columns": 10,
+        "frameWidth": 189,
+        "frameHeight": 207,
+        "gutter": 4,
+        "resolution": 2
+      }
+    },
+    {
       "id": 9000001,
       "classname": "mafia_tile_floor",
       "name": "Piso Máfia",
