@@ -52,6 +52,11 @@ type roomSnapshot struct {
 	Expansion   *expansionOffer      `json:"expansion"`
 	// Expansions lists every step for the cards of the shop; the room size tells which are bought.
 	Expansions []expansionStep `json:"expansions"`
+	// PatioX and PatioY are the patio floor beyond the café's front-left edge (0 without a patio);
+	// Patio is the next lot of the "Terreno à venda" sign.
+	PatioX int             `json:"patioX"`
+	PatioY int             `json:"patioY"`
+	Patio  *expansionOffer `json:"patio"`
 }
 type roomCommand struct {
 	ItemID    int    `json:"itemId,omitempty"`
@@ -61,7 +66,7 @@ type roomCommand struct {
 	Rotation  *int   `json:"rotation"`
 	Revision  *int   `json:"revision"`
 	RequestID string `json:"requestId"`
-	// Payment chooses how an expansion is paid: "cash", "gold" or "gold_unlock".
+	// Payment chooses how an expansion or a patio lot is paid: "cash", "gold" or "gold_unlock".
 	Payment string `json:"payment,omitempty"`
 }
 
@@ -226,7 +231,8 @@ func ensureStarterCounter(app core.App, userID string) error {
 				}
 			}
 		}
-		tilesX, tilesY := room.GetInt("tiles_x"), room.GetInt("tiles_y")
+		area := areaOf(room)
+		tilesX, tilesY := area.TilesX, area.TilesY
 		// Prefer the starter layout's tile; otherwise the free tile farthest from the door wall.
 		candidates := [][2]int{{2, 7}}
 		for y := tilesY - 1; y >= 1; y-- {
@@ -241,7 +247,7 @@ func ensureStarterCounter(app core.App, userID string) error {
 		unit := core.NewRecord(inventory)
 		unit.Load(map[string]any{"user": userID, "item_id": item.ID, "rotation": 1, "layer": roomcatalog.Layer(item)})
 		for _, tile := range candidates {
-			if !busy[tile] && validRoomPosition(item, tile[0], tile[1], 1, tilesX, tilesY) {
+			if !busy[tile] && validRoomPosition(item, tile[0], tile[1], 1, area) {
 				unit.Set("placed", true)
 				unit.Set("tx", tile[0])
 				unit.Set("ty", tile[1])
@@ -285,6 +291,8 @@ func snapshotRoom(app core.App, userID string) (roomSnapshot, error) {
 	result.TilesX = room.GetInt("tiles_x")
 	result.TilesY = room.GetInt("tiles_y")
 	result.Expansion = expansionFor(result.TilesX, result.TilesY)
+	area := areaOf(room)
+	result.PatioX, result.PatioY, result.Patio = area.PatioX, area.PatioY, patioFor(area)
 	units, err := app.FindRecordsByFilter("player_inventory", "user={:user}", "id", 10000, 0, dbx.Params{"user": userID})
 	if err != nil {
 		return result, err
@@ -300,27 +308,34 @@ func snapshotRoom(app core.App, userID string) (roomSnapshot, error) {
 	return result, nil
 }
 
-func validRoomPosition(item roomcatalog.Item, x, y, rotation, tilesX, tilesY int) bool {
-	if rotation < 0 || rotation > 3 || x < 0 || y < 0 || x >= tilesX || y >= tilesY {
+// validRoomPosition checks a placement against the room's shape. Wallpapers, windows, panels and
+// doors belong to the café walls; furniture and floors may stand on the café or on the patio.
+func validRoomPosition(item roomcatalog.Item, x, y, rotation int, area roomArea) bool {
+	if rotation < 0 || rotation > 3 || !area.contains(x, y) {
 		return false
 	}
-	if item.Type == 1 {
-		return (x == 0 && y > 0 && rotation%2 == 0) || (y == 0 && x > 0 && rotation%2 == 1)
+	onLeftWall, onRightWall := x == 0 && y > 0 && y < area.TilesY, y == 0 && x > 0 && x < area.TilesX
+	if item.Type == 1 || item.Kind == "window" || item.Kind == "panel" {
+		return (onLeftWall && rotation%2 == 0) || (onRightWall && rotation%2 == 1)
 	}
 	if item.Kind == "wall" {
 		return false
 	}
-	if item.Kind == "window" || item.Kind == "panel" {
-		return (x == 0 && y > 0 && rotation%2 == 0) || (y == 0 && x > 0 && rotation%2 == 1)
-	}
 	if item.Kind == "door" {
-		return (x == 1 && y > 0 && rotation%2 == 0) || (y == 1 && x > 0 && rotation%2 == 1)
+		return (x == 1 && y > 0 && y < area.TilesY && rotation%2 == 0) || (y == 1 && x > 0 && x < area.TilesX && rotation%2 == 1)
 	}
 	sx, sy := item.SizeX, item.SizeY
 	if rotation%2 == 1 {
 		sx, sy = sy, sx
 	}
-	return x >= 1 && y >= 1 && x+sx <= tilesX && y+sy <= tilesY
+	for dy := 0; dy < sy; dy++ {
+		for dx := 0; dx < sx; dx++ {
+			if x+dx < 1 || y+dy < 1 || !area.contains(x+dx, y+dy) {
+				return false
+			}
+		}
+	}
+	return true
 }
 
 func mutateRoom(app core.App, userID, action string, command roomCommand) (roomSnapshot, error) {
@@ -475,7 +490,7 @@ func mutateRoom(app core.App, userID, action string, command roomCommand) (roomS
 			unit.Set("placed", false)
 		} else {
 			x, y, rotation := *command.TX, *command.TY, *command.Rotation
-			if !validRoomPosition(item, x, y, rotation, room.GetInt("tiles_x"), room.GetInt("tiles_y")) {
+			if !validRoomPosition(item, x, y, rotation, areaOf(room)) {
 				return errRoomPosition
 			}
 			units, err := tx.FindRecordsByFilter("player_inventory", "user={:user}", "", 10000, 0, dbx.Params{"user": userID})
@@ -598,7 +613,7 @@ func registerRoomRoutes(e *core.ServeEvent) {
 		}
 		return r.JSON(http.StatusOK, snapshot)
 	})
-	for _, operation := range []string{"purchase", "move", "store", "sell", "expand"} {
+	for _, operation := range []string{"purchase", "move", "store", "sell", "expand", "patio"} {
 		action := operation
 		group.POST("/"+action, func(r *core.RequestEvent) error {
 			user := sessionRecord(r)
@@ -614,10 +629,11 @@ func registerRoomRoutes(e *core.ServeEvent) {
 			if err := decoder.Decode(&command); err != nil {
 				return r.BadRequestError("Pedido inválido.", nil)
 			}
+			step := action == "expand" || action == "patio"
 			if err := decoder.Decode(new(any)); err != io.EOF || command.Revision == nil || *command.Revision < 1 || !requestKeyPattern.MatchString(command.RequestID) ||
-				(action != "store" && action != "sell" && action != "expand" && (command.TX == nil || command.TY == nil || command.Rotation == nil)) ||
-				(action == "purchase" && (command.ItemID <= 0 || command.UnitID != "")) || (action == "expand" && (command.ItemID != 0 || command.UnitID != "" || command.Payment == "")) || (action != "expand" && command.Payment != "") ||
-				(action != "purchase" && action != "expand" && (command.UnitID == "" || command.ItemID != 0)) {
+				(action != "store" && action != "sell" && !step && (command.TX == nil || command.TY == nil || command.Rotation == nil)) ||
+				(action == "purchase" && (command.ItemID <= 0 || command.UnitID != "")) || (step && (command.ItemID != 0 || command.UnitID != "" || command.Payment == "")) || (!step && command.Payment != "") ||
+				(action != "purchase" && !step && (command.UnitID == "" || command.ItemID != 0)) {
 				return r.BadRequestError("Pedido inválido.", nil)
 			}
 			if err := ensureRoom(r.App, user.Id); err != nil {
@@ -630,6 +646,8 @@ func registerRoomRoutes(e *core.ServeEvent) {
 			var err error
 			if action == "expand" {
 				snapshot, err = mutateExpansion(r.App, user.Id, command)
+			} else if action == "patio" {
+				snapshot, err = mutatePatio(r.App, user.Id, command)
 			} else {
 				snapshot, err = mutateRoom(r.App, user.Id, action, command)
 			}
@@ -639,7 +657,8 @@ func registerRoomRoutes(e *core.ServeEvent) {
 					return r.NotFoundError(err.Error(), nil)
 				case errors.Is(err, errRoomPosition):
 					return r.BadRequestError(err.Error(), nil)
-				case errors.Is(err, errJuiceConflict), errors.Is(err, errRoomNotSellable), errors.Is(err, errRoomGold), errors.Is(err, errRoomConflict), errors.Is(err, errRoomOperation), errors.Is(err, errRoomBusy), errors.Is(err, errCounterBusy), errors.Is(err, errKitchenLimit), errors.Is(err, errExpansionLevel), errors.Is(err, errExpansionMax), errors.Is(err, errExpansionCash), errors.Is(err, errExpansionPayment):
+				case errors.Is(err, errJuiceConflict), errors.Is(err, errRoomNotSellable), errors.Is(err, errRoomGold), errors.Is(err, errRoomConflict), errors.Is(err, errRoomOperation), errors.Is(err, errRoomBusy), errors.Is(err, errCounterBusy), errors.Is(err, errKitchenLimit), errors.Is(err, errExpansionLevel), errors.Is(err, errExpansionMax), errors.Is(err, errExpansionCash), errors.Is(err, errExpansionPayment),
+					errors.Is(err, errPatioMax), errors.Is(err, errPatioCafe):
 					return apis.NewApiError(http.StatusConflict, err.Error(), nil)
 				default:
 					return r.InternalServerError("Não foi possível salvar esta operação.", err)

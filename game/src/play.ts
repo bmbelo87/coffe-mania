@@ -30,6 +30,7 @@ import {
   loadIndoorArt,
 } from './game/asset-manifest';
 import { loadRoomItemArt, roomModelItems, RoomInventoryClient } from './game/room-inventory';
+import { loadLandSaleSignTexture } from './game/land-sale-sign';
 import { resolveSession } from './game/session';
 import { loadPlayerState } from './game/player-state';
 import { loadNpcAppearancePolicy } from './game/npc-appearance';
@@ -110,7 +111,7 @@ async function boot(): Promise<void> {
     const roomSnapshot = await roomClient.refresh();
 
     // Catálogo fornece comportamento e pegada; manifesto fornece geometria visual.
-    const [playerState, cookingSnapshot, art, actionBarTexture, actionBarButtons, actionBarIcons, npcEmotionTextures, topBarsTextures, cookTextures, wardrobeTextures, storeBarTexture, storeBarIcons, npcAppearancePolicy, placeholderAvatar, storeTopButtonTexture, storeToolbarTextures, spiceTextures] = await Promise.all([
+    const [playerState, cookingSnapshot, art, actionBarTexture, actionBarButtons, actionBarIcons, npcEmotionTextures, topBarsTextures, cookTextures, wardrobeTextures, storeBarTexture, storeBarIcons, npcAppearancePolicy, placeholderAvatar, storeTopButtonTexture, storeToolbarTextures, spiceTextures, landSaleSignTexture] = await Promise.all([
       loadPlayerState(),
       cookingClient.refresh(),
       loadIndoorArt().catch((error) => {
@@ -164,6 +165,7 @@ async function boot(): Promise<void> {
         return undefined;
       }),
       loadSpiceScreenTextures(),
+      loadLandSaleSignTexture(),
     ]);
 
     // Only the player is baked at boot. NPC looks are generated per spawn.
@@ -181,8 +183,9 @@ async function boot(): Promise<void> {
     if (import.meta.env.DEV) Object.assign(window, { __avatarBake: avatars[0], __avatarBakes: avatars });
 
     const artProvider = await loadRoomItemArt(roomSnapshot, art ? { art, textureFor: indoorTexture } : undefined);
-    const model = new RoomModel({ items: roomModelItems(roomSnapshot, artProvider.art), walls: false, tilesX: roomSnapshot.tilesX, tilesY: roomSnapshot.tilesY });
+    const model = new RoomModel({ items: roomModelItems(roomSnapshot, artProvider.art), walls: false, tilesX: roomSnapshot.tilesX, tilesY: roomSnapshot.tilesY, patioX: roomSnapshot.patioX, patioY: roomSnapshot.patioY });
     const room = new RoomScreen({
+      landSaleSignTexture,
       playerState,
       cookingClient,
       cookingSnapshot,

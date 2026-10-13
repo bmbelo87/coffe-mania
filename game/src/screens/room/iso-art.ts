@@ -43,7 +43,7 @@ export function tileDiamond(tx: number, ty: number): { x: number; y: number }[] 
 export function drawFloor(graphics: Graphics, model: RoomModel): Graphics {
   graphics.clear();
 
-  for (let ty = 0; ty < model.tilesY; ty++) {
+  for (let ty = 0; ty < model.rowsY; ty++) {
     for (let tx = 0; tx < model.tilesX; tx++) {
       if (!model.hasFloor(tx, ty)) continue;
       graphics
@@ -188,7 +188,7 @@ export function rotateFloorSprite(sprite: Sprite, frame: IndoorArtFrame, rotatio
 export function createFloorViews(model: RoomModel, frame: IndoorArtFrame, texture: Texture): Sprite[] {
   const views: Sprite[] = [];
 
-  for (let ty = 0; ty < model.tilesY; ty++) {
+  for (let ty = 0; ty < model.rowsY; ty++) {
     for (let tx = 0; tx < model.tilesX; tx++) {
       if (!model.hasFloor(tx, ty)) continue;
       const sprite = new Sprite(texture);

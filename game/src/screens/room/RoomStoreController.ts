@@ -22,14 +22,20 @@ function contains(points: readonly { x: number; y: number }[], x: number, y: num
 export function validStorePlacement(item: RoomCatalogItem, tile: Tile, rotation: number, model: RoomModel, snapshot: RoomSnapshot, unitId?: string): boolean {
   const { tx: x, ty: y } = tile;
   if (!model.inside(x, y) || rotation < 0 || rotation > 3) return false;
-  const wallPosition = (x === 0 && y > 0 && rotation % 2 === 0) || (y === 0 && x > 0 && rotation % 2 === 1);
+  // Wall pieces belong to the café walls; the patio has none.
+  const wallPosition = (x === 0 && y > 0 && y < model.tilesY && rotation % 2 === 0) || (y === 0 && x > 0 && rotation % 2 === 1);
   if (item.type === 1) return wallPosition;
   const wallDecoration = item.kind === 'window' || item.kind === 'panel';
   if (wallDecoration && !wallPosition) return false;
   if (item.kind === 'wall') return false;
-  if (item.kind === 'door' && !((x === 1 && y > 0 && rotation % 2 === 0) || (y === 1 && x > 0 && rotation % 2 === 1))) return false;
+  if (item.kind === 'door' && !((x === 1 && y > 0 && y < model.tilesY && rotation % 2 === 0) || (y === 1 && x > 0 && rotation % 2 === 1))) return false;
   const sx = rotation % 2 ? item.sizeY : item.sizeX, sy = rotation % 2 ? item.sizeX : item.sizeY;
-  if (!wallDecoration && (x < 1 || y < 1 || x + sx > model.tilesX || y + sy > model.tilesY)) return false;
+  if (!wallDecoration) {
+    // Every tile of the footprint must be café or patio floor, as the server checks.
+    for (let dy = 0; dy < sy; dy++) for (let dx = 0; dx < sx; dx++) {
+      if (x + dx < 1 || y + dy < 1 || !model.inside(x + dx, y + dy)) return false;
+    }
+  }
   if (item.type === 0) return true;
   return !snapshot.inventory.some((other) => {
     const entry = snapshot.catalog.find((entry) => entry.id === other.itemId);
@@ -203,7 +209,7 @@ export class RoomStoreController {
     } else {
       // Móveis e pisos seguem o grid dentro da sala, mesmo com o ponteiro fora dela.
       const sx = this.rotation % 2 ? item.sizeY : item.sizeX, sy = this.rotation % 2 ? item.sizeX : item.sizeY;
-      const maxX = Math.max(1, this.options.model.tilesX - sx), maxY = Math.max(1, this.options.model.tilesY - sy);
+      const maxX = Math.max(1, this.options.model.tilesX - sx), maxY = Math.max(1, this.options.model.rowsY - sy);
       return { tx: Math.min(maxX, Math.max(1, tile.tx)), ty: Math.min(maxY, Math.max(1, tile.ty)) };
     }
     return tile;

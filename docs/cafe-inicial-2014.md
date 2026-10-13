@@ -55,8 +55,8 @@ Decoração de parede ainda não tem `kind` próprio. Hoje só `window` e `panel
 
 | Asset | Observação |
 | --- | --- |
-| Placa "Terreno à venda" | Hoje é desenhada em código; trocar por PNG (placa vermelha de borda branca, poste de madeira) |
-| Piso do terreno/pátio (pedra cinza) e mureta | Necessários para o sistema do terreno, ainda não implementado |
+| Placa "Terreno à venda" | Feita: PNG em `game/public/assets/scenery/land-sale/`, reconstruída da captura (`tools/acervo/fontes/placa-terreno/`) |
+| Piso do pátio (pedra cinza) e mureta com vão | O pátio funciona com o piso de grama existente; faltam a pedra e a mureta das capturas |
 | Estacionamento com faixa zebrada e quadrado verde, placa "E" | Ao lado da parede da porta; ligado aos suprimentos no original |
 | Chão nevado, tocos de madeira, bengala doce, guarda-sol listrado | Cenário de inverno de janeiro de 2014; sazonal, opcional |
 
@@ -71,5 +71,5 @@ Os ícones de `game/public/assets/ui/` seguem o padrão da atualização mais no
 
 ## Fora do escopo dos assets
 
-- O sistema do terreno (pátio) ainda não existe. A placa só mostra a prévia de 7x6.
+- O pátio já pode ser comprado pela placa (4x4 e depois 7x6); falta só a arte da pedra e da mureta.
 - Pratos já servidos nos balcões na captura (frango assado com frutas, hambúrguer, salada, queijo) vêm do jogo em andamento. O café inicial começa sem comida.

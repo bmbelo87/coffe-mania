@@ -15,7 +15,13 @@ Seções usadas: **Adicionado**, **Alterado**, **Corrigido**, **Removido** e **O
 - A compra acontece numa transação no servidor (`database/expansions.go`), com a revisão do quarto e a chave da requisição; repetir o pedido não cobra duas vezes.
 - A expansão é aplicada na hora, sem recarregar o jogo. O servidor do jogo ajusta a grade de navegação e avisa os outros clientes, e o cliente redimensiona o quarto no lugar.
 - Cada expansão estende as paredes e o papel de parede (continuando o papel do trecho anterior) e coloca o piso inicial no trecho novo.
-- Placa **"Terreno à venda"** no gramado junto à frente esquerda do café. Com o mouse sobre ela, aparece a prévia lisa do terreno de 7x6.
+- **Pátio**, vendido pela placa **"Terreno à venda"** no gramado (arte PNG em `game/public/assets/scenery/land-sale/`).
+  - **Terrenos:** fixos, primeiro 4x4 e depois 7x6. O primeiro custa 40.000 caféOuros ou 10 caféGranas, com bloqueio no nível 15 e desbloqueio por 10.
+  - **Prévia:** com o mouse sobre a placa, o próximo terreno aparece em verde liso, junto com o balão "Clique para expandir seu Pátio!".
+  - **Compra:** abre "Comprar Expansão?" ou "Bloqueado!".
+  - **Limite:** o pátio não passa do tamanho do café; o 7x6 pede antes a expansão 7x9 do café.
+  - **Uso:** o pátio fica abaixo da borda frontal esquerda do café, sem paredes e com piso de grama. Recebe móveis, e os clientes sentam e comem nele. Quando o café ganha linhas, o pátio e o que está nele se deslocam junto.
+  - **Banco:** campos `patio_x` e `patio_y` (migração `202610130003_patio`).
 - Ferramentas de desenvolvimento:
   - **Reiniciar do zero:** apaga o save da conta (nível, XP, moedas, temperos, sucos e o café inteiro) e recomeça como conta nova, depois de uma confirmação;
   - **Nível 1** na linha de nível;
@@ -41,9 +47,14 @@ Seções usadas: **Adicionado**, **Alterado**, **Corrigido**, **Removido** e **O
 ### Observações
 
 - Os tamanhos 7x9, 8x10 e 10x11 e o preço de 5 caféGranas do 7x9 são documentados. Os demais preços e níveis e os tamanhos depois de 10x11 são valores do projeto (`expansionSteps`).
-- A compra do terreno, as Recomendações de Expansão e os vizinhos ainda não existem; clicar na placa do terreno mostra um aviso.
+- Os tamanhos 4x4 e 7x6 do pátio e os valores do primeiro terreno são documentados; os do 7x6 são do projeto (`patioSteps`).
+- Ainda não existem a entrada do pátio direto da rua (os clientes entram pela porta do café), a mureta, o piso de pedra do original, as Recomendações de Expansão e os vizinhos.
 - As posições do café inicial foram estimadas a partir de uma única captura em perspectiva.
-- Verificação: `go test` em `database` (com 8 testes novos) e em `game-server/gameruntime`, typecheck e uma cópia isolada com banco temporário no Chrome headless. Nela foram conferidos o café inicial, a prévia do terreno, a aba Expansões, a confirmação e a compra sem recarregar a página. O botão "Reiniciar do zero" do menu dev foi testado pela API, não clicado no painel.
+- Verificação:
+  - `go test` em `database` (com 11 testes novos) e em `game-server/gameruntime`, e typecheck;
+  - uma cópia isolada com banco temporário no Chrome headless, onde foram conferidos o café inicial, a aba Expansões, a compra sem recarregar a página, a compra do pátio 4x4, o aviso do 7x6 antes da expansão do café e o 7x6 depois dela;
+  - a prévia verde não aparece nas capturas headless e foi conferida no navegador pelo responsável;
+  - o botão "Reiniciar do zero" do menu dev foi testado pela API, não clicado no painel.
 
 ## [0.2.0] — Máquina de Sucos e acervo de móveis (2026-10-13)
 

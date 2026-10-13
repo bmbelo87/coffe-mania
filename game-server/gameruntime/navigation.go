@@ -8,8 +8,11 @@ import (
 
 type Tile = gamewire.Tile
 type Unit = gamewire.Unit
+// grid covers the café rectangle and, below its front-left edge, the patio: width and height
+// bound both, cafeHeight is where the café rows end and patioWidth the last patio column.
 type grid struct {
-	width, height int
+	width, height          int
+	cafeHeight, patioWidth int
 	objects       map[Tile][]Unit
 	blocked       map[Tile]bool
 	doors         map[Tile]bool
@@ -36,7 +39,8 @@ func footprint(u Unit) []Tile {
 	return result
 }
 func newGrid(w gamewire.World) *grid {
-	g := &grid{w.TilesX, w.TilesY, map[Tile][]Unit{}, map[Tile]bool{}, map[Tile]bool{}}
+	g := &grid{objects: map[Tile][]Unit{}, blocked: map[Tile]bool{}, doors: map[Tile]bool{}}
+	g.resize(w)
 	for _, u := range w.Units {
 		g.add(u)
 	}
@@ -100,7 +104,20 @@ func opening(u Unit) Tile {
 	}
 	return Tile{X: u.X, Y: 0}
 }
-func (g *grid) inside(t Tile) bool { return t.X >= 0 && t.Y >= 0 && t.X < g.width && t.Y < g.height }
+// resize follows a café expansion or a patio purchase; tiles keep their coordinates.
+func (g *grid) resize(w gamewire.World) {
+	g.width, g.height = w.TilesX, w.TilesY+w.PatioY
+	g.cafeHeight, g.patioWidth = w.TilesY, w.PatioX
+}
+
+// inside covers the café and the patio; the patio starts at the first floor column, so the
+// café's wall column does not continue along it.
+func (g *grid) inside(t Tile) bool {
+	if t.X < 0 || t.Y < 0 || t.X >= g.width || t.Y >= g.height {
+		return false
+	}
+	return t.Y < g.cafeHeight || (t.X >= 1 && t.X <= g.patioWidth)
+}
 func (g *grid) walkable(t Tile) bool {
 	return g.inside(t) && (g.doors[t] || (t.X > 0 && t.Y > 0 && !g.blocked[t]))
 }

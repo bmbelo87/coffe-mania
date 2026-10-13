@@ -1142,11 +1142,12 @@ func (r *room) updateWorld(w gamewire.World) {
 	cookingChanged := string(w.Cooking) != string(r.world.Cooking)
 	foodsChanged := fmt.Sprint(w.Foods) != fmt.Sprint(r.world.Foods)
 	juicesChanged := fmt.Sprint(w.Juices) != fmt.Sprint(r.world.Juices)
-	resized := w.TilesX != r.world.TilesX || w.TilesY != r.world.TilesY
+	resized := w.TilesX != r.world.TilesX || w.TilesY != r.world.TilesY || w.PatioX != r.world.PatioX || w.PatioY != r.world.PatioY
 	r.world = w
 	if resized && w.TilesX >= 2 && w.TilesY >= 2 {
-		// Expansion only adds rows and columns at the far edges; walls and pieces keep their tiles.
-		r.grid.width, r.grid.height = w.TilesX, w.TilesY
+		// Expansion only adds rows and columns at the far edges and the patio follows the café's
+		// front-left edge; the units that moved with it arrive in the same world update.
+		r.grid.resize(w)
 	}
 	if juicesChanged {
 		r.broadcast(gamewire.Event{Type: "juices", Juices: w.Juices}, "")
@@ -1192,7 +1193,7 @@ func (r *room) updateWorld(w gamewire.World) {
 	if len(changes) > 0 || cookingChanged || foodsChanged || resized {
 		e := gamewire.Event{Type: "world", Units: changes, Revision: w.Revision}
 		if resized {
-			e.TilesX, e.TilesY = w.TilesX, w.TilesY
+			e.TilesX, e.TilesY, e.PatioX, e.PatioY = w.TilesX, w.TilesY, w.PatioX, w.PatioY
 		}
 		if cookingChanged {
 			e.Cooking = w.Cooking

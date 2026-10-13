@@ -1,4 +1,5 @@
 import { GAME_VERSION } from '../../core/version';
+import { LAND_SALE_SIGN_FRAME } from '../../game/land-sale-sign';
 import {
   Container,
   Graphics,
@@ -103,8 +104,6 @@ import {
 
 /** Altura máxima de móvel, usada para enquadrar a câmera. */
 const MAX_ITEM_HEIGHT = 150 * ROOM_ASSET_SCALE;
-/** Lot sold by the "Terreno à venda" sign: 7 floor tiles along the café's front-left edge, 6 deep. */
-const LAND_LOT = { width: 7, depth: 6 } as const;
 
 /** Folga em volta da sala, para ela não encostar na borda da tela. */
 const CAMERA_PADDING = 60 * ROOM_ASSET_SCALE;
@@ -212,6 +211,7 @@ interface Wanderer {
 }
 
 export interface RoomScreenOptions {
+  landSaleSignTexture?: Texture;
   /** Authenticated server snapshot; absent HUDs stay hidden, never simulated. */
   playerState?: PlayerState;
   roomSnapshot?: RoomSnapshot;
@@ -354,6 +354,7 @@ export class RoomScreen implements Screen {
   private sellModal?: SellConfirmModal;
   private roomClient?: RoomInventoryClient;
   private landSaleParts: Container[] = [];
+  private readonly landSaleSignTexture?: Texture;
   private expansionModal?: ExpansionModal;
   private expanding = false;
   /** Decoration with a sprite sheet: the texture follows the room clock. */
@@ -455,6 +456,7 @@ export class RoomScreen implements Screen {
     this.floorClassName = options.floorClassName ?? 'FloorTile';
     this.roomSnapshot = options.roomSnapshot;
     this.roomClient = options.roomClient;
+    this.landSaleSignTexture = options.landSaleSignTexture;
     this.realtime = options.realtime;
     this.npcEmotionTextures = options.npcEmotionTextures;
     this.avatars = options.avatars ?? [];
@@ -928,8 +930,10 @@ export class RoomScreen implements Screen {
     for (const id of event.removed ?? []) { const entry = this.liveActors.get(id); if (entry) { this.removeLiveActor(id, entry); this.liveActors.delete(id); } }
     if (event.type === 'world' && this.roomSnapshot && event.revision !== undefined && event.revision >= this.roomSnapshot.revision) {
       // An expansion arrives with the new size and the units of its walls and floor.
-      const resized = Boolean(event.tilesX && event.tilesY && (event.tilesX !== this.model.tilesX || event.tilesY !== this.model.tilesY));
-      const size = resized ? { tilesX: event.tilesX!, tilesY: event.tilesY! } : {};
+      // The patio fields are omitted when there is no patio.
+      const resized = Boolean(event.tilesX && event.tilesY && (event.tilesX !== this.model.tilesX || event.tilesY !== this.model.tilesY
+        || (event.patioX ?? 0) !== this.model.patioX || (event.patioY ?? 0) !== this.model.patioY));
+      const size = resized ? { tilesX: event.tilesX!, tilesY: event.tilesY!, patioX: event.patioX ?? 0, patioY: event.patioY ?? 0 } : {};
       const units = new Map(this.roomSnapshot.inventory.map((unit) => [unit.unitId, unit]));
       for (const unit of event.units ?? []) {
         if (this.roomSnapshot.canEdit !== false || unit.placed) units.set(unit.unitId, unit); else units.delete(unit.unitId);
@@ -1531,7 +1535,7 @@ export class RoomScreen implements Screen {
           dest: destination,
           isWalkable: this.model.isWalkable,
           maxTilesX: this.model.tilesX,
-          maxTilesY: this.model.tilesY,
+          maxTilesY: this.model.rowsY,
         });
         // O hitbox pode já estar neste tile na metade do passo, enquanto a arte
         // ainda chega nele. A ação só começa quando o movimento visual termina.
@@ -2044,8 +2048,10 @@ export class RoomScreen implements Screen {
     if (this.destroyed) return;
     if (this.roomSnapshot && snapshot.revision < this.roomSnapshot.revision) return;
     // An expansion is applied in place: the model grows and the floor, walls and grid follow below.
-    const resized = snapshot.tilesX !== this.model.tilesX || snapshot.tilesY !== this.model.tilesY;
-    if (resized) this.model.resize(snapshot.tilesX, snapshot.tilesY);
+    const patioX = snapshot.patioX ?? 0, patioY = snapshot.patioY ?? 0;
+    const resized = snapshot.tilesX !== this.model.tilesX || snapshot.tilesY !== this.model.tilesY
+      || patioX !== this.model.patioX || patioY !== this.model.patioY;
+    if (resized) this.model.resize(snapshot.tilesX, snapshot.tilesY, patioX, patioY);
     this.roomSnapshot = snapshot; if (updatePlayerState) this.setPlayerState(snapshot.playerState);
     const old = new Map(this.model.items.map((item) => [item.inventoryUnitId, item]));
     const items = roomModelItems(snapshot, this.artProvider?.art).map((item) => {
@@ -2068,38 +2074,40 @@ export class RoomScreen implements Screen {
   }
 
   /**
-   * The "Terreno à venda" sign on the grass beside the front-left edge of the café, as in the
-   * original. The ground stays clear: only while the pointer is over the sign the 7x6 lot it sells
-   * is previewed as one flat green area. It starts at the first floor column (the wall column is
-   * the sidewalk's edge and does not count) and extends away from the café, where the patio of
-   * the original sat.
+   * The "Terreno à venda" sign sells the patio, the open-air lot below the café's front-left edge,
+   * in fixed sizes (4x4, then 7x6). It stands on the next lot; the ground stays clear, and only
+   * while the pointer is over the sign that lot is previewed as one flat green area: the full
+   * rectangle for the first one, the part around the current patio for the next. Clicking opens
+   * the "Comprar Expansão?" window, as in the original.
    */
   private refreshLandSign(): void {
     this.landSaleParts.splice(0).forEach((part) => part.destroy({ children: true }));
-    if (!this.roomSnapshot || this.roomSnapshot.canEdit === false || !this.roomClient) return;
-    const { tilesY } = this.model;
+    const offer = this.roomSnapshot?.patio;
+    if (!this.roomSnapshot || this.roomSnapshot.canEdit === false || !this.roomClient || !this.landSaleSignTexture || !offer) return;
+    const { tilesY: top, patioX: px, patioY: py } = this.model;
+    const nx = Math.max(px, offer.floorX), ny = Math.max(py, offer.floorY);
     const corner = (tx: number, ty: number) => ({ x: tileToScreenX(tx, ty), y: tileToScreenY(tx, ty) });
-    const preview = new Graphics()
-      .poly([corner(1, tilesY), corner(1 + LAND_LOT.width, tilesY), corner(1 + LAND_LOT.width, tilesY + LAND_LOT.depth), corner(1, tilesY + LAND_LOT.depth)])
-      .fill({ color: 0x7ee03a, alpha: 0.55 });
+    // The patio grows from the first floor column (tx 1) and the café's front-left edge (ty = top).
+    const outline = px > 0 && py > 0
+      ? [corner(1 + px, top), corner(1 + nx, top), corner(1 + nx, top + ny), corner(1, top + ny), corner(1, top + py), corner(1 + px, top + py)]
+      : [corner(1, top), corner(1 + nx, top), corner(1 + nx, top + ny), corner(1, top + ny)];
+    const preview = new Graphics().poly(outline).fill({ color: 0x7ee03a, alpha: 0.55 });
     preview.label = 'land-sale-preview';
     preview.zIndex = FLOOR_DRAW_PRIORITY + 2;
     preview.eventMode = 'none';
     preview.visible = false;
 
-    const spot = { tx: 2, ty: tilesY + 1 };
+    const spot = ny > py ? { tx: 2, ty: top + py + (py > 0 ? 0 : 1) } : { tx: px + 1, ty: top };
     const sign = new Container();
     sign.label = 'land-sale-sign';
-    const post = new Graphics().roundRect(-7, -120, 14, 120, 4).fill(0x8a4f22).stroke({ color: 0x4f2a10, width: 3 });
-    const board = new Graphics().roundRect(-78, -204, 156, 98, 12).fill(0xffffff).stroke({ color: 0x8a1c10, width: 4 })
-      .roundRect(-70, -196, 140, 82, 8).fill(0xd8261a);
-    const title = new Text({ text: 'Terreno\nà venda', style: new TextStyle({
-      fontFamily: [FONT_FAMILY, 'sans-serif'], fontSize: 30, fontWeight: '800', fill: 0xffffff, align: 'center', lineHeight: 32,
-    }) });
-    title.anchor.set(0.5); title.position.set(0, -155);
+    const art = new Sprite(this.landSaleSignTexture);
+    art.label = 'land-sale-sign-art';
+    art.position.set(LAND_SALE_SIGN_FRAME.left, LAND_SALE_SIGN_FRAME.top);
+    art.scale.set(LAND_SALE_SIGN_FRAME.scale);
+    art.eventMode = 'none';
     const tip = new Container();
     tip.label = 'land-sale-tip'; tip.visible = false;
-    const tipText = new Text({ text: `Terreno ${LAND_LOT.width}x${LAND_LOT.depth}\nClique para comprar!`, style: new TextStyle({
+    const tipText = new Text({ text: 'Clique para expandir\nseu Pátio!', style: new TextStyle({
       fontFamily: [FONT_FAMILY, 'sans-serif'], fontSize: 26, fontWeight: '800', fill: 0xffffff, align: 'center', lineHeight: 30,
     }) });
     tipText.anchor.set(0.5);
@@ -2107,7 +2115,7 @@ export class RoomScreen implements Screen {
     tip.addChild(new Graphics().roundRect(-tipWidth / 2, -tipHeight / 2, tipWidth, tipHeight, 14).fill(0x5e3115).stroke({ color: 0xffffff, width: 4 })
       .poly([-12, tipHeight / 2 - 2, 12, tipHeight / 2 - 2, 0, tipHeight / 2 + 16]).fill(0x5e3115), tipText);
     tip.position.set(0, -204 - tipHeight / 2 - 22);
-    sign.addChild(post, board, title, tip);
+    sign.addChild(art, tip);
     sign.position.set(tileToScreenX(spot.tx + 0.5, spot.ty + 0.5), tileToScreenY(spot.tx + 0.5, spot.ty + 0.5));
     sign.zIndex = itemDepth(spot.tx, spot.ty);
     sign.eventMode = 'static'; sign.cursor = 'pointer';
@@ -2121,12 +2129,35 @@ export class RoomScreen implements Screen {
     sign.on('pointertap', (event: FederatedPointerEvent) => {
       if (this.storeBar?.isOpen || this.isModalOpen || this.dragCancelledTap) return;
       event.stopPropagation();
-      // The lot (the patio of the original) still has no purchase, floor or navigation; see docs/expansoes.md.
-      this.showNotice(`A compra do terreno ${LAND_LOT.width}x${LAND_LOT.depth} ainda não está disponível.`);
+      void this.buyPatio();
     });
     // Both parts sort with the room: the preview under the furniture, the sign by its tile.
     this.world.addChild(preview, sign);
     this.landSaleParts.push(preview, sign);
+  }
+
+  /**
+   * Buys the next patio lot. A lot larger than the café floor waits for a café expansion, with the
+   * original's advice; otherwise the "Comprar Expansão?" window offers caféOuros or caféGranas, or
+   * "Bloqueado!" below its level.
+   */
+  private async buyPatio(): Promise<void> {
+    const offer = this.roomSnapshot?.patio, state = this.playerState ?? this.roomSnapshot?.playerState;
+    if (!this.roomSnapshot || !offer || !state || !this.roomClient || !this.expansionModal || this.expanding || this.isModalOpen) return;
+    if (offer.floorX > this.model.tilesX - 1 || offer.floorY > this.model.tilesY - 1) {
+      this.showNotice('O tamanho máximo de um pátio é o mesmo que o do Café. Expanda seu Café primeiro.');
+      return;
+    }
+    const payment = await this.expansionModal.ask(offer, state.level);
+    if (!payment || this.destroyed || !this.roomSnapshot) return;
+    this.expanding = true;
+    try {
+      // The patio, its grass and the sign of the next lot are applied in place by applyRoomSnapshot.
+      this.applyRoomSnapshot(await this.roomClient.mutate('patio', this.roomSnapshot.revision, { payment }));
+    } catch (error) {
+      this.showNotice(error instanceof Error ? error.message : 'Não foi possível comprar o terreno.');
+      try { this.applyRoomSnapshot(await this.roomClient.refresh()); } catch { /* The next action refreshes. */ }
+    } finally { this.expanding = false; }
   }
 
   /**
@@ -2570,10 +2601,10 @@ export class RoomScreen implements Screen {
       };
     }
     return {
-      left: tileToScreenX(0, this.model.tilesY) - CAMERA_PADDING,
+      left: tileToScreenX(0, this.model.rowsY) - CAMERA_PADDING,
       right: tileToScreenX(this.model.tilesX, 0) + CAMERA_PADDING,
       top: -MAX_ITEM_HEIGHT - CAMERA_PADDING,
-      bottom: tileToScreenY(this.model.tilesX, this.model.tilesY) + CAMERA_PADDING,
+      bottom: tileToScreenY(this.model.tilesX, this.model.rowsY) + CAMERA_PADDING,
     };
   }
 
@@ -2924,7 +2955,7 @@ export class RoomScreen implements Screen {
       dest: destination,
       isWalkable: this.model.isWalkable,
       maxTilesX: this.model.tilesX,
-      maxTilesY: this.model.tilesY,
+      maxTilesY: this.model.rowsY,
     });
 
     if (!path) return null;
@@ -3009,7 +3040,7 @@ export class RoomScreen implements Screen {
       dest,
       isWalkable: this.model.isWalkable,
       maxTilesX: this.model.tilesX,
-      maxTilesY: this.model.tilesY,
+      maxTilesY: this.model.rowsY,
     });
     if (path && path.length > 0) wanderer.actor.setMovePath(path);
   }

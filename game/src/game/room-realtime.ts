@@ -16,7 +16,7 @@ export interface SharedActor {
   juiceRequestId?: string;
 }
 export interface SharedWorld {
-  roomId: string; revision: number; tilesX: number; tilesY: number;
+  roomId: string; revision: number; tilesX: number; tilesY: number; patioX?: number; patioY?: number;
   units: RoomUnit[]; foods: SharedFood[]; cooking?: CookingSnapshot;
   juices?: JuiceStock[];
 }
@@ -24,8 +24,8 @@ export interface RoomEvent {
   type: 'welcome' | 'actors' | 'world' | 'food' | 'juices' | 'ack' | 'error'; epoch: string; seq: number; serverNow: number;
   selfId?: string; world?: SharedWorld; actors?: SharedActor[]; removed?: string[];
   units?: RoomUnit[]; revision?: number; foods?: SharedFood[]; cooking?: CookingSnapshot;
-  /** Present on a "world" event when the café was expanded. */
-  tilesX?: number; tilesY?: number;
+  /** Present on a "world" event when the café or its patio changed size (patio omitted when 0). */
+  tilesX?: number; tilesY?: number; patioX?: number; patioY?: number;
   juices?: JuiceStock[];
   requestId?: string; message?: string;
 }

@@ -20,6 +20,9 @@ export interface RoomSnapshot {
   expansion?: RoomExpansionOffer | null;
   /** Every expansion step, for the cards of the "Expansões" tab. */
   expansions?: RoomExpansionStep[];
+  /** Patio floor beyond the café's front-left edge (0 without one) and the next lot for sale. */
+  patioX?: number; patioY?: number;
+  patio?: RoomExpansionOffer | null;
 }
 
 /** One café expansion: its floor size, as on the original cards ("7x9"), and its prices. */
@@ -168,7 +171,7 @@ export class RoomInventoryClient {
     }
     return response.json() as Promise<RoomSnapshot>;
   }
-  async mutate(action: 'purchase' | 'move' | 'store' | 'sell' | 'expand', revision: number, data: { itemId?: number; unitId?: string; tx?: number; ty?: number; rotation?: number; payment?: 'cash' | 'gold' | 'gold_unlock' }): Promise<RoomSnapshot> {
+  async mutate(action: 'purchase' | 'move' | 'store' | 'sell' | 'expand' | 'patio', revision: number, data: { itemId?: number; unitId?: string; tx?: number; ty?: number; rotation?: number; payment?: 'cash' | 'gold' | 'gold_unlock' }): Promise<RoomSnapshot> {
     const signature = JSON.stringify({ action, ...data });
     if (this.pending && this.pending.signature !== signature) {
       throw new Error('Verifique a última operação repetindo a mesma colocação ou recarregando o quarto.');

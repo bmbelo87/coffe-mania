@@ -38,6 +38,9 @@ type World struct {
 	Revision int             `json:"revision"`
 	TilesX   int             `json:"tilesX"`
 	TilesY   int             `json:"tilesY"`
+	// PatioX and PatioY are the patio floor beyond the café's front-left edge (0 without one).
+	PatioX int `json:"patioX"`
+	PatioY int `json:"patioY"`
 	Units    []Unit          `json:"units"`
 	Foods    []Food          `json:"foods"`
 	Cooking  json.RawMessage `json:"cooking,omitempty"`
@@ -126,9 +129,12 @@ type Event struct {
 	Removed   []string        `json:"removed,omitempty"`
 	Units     []Unit          `json:"units,omitempty"`
 	Revision  int             `json:"revision,omitempty"`
-	// TilesX and TilesY accompany a "world" event when the café was expanded.
+	// TilesX and TilesY accompany a "world" event when the café or its patio changed size; the
+	// patio fields are then the full patio size (omitted when there is none).
 	TilesX    int             `json:"tilesX,omitempty"`
 	TilesY    int             `json:"tilesY,omitempty"`
+	PatioX    int             `json:"patioX,omitempty"`
+	PatioY    int             `json:"patioY,omitempty"`
 	Cooking   json.RawMessage `json:"cooking,omitempty"`
 	Foods     []Food          `json:"foods,omitempty"`
 	Juices    []JuiceStock    `json:"juices,omitempty"`

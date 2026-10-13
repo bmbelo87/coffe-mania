@@ -1,0 +1,18 @@
+{
+  "frame": {
+    "left": -79.33333333333333,
+    "top": -204,
+    "width": 158.66666666666666,
+    "height": 205.33333333333334,
+    "scale": 0.3333333333333333
+  },
+  "resolution": 3,
+  "source": "tools/acervo/fontes/placa-terreno/referencia.png",
+  "method": "Reconstrução com imagegen a partir do anexo; transparência RGBA e escala uniforme.",
+  "anchor": {
+    "x": 574,
+    "y": 1194
+  },
+  "referenceBoardWidth": 758,
+  "displayBoardWidth": 156
+}

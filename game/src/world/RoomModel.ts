@@ -137,6 +137,9 @@ export const DEFAULT_WALLS: WallSpec = {
 export interface RoomModelOptions {
   tilesX?: number;
   tilesY?: number;
+  /** Patio floor beyond the café's front-left edge, from the first floor column (0 without one). */
+  patioX?: number;
+  patioY?: number;
   items?: readonly RoomItem[];
   /** Paredes fechando as linhas tx=0 e ty=0. `false` deixa a sala aberta. */
   walls?: boolean | WallSpec;
@@ -145,6 +148,8 @@ export interface RoomModelOptions {
 export class RoomModel {
   private sizeX: number;
   private sizeY: number;
+  private patioWidth: number;
+  private patioDepth: number;
   readonly items: RoomItem[];
 
   /** índice do tile -> item que ocupa o tile. */
@@ -157,6 +162,8 @@ export class RoomModel {
   constructor(options: RoomModelOptions = {}) {
     this.sizeX = options.tilesX ?? 8;
     this.sizeY = options.tilesY ?? 8;
+    this.patioWidth = options.patioX ?? 0;
+    this.patioDepth = options.patioY ?? 0;
     this.items = [...(options.items ?? DEFAULT_ROOM_ITEMS)].map((item) => {
       if (item.kind === 'door') {
         // Aceita portas antigas ancoradas na parede; portas de chão usam a aresta traseira do piso.
@@ -175,17 +182,24 @@ export class RoomModel {
     for (const item of this.items) this.register(item);
   }
 
+  /** Café size, walls included (row and column 0). */
   get tilesX(): number { return this.sizeX; }
   get tilesY(): number { return this.sizeY; }
+  get patioX(): number { return this.patioWidth; }
+  get patioY(): number { return this.patioDepth; }
+  /** Rows of the whole room, café and patio: the bound for loops and path searches. */
+  get rowsY(): number { return this.sizeY + this.patioDepth; }
 
   /**
-   * An expansion changes the size in place; navigation, NPCs and the store keep this same
-   * instance. Tile indices do not depend on the size, so the caller only has to follow with
-   * replaceItems, which brings the new walls and floor from the server.
+   * An expansion or a patio lot changes the size in place; navigation, NPCs and the store keep
+   * this same instance. Tile indices do not depend on the size, so the caller only has to follow
+   * with replaceItems, which brings the new walls and floor from the server.
    */
-  resize(tilesX: number, tilesY: number): void {
+  resize(tilesX: number, tilesY: number, patioX = this.patioWidth, patioY = this.patioDepth): void {
     this.sizeX = tilesX;
     this.sizeY = tilesY;
+    this.patioWidth = patioX;
+    this.patioDepth = patioY;
   }
 
   private addWalls(spec: WallSpec): void {
@@ -263,8 +277,11 @@ export class RoomModel {
     for (const item of this.items) this.register(item);
   }
 
+  /** The café rectangle and the patio below its front-left edge, which skips the wall column. */
   inside(tx: number, ty: number): boolean {
-    return tx >= 0 && ty >= 0 && tx < this.tilesX && ty < this.tilesY;
+    if (tx < 0 || ty < 0) return false;
+    if (ty < this.sizeY) return tx < this.sizeX;
+    return tx >= 1 && tx <= this.patioWidth && ty < this.rowsY;
   }
 
   /** A coordenada existe apenas para ancorar uma parede. */
@@ -289,7 +306,7 @@ export class RoomModel {
   /** Todos os tiles livres, em ordem de índice. Útil para sortear destino. */
   walkableTiles(): { tx: number; ty: number }[] {
     const tiles: { tx: number; ty: number }[] = [];
-    for (let ty = 0; ty < this.tilesY; ty++) {
+    for (let ty = 0; ty < this.rowsY; ty++) {
       for (let tx = 0; tx < this.tilesX; tx++) {
         if (this.isWalkable(tx, ty)) tiles.push({ tx, ty });
       }

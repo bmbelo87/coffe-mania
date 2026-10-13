@@ -293,7 +293,7 @@ export class OutsideNpcManager {
               dest: this.doorTile,
               isWalkable: this.model.isWalkable,
               maxTilesX: this.model.tilesX,
-              maxTilesY: this.model.tilesY,
+              maxTilesY: this.model.rowsY,
             });
 
             if (pathToDoor && pathToDoor.length > 0) {
@@ -315,7 +315,7 @@ export class OutsideNpcManager {
               dest,
               isWalkable: this.model.isWalkable,
               maxTilesX: this.model.tilesX,
-              maxTilesY: this.model.tilesY,
+              maxTilesY: this.model.rowsY,
             });
 
             if (path && path.length > 0) {
