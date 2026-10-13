@@ -24,7 +24,7 @@ import { ActionBarMood } from './ActionBarMood';
 import { createActionBarBetaSlots } from './ActionBarBetaSlots';
 import { MAIN_ACTION_BAR_SCALE, StoreActionBar } from './StoreActionBar';
 import { RoomStoreController } from './RoomStoreController';
-import { roomModelItems, type RoomSnapshot, type RoomInventoryClient } from '../../game/room-inventory';
+import { roomModelItems, type RoomExpansionStep, type RoomSnapshot, type RoomInventoryClient } from '../../game/room-inventory';
 import { RoomRealtime, type RoomEvent, type SharedActor, type SharedFood, type SharedWorld } from '../../game/room-realtime';
 import type { RecipeArt } from '../../game/recipes';
 import { WardrobeScreenModal, type WardrobeScreenTextures } from './WardrobeScreenModal';
@@ -80,6 +80,7 @@ import { DevToolsModal, loadDevToolsTextures } from './DevToolsModal';
 import { GoldBurstEffect } from './GoldBurstEffect';
 import { alphaHitArea } from './alpha-hit';
 import { SellConfirmModal } from './SellConfirmModal';
+import { ExpansionModal, type ExpansionPayment } from './ExpansionModal';
 import { cookingTime, type CookingClient, type CookingSnapshot, type CookingSpice, type StoveCooking } from '../../game/cooking';
 import {
   PAN_KEY_STEP,
@@ -102,6 +103,8 @@ import {
 
 /** Altura máxima de móvel, usada para enquadrar a câmera. */
 const MAX_ITEM_HEIGHT = 150 * ROOM_ASSET_SCALE;
+/** Lot sold by the "Terreno à venda" sign: 7 floor tiles along the café's front-left edge, 6 deep. */
+const LAND_LOT = { width: 7, depth: 6 } as const;
 
 /** Folga em volta da sala, para ela não encostar na borda da tela. */
 const CAMERA_PADDING = 60 * ROOM_ASSET_SCALE;
@@ -349,6 +352,10 @@ export class RoomScreen implements Screen {
   private networkPending = 0;
   private noticeTimer?: ReturnType<typeof setTimeout>;
   private sellModal?: SellConfirmModal;
+  private roomClient?: RoomInventoryClient;
+  private landSaleParts: Container[] = [];
+  private expansionModal?: ExpansionModal;
+  private expanding = false;
   /** Decoration with a sprite sheet: the texture follows the room clock. */
   private readonly animatedItems: { sprite: Sprite; frames: Texture[]; fps: number; offset: number }[] = [];
   private animationClock = 0;
@@ -447,6 +454,7 @@ export class RoomScreen implements Screen {
     this.playerState = options.playerState ?? options.roomSnapshot?.playerState;
     this.floorClassName = options.floorClassName ?? 'FloorTile';
     this.roomSnapshot = options.roomSnapshot;
+    this.roomClient = options.roomClient;
     this.realtime = options.realtime;
     this.npcEmotionTextures = options.npcEmotionTextures;
     this.avatars = options.avatars ?? [];
@@ -717,6 +725,7 @@ export class RoomScreen implements Screen {
           confirmSell: (_item, gold) => this.sellModal
             ? this.sellModal.ask(`Você quer mesmo vender esse item por ${gold} Ouros?`) : Promise.resolve(true),
           onTransaction: (event) => this.playGoldEffect(event),
+          onExpansion: (step, currency, next) => { void this.buyExpansion(step, currency, next); },
           isOverUI: (event) => {
             if (this.storeBar?.containsGlobalPoint(event.global) || this.topBars?.containsGlobalPoint(event.global)) return true;
             return [this.hud, this.connectionHint].some((layer) => {
@@ -754,7 +763,10 @@ export class RoomScreen implements Screen {
           if (open) this.roomStore?.onOpen(); else this.roomStore?.onClose();
         },
         () => this.openSettings(),
-        options.storeBarIcons,
+        // The "Expansões" tab shows the size cards of the café.
+        options.storeToolbarTextures?.expansion && this.roomStore && options.roomSnapshot?.canEdit !== false
+          ? [...(options.storeBarIcons ?? []), { name: 'expansion', texture: options.storeToolbarTextures.expansion }]
+          : options.storeBarIcons,
         this.roomStore ? {
           onSelect: (entry) => this.roomStore!.select(entry),
           onCategory: () => this.roomStore!.onCategory(),
@@ -867,6 +879,8 @@ export class RoomScreen implements Screen {
     this.view.addChild(this.settingsModal.view);
     this.sellModal = new SellConfirmModal();
     this.view.addChild(this.sellModal.view);
+    this.expansionModal = new ExpansionModal(options.storeToolbarTextures?.expansion);
+    this.view.addChild(this.expansionModal.view);
     this.updateMobileHudLayout();
     if (options.cookingSnapshot) this.acceptCookingSnapshot(options.cookingSnapshot, true);
     if (this.realtime) {
@@ -913,11 +927,14 @@ export class RoomScreen implements Screen {
     }
     for (const id of event.removed ?? []) { const entry = this.liveActors.get(id); if (entry) { this.removeLiveActor(id, entry); this.liveActors.delete(id); } }
     if (event.type === 'world' && this.roomSnapshot && event.revision !== undefined && event.revision >= this.roomSnapshot.revision) {
+      // An expansion arrives with the new size and the units of its walls and floor.
+      const resized = Boolean(event.tilesX && event.tilesY && (event.tilesX !== this.model.tilesX || event.tilesY !== this.model.tilesY));
+      const size = resized ? { tilesX: event.tilesX!, tilesY: event.tilesY! } : {};
       const units = new Map(this.roomSnapshot.inventory.map((unit) => [unit.unitId, unit]));
       for (const unit of event.units ?? []) {
         if (this.roomSnapshot.canEdit !== false || unit.placed) units.set(unit.unitId, unit); else units.delete(unit.unitId);
       }
-      if ((event.units?.length ?? 0) > 0) this.applyRoomSnapshot({ ...this.roomSnapshot, revision: event.revision, inventory: [...units.values()] }, false);
+      if ((event.units?.length ?? 0) > 0 || resized) this.applyRoomSnapshot({ ...this.roomSnapshot, ...size, revision: event.revision, inventory: [...units.values()] }, false);
     }
     if (event.cooking) this.acceptSharedCooking(event.cooking);
     // Uma lista vazia é omitida no evento; num evento "food" ela significa balcões vazios.
@@ -2026,6 +2043,9 @@ export class RoomScreen implements Screen {
   private applyRoomSnapshot(snapshot: RoomSnapshot, updatePlayerState = true): void {
     if (this.destroyed) return;
     if (this.roomSnapshot && snapshot.revision < this.roomSnapshot.revision) return;
+    // An expansion is applied in place: the model grows and the floor, walls and grid follow below.
+    const resized = snapshot.tilesX !== this.model.tilesX || snapshot.tilesY !== this.model.tilesY;
+    if (resized) this.model.resize(snapshot.tilesX, snapshot.tilesY);
     this.roomSnapshot = snapshot; if (updatePlayerState) this.setPlayerState(snapshot.playerState);
     const old = new Map(this.model.items.map((item) => [item.inventoryUnitId, item]));
     const items = roomModelItems(snapshot, this.artProvider?.art).map((item) => {
@@ -2040,9 +2060,100 @@ export class RoomScreen implements Screen {
     this.itemViews.clear(); this.stoveViews.clear(); this.floorUnitViews.clear();
     this.floorArt.removeChildren().forEach((child) => child.destroy({ children: true }));
     this.model.replaceItems(items); this.buildFloor();
+    if (resized) { drawTestGrid(this.testGrid, this.model); this.hudDirty = true; }
     for (const item of this.model.items) this.addItem(item);
     this.roomStore?.acceptShared(snapshot);
     if (!this.realtime) this.player.clearPath();
+    this.refreshLandSign();
+  }
+
+  /**
+   * The "Terreno à venda" sign on the grass beside the front-left edge of the café, as in the
+   * original. The ground stays clear: only while the pointer is over the sign the 7x6 lot it sells
+   * is previewed as one flat green area. It starts at the first floor column (the wall column is
+   * the sidewalk's edge and does not count) and extends away from the café, where the patio of
+   * the original sat.
+   */
+  private refreshLandSign(): void {
+    this.landSaleParts.splice(0).forEach((part) => part.destroy({ children: true }));
+    if (!this.roomSnapshot || this.roomSnapshot.canEdit === false || !this.roomClient) return;
+    const { tilesY } = this.model;
+    const corner = (tx: number, ty: number) => ({ x: tileToScreenX(tx, ty), y: tileToScreenY(tx, ty) });
+    const preview = new Graphics()
+      .poly([corner(1, tilesY), corner(1 + LAND_LOT.width, tilesY), corner(1 + LAND_LOT.width, tilesY + LAND_LOT.depth), corner(1, tilesY + LAND_LOT.depth)])
+      .fill({ color: 0x7ee03a, alpha: 0.55 });
+    preview.label = 'land-sale-preview';
+    preview.zIndex = FLOOR_DRAW_PRIORITY + 2;
+    preview.eventMode = 'none';
+    preview.visible = false;
+
+    const spot = { tx: 2, ty: tilesY + 1 };
+    const sign = new Container();
+    sign.label = 'land-sale-sign';
+    const post = new Graphics().roundRect(-7, -120, 14, 120, 4).fill(0x8a4f22).stroke({ color: 0x4f2a10, width: 3 });
+    const board = new Graphics().roundRect(-78, -204, 156, 98, 12).fill(0xffffff).stroke({ color: 0x8a1c10, width: 4 })
+      .roundRect(-70, -196, 140, 82, 8).fill(0xd8261a);
+    const title = new Text({ text: 'Terreno\nà venda', style: new TextStyle({
+      fontFamily: [FONT_FAMILY, 'sans-serif'], fontSize: 30, fontWeight: '800', fill: 0xffffff, align: 'center', lineHeight: 32,
+    }) });
+    title.anchor.set(0.5); title.position.set(0, -155);
+    const tip = new Container();
+    tip.label = 'land-sale-tip'; tip.visible = false;
+    const tipText = new Text({ text: `Terreno ${LAND_LOT.width}x${LAND_LOT.depth}\nClique para comprar!`, style: new TextStyle({
+      fontFamily: [FONT_FAMILY, 'sans-serif'], fontSize: 26, fontWeight: '800', fill: 0xffffff, align: 'center', lineHeight: 30,
+    }) });
+    tipText.anchor.set(0.5);
+    const tipWidth = tipText.width + 40, tipHeight = tipText.height + 22;
+    tip.addChild(new Graphics().roundRect(-tipWidth / 2, -tipHeight / 2, tipWidth, tipHeight, 14).fill(0x5e3115).stroke({ color: 0xffffff, width: 4 })
+      .poly([-12, tipHeight / 2 - 2, 12, tipHeight / 2 - 2, 0, tipHeight / 2 + 16]).fill(0x5e3115), tipText);
+    tip.position.set(0, -204 - tipHeight / 2 - 22);
+    sign.addChild(post, board, title, tip);
+    sign.position.set(tileToScreenX(spot.tx + 0.5, spot.ty + 0.5), tileToScreenY(spot.tx + 0.5, spot.ty + 0.5));
+    sign.zIndex = itemDepth(spot.tx, spot.ty);
+    sign.eventMode = 'static'; sign.cursor = 'pointer';
+    sign.hitArea = new Rectangle(-82, -208, 164, 210);
+    sign.on('pointerover', () => { tip.visible = true; preview.visible = true; });
+    sign.on('pointerout', () => { tip.visible = false; preview.visible = false; });
+    // Same gesture as the floor and the stoves: a fresh press clears an earlier camera drag.
+    sign.on('pointerdown', this.onDragStart);
+    sign.on('pointerup', this.onDragEnd);
+    sign.on('pointerupoutside', this.onDragEnd);
+    sign.on('pointertap', (event: FederatedPointerEvent) => {
+      if (this.storeBar?.isOpen || this.isModalOpen || this.dragCancelledTap) return;
+      event.stopPropagation();
+      // The lot (the patio of the original) still has no purchase, floor or navigation; see docs/expansoes.md.
+      this.showNotice(`A compra do terreno ${LAND_LOT.width}x${LAND_LOT.depth} ainda não está disponível.`);
+    });
+    // Both parts sort with the room: the preview under the furniture, the sign by its tile.
+    this.world.addChild(preview, sign);
+    this.landSaleParts.push(preview, sign);
+  }
+
+  /**
+   * Buys a café expansion from its card. The caféGranas card and an unlocked caféOuros card ask
+   * for confirmation; a caféOuros card below its level opens the "Bloqueado!" window, which
+   * offers the unlock or the caféGranas price.
+   */
+  private async buyExpansion(step: RoomExpansionStep, currency: 'cash' | 'gold', next: boolean): Promise<void> {
+    const offer = this.roomSnapshot?.expansion, state = this.playerState ?? this.roomSnapshot?.playerState;
+    if (!this.roomSnapshot || !offer || !state || !this.roomClient || !this.expansionModal || !this.sellModal || this.expanding || this.isModalOpen) return;
+    const size = `${step.floorX}x${step.floorY}`;
+    if (!next) { this.roomStore?.showMessage(`Compre antes a expansão ${offer.floorX}x${offer.floorY}.`); return; }
+    let payment: ExpansionPayment | null;
+    if (currency === 'gold' && state.level < step.level) payment = await this.expansionModal.ask(offer, state.level);
+    else {
+      const price = currency === 'cash' ? `${step.priceCash} Granas` : `${step.priceGold.toLocaleString('pt-BR')} Ouros`;
+      payment = await this.sellModal.ask(`Você quer mesmo expandir seu Café para ${size} por ${price}?`) ? currency : null;
+    }
+    if (!payment || this.destroyed || !this.roomSnapshot) return;
+    this.expanding = true;
+    try {
+      // The new size, walls and floor are applied in place by applyRoomSnapshot.
+      this.applyRoomSnapshot(await this.roomClient.mutate('expand', this.roomSnapshot.revision, { payment }));
+    } catch (error) {
+      this.showNotice(error instanceof Error ? error.message : 'Não foi possível expandir o café.');
+      try { this.applyRoomSnapshot(await this.roomClient.refresh()); } catch { /* The next action refreshes. */ }
+    } finally { this.expanding = false; }
   }
 
   /** Blue spice-window button with the game's font; shown only while dev mode is on. */
@@ -2151,7 +2262,7 @@ export class RoomScreen implements Screen {
   }
 
   private get isModalOpen(): boolean {
-    return Boolean(this.juiceModal?.isOpen || this.cookModal?.isOpen || this.spiceModal?.isOpen || this.wardrobeModal?.isOpen || this.settingsModal?.isOpen || this.devModal?.isOpen || this.sellModal?.isOpen);
+    return Boolean(this.juiceModal?.isOpen || this.cookModal?.isOpen || this.spiceModal?.isOpen || this.wardrobeModal?.isOpen || this.settingsModal?.isOpen || this.devModal?.isOpen || this.sellModal?.isOpen || this.expansionModal?.isOpen);
   }
 
   /** Atores em cena, o jogador primeiro. Usado nos testes. */
@@ -2960,6 +3071,7 @@ export class RoomScreen implements Screen {
     this.spiceModal?.update(deltaMs);
     this.devModal?.update(deltaMs);
     this.sellModal?.update(deltaMs);
+    this.expansionModal?.update(deltaMs);
     this.updateAnimatedItems(deltaMs);
     for (let index = this.goldEffects.length - 1; index >= 0; index--) {
       const effect = this.goldEffects[index];
@@ -3117,6 +3229,8 @@ export class RoomScreen implements Screen {
     this.spiceModal?.destroy();
     this.devModal?.destroy();
     this.sellModal?.destroy();
+    this.expansionModal?.destroy();
+    this.landSaleParts.splice(0).forEach((part) => part.destroy({ children: true }));
     this.goldEffects.splice(0).forEach((effect) => effect.destroy());
     this.wardrobeModal?.destroy();
     this.settingsModal?.destroy();

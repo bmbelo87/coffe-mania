@@ -8,6 +8,13 @@ import { FONT_FAMILY } from '../../core/fonts';
 import type { RoomCatalogItem, RoomUnit } from '../../game/room-inventory';
 
 export interface StoreEntry { item: RoomCatalogItem; unit?: RoomUnit; texture?: Texture; quantity?: number }
+/** One card of the "Expansões" tab: a floor size paid in caféGranas or caféOuros. */
+export interface ExpansionCard {
+  size: string; currency: 'cash' | 'gold'; price: number;
+  /** available: "Disponível" with "Comprar"; locked: "Não disponível" (it can still open the unlock). */
+  state: 'available' | 'locked';
+  onTap(): void;
+}
 export interface StoreActions {
   onSelect(entry: StoreEntry): void;
   onCategory(category: string | undefined): void;
@@ -68,6 +75,8 @@ export class StoreActionBar {
   private readonly slotFaces: Container[] = [];
   private readonly itemPreviewTextures = new Map<Texture, Texture>();
   private readonly pageButtons: Container[] = [];
+  private readonly expansionCards = new Container();
+  private cards?: ExpansionCard[];
   private entries: StoreEntry[] = [];
   private page = 0;
   private inventory = false;
@@ -218,6 +227,10 @@ export class StoreActionBar {
       content.addChild(holder); this.slots.push(holder);
     }
 
+    this.expansionCards.label = 'store-expansion-cards';
+    this.expansionCards.position.set(gridX, gridY);
+    content.addChild(this.expansionCards);
+
     if (buttons) {
       // Pagination has its own compact vertical group, centered beside the grid.
       const pageHeight = PAGE_BUTTON_SIZE * Math.max(
@@ -235,7 +248,7 @@ export class StoreActionBar {
       ]) {
         // Different source aspect ratios must not change the side margins.
         const button = this.createButton(placement.texture, PAGE_BUTTON_SIZE, () => {
-          const last = Math.max(0, Math.ceil(this.entries.length / this.slots.length) - 1);
+          const last = Math.max(0, Math.ceil(this.pageLength / this.pageSize) - 1);
           this.page = placement.name === 'first' ? 0 : placement.name === 'last' ? last
             : Math.max(0, Math.min(last, this.page + (placement.name === 'previous' ? -1 : 1)));
           this.renderEntries();
@@ -411,8 +424,85 @@ export class StoreActionBar {
 
   setMessage(message: string): void { if (this.message) this.message.text = message; }
 
+  /** Shows the expansion cards in place of the item slots; undefined returns to the items. */
+  setExpansionCards(cards: ExpansionCard[] | undefined): void {
+    this.cards = cards; this.page = 0;
+    this.renderEntries();
+  }
+
+  private get pageSize(): number { return this.cards ? SLOT_COLUMNS : this.slots.length; }
+  private get pageLength(): number { return this.cards ? this.cards.length : this.activeTopTab === 'news' ? 0 : this.entries.length; }
+
+  /** Cards span the two slot rows of a column, as the tall cards of the original shop. */
+  private renderCards(): void {
+    this.expansionCards.removeChildren().forEach((child) => child.destroy({ children: true }));
+    const cards = this.cards ?? [];
+    const height = 2 * SLOT_SIZE + SLOT_GAP;
+    cards.slice(this.page * SLOT_COLUMNS, (this.page + 1) * SLOT_COLUMNS).forEach((card, index) => {
+      const available = card.state === 'available';
+      const holder = new Container();
+      holder.label = `store-expansion-${card.size}-${card.currency}`;
+      holder.position.set(index * (SLOT_SIZE + SLOT_GAP), 0);
+      holder.eventMode = 'static'; holder.cursor = 'pointer';
+      holder.hitArea = new Rectangle(0, 0, SLOT_SIZE, height);
+      const face = new Container();
+      face.pivot.set(SLOT_SIZE / 2, height / 2); face.position.set(SLOT_SIZE / 2, height / 2);
+      face.addChild(new Graphics().roundRect(0, 0, SLOT_SIZE, height, 10)
+        .fill(available ? 0xffffff : 0xc9c9c9).stroke({ color: available ? 0xf0b417 : 0x9a9a9a, width: available ? 4 : SLOT_STROKE_WIDTH }));
+      const sizeLabel = new Text({ text: card.size, style: { fontFamily: FONT_FAMILY, fontSize: 22, fontWeight: 'bold', fill: 0xffffff,
+        stroke: { color: available ? 0x5e3115 : 0x5f5f5f, width: 6, join: 'round' } } });
+      sizeLabel.anchor.set(0.5, 0); sizeLabel.position.set(SLOT_SIZE / 2, 6);
+      face.addChild(sizeLabel);
+      const art = this.storeToolbarTextures?.expansion;
+      if (art) {
+        const icon = new Sprite(art); icon.anchor.set(0.5);
+        icon.scale.set(Math.min((SLOT_SIZE - 16) / art.width, 82 / art.height));
+        icon.position.set(SLOT_SIZE / 2, 82);
+        if (!available) icon.tint = 0x8f8f8f;
+        face.addChild(icon);
+      }
+      if (available) {
+        const coinTexture = card.currency === 'gold' ? this.storeToolbarTextures?.gold : this.storeToolbarTextures?.cash;
+        const price = new Container(); let x = 0;
+        if (coinTexture) { const coin = new Sprite(coinTexture); coin.anchor.set(0, 0.5); coin.scale.set(22 / coin.texture.height); price.addChild(coin); x = coin.width + 4; }
+        const value = new Text({ text: card.price.toLocaleString('pt-BR'), style: { fontFamily: FONT_FAMILY, fontSize: 18, fontWeight: 'bold', fill: 0xffffff,
+          stroke: { color: 0x633513, width: 7, join: 'round' } } });
+        value.anchor.set(0, 0.5); value.position.set(x, 0); price.addChild(value);
+        price.position.set((SLOT_SIZE - price.width) / 2, 138);
+        face.addChild(price);
+      } else {
+        const lock = new Graphics()
+          .roundRect(-15, -4, 30, 24, 5).fill(0x7d8288).stroke({ color: 0x3d4146, width: 2.5 })
+          .arc(0, -4, 9, Math.PI, 0).stroke({ color: 0x3d4146, width: 4 });
+        lock.position.set(SLOT_SIZE / 2, 132);
+        face.addChild(lock);
+      }
+      const status = new Text({ text: available ? 'Disponível' : 'Não disponível', style: { fontFamily: FONT_FAMILY, fontSize: available ? 16 : 13,
+        fontWeight: 'bold', fill: available ? 0x1c6b1f : 0x666666 } });
+      status.anchor.set(0.5, 0); status.position.set(SLOT_SIZE / 2, 160);
+      face.addChild(status);
+      if (available) {
+        const buy = new Graphics().roundRect(10, 190, SLOT_SIZE - 20, 34, 8).fill(0x2db83a).stroke({ color: 0x0f6a19, width: 3 });
+        const buyText = new Text({ text: 'Comprar', style: { fontFamily: FONT_FAMILY, fontSize: 17, fontWeight: 'bold', fill: 0xffffff,
+          stroke: { color: 0x0f6a19, width: 4, join: 'round' } } });
+        buyText.anchor.set(0.5); buyText.position.set(SLOT_SIZE / 2, 207);
+        face.addChild(buy, buyText);
+      }
+      face.children.forEach((child) => { child.eventMode = 'none'; });
+      holder.addChild(face);
+      this.bindButtonFeedback(holder, face);
+      holder.on('pointertap', (event) => { event.stopPropagation(); card.onTap(); });
+      this.expansionCards.addChild(holder);
+    });
+  }
+
   private renderEntries(): void {
-    const entries = this.activeTopTab === 'news' ? [] : this.entries;
+    const showCards = Boolean(this.cards) && this.activeTopTab === 'shop';
+    this.expansionCards.visible = showCards;
+    this.slots.forEach((slot) => { slot.visible = !showCards; });
+    if (showCards) this.renderCards();
+    else this.expansionCards.removeChildren().forEach((child) => child.destroy({ children: true }));
+    const entries = this.activeTopTab === 'news' || showCards ? [] : this.entries;
     this.slots.forEach((slot, index) => {
       const face = this.slotFaces[index];
       // Keep the card's background; all its contents share the same centered scale.
@@ -484,7 +574,7 @@ export class StoreActionBar {
         if (!this.actions?.onDragStart) this.actions?.onSelect(entry);
       });
     });
-    const last = Math.max(0, Math.ceil(entries.length / this.slots.length) - 1);
+    const last = Math.max(0, Math.ceil(this.pageLength / this.pageSize) - 1);
     this.pageButtons.forEach((button, index) => {
       const enabled = index < 2 ? this.page > 0 : this.page < last;
       button.alpha = enabled ? 1 : .4; button.eventMode = enabled ? 'static' : 'none'; button.cursor = enabled ? 'pointer' : 'default';

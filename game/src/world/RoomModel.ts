@@ -143,8 +143,8 @@ export interface RoomModelOptions {
 }
 
 export class RoomModel {
-  readonly tilesX: number;
-  readonly tilesY: number;
+  private sizeX: number;
+  private sizeY: number;
   readonly items: RoomItem[];
 
   /** índice do tile -> item que ocupa o tile. */
@@ -155,8 +155,8 @@ export class RoomModel {
   private readonly wallTiles = new Set<number>();
 
   constructor(options: RoomModelOptions = {}) {
-    this.tilesX = options.tilesX ?? 8;
-    this.tilesY = options.tilesY ?? 8;
+    this.sizeX = options.tilesX ?? 8;
+    this.sizeY = options.tilesY ?? 8;
     this.items = [...(options.items ?? DEFAULT_ROOM_ITEMS)].map((item) => {
       if (item.kind === 'door') {
         // Aceita portas antigas ancoradas na parede; portas de chão usam a aresta traseira do piso.
@@ -173,6 +173,19 @@ export class RoomModel {
     const walls = options.walls ?? true;
     if (walls !== false) this.addWalls(walls === true ? DEFAULT_WALLS : walls);
     for (const item of this.items) this.register(item);
+  }
+
+  get tilesX(): number { return this.sizeX; }
+  get tilesY(): number { return this.sizeY; }
+
+  /**
+   * An expansion changes the size in place; navigation, NPCs and the store keep this same
+   * instance. Tile indices do not depend on the size, so the caller only has to follow with
+   * replaceItems, which brings the new walls and floor from the server.
+   */
+  resize(tilesX: number, tilesY: number): void {
+    this.sizeX = tilesX;
+    this.sizeY = tilesY;
   }
 
   private addWalls(spec: WallSpec): void {

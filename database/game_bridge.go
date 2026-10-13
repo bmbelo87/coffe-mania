@@ -137,12 +137,16 @@ func persistenceOperation(app core.App, op gamewire.Operation) gamewire.Result {
 			body, err = snapshotDev(app, op.Owner)
 		}
 
-	case "purchase", "move", "store", "sell":
+	case "purchase", "move", "store", "sell", "expand":
 		var command roomCommand
-		if json.Unmarshal(op.Body, &command) != nil || command.Revision == nil || !requestKeyPattern.MatchString(command.RequestID) || (op.Action != "store" && op.Action != "sell" && (command.TX == nil || command.TY == nil || command.Rotation == nil)) {
+		if json.Unmarshal(op.Body, &command) != nil || command.Revision == nil || !requestKeyPattern.MatchString(command.RequestID) || (op.Action != "store" && op.Action != "sell" && op.Action != "expand" && (command.TX == nil || command.TY == nil || command.Rotation == nil)) {
 			return fail(400, "Pedido inválido.")
 		}
-		body, err = mutateRoom(app, op.Owner, op.Action, command)
+		if op.Action == "expand" {
+			body, err = mutateExpansion(app, op.Owner, command)
+		} else {
+			body, err = mutateRoom(app, op.Owner, op.Action, command)
+		}
 	case "cook_start", "cook_serve", "cook_cancel", "cook_clean", "cook_spice":
 		var command struct {
 			StoveID  string `json:"stoveId"`
@@ -186,7 +190,7 @@ func persistenceOperation(app core.App, op gamewire.Operation) gamewire.Result {
 			return fail(400, err.Error())
 		case errors.Is(err, errAlreadySpiced), errors.Is(err, errSpiceNotUsable), errors.Is(err, errNoSpice):
 			return fail(409, err.Error())
-		case errors.Is(err, errJuiceConflict), errors.Is(err, errRoomNotSellable), errors.Is(err, errRoomGold), errors.Is(err, errRoomConflict), errors.Is(err, errRoomOperation), errors.Is(err, errRoomBusy), errors.Is(err, errCounterBusy), errors.Is(err, errKitchenLimit), errors.Is(err, errStoveOccupied), errors.Is(err, errDishNotReady), errors.Is(err, errCookingCannotCancel), errors.Is(err, errNoCounter),
+		case errors.Is(err, errJuiceConflict), errors.Is(err, errRoomNotSellable), errors.Is(err, errRoomGold), errors.Is(err, errRoomConflict), errors.Is(err, errRoomOperation), errors.Is(err, errRoomBusy), errors.Is(err, errCounterBusy), errors.Is(err, errKitchenLimit), errors.Is(err, errExpansionLevel), errors.Is(err, errExpansionMax), errors.Is(err, errExpansionCash), errors.Is(err, errExpansionPayment), errors.Is(err, errStoveOccupied), errors.Is(err, errDishNotReady), errors.Is(err, errCookingCannotCancel), errors.Is(err, errNoCounter),
 			errors.Is(err, errStoveDirty), errors.Is(err, errStoveClean), errors.Is(err, errDishSpoiled):
 			return fail(409, err.Error())
 		default:

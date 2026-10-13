@@ -16,7 +16,18 @@ export interface RoomSnapshot {
   catalog: RoomCatalogItem[]; playerState: PlayerState;
   /** Share of the price a sold item pays back; the server owns the rule. */
   sellPercent?: number;
+  /** Next café expansion on offer; null once the café is at its maximum size. */
+  expansion?: RoomExpansionOffer | null;
+  /** Every expansion step, for the cards of the "Expansões" tab. */
+  expansions?: RoomExpansionStep[];
 }
+
+/** One café expansion: its floor size, as on the original cards ("7x9"), and its prices. */
+export interface RoomExpansionStep {
+  floorX: number; floorY: number; level: number;
+  priceCash: number; priceGold: number; unlockCash: number;
+}
+export interface RoomExpansionOffer extends RoomExpansionStep { step: number; steps: number }
 
 /** What selling this item pays, as the server will compute it (0: it cannot be sold). */
 export function sellGold(item: RoomCatalogItem, snapshot: RoomSnapshot): number {
@@ -157,7 +168,7 @@ export class RoomInventoryClient {
     }
     return response.json() as Promise<RoomSnapshot>;
   }
-  async mutate(action: 'purchase' | 'move' | 'store' | 'sell', revision: number, data: { itemId?: number; unitId?: string; tx?: number; ty?: number; rotation?: number }): Promise<RoomSnapshot> {
+  async mutate(action: 'purchase' | 'move' | 'store' | 'sell' | 'expand', revision: number, data: { itemId?: number; unitId?: string; tx?: number; ty?: number; rotation?: number; payment?: 'cash' | 'gold' | 'gold_unlock' }): Promise<RoomSnapshot> {
     const signature = JSON.stringify({ action, ...data });
     if (this.pending && this.pending.signature !== signature) {
       throw new Error('Verifique a última operação repetindo a mesma colocação ou recarregando o quarto.');

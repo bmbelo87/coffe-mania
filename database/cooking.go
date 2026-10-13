@@ -72,7 +72,7 @@ func ensureStarterStove(app core.App, userID string) error {
 			return err
 		}
 		stove := core.NewRecord(collection)
-		stove.Load(map[string]any{"user": userID, "item_id": starterStoveItemID, "tx": 6, "ty": 2})
+		stove.Load(map[string]any{"user": userID, "item_id": starterStoveItemID, "tx": 1, "ty": 7})
 		return txApp.Save(stove)
 	})
 }

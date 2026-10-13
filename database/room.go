@@ -49,6 +49,9 @@ type roomSnapshot struct {
 	Catalog     []roomcatalog.Item   `json:"catalog"`
 	PlayerState playerstate.Snapshot `json:"playerState"`
 	SellPercent int                  `json:"sellPercent"`
+	Expansion   *expansionOffer      `json:"expansion"`
+	// Expansions lists every step for the cards of the shop; the room size tells which are bought.
+	Expansions []expansionStep `json:"expansions"`
 }
 type roomCommand struct {
 	ItemID    int    `json:"itemId,omitempty"`
@@ -58,11 +61,16 @@ type roomCommand struct {
 	Rotation  *int   `json:"rotation"`
 	Revision  *int   `json:"revision"`
 	RequestID string `json:"requestId"`
+	// Payment chooses how an expansion is paid: "cash", "gold" or "gold_unlock".
+	Payment string `json:"payment,omitempty"`
 }
 
 // Provision the starter room and its owned inventory units once, without charging gold.
 func ensureRoom(app core.App, userID string) error {
 	if _, err := app.FindFirstRecordByData("player_rooms", "user", userID); err == nil {
+		if err := repairRoomShell(app, userID); err != nil {
+			return err
+		}
 		return ensureStarterCounter(app, userID)
 	} else if !errors.Is(err, sql.ErrNoRows) {
 		return err
@@ -89,6 +97,11 @@ func ensureRoom(app core.App, userID string) error {
 		if err != nil {
 			return err
 		}
+		stoves, err := tx.FindCollectionByNameOrId("player_stoves")
+		if err != nil {
+			return err
+		}
+		starterStoveUsed := false
 		add := func(id, x, y, rotation int) error {
 			item, ok := roomcatalog.ByID(id)
 			if !ok {
@@ -97,9 +110,20 @@ func ensureRoom(app core.App, userID string) error {
 			unit := core.NewRecord(inventory)
 			unit.Load(map[string]any{"user": userID, "item_id": id, "tx": x, "ty": y, "rotation": rotation, "placed": true, "layer": roomcatalog.Layer(item)})
 			if item.Kind == "stove" {
-				stove, err := tx.FindFirstRecordByFilter("player_stoves", "user={:user} && item_id={:item}", dbx.Params{"user": userID, "item": id})
-				if err != nil {
-					return err
+				// The first starter stove takes the slot ensureStarterStove created; the others get their own.
+				var stove *core.Record
+				if id == starterStoveItemID && !starterStoveUsed {
+					stove, err = tx.FindFirstRecordByFilter("player_stoves", "user={:user} && item_id={:item}", dbx.Params{"user": userID, "item": id})
+					if err != nil {
+						return err
+					}
+					starterStoveUsed = true
+				} else {
+					stove = core.NewRecord(stoves)
+					stove.Load(map[string]any{"user": userID, "item_id": id, "tx": x, "ty": y})
+					if err := tx.Save(stove); err != nil {
+						return err
+					}
 				}
 				unit.Set("stove_id", stove.Id)
 				unit.Set("tx", stove.GetInt("tx"))
@@ -107,17 +131,30 @@ func ensureRoom(app core.App, userID string) error {
 			}
 			return tx.Save(unit)
 		}
-		// The stove and the counter face the dining room (rotation 1): the chef stands in front of the knobs.
-		starters := [][4]int{{3070000, 6, 2, 1}, {starterCounterItemID, 7, 3, 1}, {3010000, 4, 1, 1}, {3000011, 0, 2, 0}, {3000011, 0, 6, 0},
-			{3040001, 2, 3, 0}, {3040001, 2, 5, 0}, {3040001, 5, 5, 0}, {3030010, 3, 3, 0}, {3030010, 3, 5, 0}, {3030010, 6, 5, 0},
-			{3200000, 2, 0, 1}, {3300000, 1, 7, 0}, {3100000, 5, 0, 1}, {3020003, 1, 1, 0}, {3020003, 7, 1, 0}, {3020003, 7, 7, 0}}
+		// The starter café of the original (January 2014 capture), on its 6x9 floor (x 1..6 along
+		// the door wall, y 1..9 along the other): the kitchen is a checkerboard of three stoves and
+		// three counters at the front-left, each facing a free tile where the chef or the waiter
+		// stands; four white-cloth tables with one chair each fill the dining room, the green check
+		// table with two chairs sits by the end of the door wall, and the tile inside the door stays
+		// free; door and windows on the right wall, the menu board, the
+		// achievement panel and a window on the left one. docs/cafe-inicial-2014.md lists the
+		// pieces of the capture that still have no art (lamps, payphone, clock, poster).
+		starters := [][4]int{
+			{3070000, 1, 7, 3}, {3070000, 3, 7, 3}, {3070000, 2, 8, 1},
+			{starterCounterItemID, 2, 7, 3}, {starterCounterItemID, 1, 8, 1}, {starterCounterItemID, 3, 8, 1},
+			{3030010, 2, 2, 0}, {3040001, 1, 2, 0}, {3030010, 2, 4, 0}, {3040001, 1, 4, 0},
+			{3030010, 4, 3, 0}, {3040001, 5, 3, 2}, {3030010, 4, 5, 0}, {3040001, 5, 5, 2},
+			{9030302, 6, 2, 0}, {9040301, 6, 1, 1}, {9040301, 5, 2, 0},
+			{3010000, 3, 1, 1}, {3000011, 1, 0, 1}, {3000011, 5, 0, 1},
+			{3100000, 0, 1, 0}, {3200000, 0, 4, 0}, {3000011, 0, 7, 0},
+		}
 		for _, starter := range starters {
 			if err := add(starter[0], starter[1], starter[2], starter[3]); err != nil {
 				return err
 			}
 		}
-		for y := 0; y < 8; y++ {
-			for x := 0; x < 8; x++ {
+		for y := 0; y <= starterFloorY; y++ {
+			for x := 0; x <= starterFloorX; x++ {
 				if x > 0 && y > 0 {
 					if err := add(3050000, x, y, 0); err != nil {
 						return err
@@ -142,7 +179,7 @@ func ensureRoom(app core.App, userID string) error {
 			}
 		}
 		room := core.NewRecord(rooms)
-		room.Load(map[string]any{"user": userID, "revision": 1, "tiles_x": 8, "tiles_y": 8})
+		room.Load(map[string]any{"user": userID, "revision": 1, "tiles_x": starterFloorX + 1, "tiles_y": starterFloorY + 1})
 		return tx.Save(room)
 	})
 }
@@ -191,7 +228,7 @@ func ensureStarterCounter(app core.App, userID string) error {
 		}
 		tilesX, tilesY := room.GetInt("tiles_x"), room.GetInt("tiles_y")
 		// Prefer the starter layout's tile; otherwise the free tile farthest from the door wall.
-		candidates := [][2]int{{7, 3}}
+		candidates := [][2]int{{2, 7}}
 		for y := tilesY - 1; y >= 1; y-- {
 			for x := tilesX - 1; x >= 1; x-- {
 				candidates = append(candidates, [2]int{x, y})
@@ -239,7 +276,7 @@ func kitchenLimit(kind string, level int) int {
 }
 
 func snapshotRoom(app core.App, userID string) (roomSnapshot, error) {
-	result := roomSnapshot{RoomID: userID, CanEdit: true, Inventory: []roomUnit{}, Catalog: roomcatalog.Items, SellPercent: roomcatalog.SellPercent}
+	result := roomSnapshot{RoomID: userID, CanEdit: true, Inventory: []roomUnit{}, Catalog: roomcatalog.Items, SellPercent: roomcatalog.SellPercent, Expansions: expansionSteps}
 	room, err := app.FindFirstRecordByData("player_rooms", "user", userID)
 	if err != nil {
 		return result, err
@@ -247,6 +284,7 @@ func snapshotRoom(app core.App, userID string) (roomSnapshot, error) {
 	result.Revision = room.GetInt("revision")
 	result.TilesX = room.GetInt("tiles_x")
 	result.TilesY = room.GetInt("tiles_y")
+	result.Expansion = expansionFor(result.TilesX, result.TilesY)
 	units, err := app.FindRecordsByFilter("player_inventory", "user={:user}", "id", 10000, 0, dbx.Params{"user": userID})
 	if err != nil {
 		return result, err
@@ -560,7 +598,7 @@ func registerRoomRoutes(e *core.ServeEvent) {
 		}
 		return r.JSON(http.StatusOK, snapshot)
 	})
-	for _, operation := range []string{"purchase", "move", "store", "sell"} {
+	for _, operation := range []string{"purchase", "move", "store", "sell", "expand"} {
 		action := operation
 		group.POST("/"+action, func(r *core.RequestEvent) error {
 			user := sessionRecord(r)
@@ -577,8 +615,9 @@ func registerRoomRoutes(e *core.ServeEvent) {
 				return r.BadRequestError("Pedido inválido.", nil)
 			}
 			if err := decoder.Decode(new(any)); err != io.EOF || command.Revision == nil || *command.Revision < 1 || !requestKeyPattern.MatchString(command.RequestID) ||
-				(action != "store" && action != "sell" && (command.TX == nil || command.TY == nil || command.Rotation == nil)) ||
-				(action == "purchase" && (command.ItemID <= 0 || command.UnitID != "")) || (action != "purchase" && (command.UnitID == "" || command.ItemID != 0)) {
+				(action != "store" && action != "sell" && action != "expand" && (command.TX == nil || command.TY == nil || command.Rotation == nil)) ||
+				(action == "purchase" && (command.ItemID <= 0 || command.UnitID != "")) || (action == "expand" && (command.ItemID != 0 || command.UnitID != "" || command.Payment == "")) || (action != "expand" && command.Payment != "") ||
+				(action != "purchase" && action != "expand" && (command.UnitID == "" || command.ItemID != 0)) {
 				return r.BadRequestError("Pedido inválido.", nil)
 			}
 			if err := ensureRoom(r.App, user.Id); err != nil {
@@ -587,14 +626,20 @@ func registerRoomRoutes(e *core.ServeEvent) {
 			if roomService(r.App) != nil {
 				return proxyRoomOperation(r, user.Id, action, command)
 			}
-			snapshot, err := mutateRoom(r.App, user.Id, action, command)
+			var snapshot roomSnapshot
+			var err error
+			if action == "expand" {
+				snapshot, err = mutateExpansion(r.App, user.Id, command)
+			} else {
+				snapshot, err = mutateRoom(r.App, user.Id, action, command)
+			}
 			if err != nil {
 				switch {
 				case errors.Is(err, errRoomOwned):
 					return r.NotFoundError(err.Error(), nil)
 				case errors.Is(err, errRoomPosition):
 					return r.BadRequestError(err.Error(), nil)
-				case errors.Is(err, errJuiceConflict), errors.Is(err, errRoomNotSellable), errors.Is(err, errRoomGold), errors.Is(err, errRoomConflict), errors.Is(err, errRoomOperation), errors.Is(err, errRoomBusy), errors.Is(err, errCounterBusy), errors.Is(err, errKitchenLimit):
+				case errors.Is(err, errJuiceConflict), errors.Is(err, errRoomNotSellable), errors.Is(err, errRoomGold), errors.Is(err, errRoomConflict), errors.Is(err, errRoomOperation), errors.Is(err, errRoomBusy), errors.Is(err, errCounterBusy), errors.Is(err, errKitchenLimit), errors.Is(err, errExpansionLevel), errors.Is(err, errExpansionMax), errors.Is(err, errExpansionCash), errors.Is(err, errExpansionPayment):
 					return apis.NewApiError(http.StatusConflict, err.Error(), nil)
 				default:
 					return r.InternalServerError("Não foi possível salvar esta operação.", err)

@@ -12,7 +12,7 @@ export interface DevWorld {
 export interface DevSnapshot { playerState: PlayerState; cooking: CookingSnapshot; world: DevWorld; maxLevel: number }
 export type DevStoveCommand = 'finish' | 'spoil' | 'clean' | 'dirty' | 'empty';
 export interface DevCommand {
-  command: 'resource' | DevStoveCommand | 'clear_counters' | 'refill' | 'add_food' | 'spawn_customers' | 'clear_customers';
+  command: 'resource' | DevStoveCommand | 'clear_counters' | 'refill' | 'add_food' | 'spawn_customers' | 'clear_customers' | 'reset_cafe';
   stoveId?: string;
   counterId?: string;
   recipeId?: string;

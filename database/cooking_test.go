@@ -68,13 +68,20 @@ func TestCatalogStoveAndCounter(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-	counter, err := app.FindFirstRecordByFilter("player_inventory", "user={:user} && item_id={:item}", dbx.Params{"user": owner, "item": starterCounterItemID})
-	if err != nil {
+	counters, err := app.FindRecordsByFilter("player_inventory", "user={:user} && item_id={:item}", "", 0, 0, dbx.Params{"user": owner, "item": starterCounterItemID})
+	if err != nil || len(counters) == 0 {
 		t.Fatal(err)
 	}
+	counter := counters[0]
 	counter.Set("item_id", 9030103)
 	if err := app.Save(counter); err != nil {
 		t.Fatal(err)
+	}
+	for _, other := range counters[1:] {
+		other.Set("placed", false)
+		if err := app.Save(other); err != nil {
+			t.Fatal(err)
+		}
 	}
 	if err := startCooking(app, owner, stove.Id, "passion_fruit_mousse", types.NowDateTime()); err != nil {
 		t.Fatalf("catalogue stove cannot cook: %v", err)
@@ -185,13 +192,15 @@ func TestMousseGoesToCounterAndPaysPerPortion(t *testing.T) {
 
 func TestServeWithoutCounterKeepsDishOnStove(t *testing.T) {
 	app, userID := newCookingTestApp(t)
-	counter, err := app.FindFirstRecordByFilter("player_inventory", "user={:user} && item_id={:item}", dbx.Params{"user": userID, "item": starterCounterItemID})
+	counters, err := app.FindRecordsByFilter("player_inventory", "user={:user} && item_id={:item}", "", 0, 0, dbx.Params{"user": userID, "item": starterCounterItemID})
 	if err != nil {
 		t.Fatal(err)
 	}
-	counter.Set("placed", false)
-	if err := app.Save(counter); err != nil {
-		t.Fatal(err)
+	for _, counter := range counters {
+		counter.Set("placed", false)
+		if err := app.Save(counter); err != nil {
+			t.Fatal(err)
+		}
 	}
 	stove, _ := app.FindFirstRecordByData("player_stoves", "user", userID)
 	if err := startCooking(app, userID, stove.Id, "passion_fruit_mousse", types.NowDateTime()); err != nil {
@@ -204,24 +213,27 @@ func TestServeWithoutCounterKeepsDishOnStove(t *testing.T) {
 	if _, err := app.FindFirstRecordByData("stove_cooking", "stove", stove.Id); err != nil {
 		t.Fatalf("o preparo deve continuar no fogão: %v", err)
 	}
-	// A stored counter still counts as owned: no second starter counter appears.
+	// Stored counters still count as owned: no extra starter counter appears.
 	if err := ensureRoom(app, userID); err != nil {
 		t.Fatal(err)
 	}
 	units, _ := app.FindRecordsByFilter("player_inventory", "user={:user} && item_id={:item}", "", 0, 0, dbx.Params{"user": userID, "item": starterCounterItemID})
-	if len(units) != 1 {
+	if len(units) != len(counters) {
 		t.Fatalf("balcões iniciais: %d", len(units))
 	}
 }
 
 func TestExistingRoomReceivesStarterCounterOnce(t *testing.T) {
 	app, userID := newCookingTestApp(t)
-	counter, err := app.FindFirstRecordByFilter("player_inventory", "user={:user} && item_id={:item}", dbx.Params{"user": userID, "item": starterCounterItemID})
+	// A room from before counters: none of the starter counters exist.
+	counters, err := app.FindRecordsByFilter("player_inventory", "user={:user} && item_id={:item}", "", 0, 0, dbx.Params{"user": userID, "item": starterCounterItemID})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := app.Delete(counter); err != nil {
-		t.Fatal(err)
+	for _, counter := range counters {
+		if err := app.Delete(counter); err != nil {
+			t.Fatal(err)
+		}
 	}
 	room, _ := app.FindFirstRecordByData("player_rooms", "user", userID)
 	revision := room.GetInt("revision")
@@ -231,7 +243,7 @@ func TestExistingRoomReceivesStarterCounterOnce(t *testing.T) {
 		}
 	}
 	units, _ := app.FindRecordsByFilter("player_inventory", "user={:user} && item_id={:item}", "", 0, 0, dbx.Params{"user": userID, "item": starterCounterItemID})
-	if len(units) != 1 || !units[0].GetBool("placed") || units[0].GetInt("tx") != 7 || units[0].GetInt("ty") != 3 {
+	if len(units) != 1 || !units[0].GetBool("placed") || units[0].GetInt("tx") != 2 || units[0].GetInt("ty") != 7 {
 		t.Fatalf("balcão provisionado: %v", units)
 	}
 	room, _ = app.FindFirstRecordByData("player_rooms", "user", userID)
@@ -304,7 +316,9 @@ func TestStoveCycleDirtySpoiledAndClean(t *testing.T) {
 func TestBuyingStoveCreatesCookingSlotWithinLevelLimit(t *testing.T) {
 	app, userID := newCookingTestApp(t)
 	state, _ := app.FindFirstRecordByData(playerstate.Collection, "user", userID)
+	// The starter kitchen already has the three stoves of level 1; level 6 allows a fourth.
 	state.Set("gold", 100000)
+	state.Set("level", 6)
 	if err := app.Save(state); err != nil {
 		t.Fatal(err)
 	}
@@ -313,13 +327,13 @@ func TestBuyingStoveCreatesCookingSlotWithinLevelLimit(t *testing.T) {
 		revision, rotation := room.GetInt("revision"), 1
 		return mutateRoom(app, userID, "purchase", roomCommand{ItemID: starterStoveItemID, TX: &tx, TY: &ty, Rotation: &rotation, Revision: &revision, RequestID: "buy-stove-" + key + "-000000"})
 	}
-	snapshot, err := buy(4, 6, "a")
+	snapshot, err := buy(6, 4, "a")
 	if err != nil {
 		t.Fatal(err)
 	}
 	var bought *roomUnit
 	for i, u := range snapshot.Inventory {
-		if u.ItemID == starterStoveItemID && u.TX == 4 && u.TY == 6 {
+		if u.ItemID == starterStoveItemID && u.TX == 6 && u.TY == 4 {
 			bought = &snapshot.Inventory[i]
 		}
 	}
@@ -329,12 +343,9 @@ func TestBuyingStoveCreatesCookingSlotWithinLevelLimit(t *testing.T) {
 	if err := startCooking(app, userID, bought.StoveID, "nachos", types.NowDateTime()); err != nil {
 		t.Fatalf("o fogão comprado cozinha: %v", err)
 	}
-	if _, err := buy(5, 6, "b"); err != nil {
-		t.Fatal(err)
-	}
-	// Nível 1: 3 fogões (o inicial e os dois comprados).
-	if _, err := buy(6, 6, "c"); !errors.Is(err, errKitchenLimit) {
-		t.Fatalf("o quarto fogão passa do limite do nível 1: %v", err)
+	// Nível 6: 4 fogões (os três iniciais e o comprado).
+	if _, err := buy(6, 6, "b"); !errors.Is(err, errKitchenLimit) {
+		t.Fatalf("o quinto fogão passa do limite do nível 6: %v", err)
 	}
 }
 

@@ -476,12 +476,12 @@ export class DevToolsModal {
       ['−10 mil', add('gold', -10000)], ['+1.000', add('gold', 1000)], ['+10 mil', add('gold', 10000)], ['+100 mil', add('gold', 100000)], ['+1 milhão', add('gold', 1000000)], ['Zerar', set('gold', 0), 'gray'],
     ]);
     this.resourceRow(top + 2 * row, 'Nível', `${state.level} de ${snapshot.maxLevel}`, () => this.icon(icons.xp, 90, top + 2 * row, 50), [
-      ['−10', add('level', -10)], ['−1', add('level', -1)], ['+1', add('level', 1)], ['+10', add('level', 10)], ['Máximo', set('level', snapshot.maxLevel), 'blue'],
+      ['−10', add('level', -10)], ['−1', add('level', -1)], ['+1', add('level', 1)], ['+10', add('level', 10)], ['Nível 1', set('level', 1), 'gray'], ['Máximo', set('level', snapshot.maxLevel), 'blue'],
     ]);
     const missing = Math.max(0, state.experience.maximum - state.experience.current);
     this.resourceRow(top + 3 * row, 'XP', integer.format(state.experience.current), () => this.icon(icons.xp, 90, top + 3 * row, 40), [
       ['+10', add('experience', 10)], ['+100', add('experience', 100)], ['+1.000', add('experience', 1000)], ['+10 mil', add('experience', 10000)],
-      ['Subir de nível', add('experience', Math.max(1, missing)), 'blue'],
+      ['Zerar', set('experience', 0), 'gray'], ['Subir de nível', add('experience', Math.max(1, missing)), 'blue'],
     ]);
     if (state.level < snapshot.maxLevel) this.text(`faltam ${integer.format(missing)} para o nível ${state.level + 1}`, 360, top + 3 * row + 24, 17, COLORS.soft);
     this.resourceRow(top + 4 * row, 'Energia', `${state.energy.current}/${state.energy.maximum}`, () => this.icon(icons.energy, 90, top + 4 * row, 46), [
@@ -659,6 +659,13 @@ export class DevToolsModal {
     this.button('Chamar 5 clientes', 386, crowdY + 36, 240, 'green', { command: 'spawn_customers', value: 5 }, 'Clientes a caminho.');
     this.button('Dispensar todos', 636, crowdY + 36, 240, 'gray', { command: 'clear_customers' }, 'Clientes dispensados, sem avaliação.');
     this.text('Os clientes chamados respeitam o limite de rostos diferentes; os dispensados saem sem mexer na popularidade.', 136, crowdY + 112, 19, COLORS.soft);
+    this.button('Reiniciar do zero', 886, crowdY + 36, 300, 'gray', () => {
+      // Destructive: the whole save goes away, so it asks first and reloads into the new game.
+      if (!window.confirm('Apagar o save desta conta e recomeçar do zero? Nível, XP, moedas, temperos, sucos e o café inteiro voltam ao início.')) return;
+      void this.run({ command: 'reset_cafe' }, 'Save apagado. Recomeçando…').then(() => {
+        if (this.status.text === 'Save apagado. Recomeçando…') window.location.reload();
+      });
+    });
   }
 
   private onKeyDown = (event: KeyboardEvent): void => {

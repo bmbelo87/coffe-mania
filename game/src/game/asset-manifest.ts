@@ -243,6 +243,10 @@ export interface StoreToolbarTextures {
   inventory: Texture;
   cashRegister: Texture;
   gold: Texture;
+  /** Expansion symbol (orange frame receiving a floor block), as on the expansion cards of the shop. */
+  expansion: Texture;
+  /** caféGranas bill, for prices in the second currency. */
+  cash: Texture;
 }
 
 export async function loadStoreToolbarTextures(): Promise<StoreToolbarTextures> {
@@ -255,7 +259,9 @@ export async function loadStoreToolbarTextures(): Promise<StoreToolbarTextures> 
     news: crop(153, 82, 303, 295),
     inventory: crop(849, 99, 265, 253),
     cashRegister: crop(660, 397, 278, 293),
+    expansion: crop(520, 92, 300, 262),
     gold: new Texture({ source: currencySheet.source, frame: new Rectangle(208, 40, 161, 154) }),
+    cash: new Texture({ source: currencySheet.source, frame: new Rectangle(22, 42, 160, 148) }),
   };
 }
 

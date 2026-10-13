@@ -126,6 +126,9 @@ type Event struct {
 	Removed   []string        `json:"removed,omitempty"`
 	Units     []Unit          `json:"units,omitempty"`
 	Revision  int             `json:"revision,omitempty"`
+	// TilesX and TilesY accompany a "world" event when the café was expanded.
+	TilesX    int             `json:"tilesX,omitempty"`
+	TilesY    int             `json:"tilesY,omitempty"`
 	Cooking   json.RawMessage `json:"cooking,omitempty"`
 	Foods     []Food          `json:"foods,omitempty"`
 	Juices    []JuiceStock    `json:"juices,omitempty"`

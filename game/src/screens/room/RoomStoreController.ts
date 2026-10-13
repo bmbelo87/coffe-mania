@@ -1,11 +1,11 @@
 import { Container, Graphics, Sprite, type FederatedPointerEvent } from 'pixi.js';
 import type { ArtProvider } from '../../game/indoor-art';
 import { rotatedArt } from '../../game/indoor-art';
-import { RoomInventoryClient, sellGold, type RoomCatalogItem, type RoomSnapshot } from '../../game/room-inventory';
+import { RoomInventoryClient, sellGold, type RoomCatalogItem, type RoomExpansionStep, type RoomSnapshot } from '../../game/room-inventory';
 import type { RoomModel, RoomItem } from '../../world/RoomModel';
-import { DEPTH_BIAS_WALLPAPER, FLOOR_DRAW_PRIORITY, screenToTile, tileToScreen, wallDepth, type Tile } from '../../world/iso';
+import { DEPTH_BIAS_WALLPAPER, FLOOR_DRAW_PRIORITY, facingTile, screenToTile, tileToScreen, wallDepth, type Tile } from '../../world/iso';
 import { wallGeometry } from '../../world/wallGeometry';
-import { StoreActionBar, type StoreEntry } from './StoreActionBar';
+import { StoreActionBar, type ExpansionCard, type StoreEntry } from './StoreActionBar';
 import { createArtView, rotateFloorSprite, tileDiamond } from './iso-art';
 import { createProceduralWallView } from './ProceduralWallView';
 import { DoorView } from './DoorView';
@@ -37,6 +37,23 @@ export function validStorePlacement(item: RoomCatalogItem, tile: Tile, rotation:
     const ox = other.rotation % 2 ? entry.sizeY : entry.sizeX, oy = other.rotation % 2 ? entry.sizeX : entry.sizeY;
     return x < other.tx + ox && x + sx > other.tx && y < other.ty + oy && y + sy > other.ty;
   });
+}
+
+/**
+ * Rotação com que uma cadeira em `tile` fica virada para uma mesa vizinha (mesma convenção de
+ * facingTile e do servidor: 0 → +x, 1 → +y, 2 → −x, 3 → −y). Mantém `current` se já encara uma mesa;
+ * devolve undefined quando nenhuma mesa é adjacente.
+ */
+export function chairRotationTowardTable(tile: Tile, current: number, snapshot: RoomSnapshot): number | undefined {
+  const tableAt = (tx: number, ty: number) => snapshot.inventory.some((unit) => {
+    const entry = snapshot.catalog.find((item) => item.id === unit.itemId);
+    if (!unit.placed || entry?.kind !== 'table') return false;
+    const sx = unit.rotation % 2 ? entry.sizeY : entry.sizeX, sy = unit.rotation % 2 ? entry.sizeX : entry.sizeY;
+    return tx >= unit.tx && tx < unit.tx + sx && ty >= unit.ty && ty < unit.ty + sy;
+  });
+  const faces = (rotation: number) => { const front = facingTile(tile.tx, tile.ty, rotation); return tableAt(front.tx, front.ty); };
+  if (faces(current)) return current;
+  return [0, 1, 2, 3].find(faces);
 }
 
 export class RoomStoreController {
@@ -74,6 +91,8 @@ export class RoomStoreController {
     confirmSell?(item: RoomCatalogItem, gold: number): Promise<boolean>;
     /** A purchase happened at a tile: the room shows the gold effect there. */
     onTransaction?(event: { item: RoomCatalogItem; tile: Tile; rotation: number; gold: number }): void;
+    /** A card of the "Expansões" tab was clicked. */
+    onExpansion?(step: RoomExpansionStep, currency: 'cash' | 'gold', next: boolean): void;
   }) {
     this.snapshot = options.snapshot;
     this.preview.label = 'store-placement-preview'; this.preview.eventMode = 'none';
@@ -100,8 +119,12 @@ export class RoomStoreController {
   onCategory(): void { this.cancel(); this.refreshEntries(); }
   toggleInventory(): void { this.cancel(); this.inventory = !this.inventory; this.refreshEntries(); }
   private message(text: string): void { this.store?.setMessage(text); }
+  showMessage(text: string): void { this.message(text); }
   private refreshEntries(): void {
     const category = this.store?.selectedCategory;
+    // The expansion tab lists size cards instead of items; the inventory never has expansions.
+    if (category === 'expansion' && !this.inventory) { this.store?.setEntries([], false); this.store?.setExpansionCards(this.expansionCards()); return; }
+    this.store?.setExpansionCards(undefined);
     const categoryFor = (item: RoomCatalogItem): string => item.type === 0 ? 'floor' : item.type === 1 ? 'wallpaper' : item.type === 2 ? 'door'
       : ({ stove: 'stove', counter: 'counter', juice_machine: 'flower', table: 'table', chair: 'chair', window: 'flower-window', panel: 'flower-window', bush: 'flower', letterbox: 'flower', decor: 'flower', wall: 'wallpaper', door: 'door' } as const)[item.kind];
     const texture = (item: RoomCatalogItem) => {
@@ -121,6 +144,20 @@ export class RoomStoreController {
     const entries: StoreEntry[] = this.inventory ? [...stored.values()]
       : available.filter((item) => item.purchasable && matches(item)).map((item) => ({ item, texture: texture(item) }));
     this.store?.setEntries(entries, this.inventory);
+  }
+  /**
+   * Two cards per size still to buy, as in the original tab: caféOuros (locked below its level)
+   * and caféGranas. Only the next size can be bought; later ones stay "Não disponível".
+   */
+  private expansionCards(): ExpansionCard[] {
+    const { tilesX, tilesY, playerState } = this.snapshot;
+    const pending = (this.snapshot.expansions ?? []).filter((step) => step.floorX + 1 > tilesX || step.floorY + 1 > tilesY);
+    return pending.flatMap((step, index) => (['gold', 'cash'] as const).map((currency): ExpansionCard => ({
+      size: `${step.floorX}x${step.floorY}`, currency,
+      price: currency === 'gold' ? step.priceGold : step.priceCash,
+      state: index === 0 && (currency === 'cash' || playerState.level >= step.level) ? 'available' : 'locked',
+      onTap: () => this.options.onExpansion?.(step, currency, index === 0),
+    })));
   }
   select(entry: StoreEntry): void {
     if (this.busy) return;
@@ -186,6 +223,10 @@ export class RoomStoreController {
     const previous = this.tile;
     // Sobre a barra da loja a prévia fica no último tile; fora dela segue o grid.
     if (!this.overUI) this.tile = this.pickTile(event);
+    // A cadeira se vira para a mesa vizinha ao mudar de tile; R continua girando enquanto ela ficar ali.
+    if (this.selection.item.kind === 'chair' && this.tile && (!previous || previous.tx !== this.tile.tx || previous.ty !== this.tile.ty)) {
+      this.rotation = chairRotationTowardTable(this.tile, this.rotation, this.snapshot) ?? this.rotation;
+    }
     this.drawPreview();
     if (this.painting === event.pointerId && this.tile && (!previous || previous.tx !== this.tile.tx || previous.ty !== this.tile.ty)) {
       void this.commit();

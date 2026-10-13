@@ -4,6 +4,47 @@ Mudanças desta distribuição, da versão mais nova para a mais antiga. A numer
 
 Seções usadas: **Adicionado**, **Alterado**, **Corrigido**, **Removido** e **Observações** (limites conhecidos e o que ficou para depois).
 
+## [0.3.0] — Expansões do café e café inicial de 2014 (2026-10-13)
+
+### Adicionado
+
+- Expansões do café pela aba **Expansões** da loja (ícone laranja do conjunto atual). Há dois cartões por tamanho: caféOuros e caféGranas, nesta ordem, como no original. Os tamanhos são 7x9, 8x10, 10x11, 11x13 e 13x14; o 7x9 custa 5 caféGranas.
+  - O cartão de caféGranas não tem requisito.
+  - O de caféOuros pede nível; abaixo dele, abre a janela "Bloqueado!", com "Desbloquear por N" ou o pagamento só em caféGranas.
+  - Só o próximo tamanho pode ser comprado.
+- A compra acontece numa transação no servidor (`database/expansions.go`), com a revisão do quarto e a chave da requisição; repetir o pedido não cobra duas vezes.
+- A expansão é aplicada na hora, sem recarregar o jogo. O servidor do jogo ajusta a grade de navegação e avisa os outros clientes, e o cliente redimensiona o quarto no lugar.
+- Cada expansão estende as paredes e o papel de parede (continuando o papel do trecho anterior) e coloca o piso inicial no trecho novo.
+- Placa **"Terreno à venda"** no gramado junto à frente esquerda do café. Com o mouse sobre ela, aparece a prévia lisa do terreno de 7x6.
+- Ferramentas de desenvolvimento:
+  - **Reiniciar do zero:** apaga o save da conta (nível, XP, moedas, temperos, sucos e o café inteiro) e recomeça como conta nova, depois de uma confirmação;
+  - **Nível 1** na linha de nível;
+  - **Zerar** na linha de XP.
+- `docs/expansoes.md`, com as fontes encontradas (blog oficial da Vostu pelo Wayback Machine, acervo local, capturas e vídeo), e `docs/cafe-inicial-2014.md`, com os assets que faltam para o início ficar idêntico ao de janeiro de 2014.
+
+### Alterado
+
+- O café novo começa com piso 6x9, no layout da captura de 7 de janeiro de 2014:
+  - cozinha com 3 fogões e 3 balcões em xadrez na frente esquerda;
+  - quatro mesas de toalha branca com uma cadeira cada;
+  - mesa xadrez verde com duas cadeiras junto ao fim da parede da porta;
+  - porta e janelas na parede direita; quadro de cardápio, painel e janela na esquerda.
+
+  Arbustos e caixa de correio saíram do início. Cafés existentes não mudam.
+- Ao mover uma cadeira para perto de uma mesa, ela se vira para a mesa sozinha; **R** continua girando enquanto ela ficar no mesmo tile.
+
+### Corrigido
+
+- O jogador parava de ganhar XP no nível 150. O campo `level` de alguns bancos continuava limitado a 150, então salvar o nível 151 falhava e toda a concessão de XP era recusada. A migração `202610130002_level_cap` reaplica o limite da tabela (260).
+- Cafés expandidos antes desta versão ficavam sem paredes e sem piso no trecho novo. Eles são reparados ao abrir o quarto.
+
+### Observações
+
+- Os tamanhos 7x9, 8x10 e 10x11 e o preço de 5 caféGranas do 7x9 são documentados. Os demais preços e níveis e os tamanhos depois de 10x11 são valores do projeto (`expansionSteps`).
+- A compra do terreno, as Recomendações de Expansão e os vizinhos ainda não existem; clicar na placa do terreno mostra um aviso.
+- As posições do café inicial foram estimadas a partir de uma única captura em perspectiva.
+- Verificação: `go test` em `database` (com 8 testes novos) e em `game-server/gameruntime`, typecheck e uma cópia isolada com banco temporário no Chrome headless. Nela foram conferidos o café inicial, a prévia do terreno, a aba Expansões, a confirmação e a compra sem recarregar a página. O botão "Reiniciar do zero" do menu dev foi testado pela API, não clicado no painel.
+
 ## [0.2.0] — Máquina de Sucos e acervo de móveis (2026-10-13)
 
 ### Adicionado

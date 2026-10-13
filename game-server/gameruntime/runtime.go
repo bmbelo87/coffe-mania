@@ -1086,6 +1086,19 @@ func (r *room) finishDevActions(body json.RawMessage) {
 	case "clear_customers":
 		r.clearCustomers()
 		return
+	case "reset_cafe":
+		// The café was rebuilt: nobody may stay seated on a deleted chair or outside a smaller room.
+		r.clearCustomers()
+		for _, actor := range r.actors {
+			actor.path, actor.Move, actor.Action, actor.Food = nil, nil, nil, nil
+			actor.State = "idle"
+			if t, ok := r.freeTile(Tile{X: actor.X, Y: actor.Y}, actor.ID); ok {
+				actor.X, actor.Y = t.X, t.Y
+				r.indexActor(actor)
+			}
+			r.broadcast(gamewire.Event{Type: "actors", Actors: []gamewire.Actor{r.status(actor, false)}}, "")
+		}
+		return
 	}
 	for _, actor := range r.actors {
 		stoveChanged := actor.Action != nil && actor.Action.StoveID != "" &&
@@ -1129,7 +1142,12 @@ func (r *room) updateWorld(w gamewire.World) {
 	cookingChanged := string(w.Cooking) != string(r.world.Cooking)
 	foodsChanged := fmt.Sprint(w.Foods) != fmt.Sprint(r.world.Foods)
 	juicesChanged := fmt.Sprint(w.Juices) != fmt.Sprint(r.world.Juices)
+	resized := w.TilesX != r.world.TilesX || w.TilesY != r.world.TilesY
 	r.world = w
+	if resized && w.TilesX >= 2 && w.TilesY >= 2 {
+		// Expansion only adds rows and columns at the far edges; walls and pieces keep their tiles.
+		r.grid.width, r.grid.height = w.TilesX, w.TilesY
+	}
 	if juicesChanged {
 		r.broadcast(gamewire.Event{Type: "juices", Juices: w.Juices}, "")
 	}
@@ -1171,8 +1189,11 @@ func (r *room) updateWorld(w gamewire.World) {
 			}
 		}
 	}
-	if len(changes) > 0 || cookingChanged || foodsChanged {
+	if len(changes) > 0 || cookingChanged || foodsChanged || resized {
 		e := gamewire.Event{Type: "world", Units: changes, Revision: w.Revision}
+		if resized {
+			e.TilesX, e.TilesY = w.TilesX, w.TilesY
+		}
 		if cookingChanged {
 			e.Cooking = w.Cooking
 		}

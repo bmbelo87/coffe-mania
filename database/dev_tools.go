@@ -95,7 +95,7 @@ func decodeDevCommand(reader io.Reader) (devCommand, error) {
 		if !only(false, false, false, false, true) || command.Value == nil || *command.Value < 1 || *command.Value > 10 || *command.Value != math.Trunc(*command.Value) {
 			return command, invalidDev("Informe de 1 a 10 clientes.")
 		}
-	case "refill", "clear_customers":
+	case "refill", "clear_customers", "reset_cafe":
 		if !only(false, false, false, false, false) {
 			return command, invalidDev("Pedido inválido.")
 		}
@@ -184,6 +184,8 @@ func mutateDev(app core.App, user string, command devCommand) error {
 			err = clearDevCounters(tx, user, command.CounterID)
 		case command.Command == "add_food":
 			err = addDevFood(tx, user, command)
+		case command.Command == "reset_cafe":
+			err = resetDevCafe(tx, user)
 		case devRoomCommands[command.Command]:
 			err = nil // The room service applies it after the receipt is saved.
 		default:
@@ -200,6 +202,44 @@ func mutateDev(app core.App, user string, command devCommand) error {
 		receipt.Load(map[string]any{"user": user, "request_id": command.RequestID, "command": string(data)})
 		return tx.Save(receipt)
 	})
+}
+
+// resetDevCafe deletes the player's save and starts it over, as a new account: progress,
+// currencies, café name and look (player_state), the café with its pieces, stoves, dishes
+// and juices, spices bought and the operation receipts. Only the login account remains.
+func resetDevCafe(app core.App, user string) error {
+	old, err := app.FindFirstRecordByData("player_rooms", "user", user)
+	if err != nil {
+		return err
+	}
+	revision := old.GetInt("revision")
+	for _, collection := range []string{
+		"stove_cooking", "room_food", "juice_state", "juice_operations", "spice_purchases", "room_operations",
+		"dev_commands", "player_inventory", "player_stoves", "player_rooms", playerstate.Collection,
+	} {
+		records, err := app.FindRecordsByFilter(collection, "user={:user}", "", 0, 0, dbx.Params{"user": user})
+		if err != nil {
+			return err
+		}
+		for _, record := range records {
+			if err := app.Delete(record); err != nil {
+				return err
+			}
+		}
+	}
+	if _, err := playerstate.GetOrCreate(app, user); err != nil {
+		return err
+	}
+	if err := ensureRoom(app, user); err != nil {
+		return err
+	}
+	// Clients drop snapshots older than the one they hold: the new café continues the revision.
+	room, err := app.FindFirstRecordByData("player_rooms", "user", user)
+	if err != nil {
+		return err
+	}
+	room.Set("revision", revision+1)
+	return app.Save(room)
 }
 
 // Energy may exceed its capacity, as with the original's eco-generators; the tool allows a
