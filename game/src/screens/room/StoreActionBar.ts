@@ -6,6 +6,7 @@ import type { ActionBarButtonTextures, ActionBarIconTexture, StoreToolbarTexture
 import { CATEGORY_PULSE_DURATION_MS, drawCategorySelectionPulse } from './CategorySelectionPulse';
 import { FONT_FAMILY } from '../../core/fonts';
 import { PopupOpening } from './PopupOpening';
+import { stretchedButton } from './dialog-art';
 import type { RoomCatalogItem, RoomUnit } from '../../game/room-inventory';
 
 export interface StoreEntry { item: RoomCatalogItem; unit?: RoomUnit; texture?: Texture; quantity?: number }
@@ -451,8 +452,16 @@ export class StoreActionBar {
       holder.hitArea = new Rectangle(0, 0, SLOT_SIZE, height);
       const face = new Container();
       face.pivot.set(SLOT_SIZE / 2, height / 2); face.position.set(SLOT_SIZE / 2, height / 2);
-      face.addChild(new Graphics().roundRect(0, 0, SLOT_SIZE, height, 10)
-        .fill(available ? 0xffffff : 0xc9c9c9).stroke({ color: available ? 0xf0b417 : 0x9a9a9a, width: available ? 4 : SLOT_STROKE_WIDTH }));
+      const cardArt = this.storeToolbarTextures?.expansionCards;
+      if (cardArt) {
+        // Cartão destacado (raios verdes) para o que pode ser comprado, como o "Instalar!" da loja original.
+        const background = new Sprite(available ? cardArt.highlight : cardArt.locked);
+        background.width = SLOT_SIZE; background.height = height;
+        face.addChild(background);
+      } else {
+        face.addChild(new Graphics().roundRect(0, 0, SLOT_SIZE, height, 10)
+          .fill(available ? 0xffffff : 0xc9c9c9).stroke({ color: available ? 0xf0b417 : 0x9a9a9a, width: available ? 4 : SLOT_STROKE_WIDTH }));
+      }
       const sizeLabel = new Text({ text: card.size, style: { fontFamily: FONT_FAMILY, fontSize: 22, fontWeight: 'bold', fill: 0xffffff,
         stroke: { color: available ? 0x5e3115 : 0x5f5f5f, width: 6, join: 'round' } } });
       sizeLabel.anchor.set(0.5, 0); sizeLabel.position.set(SLOT_SIZE / 2, 6);
@@ -475,18 +484,23 @@ export class StoreActionBar {
         price.position.set((SLOT_SIZE - price.width) / 2, 138);
         face.addChild(price);
       } else {
-        const lock = new Graphics()
+        const padlock = this.storeToolbarTextures?.padlock;
+        const lock = padlock ? new Sprite(padlock) : new Graphics()
           .roundRect(-15, -4, 30, 24, 5).fill(0x7d8288).stroke({ color: 0x3d4146, width: 2.5 })
           .arc(0, -4, 9, Math.PI, 0).stroke({ color: 0x3d4146, width: 4 });
+        if (lock instanceof Sprite) { lock.anchor.set(0.5, 0.6); lock.scale.set(38 / lock.texture.height); }
         lock.position.set(SLOT_SIZE / 2, 132);
         face.addChild(lock);
       }
       const status = new Text({ text: available ? 'Disponível' : 'Não disponível', style: { fontFamily: FONT_FAMILY, fontSize: available ? 16 : 13,
-        fontWeight: 'bold', fill: available ? 0x1c6b1f : 0x666666 } });
+        fontWeight: 'bold', fill: available ? 0x1c6b1f : 0xffffff, stroke: { color: available ? 0xffffff : 0x4a4a4a, width: 4, join: 'round' } } });
       status.anchor.set(0.5, 0); status.position.set(SLOT_SIZE / 2, 160);
       face.addChild(status);
       if (available) {
-        const buy = new Graphics().roundRect(10, 190, SLOT_SIZE - 20, 34, 8).fill(0x2db83a).stroke({ color: 0x0f6a19, width: 3 });
+        const buyArt = this.storeToolbarTextures?.buyButton;
+        const buy = buyArt ? stretchedButton(buyArt, SLOT_SIZE - 20, 34)
+          : new Graphics().roundRect(0, 0, SLOT_SIZE - 20, 34, 8).fill(0x2db83a).stroke({ color: 0x0f6a19, width: 3 });
+        buy.position.set(10, 190);
         const buyText = new Text({ text: 'Comprar', style: { fontFamily: FONT_FAMILY, fontSize: 17, fontWeight: 'bold', fill: 0xffffff,
           stroke: { color: 0x0f6a19, width: 4, join: 'round' } } });
         buyText.anchor.set(0.5); buyText.position.set(SLOT_SIZE / 2, 207);

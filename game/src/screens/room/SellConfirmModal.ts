@@ -1,7 +1,8 @@
-import { Container, Graphics, Rectangle, Text, TextStyle } from 'pixi.js';
+import { Container, Graphics, Rectangle, Sprite, Text, TextStyle } from 'pixi.js';
 
 import { FONT_FAMILY } from '../../core/font-tokens';
 import { STAGE_HEIGHT, STAGE_WIDTH } from '../../core/stage';
+import type { DialogArt } from './dialog-art';
 import { modalAnimationFrame, type ModalPhase } from './ModalAnimation';
 
 const PANEL = { width: 700, height: 520 } as const;
@@ -17,14 +18,18 @@ function label(text: string, size: number, fill: number, extra: ConstructorParam
 
 /**
  * Confirmation popup, with the layout of the original ("Você quer mesmo vender esse item por
- * N Ouros?"). Provisional art: the frame, logo, close and confirm buttons are drawn here until
- * the real pieces arrive. Enter or the check confirms; Esc, the X or a click outside cancels.
+ * N Ouros?"). The frame, logo, close and confirm buttons come from `setArt`; drawn placeholders
+ * stand in only until the art loads. Enter or the check confirms; Esc, the X or a click outside cancels.
  */
 export class SellConfirmModal {
   readonly view = new Container();
   private readonly panel = new Container();
   private readonly backdrop = new Graphics();
   private readonly message: Text;
+  private readonly frame = new Container();
+  private readonly logo = new Container();
+  private readonly closeButton = new Container();
+  private readonly confirmButton = new Container();
   private phase: ModalPhase = 'closed';
   private animTimer = 0;
   private resolve?: (confirmed: boolean) => void;
@@ -46,13 +51,14 @@ export class SellConfirmModal {
     this.panel.hitArea = new Rectangle(0, 0, PANEL.width, PANEL.height);
     for (const name of ['pointerdown', 'pointerup', 'pointertap', 'wheel'] as const) this.panel.on(name, (event) => event.stopPropagation());
 
-    const frame = new Graphics()
+    const frame = this.frame;
+    frame.addChild(new Graphics()
       .roundRect(0, 0, PANEL.width, PANEL.height, 36).fill(0xc9b27a)
       .roundRect(8, 8, PANEL.width - 16, PANEL.height - 16, 30).fill(0xf3ecbc)
-      .roundRect(26, 26, PANEL.width - 52, PANEL.height - 52, 16).fill(0xffffff);
+      .roundRect(26, 26, PANEL.width - 52, PANEL.height - 52, 16).fill(0xffffff));
     frame.eventMode = 'none';
 
-    const logo = new Container();
+    const logo = this.logo;
     logo.position.set(PANEL.width / 2, 120);
     const oval = new Graphics().ellipse(0, 0, 160, 76).fill(0xffc21a).stroke({ color: 0xe39a00, width: 6 });
     const logoTop = label('CAFÉ', 54, 0x2f7fb8, { fontWeight: '800', stroke: { color: 0xffffff, width: 7, join: 'round' } });
@@ -66,7 +72,7 @@ export class SellConfirmModal {
     this.message = label('', 30, BROWN, { align: 'center', wordWrap: true, wordWrapWidth: PANEL.width - 150, lineHeight: 40 });
     this.message.anchor.set(0.5, 0); this.message.position.set(PANEL.width / 2, 300);
 
-    const close = new Container();
+    const close = this.closeButton;
     close.label = 'sell-confirm-close';
     close.position.set(PANEL.width - 52, 38);
     close.eventMode = 'static'; close.cursor = 'pointer';
@@ -78,7 +84,7 @@ export class SellConfirmModal {
     close.addChild(closeFace);
     close.on('pointertap', (event) => { event.stopPropagation(); this.finish(false); });
 
-    const confirm = new Container();
+    const confirm = this.confirmButton;
     confirm.label = 'sell-confirm-ok';
     confirm.position.set(PANEL.width / 2, PANEL.height - 28);
     confirm.eventMode = 'static'; confirm.cursor = 'pointer';
@@ -100,6 +106,27 @@ export class SellConfirmModal {
   }
 
   get isOpen(): boolean { return this.phase !== 'closed'; }
+
+  /** Troca o logo e os botões desenhados pela arte do jogo. */
+  setArt(art: Pick<DialogArt, 'logo' | 'close' | 'confirm' | 'confirmWindow'>): void {
+    if (this.disposed) return;
+    this.frame.removeChildren().forEach((child) => child.destroy());
+    const window = new Sprite(art.confirmWindow);
+    window.width = PANEL.width; window.height = PANEL.height;
+    this.frame.addChild(window);
+    const replace = (holder: Container, texture: DialogArt['logo'] | undefined, width: number, height: number) => {
+      if (!texture) return;
+      holder.removeChildren().forEach((child) => child.destroy());
+      const sprite = new Sprite(texture);
+      sprite.anchor.set(0.5);
+      sprite.scale.set(Math.min(width / texture.width, height / texture.height));
+      sprite.eventMode = 'none';
+      holder.addChild(sprite);
+    };
+    replace(this.logo, art.logo, 380, 190);
+    replace(this.closeButton, art.close, 62, 62);
+    replace(this.confirmButton, art.confirm, 92, 92);
+  }
 
   /** Resolves true when the player confirms. Asking again while open cancels the earlier question. */
   ask(text: string): Promise<boolean> {

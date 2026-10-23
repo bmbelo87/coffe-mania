@@ -102,7 +102,9 @@ export class TopBars {
     front.eventMode = 'none';
     this.view.addChild(front);
 
-    this.currencies = new CurrencyHud(onAddCurrency, textures.currencyAdd);
+    this.currencies = new CurrencyHud(
+      { atlas: textures.icons, cash: TOP_BAR_ICON_FRAMES[0], gold: TOP_BAR_ICON_FRAMES[1] }, onAddCurrency, textures.currencyAdd,
+    );
     this.currencies.view.position.set(265, 35);
     this.view.addChild(this.currencies.view);
 

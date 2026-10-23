@@ -33,6 +33,21 @@ export const AVATAR_PLACEHOLDER_URLS = {
 
 /** Cadeado raster gerado a partir das referências do jogo. */
 export const UI_PADLOCK_URL = new URL('assets/ui/padlock.png', new URL(base, document.baseURI)).href;
+/** Logo do Café Mania recortado da arte da Vostu (origem em `ui/logo/source.json`). */
+export const UI_LOGO_URL = new URL('assets/ui/logo/cafe-mania.png', new URL(base, document.baseURI)).href;
+/** Balão branco de dica restaurado do original; a ponta fica a 26% da largura. */
+/** Molduras e botão roxo das janelas de confirmação e de bloqueio (origem em `ui/dialog/source.json`). */
+export const UI_DIALOG_URLS = {
+  lockedWindow: new URL('assets/ui/dialog/locked-window.png', new URL(base, document.baseURI)).href,
+  confirmWindow: new URL('assets/ui/dialog/confirm-window.png', new URL(base, document.baseURI)).href,
+  purpleButton: new URL('assets/ui/dialog/button-purple.png', new URL(base, document.baseURI)).href,
+} as const;
+/** Cartões altos da aba Expansões da loja (origem em `store/expansion-cards/source.json`). */
+export const UI_EXPANSION_CARD_URLS = {
+  highlight: new URL('assets/store/expansion-cards/highlight.png', new URL(base, document.baseURI)).href,
+  locked: new URL('assets/store/expansion-cards/locked.png', new URL(base, document.baseURI)).href,
+} as const;
+export const UI_HOVER_BALLOON_URL = new URL('assets/ui/spices/spoiled-callout.png', new URL(base, document.baseURI)).href;
 export const UI_STOVE_HOVER_URLS = {
   panel: new URL('assets/ui/stove-hover/panel.png', new URL(base, document.baseURI)).href,
   book: new URL('assets/ui/stove-hover/book.png', new URL(base, document.baseURI)).href,
@@ -280,11 +295,18 @@ export interface StoreToolbarTextures {
   expansion: Texture;
   /** caféGranas bill, for prices in the second currency. */
   cash: Texture;
+  /** Tall shop cards; the purchasable sizes use the highlight. */
+  expansionCards?: { highlight: Texture; locked: Texture };
+  padlock?: Texture;
+  /** Empty green button of the game, stretched under "Comprar". */
+  buyButton?: Texture;
 }
 
 export async function loadStoreToolbarTextures(): Promise<StoreToolbarTextures> {
-  const [sheet, currencySheet] = await Promise.all([
+  const [sheet, currencySheet, highlight, locked, padlock, buyButton] = await Promise.all([
     loadResourceIcon(UI_STORE_TOOLBAR_BUNDLE_URL), loadResourceIcon(UI_STORE_CURRENCY_BUNDLE_URL),
+    ...[UI_EXPANSION_CARD_URLS.highlight, UI_EXPANSION_CARD_URLS.locked, UI_PADLOCK_URL,
+      new URL('assets/ui/spices/button-buy.png', new URL(base, document.baseURI)).href].map(loadResourceIcon),
   ]);
   const crop = (x: number, y: number, width: number, height: number) =>
     new Texture({ source: sheet.source, frame: new Rectangle(x, y, width, height) });
@@ -295,6 +317,9 @@ export async function loadStoreToolbarTextures(): Promise<StoreToolbarTextures> 
     expansion: crop(520, 92, 300, 262),
     gold: new Texture({ source: currencySheet.source, frame: new Rectangle(208, 40, 161, 154) }),
     cash: new Texture({ source: currencySheet.source, frame: new Rectangle(22, 42, 160, 148) }),
+    expansionCards: { highlight, locked },
+    padlock,
+    buyButton,
   };
 }
 

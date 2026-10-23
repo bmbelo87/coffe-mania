@@ -20,6 +20,14 @@ const PALETTES = {
 } as const;
 
 const SHADOW_PADDING = 14;
+/** Altura exibida de cada ícone; a moeda e a nota saltam um pouco para fora da moldura, como no original. */
+const CURRENCY_ICON_HEIGHT = { cash: 50, gold: 54 } as const;
+
+export interface CurrencyIconArt {
+  atlas: Texture;
+  cash: { x: number; y: number; width: number; height: number };
+  gold: { x: number; y: number; width: number; height: number };
+}
 /** Limites da arte restaurada, com a margem de antialiasing preservada. */
 const ADD_BUTTON_FRAME = new Rectangle(111, 51, 1122, 1067);
 
@@ -124,38 +132,13 @@ export class CurrencyCounter {
   }
 }
 
-function createCashIcon(): Container {
-  const icon = new Container();
-  icon.label = 'room-top-bar-icon-1';
-  // As quatro arestas conservam a perspectiva da nota, além de sua inclinação.
-  const art = new Graphics()
-    .poly([-27, -7, 10, -26, 27, -7, -5, 28]).fill(0xffffff)
-    .stroke({ color: 0xffffff, width: 4, join: 'round' })
-    .poly([-25, -7, 10, -23, 24, -7, -5, 25]).fill(0x156831)
-    .poly([-20, -5, 9, -18, 19, -6, -5, 19]).fill(0x52af43)
-    .poly([-15, -4, 7, -14, 15, -6, -5, 14]).fill(0xa2d681)
-    .circle(3, -5, 5.5).fill(0x40ad43)
-    .circle(-15, -4, 3).fill(0x52af43)
-    .circle(7, -14, 3).fill(0x52af43)
-    .circle(15, -6, 3).fill(0x52af43)
-    .circle(-5, 14, 3).fill(0x52af43);
-  icon.addChild(art);
-  icon.eventMode = 'none';
-  return icon;
-}
-
-function createGoldIcon(): Container {
-  const icon = new Container();
-  icon.label = 'room-top-bar-icon-2';
-  const art = new Graphics()
-    .circle(0, 0, 25).fill(0xf4f4f1)
-    .circle(-1.5, -0.5, 21.5).fill(0xb58927)
-    .circle(0.5, -1, 19.5).fill(0xffd600)
-    .circle(0.5, 0, 13.5).fill(0xd39220)
-    .circle(2.5, 1, 11.7).fill(0xe6a224)
-    .moveTo(12, -23).lineTo(17, -21).lineTo(14.5, -14)
-    .stroke({ color: 0xffffff, width: 3.5, join: 'round' });
-  icon.addChild(art);
+/** Nota e moeda do atlas do HUD (o mesmo do Livro de Receitas), com o contorno branco de adesivo. */
+function createCurrencyIcon(currency: HudCurrency, atlas: Texture, frame: { x: number; y: number; width: number; height: number }): Sprite {
+  const icon = new Sprite(new Texture({ source: atlas.source, frame: new Rectangle(frame.x, frame.y, frame.width, frame.height) }));
+  icon.label = `room-top-bar-icon-${currency === 'cash' ? 1 : 2}`;
+  icon.anchor.set(0.5);
+  icon.height = CURRENCY_ICON_HEIGHT[currency];
+  icon.scale.x = icon.scale.y;
   icon.eventMode = 'none';
   return icon;
 }
@@ -168,7 +151,7 @@ export class CurrencyHud {
   private readonly shadowTextures: Texture[] = [];
   private readonly addTexture?: Texture;
 
-  constructor(onAdd?: (currency: HudCurrency) => void, addTexture?: Texture) {
+  constructor(icons: CurrencyIconArt, onAdd?: (currency: HudCurrency) => void, addTexture?: Texture) {
     const { width, height, seam } = CURRENCY_HUD_LAYOUT;
     this.view.label = 'room-currency-hud';
     this.view.addChild(this.shadow(width, height, 14));
@@ -197,9 +180,9 @@ export class CurrencyHud {
     cashShadow.position.set(3 - 29 - SHADOW_PADDING, height / 2 - 28 - SHADOW_PADDING);
     const goldShadow = this.shadow(50, 50, 25);
     goldShadow.position.set(seam - 25 - SHADOW_PADDING, height / 2 - 25 - SHADOW_PADDING);
-    const cashIcon = createCashIcon();
+    const cashIcon = createCurrencyIcon('cash', icons.atlas, icons.cash);
     cashIcon.position.set(3, height / 2);
-    const goldIcon = createGoldIcon();
+    const goldIcon = createCurrencyIcon('gold', icons.atlas, icons.gold);
     goldIcon.position.set(seam, height / 2);
     this.view.addChild(cashShadow, goldShadow, cashIcon, goldIcon);
   }
@@ -225,7 +208,10 @@ export class CurrencyHud {
   }
 
   destroy(): void {
+    // Os recortes dos ícones são do HUD; a fonte do atlas continua compartilhada.
+    const iconTextures = this.view.children.filter((child): child is Sprite => child instanceof Sprite && child.label.startsWith('room-top-bar-icon-')).map((sprite) => sprite.texture);
     this.view.destroy({ children: true });
+    iconTextures.forEach((texture) => texture.destroy());
     this.shadowTextures.forEach((texture) => texture.destroy(true));
     this.addTexture?.destroy();
   }

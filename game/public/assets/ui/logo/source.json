@@ -1,0 +1,7 @@
+{
+  "art": "Logo do Café Mania recortado da faixa de abertura da coleção Behance 49023909 (Erica Perez, \"Cafe Manía-Vostu\"), artes-referencia/cafe-mania-acervo-complementar-2/cafe-mania-acervo-2/artes/49023909/001.png.",
+  "sourceSha256": "18874bc98884f9bf14b3cdd4b0d91ab088c06a9609f5637b96632ed3423d052b",
+  "outputSha256": "a68015e312ab82448f4ae39876cf2a2d3778ff8495f89960b6300224fedff11a",
+  "processing": "Recorte da área 520..880 x 0..205 da faixa; o fundo em degradê é separado pelo contorno branco do adesivo. Na transição, o alfa é estimado como mistura entre o branco do contorno e a cor local do fundo; o resto da arte não foi redesenhado. Ampliado 3x com Lanczos sobre alfa pré-multiplicado.",
+  "limits": "A arte de origem tem só 313 px de largura; a ampliação deixa o traço um pouco macio. Substituir por uma versão maior quando houver."
+}

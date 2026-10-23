@@ -1,0 +1,32 @@
+{
+  "origin": "Reconstruções geradas com o ChatGPT (Image Gen) a pedido do responsável pelo projeto, em 23/10/2026, a partir das capturas listadas. Não são PNGs originais recuperados.",
+  "processing": "Só recorte pela caixa do alfa; os cartões foram separados pelas colunas transparentes. O botão roxo mantém o canvas 608x203 do botão verde dos Temperos para usar o mesmo nine-slice.",
+  "reference": [
+    "Behance 15414597/008.png (cartões branco e \"Instalar!\")",
+    "P066_02_unlock-machines_c89c58a4.jpg (cartão bloqueado)"
+  ],
+  "files": {
+    "normal": {
+      "size": [
+        330,
+        710
+      ],
+      "sha256": "f2c5a7ea6b9659a67c4ec0219033bd3ae16df6307689d558d92c22ee88d18912"
+    },
+    "highlight": {
+      "size": [
+        330,
+        710
+      ],
+      "sha256": "f1d268269d01182122f1084db412705833519e81543ebabbcf194b9182947bf2"
+    },
+    "locked": {
+      "size": [
+        330,
+        710
+      ],
+      "sha256": "9fcf16d01fa66c908e4a5d591941bb50852a58b7943427425fd3c9a5f9280b13"
+    }
+  },
+  "unused": "normal.png ainda não é carregado pelo jogo: fica para cartões comuns da loja."
+}

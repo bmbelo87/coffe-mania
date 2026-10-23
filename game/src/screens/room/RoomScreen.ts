@@ -44,8 +44,8 @@ import {JuiceScreenModal} from './JuiceScreenModal';
 import {JuiceClient,loadJuiceArt,loadJuiceMachineArt,type JuiceStock} from '../../game/juices';
 import { CookProgressCallout } from './CookProgressCallout';
 import { IdleStoveCallout, loadIdleStoveArt } from './IdleStoveCallout';
-import { ReadyDishCallout } from './ReadyDishCallout';
-import { SpoiledDishCallout } from './SpoiledDishCallout';
+import { loadDialogExtras } from './dialog-art';
+import { HoverBalloon } from './HoverBalloon';
 import { carriedDishPose, fitDish } from './DishPresentation';
 import { DoorView } from './DoorView';
 import { doorOpeningTile } from '../../world/doorGeometry';
@@ -344,7 +344,9 @@ export class RoomScreen implements Screen {
   private playerState?: PlayerState;
   private cleaningProcess?: { stove: RoomItem; phase: 'walking' | 'requesting' };
   /** Pratos nos balcões, por unidade de inventário do balcão. */
-  private readonly counterDishViews = new Map<string, { view: Sprite; label: Text }>();
+  private readonly counterDishViews = new Map<string, { view: Sprite; label?: HoverBalloon }>();
+  /** Balão branco de dica do original, compartilhado pelos avisos sobre fogão, balcão e máquina. */
+  private readonly hoverBalloonTexture?: Texture;
   private sharedFoods: SharedFood[] = [];
   private sharedJuices: JuiceStock[] = [];
   private readonly juiceClient = new JuiceClient();
@@ -353,7 +355,7 @@ export class RoomScreen implements Screen {
   private readonly juiceRequests = new Map<string, { bubble: ThoughtBubble; nonce: string; recipeId?: string }>();
   private thoughtBubbleArt?: ThoughtBubbleArt;
   private readonly servingJuice = new Set<string>();
-  private juiceTooltip?: Text;
+  private juiceTooltip?: HoverBalloon;
   private readonly sharedCookingViews = new Map<string, Sprite>();
   /** "Luz em volta do prato" temperado (FAQ oficial), por fogão. */
   private readonly spiceGlows = new Map<string, Graphics>();
@@ -402,8 +404,8 @@ export class RoomScreen implements Screen {
   private stoveActionsStove?: RoomItem;
   private cookCallout?: CookProgressCallout;
   private idleStoveCallout?: IdleStoveCallout;
-  private readonly readyCallout = new ReadyDishCallout();
-  private readonly spoiledCallout?: SpoiledDishCallout;
+  private readonly readyCallout?: HoverBalloon;
+  private readonly spoiledCallout?: HoverBalloon;
   private hoveredStove?: RoomItem;
   private servingProcess?: {
     stove: RoomItem;
@@ -466,6 +468,7 @@ export class RoomScreen implements Screen {
     this.cookProgressTextures = options.cookTextures;
     this.cookingClient = options.cookingClient;
     this.spiceTextures = options.spiceTextures;
+    this.hoverBalloonTexture = options.spiceTextures?.stove.callout;
     this.spiceMenuTexture = options.actionBarIcons?.find(({ name }) => name === 'mortar')?.texture;
     this.playerState = options.playerState ?? options.roomSnapshot?.playerState;
     this.floorClassName = options.floorClassName ?? 'FloorTile';
@@ -780,7 +783,7 @@ export class RoomScreen implements Screen {
           this.outsideNpcManager?.setRenderingEnabled(!open);
           this.liveActors.forEach(({ view }) => { view.view.renderable = !open; });
           this.mealViews.forEach((view) => { view.renderable = !open; });
-          this.counterDishViews.forEach(({ view, label }) => { view.renderable = !open; label.renderable = !open; });
+          this.counterDishViews.forEach(({ view, label }) => { view.renderable = !open; if (label) label.view.renderable = !open; });
           this.carriedViews.forEach((view) => { view.renderable = !open; });
           this.liveEmotions.forEach(({ effect }) => { effect.view.renderable = !open; });
           this.sharedCookingViews.forEach((view) => { view.renderable = !open; });
@@ -814,8 +817,6 @@ export class RoomScreen implements Screen {
       if (this.roomStore) this.view.addChild(this.roomStore.cursorView);
     }
 
-    this.readyCallout.view.zIndex = POPUP_DRAW_PRIORITY + 2;
-    this.world.addChild(this.readyCallout.view);
     void loadIdleStoveArt().then(art => {
       if (this.destroyed) return;
       this.idleStoveCallout = new IdleStoveCallout(art);
@@ -834,9 +835,15 @@ export class RoomScreen implements Screen {
       }).catch(error => { if (!this.destroyed) console.warn('[thought-bubble] arte indisponível', error); });
     }
     if (options.spiceTextures) {
-      this.spoiledCallout = new SpoiledDishCallout(options.spiceTextures.icons.sage, options.spiceTextures.stove.callout);
-      this.spoiledCallout.view.zIndex = POPUP_DRAW_PRIORITY + 2;
-      this.world.addChild(this.spoiledCallout.view);
+      const balloon = options.spiceTextures.stove.callout;
+      this.spoiledCallout = new HoverBalloon(balloon, 'spoiled-dish-callout', {
+        title: 'Comida estragada', hint: 'Clique para opções', icon: options.spiceTextures.icons.sage,
+      });
+      this.readyCallout = new HoverBalloon(balloon, 'ready-dish-callout');
+      for (const callout of [this.spoiledCallout, this.readyCallout]) {
+        callout.view.zIndex = POPUP_DRAW_PRIORITY + 2;
+        this.world.addChild(callout.view);
+      }
     }
     if (options.cookTextures) {
       if (options.cookTextures.progressCallout) {
@@ -921,6 +928,15 @@ export class RoomScreen implements Screen {
     this.view.addChild(this.sellModal.view);
     this.expansionModal = new ExpansionModal(options.storeToolbarTextures?.expansion);
     this.view.addChild(this.expansionModal.view);
+    const spices = options.spiceTextures, toolbar = options.storeToolbarTextures;
+    if (spices && toolbar) {
+      void loadDialogExtras().then((extras) => {
+        if (this.destroyed) return;
+        const art = { ...extras, close: spices.close, green: spices.buy, confirm: options.actionBarButtons?.confirm, cash: toolbar.cash, gold: toolbar.gold };
+        this.sellModal?.setArt(art);
+        this.expansionModal?.setArt(art);
+      }).catch((error: unknown) => { if (!this.destroyed) console.warn('[janelas] arte indisponível', error); });
+    }
     this.levelUpModal = new LevelUpModal();
     this.updateMobileHudLayout();
     if (options.cookingSnapshot) this.acceptCookingSnapshot(options.cookingSnapshot, true);
@@ -1054,31 +1070,31 @@ export class RoomScreen implements Screen {
         view.label = 'counter-dish:' + counter.inventoryUnitId;
         // O prato fica na frente do fogão vizinho na tela; não pode roubar o clique dele.
         view.eventMode = 'none';
-        const label = new Text({ text: '', style: new TextStyle({
-          fontFamily: [FONT_FAMILY, 'sans-serif'], fontSize: 30, fontWeight: '600', fill: 0xffffff, align: 'center',
-          stroke: { color: 0x5a3915, width: 6, join: 'round' },
-        }) });
-        label.anchor.set(0.5, 1);
-        label.visible = false;
-        label.zIndex = POPUP_DRAW_PRIORITY;
-        this.world.addChild(view, label);
+        const label = this.hoverBalloonTexture
+          ? new HoverBalloon(this.hoverBalloonTexture, 'counter-dish-callout:' + counter.inventoryUnitId) : undefined;
+        if (label) label.view.zIndex = POPUP_DRAW_PRIORITY;
+        this.world.addChild(view);
+        if (label) this.world.addChild(label.view);
         dish = { view, label };
         this.counterDishViews.set(counter.inventoryUnitId, dish);
       }
       if (dish.view.texture !== art.stage2) dish.view.texture = art.stage2;
       fitDish(dish.view);
-      dish.label.text = `${art.name}\n${portions} ${portions === 1 ? 'porção' : 'porções'}`;
+      dish.label?.set({ title: art.name, hint: `${portions} ${portions === 1 ? 'porção restante' : 'porções restantes'}`, titleColor: 0x5a3915 });
       const x = tileToScreenX(counter.tx, counter.ty);
       const y = tileToScreenY(counter.tx, counter.ty) + COUNTER_DISH_Y;
       dish.view.position.set(x, y);
       setItemOverlayDepth(dish.view, counter);
-      dish.label.position.set(x, y - 96);
-      dish.label.visible = this.hovered?.tx === counter.tx && this.hovered.ty === counter.ty;
-      dish.view.renderable = dish.label.renderable = !this.storeBar?.isOpen;
+      dish.view.renderable = !this.storeBar?.isOpen;
+      if (dish.label) {
+        dish.label.view.position.set(x, y - 50);
+        dish.label.view.visible = this.hovered?.tx === counter.tx && this.hovered.ty === counter.ty;
+        dish.label.view.renderable = dish.view.renderable;
+      }
     }
     for (const [id, dish] of this.counterDishViews) {
       if (shown.has(id)) continue;
-      dish.view.destroy(); dish.label.destroy(); this.counterDishViews.delete(id);
+      dish.view.destroy(); dish.label?.destroy(); this.counterDishViews.delete(id);
     }
   }
 
@@ -1534,7 +1550,7 @@ export class RoomScreen implements Screen {
     const callout = this.cookCallout;
     if (this.idleStoveCallout) this.idleStoveCallout.view.visible = false;
     if (callout) callout.view.visible = false;
-    this.readyCallout.view.visible = false;
+    if (this.readyCallout) this.readyCallout.view.visible = false;
     if (this.spoiledCallout) this.spoiledCallout.view.visible = false;
     const stove = this.hoveredStove;
     if (!stove || this.isModalOpen || this.storeBar?.isOpen || this.stoveActions || this.drag ||
@@ -1564,8 +1580,15 @@ export class RoomScreen implements Screen {
       return;
     }
     if (ready) {
-      this.readyCallout.view.position.set(x, y);
-      this.readyCallout.view.visible = true;
+      if (this.readyCallout) {
+        const recipeId = job?.recipeId ?? process?.recipeId;
+        this.readyCallout.set({
+          title: 'Prato pronto!', hint: 'Clique para servir!', titleColor: 0x873903,
+          icon: recipeId ? this.recipeArt(recipeId)?.stage2 : undefined,
+        });
+        this.readyCallout.view.position.set(x, y);
+        this.readyCallout.view.visible = true;
+      }
       return;
     }
     if (!callout) return;
@@ -2380,7 +2403,7 @@ export class RoomScreen implements Screen {
     this.closeStoveActions();
     if (this.idleStoveCallout) this.idleStoveCallout.view.visible = false;
     if (this.cookCallout) this.cookCallout.view.visible = false;
-    this.readyCallout.view.visible = false;
+    if (this.readyCallout) this.readyCallout.view.visible = false;
     if (this.spoiledCallout) this.spoiledCallout.view.visible = false;
     this.settingsModal?.open();
   }
@@ -2461,8 +2484,10 @@ export class RoomScreen implements Screen {
       view.on('pointertap',(event:FederatedPointerEvent)=>{if(this.storeBar?.isOpen||this.dragCancelledTap||this.isModalOpen||this.roomSnapshot?.canEdit===false||!item.inventoryUnitId)return;event.stopPropagation();void this.juiceModal?.open(item.inventoryUnitId);});
       view.on('pointerover',()=>{
         if(this.isModalOpen||this.storeBar?.isOpen)return;const stock=this.sharedJuices.find(value=>value.machineId===item.inventoryUnitId);
-        this.juiceTooltip?.destroy();this.juiceTooltip=new Text({text:!stock?.unlocked?'Máquina trancada · clique para abrir':stock.portions?`Suco pronto · ${stock.portions} copos restantes`:'Máquina vazia',style:{fontFamily:FONT_FAMILY,fontSize:22,fill:0xffffff,stroke:{color:0x382414,width:4}}});
-        this.juiceTooltip.position.set(tileToScreenX(item.tx,item.ty)-80,tileToScreenY(item.tx,item.ty)-180);this.juiceTooltip.zIndex=POPUP_DRAW_PRIORITY+6;this.world.addChild(this.juiceTooltip);
+        this.juiceTooltip?.destroy();this.juiceTooltip=undefined;if(!this.hoverBalloonTexture)return;
+        // Textos dos estados da máquina nas capturas de 2010 (P072_02 e P072_07).
+        this.juiceTooltip=new HoverBalloon(this.hoverBalloonTexture,'juice-machine-callout',!stock?.unlocked?{title:'Máquina trancada',hint:'Clique para destravar',titleColor:0x5a3915}:stock.portions?{title:'Suco Pronto',hint:`${stock.portions} ${stock.portions===1?'copo restante':'copos restantes'}`,titleColor:0x5a3915}:{title:'Máquina Vazia',hint:'Clique para preparar',titleColor:0x5a3915});
+        this.juiceTooltip.view.position.set(tileToScreenX(item.tx,item.ty)+80,tileToScreenY(item.tx,item.ty)-150);this.juiceTooltip.view.zIndex=POPUP_DRAW_PRIORITY+6;this.juiceTooltip.view.visible=true;this.world.addChild(this.juiceTooltip.view);
       });view.on('pointerout',()=>{this.juiceTooltip?.destroy();this.juiceTooltip=undefined;});
     }
     if (this.roomSnapshot) for (const view of views) this.bindStoreItem(view, () => item.wallpaperUnitId ?? item.inventoryUnitId);
@@ -2598,7 +2623,7 @@ export class RoomScreen implements Screen {
       this.hoveredStove = undefined;
       if (this.idleStoveCallout) this.idleStoveCallout.view.visible = false;
       if (this.cookCallout) this.cookCallout.view.visible = false;
-      this.readyCallout.view.visible = false;
+      if (this.readyCallout) this.readyCallout.view.visible = false;
       if (this.spoiledCallout) this.spoiledCallout.view.visible = false;
     });
   }
@@ -3349,7 +3374,7 @@ export class RoomScreen implements Screen {
     for (const [id, entry] of this.liveActors) this.removeLiveActor(id, entry);
     this.liveActors.clear(); this.mealViews.clear();
     this.chairBackrests.clear();
-    this.counterDishViews.forEach(({ view, label }) => { view.destroy(); label.destroy(); }); this.counterDishViews.clear();
+    this.counterDishViews.forEach(({ view, label }) => { view.destroy(); label?.destroy(); }); this.counterDishViews.clear();
     this.carriedViews.forEach((view) => view.destroy()); this.carriedViews.clear();
     this.sharedCookingViews.forEach((view) => view.destroy()); this.sharedCookingViews.clear();
     this.sharedCookingProgress.forEach(({ bar }) => bar.destroy()); this.sharedCookingProgress.clear();
@@ -3359,7 +3384,7 @@ export class RoomScreen implements Screen {
     this.closeStoveActions();
     this.cookCallout?.destroy();
     this.idleStoveCallout?.destroy();
-    this.readyCallout.destroy();
+    this.readyCallout?.destroy();
     this.spoiledCallout?.destroy();
     this.clearServingProcess();
     this.storeBar?.destroy();

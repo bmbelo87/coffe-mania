@@ -1,0 +1,40 @@
+{
+  "origin": "Reconstruções geradas com o ChatGPT (Image Gen) a pedido do responsável pelo projeto, em 23/10/2026, a partir das capturas listadas. Não são PNGs originais recuperados.",
+  "processing": "Só recorte pela caixa do alfa; os cartões foram separados pelas colunas transparentes. O botão roxo mantém o canvas 608x203 do botão verde dos Temperos para usar o mesmo nine-slice.",
+  "files": {
+    "locked-window.png": {
+      "reference": [
+        "artes-referencia/.../interface-eventos-guias/P066_01_unlock-patio_5399c916.jpg",
+        "P066_03_unlock-juices_d8cd6261.jpg"
+      ],
+      "size": [
+        1504,
+        924
+      ],
+      "sha256": "b0b9bd3cd4dab73dcc423ff1884e5cc6237b571158101753857918d074d544a8"
+    },
+    "confirm-window.png": {
+      "reference": [
+        "P017_03_abrir-caixa_09811847.png (moldura creme da janela \"Presente Misterioso!\", 2010)"
+      ],
+      "size": [
+        1384,
+        1024
+      ],
+      "sha256": "b8b3e776e2101417d6d3fa36b1331750780e5a38c6259ff9940875dd88daf442"
+    },
+    "button-purple.png": {
+      "reference": [
+        "P066_01",
+        "P066_02_unlock-machines_c89c58a4.jpg",
+        "vídeo ~2013, receitas bloqueadas (avancado-06-card-05.png)",
+        "formato: ui/spices/button-buy.png"
+      ],
+      "size": [
+        608,
+        203
+      ],
+      "sha256": "c5780f400e4b68b64fad05ad83b2fdc0a7def01895ccd6fd82a0aeb9a59990ce"
+    }
+  }
+}
