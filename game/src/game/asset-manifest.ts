@@ -47,6 +47,12 @@ export const UI_EXPANSION_CARD_URLS = {
   highlight: new URL('assets/store/expansion-cards/highlight.png', new URL(base, document.baseURI)).href,
   locked: new URL('assets/store/expansion-cards/locked.png', new URL(base, document.baseURI)).href,
 } as const;
+/** Variantes desligadas dos botões azuis do menu da engrenagem (origem em `ui/settings-menu/source.json`). */
+export const UI_SETTINGS_MENU_URLS = {
+  soundOff: new URL('assets/ui/settings-menu/sound-off.png', new URL(base, document.baseURI)).href,
+  musicOff: new URL('assets/ui/settings-menu/music-off.png', new URL(base, document.baseURI)).href,
+  fullscreenExit: new URL('assets/ui/settings-menu/fullscreen-exit.png', new URL(base, document.baseURI)).href,
+} as const;
 export const UI_HOVER_BALLOON_URL = new URL('assets/ui/spices/spoiled-callout.png', new URL(base, document.baseURI)).href;
 export const UI_STOVE_HOVER_URLS = {
   panel: new URL('assets/ui/stove-hover/panel.png', new URL(base, document.baseURI)).href,

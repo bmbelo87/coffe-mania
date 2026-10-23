@@ -26,6 +26,7 @@ export class FullscreenButton {
   private readonly onChange = () => this.sync();
   private expanded = false;
   private wardrobeOpen = false;
+  private roomMenu = false;
   private stageScale = 1;
   private readonly onOutsidePress = (event: PointerEvent) => {
     if (event.target instanceof Node && !this.container.contains(event.target)) this.setExpanded(false);
@@ -86,6 +87,19 @@ export class FullscreenButton {
     this.wardrobeOpen = open;
     this.container.classList.toggle('is-wardrobe', open);
     this.updatePosition();
+    this.syncVisibility();
+  }
+
+  /** Na sala, a tela cheia fica no menu da engrenagem; o botão do canto só aparece no guarda-roupa. */
+  setRoomMenu(active: boolean): void {
+    this.roomMenu = active;
+    this.syncVisibility();
+  }
+
+  private syncVisibility(): void {
+    const hidden = this.roomMenu && !this.wardrobeOpen;
+    if (hidden) this.setExpanded(false);
+    this.container.hidden = hidden;
   }
 
   setStageScale(scale: number): void {

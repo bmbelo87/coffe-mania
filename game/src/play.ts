@@ -214,7 +214,6 @@ async function boot(): Promise<void> {
       ...(actionBarIcons ? { actionBarIcons } : {}),
       ...(npcEmotionTextures ? { npcEmotionTextures } : {}),
       settings: {
-        playerName: session.displayName,
         getPreferences: () => ({ ...soundPreferences }),
         onChange: updateSoundPreferences,
         getBitterMode: () => loadBitterMode(safeStorage(), session.playerId),
@@ -230,6 +229,8 @@ async function boot(): Promise<void> {
       onWardrobeVisibilityChange: (open) => {
         fullscreen.setWardrobeOpen(open);
       },
+      fullscreen: { isActive: () => fullscreen.isFullscreen, toggle: () => fullscreen.toggle() },
+      onSettingsMenuReady: () => fullscreen.setRoomMenu(true),
     });
     room.bindWheelElement(app.canvas);
     screens.show(room);

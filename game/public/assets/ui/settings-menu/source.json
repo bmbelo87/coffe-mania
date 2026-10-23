@@ -1,0 +1,10 @@
+{
+  "origin": "Variantes geradas com o ChatGPT (Image Gen) a pedido do responsável pelo projeto, em 23/10/2026, a partir dos botões azuis de ui/buttons_collection_1.png (volume, musica, tela_cheia). Não são PNGs originais recuperados.",
+  "processing": "Só recorte das três células de 240x240 pela caixa do alfa.",
+  "reference": "Funções da coluna de controles de 2010 (P117_07, P115_01); o menu suspenso da engrenagem do visual final não tem captura aberta, é uma reconstrução.",
+  "files": {
+    "sound-off": "55c5d44d6d44ddf2699eacd5be77b0eb48e94185cb0cf5a09d97ab273f5cb867",
+    "music-off": "3844aebbafe8c99ce8fbc709608628a37b8df93851721601c3f540f5589c6e33",
+    "fullscreen-exit": "1c0db006bae12025d707d8007241167d6092c34b43d6867bc6f7075d02108587"
+  }
+}

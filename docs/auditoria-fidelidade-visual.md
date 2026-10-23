@@ -47,7 +47,7 @@ O clone já segue o visual final na maior parte: os ícones de `game/public/asse
 | Fiel ao visual final | Painel do topo (caféGranas, caféOuros, XP, energia, suprimentos), barra de ações, Livro de Receitas, janela "Parabéns!!!", guarda-roupa, loja, Máquina de Sucos (2010), balão "Clique no fogão para preparar um prato!", placa "Terreno à venda" |
 | Arte reconstruída, mas com o layout certo | Empregados (2010), "Bloqueado!" (2010), balão de pensamento, 16 pratos, 25 peças da orla |
 | Desenhado em código onde o original tinha arte | Ícones de caféGrana e caféOuro do topo, Configurações, confirmação de expansão (com logo improvisado), "Bloqueado!", cartões de expansão, balão "Prato pronto", dica da Máquina de Sucos, barra de amigos "beta" |
-| Diferente do original | Temperos (layout inventado), popularidade sem estrelas e com teto 105, ausência das colunas laterais, cenário sem placas, obras e figurantes |
+| Diferente do original | Popularidade sem estrelas e com teto 105, ausência das colunas laterais, cenário sem placas, obras e figurantes |
 
 ## 1. Desenhado em código no lugar de arte
 
@@ -77,7 +77,7 @@ Pela regra do `AGENTS.md`, painéis, ícones e elementos ilustrados devem ser im
 | **Popularidade** | "80,9/105", carinha e nome do café | Com o Café Estrela (nov/2011): "106,7/160", cinco estrelas sob o número, balão "Café Estrela" com popularidade máxima e próxima estrela, janela "Seu Café ganhou uma Estrela!" | O teto 105 é do lançamento; com o HUD final, o certo são as estrelas. É mecânica, além de arte: exige planejar |
 | **Barra de amigos** | Oito espaços "beta" | Cartões "Agregar Amigo" nas pontas; cartões com nome, foto ou silhueta, estrela de nível e XP | Trocar o provisório por cartões de arte, mesmo sem amigos reais (vizinhos de NPC ou "Agregar Amigo") |
 | **Livro de Receitas** | Muito próximo do quadro 003 do vídeo | O painel da direita mostra sempre a receita selecionada, com o relógio, "Compra por N ouros", "Ganha no total N XP" e "Outros ganhos" (porções e c/un.). Os cartões bloqueados têm o botão roxo "Desbloquear por N" | Tirar o estado vazio "Sabia que…?" e implementar o botão roxo, já registrado como pendente. A aba **Deluxe** não aparece nas capturas de 2013 (Básico, Avançado, Especiais, Favoritos): confirmar a fonte antes de manter |
-| **Temperos** | Seis colunas lado a lado, com "Comprar" e "Usar" | 2010: janela "Temperos" com as abas **Prateleira / Mercado**, grade 3×2 de cartões com nome, descrição, quantidade "x1" e "Usar", e páginas. Também havia a "Prateleira" (montar com peças pedidas aos vizinhos). Em 29/12/2011 só os ícones foram redesenhados, e o clone já usa os ícones novos | O layout do clone não tem referência. Seguir a janela de 2010 com os ícones de 2011 até aparecer captura posterior |
+| **Temperos** | Seis colunas lado a lado, com "Comprar" e "Usar" | 2010: janela "Temperos" com as abas **Prateleira / Mercado** e grade 3×2. No visual final, seis cartões creme lado a lado: é a captura do jogo final enviada pelo responsável, origem registrada em `game/public/assets/ui/spices/source.json` | **Já segue o visual final.** A primeira versão desta auditoria dizia que o layout não tinha referência; estava errada, porque a captura não está no acervo, só no `source.json` |
 | **Empregados** | Quatro cartões, cadeados e "Trabalhando" (layout de 2010) | 2013 (P145_09): cartão "DONO", cartões com foto, "Demitir", "Posição disponível" e "Contratar", setas laterais | Coerente com 2010. Para o visual final, falta a variante de 2013 |
 | **Configurações** | Janela grande desenhada em código | Não existia janela. Em 2010, coluna vertical de botões à direita (+, −, tela cheia, olho, música, som); em 2013, a engrenagem azul da barra abre um menu pequeno | Trocar por botões de arte. Os ícones da engrenagem e da barra já existem |
 | **Guarda-roupa** | Igual a P145_12 | Mostra o preço de cada peça (moeda e valor) sob o ícone | Conferir se o preço deve aparecer; o resto bate |
@@ -115,7 +115,7 @@ Posição dos objetos: no vídeo, o café fica com a rua passando junto à pared
 
 ## 5. O que não dá para afirmar com as fontes
 
-- Não há captura da janela de Temperos depois de 29/12/2011, só dos ícones novos.
+- O acervo não tem captura da janela de Temperos depois de 29/12/2011. A captura do visual final usada pelo clone foi enviada pelo responsável e não está no acervo.
 - Não há captura de uma janela de configurações no visual final; só da engrenagem.
 - A barraca do quadro 002 não tem nome nem post associado no acervo.
 - O fórum arquivado não guardou imagens do jogo.
@@ -129,13 +129,15 @@ Cada lote segue a regra do projeto: apresentar referências e assets antes de im
 | --- | --- | --- | --- |
 | **F1 — Trocar o desenhado em código** | Nota e moeda do topo; logo e moldura da confirmação; "Bloqueado!"; balões "Prato pronto" e da Máquina de Sucos; cartões de expansão | Reaproveitar: logo recortado, balão do `IdleStoveCallout`, moeda do `GoldBurstEffect`, cadeado `ui/padlock.png`. Criar com Image Gen: moldura da janela, nota de caféGrana e cartão de expansão | Pequeno, quase só arte e troca de texturas |
 | **F2 — Controles e configurações** | Coluna de botões (zoom, tela cheia, música, som) ou menu da engrenagem no lugar da janela grande | Ícones existentes da barra; criar os que faltarem | Pequeno |
-| **F3 — Temperos no layout original** | Janela com abas Prateleira / Mercado e grade 3×2, com os ícones de 2011 | Reaproveitar os ícones atuais; criar a moldura | Médio |
+| **F3 — Placas e estacionamento** | Placa "Expansão à venda" e a área cinza de estacionamento com borda zebrada, barreiras brancas e placa "E" (vídeo ~2013, quadros 002 e 003; P125_09) | Criar com Image Gen a partir dos quadros; a placa segue o estilo da "Terreno à venda" que já existe | Médio |
 | **F4 — Barra de amigos e popularidade com estrelas** | Cartões "Agregar Amigo" e de vizinhos; estrelas sob a popularidade, balão "Café Estrela" e janela de estrela nova | Criar cartões, estrelas e janela a partir de P123 e do vídeo. Mecânica de estrelas e teto variável no servidor | Médio a grande (mecânica) |
 | **F5 — Cenário** | Placa "Expansão à venda", estacionamento com placa "E", figurantes da praia | Criar com Image Gen a partir dos quadros 002, 003 e 005 | Médio |
 | **F6 — Colunas laterais** | Missões à esquerda e construíveis à direita, primeiro só como interface | Recortar e reconstruir os ícones do vídeo | Depende de decidir as mecânicas |
 | Depois | Missões, conquistas, prêmio diário, segundo piso, filial na praia | Referências abundantes no acervo | Grande; cada um é uma funcionalidade |
 
-Sugestão de ordem: F1 e F2 primeiro, porque são baratos e removem o que mais destoa. Depois F3. F4, F5 e F6 pedem decisões de mecânica antes da arte.
+Sugestão de ordem: F1 e F2 primeiro, porque são baratos e removem o que mais destoa. Depois F3, que antecipa a parte de placas do F5. F4, F5 e F6 pedem decisões de mecânica antes da arte.
+
+O F3 original (Temperos no layout de 2010) foi cancelado em 23/10/2026: o layout atual já é o do visual final.
 
 ## Andamento do F1 (23/10/2026)
 
@@ -163,3 +165,16 @@ Arte nova, gerada pelo responsável com o ChatGPT a partir das referências e s�
 | Cartões altos: destacado e bloqueado | Aba Expansões, com o cadeado e o "Comprar" de arte |
 
 O cartão branco comum (`normal.png`) ficou guardado, mas ainda não é usado. Os desenhos em código dessas peças só aparecem até a arte terminar de carregar.
+
+## Andamento do F2 (23/10/2026)
+
+- A engrenagem azul, na barra e na loja, abre um menu suspenso para cima (`SettingsMenu.ts`) com:
+  - zoom + e −;
+  - tela cheia;
+  - música e som: ligam e desligam, e ao ligar de novo voltam ao volume anterior;
+  - a engrenagem pequena de "Avançado".
+- Os botões vêm da folha azul da interface atual (`ui/buttons_collection_1.png`). As variantes desligadas e "sair da tela cheia" foram geradas a partir dela (`ui/settings-menu/`).
+- O menu aberto não tem captura do original: é reconstrução. As funções são as da coluna de 2010; o olho ficou de fora por falta de evidência do que fazia.
+- "Avançado" é a antiga janela de Configurações, agora com a moldura creme e o fechar vermelho, sem a linha do nome do jogador. Ela guarda o volume fino, o modo bitter e o modo dev.
+- O botão HTML de tela cheia do canto some na sala e continua no carregamento e no guarda-roupa.
+

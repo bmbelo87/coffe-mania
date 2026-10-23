@@ -1,4 +1,4 @@
-import { Container, Graphics, Rectangle, Text, TextStyle, type FederatedPointerEvent } from 'pixi.js';
+import { Container, Graphics, NineSliceSprite, Rectangle, Sprite, Text, TextStyle, type FederatedPointerEvent, type Texture } from 'pixi.js';
 
 import { DEFAULT_AUDIO_PREFERENCES, sanitizeAudioPreferences, type AudioPreferences } from '../audio/preferences';
 import { FONT_FAMILY } from '../core/font-tokens';
@@ -6,7 +6,6 @@ import { STAGE_HEIGHT, STAGE_WIDTH } from '../core/stage';
 import { PopupOpening } from '../screens/room/PopupOpening';
 
 export interface SettingsModalOptions {
-  playerName?: string;
   getPreferences?: () => AudioPreferences;
   onChange?: (preferences: AudioPreferences) => void;
   getBitterMode?: () => boolean;
@@ -37,19 +36,28 @@ interface VolumeSlider {
 }
 
 const PANEL_WIDTH = 920;
-const PANEL_HEIGHT = 820;
-const PANEL_HEIGHT_WITH_DEV = 970;
+const PANEL_HEIGHT = 680;
+const PANEL_HEIGHT_WITH_DEV = 830;
+/** Cantos da moldura creme (arte em 2x); o miolo liso estica com a altura do painel. */
+const FRAME_CORNER = 110;
 const TRACK_WIDTH = 520;
 const DARK_BROWN = 0x603a1e;
 const LIGHT_BROWN = 0xc69a60;
 
-/** All visuals and pointer controls belong to the game's stage, not the DOM. */
+/**
+ * Janela "Avançado", aberta pelo menu da engrenagem: volume fino, modo bitter e modo dev.
+ * Não existe no original; usa a moldura creme e o fechar vermelho das outras janelas.
+ * All visuals and pointer controls belong to the game's stage, not the DOM.
+ */
 export class SettingsModal {
   readonly view = new Container();
   private readonly panel = new Container();
   private readonly popup: PopupOpening;
   private readonly closeButton = new Container();
   private readonly closeFocus = new Graphics();
+  private readonly frame = new Container();
+  private readonly closeIcon = new Container();
+  private readonly panelHeight: number;
   private readonly sliders: VolumeSlider[] = [];
   private readonly texts: Text[] = [];
   private readonly checkboxes: Checkbox[] = [];
@@ -77,6 +85,7 @@ export class SettingsModal {
     backdrop.on('pointertap', (event) => { event.stopPropagation(); this.close(); });
 
     const panelHeight = options.onDevModeChange ? PANEL_HEIGHT_WITH_DEV : PANEL_HEIGHT;
+    this.panelHeight = panelHeight;
     this.panel.label = 'settings-modal-panel';
     this.panel.position.set((STAGE_WIDTH - PANEL_WIDTH) / 2, (STAGE_HEIGHT - panelHeight) / 2);
     this.panel.eventMode = 'static';
@@ -84,31 +93,23 @@ export class SettingsModal {
     for (const name of ['pointerdown', 'pointerup', 'pointertap', 'wheel'] as const) {
       this.panel.on(name, (event) => event.stopPropagation());
     }
-    const frame = new Graphics()
+    this.frame.addChild(new Graphics()
       .roundRect(0, 0, PANEL_WIDTH, panelHeight, 40).fill(DARK_BROWN)
       .roundRect(12, 12, PANEL_WIDTH - 24, panelHeight - 24, 28).fill(LIGHT_BROWN)
-      .roundRect(22, 22, PANEL_WIDTH - 44, panelHeight - 44, 18).fill(0xffffff);
-    frame.eventMode = 'none';
-    this.panel.addChild(frame);
+      .roundRect(22, 22, PANEL_WIDTH - 44, panelHeight - 44, 18).fill(0xffffff));
+    this.frame.eventMode = 'none';
+    this.panel.addChild(this.frame);
 
-    const title = this.addText('Configurações', PANEL_WIDTH / 2, 85, 64, 'settings-modal-title');
+    const title = this.addText('Avançado', PANEL_WIDTH / 2, 85, 64, 'settings-modal-title');
     title.anchor.set(0.5);
-    const square = new Graphics().roundRect(76, 166, 96, 96, 12)
-      .fill(0xffffff).stroke({ color: 0x704721, width: 6 });
-    square.eventMode = 'none';
-    this.panel.addChild(square);
-    const playerName = this.addText(options.playerName ?? '', 204, 214, 46, 'settings-modal-player-name');
-    playerName.anchor.set(0, 0.5);
-    // Long authenticated names stay inside the panel without changing its size.
-    if (playerName.text && playerName.width > 636) playerName.scale.set(636 / playerName.width);
 
     this.buildCloseButton();
-    this.buildSlider('musicPercent', 'Música', 382);
-    this.buildSlider('effectsPercent', 'Efeitos sonoros', 522);
-    this.buildCheckbox('bitter', 628, 'modo bitter', 'modo bitter permite mais zoom, mas pode causar aberrações visuais',
+    this.buildSlider('musicPercent', 'Música', 232);
+    this.buildSlider('effectsPercent', 'Efeitos sonoros', 372);
+    this.buildCheckbox('bitter', 478, 'modo bitter', 'modo bitter permite mais zoom, mas pode causar aberrações visuais',
       () => this.options.getBitterMode?.(), (checked) => this.options.onBitterModeChange?.(checked));
     if (options.onDevModeChange) {
-      this.buildCheckbox('dev', 800, 'modo dev', 'mostra o botão DEV na barra: recursos, fogões, balcões e clientes direto no servidor',
+      this.buildCheckbox('dev', 650, 'modo dev', 'mostra o botão DEV na barra: recursos, fogões, balcões e clientes direto no servidor',
         () => this.options.getDevMode?.(), (checked) => this.options.onDevModeChange?.(checked));
     }
     this.view.addChild(backdrop, this.panel);
@@ -120,6 +121,22 @@ export class SettingsModal {
   }
 
   get isOpen(): boolean { return this.view.visible; }
+
+  /** Troca a moldura e o fechar desenhados pela arte das outras janelas do jogo. */
+  setArt(frame: Texture, close: Texture): void {
+    if (this.disposed) return;
+    this.frame.removeChildren().forEach((child) => child.destroy());
+    const art = new NineSliceSprite({ texture: frame, leftWidth: FRAME_CORNER, rightWidth: FRAME_CORNER, topHeight: FRAME_CORNER, bottomHeight: FRAME_CORNER });
+    art.width = PANEL_WIDTH * 2;
+    art.height = this.panelHeight * 2;
+    art.scale.set(0.5);
+    this.frame.addChild(art);
+    this.closeIcon.removeChildren().forEach((child) => child.destroy());
+    const icon = new Sprite(close);
+    icon.anchor.set(0.5);
+    icon.scale.set(68 / Math.max(close.width, close.height));
+    this.closeIcon.addChild(icon);
+  }
 
   open(): void {
     if (this.disposed || this.isOpen) return;
@@ -176,16 +193,16 @@ export class SettingsModal {
     button.eventMode = 'static';
     button.cursor = 'pointer';
     button.hitArea = new Rectangle(-38, -38, 76, 76);
-    const icon = new Graphics()
+    this.closeIcon.addChild(new Graphics()
       .roundRect(-34, -34, 68, 68, 20).fill(0x015495)
       .roundRect(-28, -28, 56, 56, 14).fill(0x0084ed)
       .roundRect(-24, -24, 48, 48, 10).fill(0x01a9fd)
       .moveTo(-10, -10).lineTo(10, 10).moveTo(10, -10).lineTo(-10, 10)
-      .stroke({ color: 0xffffff, width: 8, cap: 'round' });
-    icon.eventMode = 'none';
+      .stroke({ color: 0xffffff, width: 8, cap: 'round' }));
+    this.closeIcon.eventMode = 'none';
     this.closeFocus.roundRect(-42, -42, 84, 84, 24).stroke({ color: 0x01a9fd, width: 4 });
     this.closeFocus.eventMode = 'none';
-    button.addChild(this.closeFocus, icon);
+    button.addChild(this.closeFocus, this.closeIcon);
     button.on('pointerover', () => { this.closeHovered = true; this.syncCloseFeedback(); });
     button.on('pointerout', () => {
       this.closeHovered = false;

@@ -32,6 +32,7 @@ import { RoomRealtime, type RoomEvent, type SharedActor, type SharedFood, type S
 import type { RecipeArt } from '../../game/recipes';
 import { WardrobeScreenModal, type WardrobeScreenTextures } from './WardrobeScreenModal';
 import { SettingsModal, type SettingsModalOptions } from '../../ui/SettingsModal';
+import { DEFAULT_AUDIO_PREFERENCES, sanitizeAudioPreferences, type AudioPreferences } from '../../audio/preferences';
 import { findPath } from '../../world/PathFinder';
 import { RoomModel, footprintTiles, type RoomItem } from '../../world/RoomModel';
 import {
@@ -45,6 +46,7 @@ import {JuiceClient,loadJuiceArt,loadJuiceMachineArt,type JuiceStock} from '../.
 import { CookProgressCallout } from './CookProgressCallout';
 import { IdleStoveCallout, loadIdleStoveArt } from './IdleStoveCallout';
 import { loadDialogExtras } from './dialog-art';
+import { loadSettingsMenuTextures, SettingsMenu, type SettingsMenuAction, type SettingsMenuState } from './SettingsMenu';
 import { HoverBalloon } from './HoverBalloon';
 import { carriedDishPose, fitDish } from './DishPresentation';
 import { DoorView } from './DoorView';
@@ -269,6 +271,10 @@ export interface RoomScreenOptions {
   /** Present only when the server enables developer tools; the toggle lives in Settings. */
   devMode?: { get: () => boolean; set: (enabled: boolean) => void };
   onWardrobeVisibilityChange?: (open: boolean) => void;
+  /** Tela cheia da página; o menu da engrenagem só a aciona. */
+  fullscreen?: { isActive: () => boolean; toggle: () => Promise<void> };
+  /** O menu da engrenagem carregou: a página pode recolher os controles que ele substitui. */
+  onSettingsMenuReady?: () => void;
 }
 
 /** Cena isométrica com câmera e HUD independente do zoom. O mundo contém piso, destaques e objetos ordenados por RoomDepthSorter. A hitbox troca de tile na metade do passo; os sprites continuam interpolados. */
@@ -288,6 +294,11 @@ export class RoomScreen implements Screen {
   readonly spiceModal?: SpiceScreenModal;
   readonly wardrobeModal?: WardrobeScreenModal;
   readonly settingsModal?: SettingsModal;
+  private settingsMenu?: SettingsMenu;
+  private readonly settingsOptions?: SettingsModalOptions;
+  private readonly fullscreenControl?: RoomScreenOptions['fullscreen'];
+  /** Volume de antes de desligar pelo menu; ligar de novo devolve esse valor. */
+  private readonly restoredVolume: { musicPercent?: number; effectsPercent?: number } = {};
   private readonly levelUpModal: LevelUpModal;
   private devModal?: DevToolsModal;
   private devModalLoading = false;
@@ -729,7 +740,7 @@ export class RoomScreen implements Screen {
           button.on('pointerupoutside', () => { pressed = false; syncFeedback(); });
           button.on('pointertap', (event) => {
             event.stopPropagation();
-            if (placement.name === 'settings') this.openSettings();
+            if (placement.name === 'settings') this.openSettings(button);
           });
           this.actionBarLayer.addChild(button);
         }
@@ -793,7 +804,7 @@ export class RoomScreen implements Screen {
             this.roomStore?.onOpen();
           } else this.roomStore?.onClose();
         },
-        () => this.openSettings(),
+        () => this.openSettings(this.storeBar?.view.getChildByLabel('store-settings-button', true) ?? undefined),
         // The "Expansões" tab shows the size cards of the café.
         options.storeToolbarTextures?.expansion && this.roomStore && options.roomSnapshot?.canEdit !== false
           ? [...(options.storeBarIcons ?? []), { name: 'expansion', texture: options.storeToolbarTextures.expansion }]
@@ -905,6 +916,8 @@ export class RoomScreen implements Screen {
 
       if (this.hud) this.view.addChild(this.hud);
     }
+    this.settingsOptions = options.settings;
+    this.fullscreenControl = options.fullscreen;
     this.settingsModal = new SettingsModal({
       ...options.settings,
       getBitterMode: () => this.camera.bitterMode,
@@ -924,6 +937,12 @@ export class RoomScreen implements Screen {
       } : {}),
     });
     this.view.addChild(this.settingsModal.view);
+    void loadSettingsMenuTextures().then((textures) => {
+      if (this.destroyed) return;
+      this.settingsMenu = new SettingsMenu(textures, (action) => this.runSettingsAction(action, options));
+      this.view.addChild(this.settingsMenu.view);
+      options.onSettingsMenuReady?.();
+    }).catch((error: unknown) => { if (!this.destroyed) console.warn('[configurações] botões indisponíveis', error); });
     this.sellModal = new SellConfirmModal();
     this.view.addChild(this.sellModal.view);
     this.expansionModal = new ExpansionModal(options.storeToolbarTextures?.expansion);
@@ -935,6 +954,7 @@ export class RoomScreen implements Screen {
         const art = { ...extras, close: spices.close, green: spices.buy, confirm: options.actionBarButtons?.confirm, cash: toolbar.cash, gold: toolbar.gold };
         this.sellModal?.setArt(art);
         this.expansionModal?.setArt(art);
+        this.settingsModal?.setArt(extras.confirmWindow, spices.close);
       }).catch((error: unknown) => { if (!this.destroyed) console.warn('[janelas] arte indisponível', error); });
     }
     this.levelUpModal = new LevelUpModal();
@@ -2187,6 +2207,7 @@ export class RoomScreen implements Screen {
     this.refreshLandSign();
   }
 
+
   /**
    * The "Terreno à venda" sign sells the patio, the open-air lot below the café's front-left edge,
    * in fixed sizes (4x4, then 7x6). It stands on the grass beyond the next lot's right edge; only
@@ -2393,8 +2414,64 @@ export class RoomScreen implements Screen {
     this.devModal.open();
   }
 
-  openSettings(): void {
+  /**
+   * A engrenagem abre o menu suspenso de controles; sem a arte dele, ou pelo botão "Avançado",
+   * abre a janela com volume, modo bitter e modo dev.
+   */
+  openSettings(gear?: Container): void {
     if (this.isModalOpen) return;
+    if (this.settingsMenu && gear) {
+      const center = this.view.toLocal(gear.getGlobalPosition());
+      const bounds = gear.getBounds();
+      const scale = this.view.worldTransform.a || 1;
+      this.settingsMenu.toggle(center, this.settingsMenuState(), bounds.height / scale);
+      return;
+    }
+    this.openAdvancedSettings();
+  }
+
+  private settingsMenuState(): SettingsMenuState {
+    const preferences = this.settingsPreferences();
+    return {
+      fullscreen: this.fullscreenControl?.isActive() ?? false,
+      music: !preferences.muted && preferences.musicPercent > 0,
+      sound: !preferences.muted && preferences.effectsPercent > 0,
+    };
+  }
+
+  private settingsPreferences(): AudioPreferences {
+    return sanitizeAudioPreferences(this.settingsOptions?.getPreferences?.() ?? DEFAULT_AUDIO_PREFERENCES);
+  }
+
+  private runSettingsAction(action: SettingsMenuAction, options: RoomScreenOptions): void {
+    const center = { x: STAGE_WIDTH / 2, y: STAGE_HEIGHT / 2 };
+    if (action === 'zoomIn' || action === 'zoomOut') {
+      // Dois passos da roda do mouse por clique.
+      this.requestZoom(ZOOM_WHEEL_STEP ** (action === 'zoomIn' ? 2 : -2), center);
+    } else if (action === 'fullscreen') {
+      void options.fullscreen?.toggle().then(() => this.settingsMenu?.sync(this.settingsMenuState()));
+    } else if (action === 'music' || action === 'sound') {
+      const channel = action === 'music' ? 'musicPercent' : 'effectsPercent';
+      const current = this.settingsPreferences();
+      // O mudo antigo valia para os dois canais; ao mexer em um, o outro mantém o volume salvo.
+      const next: AudioPreferences = { ...current, muted: false,
+        musicPercent: current.muted ? 0 : current.musicPercent, effectsPercent: current.muted ? 0 : current.effectsPercent };
+      if (next[channel] > 0) {
+        this.restoredVolume[channel] = next[channel];
+        next[channel] = 0;
+      } else {
+        next[channel] = this.restoredVolume[channel] || DEFAULT_AUDIO_PREFERENCES[channel];
+      }
+      this.settingsOptions?.onChange?.(sanitizeAudioPreferences(next));
+      this.settingsMenu?.sync(this.settingsMenuState());
+    } else if (action === 'advanced') {
+      this.openAdvancedSettings();
+    }
+  }
+
+  openAdvancedSettings(): void {
+    if (this.isModalOpen) return;
+    this.settingsMenu?.close();
     this.drag = null;
     this.pinch = null;
     this.touchPoints.clear();
@@ -3232,6 +3309,8 @@ export class RoomScreen implements Screen {
     this.sellModal?.update(deltaMs);
     this.expansionModal?.update(deltaMs);
     this.settingsModal?.update(deltaMs);
+    this.settingsMenu?.update(deltaMs);
+    if (this.settingsMenu?.isOpen && (this.isModalOpen || this.wardrobeModal?.isOpen)) this.settingsMenu.close();
     this.juiceModal?.update(deltaMs);
     this.waiterModal?.update(deltaMs);
     this.levelUpModal?.update(deltaMs);
@@ -3403,6 +3482,7 @@ export class RoomScreen implements Screen {
     this.goldEffects.splice(0).forEach((effect) => effect.destroy());
     this.wardrobeModal?.destroy();
     this.settingsModal?.destroy();
+    this.settingsMenu?.destroy();
     this.outsideNpcManager?.destroy();
     this.npcAvatarSource?.destroy();
     this.npcAvatarIndices.clear();
