@@ -1,17 +1,48 @@
+# Dependências e builds
 node_modules/
 dist/
+*.exe
+*.test
+game-server/coffe-game-server
+database/coffe-database
+__pycache__/
+*.pyc
+
+# Dados, binários e chaves gerados localmente pelo launcher
 .runtime/
 database/pb_data/
 database/pb_migrations/
 .env
 .env.*
 !.env.example
+
+# Registros e resultados de testes
 *.log
-*.exe
-*.test
-game-server/coffe-game-server
-database/coffe-database
+/logs/
+test-results/
+playwright-report/
+
+# Vídeos e capturas de referência soltos na raiz
+/*.mp4
+/*.mov
+/*.webm
+
+# Arte-fonte das ferramentas de arte: masters, rascunhos, gerações e referências grandes.
+# Ficam com quem produz a arte; o repositório leva os scripts, prompts e source.json.
+# O acervo, o Asset Studio e o video-to-item continuam versionados como antes.
+/tools/**/*.png
+/tools/**/*.jpg
+/tools/**/*.jpeg
+/tools/**/*.webp
+!/tools/acervo/**
+!/tools/asset-positioner/**
+!/tools/video-to-item/**
+/tools/exports/
+tools/gabaritos/
+
+# Sistema e sincronização
 .DS_Store
 Thumbs.db
-
-tools/gabaritos/
+desktop.ini
+.stfolder/
+*.sync-conflict-*
