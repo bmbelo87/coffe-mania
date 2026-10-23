@@ -46,6 +46,7 @@ import {JuiceClient,loadJuiceArt,loadJuiceMachineArt,type JuiceStock} from '../.
 import { CookProgressCallout } from './CookProgressCallout';
 import { IdleStoveCallout, loadIdleStoveArt } from './IdleStoveCallout';
 import { loadDialogExtras } from './dialog-art';
+import { buildParking, EXPANSION_SIGN_SCALE, groundSprite, loadCafeSceneryArt, PARKING_SIZE, type CafeSceneryArt } from './cafe-scenery';
 import { loadSettingsMenuTextures, SettingsMenu, type SettingsMenuAction, type SettingsMenuState } from './SettingsMenu';
 import { HoverBalloon } from './HoverBalloon';
 import { carriedDishPose, fitDish } from './DishPresentation';
@@ -379,6 +380,9 @@ export class RoomScreen implements Screen {
   private sellModal?: SellConfirmModal;
   private roomClient?: RoomInventoryClient;
   private landSaleParts: Container[] = [];
+  /** Placa "Expansão à venda" e estacionamento; acompanham o tamanho do café. */
+  private cafeSceneryParts: Container[] = [];
+  private cafeSceneryArt?: CafeSceneryArt;
   private readonly landSaleSignTexture?: Texture;
   private expansionModal?: ExpansionModal;
   private expanding = false;
@@ -2205,8 +2209,95 @@ export class RoomScreen implements Screen {
     this.roomStore?.acceptShared(snapshot);
     if (!this.realtime) this.player.clearPath();
     this.refreshLandSign();
+    this.refreshCafeScenery();
   }
 
+  /**
+   * Do lado da frente-direita do café (vídeo de ~2013, quadros 002 e 003): o estacionamento colado
+   * à calçada e, mais à frente, a placa "Expansão à venda". Os dois ficam além da próxima expansão,
+   * para nunca ficar sobre o piso novo. A placa só aparece para o dono e enquanto houver expansão.
+   */
+  private refreshCafeScenery(): void {
+    this.cafeSceneryParts.splice(0).forEach((part) => part.destroy({ children: true }));
+    const art = this.cafeSceneryArt;
+    if (!art) {
+      void loadCafeSceneryArt().then((loaded) => {
+        if (this.destroyed || this.cafeSceneryArt) return;
+        this.cafeSceneryArt = loaded;
+        this.refreshCafeScenery();
+      }).catch((error: unknown) => { if (!this.destroyed) console.warn('[cenário] placa e estacionamento indisponíveis', error); });
+      return;
+    }
+    const { tilesX, tilesY } = this.model;
+    const offer = this.roomSnapshot?.canEdit !== false && this.roomClient ? this.roomSnapshot?.expansion : undefined;
+    const edge = Math.max(tilesX, offer ? offer.floorX + 1 : tilesX);
+
+    const parking = buildParking(art, edge + 1, 0);
+    for (const piece of parking.ground) piece.zIndex = FLOOR_DRAW_PRIORITY + 2;
+    for (const { view, tx, ty } of parking.standing) view.zIndex = itemDepth(tx, ty);
+    this.world.addChild(...parking.ground, ...parking.standing.map(({ view }) => view));
+    this.cafeSceneryParts.push(...parking.ground, ...parking.standing.map(({ view }) => view));
+
+    if (!offer) return;
+    const fx = offer.floorX + 1, fy = offer.floorY + 1;
+    const corner = (tx: number, ty: number) => ({ x: tileToScreenX(tx, ty), y: tileToScreenY(tx, ty) });
+    // Piso que a próxima expansão acrescenta, em verde como o lote da placa do pátio.
+    const preview = new Graphics();
+    if (fx > tilesX) preview.poly([corner(tilesX, 1), corner(fx, 1), corner(fx, fy), corner(tilesX, fy)]).fill({ color: 0x7ee03a, alpha: 0.55 });
+    if (fy > tilesY) preview.poly([corner(1, tilesY), corner(tilesX, tilesY), corner(tilesX, fy), corner(1, fy)]).fill({ color: 0x7ee03a, alpha: 0.55 });
+    preview.label = 'expansion-sale-preview';
+    preview.zIndex = FLOOR_DRAW_PRIORITY + 2;
+    preview.eventMode = 'none';
+    preview.visible = false;
+
+    const spot = { tx: edge + PARKING_SIZE / 2 + 1, ty: Math.max(PARKING_SIZE + 3, tilesY - 3) };
+    const sign = new Container();
+    sign.label = 'expansion-sale-sign';
+    const signArt = groundSprite(art.expansionSign, 'expansionSign', 0, 0, EXPANSION_SIGN_SCALE);
+    signArt.position.set(0, 0);
+    const tip = new Container();
+    tip.label = 'expansion-sale-tip'; tip.visible = false;
+    const tipText = new Text({ text: 'Clique para expandir\nseu Café!', style: new TextStyle({
+      fontFamily: [FONT_FAMILY, 'sans-serif'], fontSize: 26, fontWeight: '800', fill: 0xffffff, align: 'center', lineHeight: 30,
+    }) });
+    tipText.anchor.set(0.5);
+    const tipWidth = tipText.width + 40, tipHeight = tipText.height + 22;
+    tip.addChild(new Graphics().roundRect(-tipWidth / 2, -tipHeight / 2, tipWidth, tipHeight, 14).fill(0x5e3115).stroke({ color: 0xffffff, width: 4 })
+      .poly([-12, tipHeight / 2 - 2, 12, tipHeight / 2 - 2, 0, tipHeight / 2 + 16]).fill(0x5e3115), tipText);
+    tip.position.set(0, -200 - tipHeight / 2 - 22);
+    sign.addChild(signArt, tip);
+    sign.position.set(tileToScreenX(spot.tx + 0.5, spot.ty + 0.5), tileToScreenY(spot.tx + 0.5, spot.ty + 0.5));
+    sign.zIndex = itemDepth(spot.tx, spot.ty);
+    sign.eventMode = 'static'; sign.cursor = 'pointer';
+    sign.hitArea = new Rectangle(-120, -190, 230, 200);
+    sign.on('pointerover', () => { tip.visible = true; preview.visible = true; });
+    sign.on('pointerout', () => { tip.visible = false; preview.visible = false; });
+    sign.on('pointerdown', this.onDragStart);
+    sign.on('pointerup', this.onDragEnd);
+    sign.on('pointerupoutside', this.onDragEnd);
+    sign.on('pointertap', (event: FederatedPointerEvent) => {
+      if (this.storeBar?.isOpen || this.isModalOpen || this.dragCancelledTap) return;
+      event.stopPropagation();
+      void this.buyExpansionFromSign();
+    });
+    this.world.addChild(preview, sign);
+    this.cafeSceneryParts.push(preview, sign);
+  }
+
+  /** A placa vende o próximo tamanho pela janela "Comprar Expansão?", como a do pátio. */
+  private async buyExpansionFromSign(): Promise<void> {
+    const offer = this.roomSnapshot?.expansion, state = this.playerState ?? this.roomSnapshot?.playerState;
+    if (!this.roomSnapshot || !offer || !state || !this.roomClient || !this.expansionModal || this.expanding || this.isModalOpen) return;
+    const payment = await this.expansionModal.ask(offer, state.level);
+    if (!payment || this.destroyed || !this.roomSnapshot) return;
+    this.expanding = true;
+    try {
+      this.applyRoomSnapshot(await this.roomClient.mutate('expand', this.roomSnapshot.revision, { payment }));
+    } catch (error) {
+      this.showNotice(error instanceof Error ? error.message : 'Não foi possível expandir o café.');
+      try { this.applyRoomSnapshot(await this.roomClient.refresh()); } catch { /* The next action refreshes. */ }
+    } finally { this.expanding = false; }
+  }
 
   /**
    * The "Terreno à venda" sign sells the patio, the open-air lot below the café's front-left edge,
@@ -3478,6 +3569,7 @@ export class RoomScreen implements Screen {
     this.sellModal?.destroy();
     this.expansionModal?.destroy();
     this.levelUpModal?.destroy();
+    this.cafeSceneryParts.splice(0).forEach((part) => part.destroy({ children: true }));
     this.landSaleParts.splice(0).forEach((part) => part.destroy({ children: true }));
     this.goldEffects.splice(0).forEach((effect) => effect.destroy());
     this.wardrobeModal?.destroy();

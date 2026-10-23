@@ -1,0 +1,39 @@
+{
+  "origin": "Reconstruções geradas com o ChatGPT (Image Gen) a pedido do responsável pelo projeto, em 23/10/2026, a partir do quadro 003 do vídeo de ~2013 e da captura \"Encomenda de Suprimentos\" (P125_09, 2014). Não são PNGs originais recuperados.",
+  "processing": "Folha de 2048x512 cortada em quatro células de 512x512, sem redimensionar. Na escala 1, o ladrilho cobre 2x2 tiles e a borda zebrada cobre um lado de 4 tiles, na diagonal de cima-direita (as bordas da outra diagonal usam o espelho).",
+  "cell": 512,
+  "pieces": {
+    "no-parking-sign": {
+      "anchor": {
+        "x": 254,
+        "y": 454,
+        "note": "base do poste"
+      },
+      "sha256": "9d44c8e9d1f6ceb46cbe294d53dd8105f8aa00065d653cce24121eb27d94d41c"
+    },
+    "barrier": {
+      "anchor": {
+        "x": 255,
+        "y": 303,
+        "note": "meio entre os pés"
+      },
+      "sha256": "8e90cf1c625fa5ab62ba53567480a575e717bb2044d04afdd28bfee2c5b334d6"
+    },
+    "slab": {
+      "anchor": {
+        "x": 256,
+        "y": 256,
+        "note": "centro do losango de 2x2 tiles"
+      },
+      "sha256": "84b338cd20f55b8cc9407951cdcb3be781469da9049671fcab79d2a80f847075"
+    },
+    "curb": {
+      "anchor": {
+        "x": 256,
+        "y": 255,
+        "note": "meio do trecho, que cobre 4 tiles"
+      },
+      "sha256": "ce9fcea084556791ee32870885a4b4d598d919f72e8a0d60f5983c96003bdec3"
+    }
+  }
+}

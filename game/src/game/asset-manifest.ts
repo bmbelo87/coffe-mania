@@ -53,6 +53,14 @@ export const UI_SETTINGS_MENU_URLS = {
   musicOff: new URL('assets/ui/settings-menu/music-off.png', new URL(base, document.baseURI)).href,
   fullscreenExit: new URL('assets/ui/settings-menu/fullscreen-exit.png', new URL(base, document.baseURI)).href,
 } as const;
+/** Placa "Expansão à venda" e peças do estacionamento, reconstruídas do vídeo de ~2013. */
+export const UI_CAFE_SCENERY_URLS = {
+  expansionSign: new URL('assets/scenery/expansion-sale/sign.png', new URL(base, document.baseURI)).href,
+  noParkingSign: new URL('assets/scenery/coast-city/parking/no-parking-sign.png', new URL(base, document.baseURI)).href,
+  barrier: new URL('assets/scenery/coast-city/parking/barrier.png', new URL(base, document.baseURI)).href,
+  slab: new URL('assets/scenery/coast-city/parking/slab.png', new URL(base, document.baseURI)).href,
+  curb: new URL('assets/scenery/coast-city/parking/curb.png', new URL(base, document.baseURI)).href,
+} as const;
 export const UI_HOVER_BALLOON_URL = new URL('assets/ui/spices/spoiled-callout.png', new URL(base, document.baseURI)).href;
 export const UI_STOVE_HOVER_URLS = {
   panel: new URL('assets/ui/stove-hover/panel.png', new URL(base, document.baseURI)).href,

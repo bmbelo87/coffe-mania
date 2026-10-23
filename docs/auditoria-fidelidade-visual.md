@@ -178,3 +178,11 @@ O cartão branco comum (`normal.png`) ficou guardado, mas ainda não é usado. O
 - "Avançado" é a antiga janela de Configurações, agora com a moldura creme e o fechar vermelho, sem a linha do nome do jogador. Ela guarda o volume fino, o modo bitter e o modo dev.
 - O botão HTML de tela cheia do canto some na sala e continua no carregamento e no guarda-roupa.
 
+## Andamento do F3 (23/10/2026)
+
+- **Placa "Expansão à venda"** (`scenery/expansion-sale/`), reconstruída do quadro 002 do vídeo de ~2013 no estilo da "Terreno à venda". Fica no gramado em frente ao estacionamento, além da próxima expansão. Ao passar o mouse, o piso novo aparece em verde e surge o balão "Clique para expandir seu Café!". O clique abre "Comprar Expansão?" ou "Bloqueado!". Só aparece para o dono e enquanto houver expansão.
+- **Estacionamento** (`scenery/coast-city/parking/`), reconstruído do quadro 003 e da captura "Encomenda de Suprimentos" (P125_09): quatro ladrilhos de concreto, borda zebrada nos três lados de grama, barreiras brancas e placa "E". Fica colado à calçada, logo depois da borda direita da próxima expansão, e anda junto quando o café cresce.
+- **Limites:**
+  - o estacionamento é só cenário: ainda não recebe a entrega de suprimentos;
+  - a posição foi estimada pelo vídeo de uma conta já expandida;
+  - os personagens não desviam das barreiras, porque o cenário externo não entra na grade de navegação.
