@@ -1,0 +1,509 @@
+{
+  "exports": [
+    {
+      "id": "pamonha",
+      "archive": "artes-referencia/receitas-cruzadas/lote-01/gerados/pamonha-imagegen.png",
+      "archiveSha256": "16682a1810917a82f5008213165f8a5afb3e4630aaa7a0f14e4897d69bc9dd26",
+      "stage2Sha256": "a06c2a7c49d3851cbdd03823b373dff7b86c95ae2b40e9893c3c111a3e526b23",
+      "stage1Sha256": "940aedfe9541f74a6ef827d706611548a9fcb3164caabf2dcedc9904ed1b973e",
+      "canvas": [
+        512,
+        512
+      ],
+      "visibleSize": [
+        496,
+        374
+      ],
+      "offset": [
+        8,
+        138
+      ],
+      "referenceAlphaBox": [
+        0,
+        7,
+        1342,
+        1018
+      ],
+      "category": "basic",
+      "bookOrder": 5,
+      "provisionalRules": {},
+      "recipe": "game/public/assets/foods/pamonha/recipe.json"
+    },
+    {
+      "id": "tacos_triplos",
+      "archive": "artes-referencia/receitas-cruzadas/lote-01/gerados/tacos_triplos-imagegen.png",
+      "archiveSha256": "d0daf06245714b86b2c87e23c168417a2a27c9af05d3515360ad0a0a21eecaf4",
+      "stage2Sha256": "1f1a2609a96f3cd1d95aeb13ca58ce217711a7e918087a6992551dd0034bd87f",
+      "stage1Sha256": "940aedfe9541f74a6ef827d706611548a9fcb3164caabf2dcedc9904ed1b973e",
+      "canvas": [
+        512,
+        512
+      ],
+      "visibleSize": [
+        496,
+        371
+      ],
+      "offset": [
+        8,
+        141
+      ],
+      "referenceAlphaBox": [
+        0,
+        92,
+        1374,
+        1121
+      ],
+      "category": "basic",
+      "bookOrder": 6,
+      "provisionalRules": {},
+      "recipe": "game/public/assets/foods/tacos_triplos/recipe.json"
+    },
+    {
+      "id": "vatapa",
+      "archive": "artes-referencia/receitas-cruzadas/lote-02/gerados/vatapa-preview.png",
+      "archiveSha256": "3856790c8045d8ccbcf27c191fcfd09f242810fd8c40dc91ad5e02d1c16f2d3f",
+      "stage2Sha256": "5529305c18470a479d4afaf1faf0a0de85905ef5236ab75be534ca5b9a9d9140",
+      "stage1Sha256": "940aedfe9541f74a6ef827d706611548a9fcb3164caabf2dcedc9904ed1b973e",
+      "canvas": [
+        512,
+        512
+      ],
+      "visibleSize": [
+        496,
+        382
+      ],
+      "offset": [
+        8,
+        130
+      ],
+      "referenceAlphaBox": [
+        8,
+        8,
+        1250,
+        964
+      ],
+      "category": "basic",
+      "bookOrder": 7,
+      "provisionalRules": {},
+      "recipe": "game/public/assets/foods/vatapa/recipe.json"
+    },
+    {
+      "id": "mandioquinha",
+      "archive": "artes-referencia/receitas-cruzadas/lote-02/gerados/mandioquinha-preview.png",
+      "archiveSha256": "6b6feb8edeed512e6b64e32d85b88ebb74280c0d0be8b0ab2b9f38d8e2563ad0",
+      "stage2Sha256": "93635d6de4dbbf0600aed6a6599f31f95fd0606db55fcc0fbd4afe4c016b77f2",
+      "stage1Sha256": "940aedfe9541f74a6ef827d706611548a9fcb3164caabf2dcedc9904ed1b973e",
+      "canvas": [
+        512,
+        512
+      ],
+      "visibleSize": [
+        496,
+        244
+      ],
+      "offset": [
+        8,
+        268
+      ],
+      "referenceAlphaBox": [
+        8,
+        8,
+        1545,
+        765
+      ],
+      "category": "basic",
+      "bookOrder": 8,
+      "provisionalRules": {
+        "level": {
+          "value": 5,
+          "reason": "Nível estimado para progressão inicial; custo, porções, venda, tempo e XP vêm do vídeo."
+        }
+      },
+      "recipe": "game/public/assets/foods/mandioquinha/recipe.json"
+    },
+    {
+      "id": "arroz_carreteiro",
+      "archive": "artes-referencia/receitas-cruzadas/lote-03/gerados/arroz_carreteiro-preview.png",
+      "archiveSha256": "a7ce84b8834270ec04a7b4cfac901b83bb0f40bf0228bd0d9d9f8c1b58ee38f5",
+      "stage2Sha256": "8b0d0e4ff3f9cddf7f0dd66b57c8567b9d58e516afe12411e2ef6d84e7d410fc",
+      "stage1Sha256": "940aedfe9541f74a6ef827d706611548a9fcb3164caabf2dcedc9904ed1b973e",
+      "canvas": [
+        512,
+        512
+      ],
+      "visibleSize": [
+        496,
+        323
+      ],
+      "offset": [
+        8,
+        189
+      ],
+      "referenceAlphaBox": [
+        8,
+        8,
+        1185,
+        775
+      ],
+      "category": "basic",
+      "bookOrder": 9,
+      "provisionalRules": {
+        "level": {
+          "value": 10,
+          "reason": "Nível estimado para um prato intermediário de duas horas."
+        },
+        "costGold": {
+          "value": 180,
+          "reason": "Custo estimado; referência histórica ausente."
+        },
+        "portions": {
+          "value": 120,
+          "reason": "Rendimento estimado; referência histórica ausente."
+        },
+        "profitGold": {
+          "value": 4,
+          "reason": "Venda estimada; 480 brutos e 300 líquidos por lote de duas horas."
+        }
+      },
+      "recipe": "game/public/assets/foods/arroz_carreteiro/recipe.json"
+    },
+    {
+      "id": "quindim",
+      "archive": "artes-referencia/receitas-cruzadas/lote-03/gerados/quindim-preview.png",
+      "archiveSha256": "7d48413b85de06314eab13c5cbf94eb4521338d9fe0cb88806c73c2fd7ae8ba8",
+      "stage2Sha256": "5407d05e2dd5c3eb434fce736dba499f31f262b45ef9e1e6f13d166b90ba03d3",
+      "stage1Sha256": "940aedfe9541f74a6ef827d706611548a9fcb3164caabf2dcedc9904ed1b973e",
+      "canvas": [
+        512,
+        512
+      ],
+      "visibleSize": [
+        496,
+        258
+      ],
+      "offset": [
+        8,
+        254
+      ],
+      "referenceAlphaBox": [
+        8,
+        8,
+        1351,
+        706
+      ],
+      "category": "basic",
+      "bookOrder": 10,
+      "provisionalRules": {
+        "level": {
+          "value": 6,
+          "reason": "Nível estimado para sobremesa inicial de 25 minutos."
+        },
+        "costGold": {
+          "value": 90,
+          "reason": "Custo estimado; referência histórica ausente."
+        },
+        "portions": {
+          "value": 60,
+          "reason": "Rendimento estimado; referência histórica ausente."
+        },
+        "profitGold": {
+          "value": 4,
+          "reason": "Venda estimada; 240 brutos e 150 líquidos por lote de 25 minutos."
+        }
+      },
+      "recipe": "game/public/assets/foods/quindim/recipe.json"
+    },
+    {
+      "id": "salada_caesar",
+      "archive": "artes-referencia/receitas-cruzadas/lote-03/gerados/salada_caesar-preview.png",
+      "archiveSha256": "fbe0cbb76af1195073fe3cbf135490fce8d850e6869cd818c9c31f5f5a1abb30",
+      "stage2Sha256": "7dd8ddeddb4926ca5d4e26f0266741d582e1a691852d766de75ce37991a81787",
+      "stage1Sha256": "940aedfe9541f74a6ef827d706611548a9fcb3164caabf2dcedc9904ed1b973e",
+      "canvas": [
+        512,
+        512
+      ],
+      "visibleSize": [
+        496,
+        463
+      ],
+      "offset": [
+        8,
+        49
+      ],
+      "referenceAlphaBox": [
+        8,
+        8,
+        1041,
+        973
+      ],
+      "category": "basic",
+      "bookOrder": 11,
+      "provisionalRules": {},
+      "recipe": "game/public/assets/foods/salada_caesar/recipe.json"
+    },
+    {
+      "id": "bolo_cenoura",
+      "archive": "artes-referencia/receitas-cruzadas/lote-03/gerados/bolo_cenoura-preview.png",
+      "archiveSha256": "93b6c88d482604ffaddb0f0a5acd8868c0132ee64fae4cf1b89831940deb5f23",
+      "stage2Sha256": "5d6cfbb3bc6cb37c0632d9173cc8d8197fc4fe5b9d6b788476d03229f98bf037",
+      "stage1Sha256": "940aedfe9541f74a6ef827d706611548a9fcb3164caabf2dcedc9904ed1b973e",
+      "canvas": [
+        512,
+        512
+      ],
+      "visibleSize": [
+        496,
+        309
+      ],
+      "offset": [
+        8,
+        203
+      ],
+      "referenceAlphaBox": [
+        8,
+        8,
+        1262,
+        789
+      ],
+      "category": "basic",
+      "bookOrder": 12,
+      "provisionalRules": {},
+      "recipe": "game/public/assets/foods/bolo_cenoura/recipe.json"
+    },
+    {
+      "id": "super_a_la_minuta",
+      "archive": "artes-referencia/receitas-cruzadas/lote-03/gerados/super_a_la_minuta-preview.png",
+      "archiveSha256": "96ae3add0458acc9c76ea62fdf8abe30893fc9dca545f0ffffb7edf3b0d06f48",
+      "stage2Sha256": "b84e08f9b00bb143a408c83c44c50be84b852ad8a67e445606f9591b3f3e565e",
+      "stage1Sha256": "940aedfe9541f74a6ef827d706611548a9fcb3164caabf2dcedc9904ed1b973e",
+      "canvas": [
+        512,
+        512
+      ],
+      "visibleSize": [
+        496,
+        280
+      ],
+      "offset": [
+        8,
+        232
+      ],
+      "referenceAlphaBox": [
+        8,
+        8,
+        1414,
+        803
+      ],
+      "category": "advanced",
+      "bookOrder": 1,
+      "provisionalRules": {},
+      "recipe": "game/public/assets/foods/super_a_la_minuta/recipe.json"
+    },
+    {
+      "id": "carre_carneiro",
+      "archive": "artes-referencia/receitas-cruzadas/lote-03/gerados/carre_carneiro-preview.png",
+      "archiveSha256": "4fcf32ef885fa2d41ad76052f359077d39d69a16aac7a89d42d4f805b728173a",
+      "stage2Sha256": "598cb34356f7f41a517168c9253335931d53442c4cff3b693a3b94077d29a4a1",
+      "stage1Sha256": "940aedfe9541f74a6ef827d706611548a9fcb3164caabf2dcedc9904ed1b973e",
+      "canvas": [
+        512,
+        512
+      ],
+      "visibleSize": [
+        496,
+        358
+      ],
+      "offset": [
+        8,
+        154
+      ],
+      "referenceAlphaBox": [
+        8,
+        8,
+        1294,
+        936
+      ],
+      "category": "advanced",
+      "bookOrder": 2,
+      "provisionalRules": {},
+      "recipe": "game/public/assets/foods/carre_carneiro/recipe.json"
+    },
+    {
+      "id": "torta_limao_vovo",
+      "archive": "artes-referencia/receitas-cruzadas/lote-04/gerados/torta_limao_vovo-preview.png",
+      "archiveSha256": "52ce12fe0946adfec74a55c8a136a0cfbbe300d7de3fc4b9b9d72a5bd257a954",
+      "stage2Sha256": "7fb28dca84e3926a505ae736132cb435bef7076560d54f720261daae9aeef3e0",
+      "stage1Sha256": "940aedfe9541f74a6ef827d706611548a9fcb3164caabf2dcedc9904ed1b973e",
+      "canvas": [
+        512,
+        512
+      ],
+      "visibleSize": [
+        496,
+        294
+      ],
+      "offset": [
+        8,
+        218
+      ],
+      "referenceAlphaBox": [
+        8,
+        8,
+        1487,
+        884
+      ],
+      "category": "advanced",
+      "bookOrder": 3,
+      "provisionalRules": {},
+      "recipe": "game/public/assets/foods/torta_limao_vovo/recipe.json"
+    },
+    {
+      "id": "lagosta_nobre",
+      "archive": "artes-referencia/receitas-cruzadas/lote-04/gerados/lagosta_nobre-preview.png",
+      "archiveSha256": "cf4e659bbac2a23803790b3bb2cc062ca5b9732d3681f0a5d84e2b3e12a0e43a",
+      "stage2Sha256": "b5d17a9ea46ba94f4b2222ae84e36e8cbe8ea6a98b56cc5f52d17e4a4af12da6",
+      "stage1Sha256": "940aedfe9541f74a6ef827d706611548a9fcb3164caabf2dcedc9904ed1b973e",
+      "canvas": [
+        512,
+        512
+      ],
+      "visibleSize": [
+        496,
+        247
+      ],
+      "offset": [
+        8,
+        265
+      ],
+      "referenceAlphaBox": [
+        8,
+        8,
+        1581,
+        791
+      ],
+      "category": "advanced",
+      "bookOrder": 4,
+      "provisionalRules": {},
+      "recipe": "game/public/assets/foods/lagosta_nobre/recipe.json"
+    },
+    {
+      "id": "batatas_sorridentes",
+      "archive": "artes-referencia/receitas-cruzadas/lote-04/gerados/batatas_sorridentes-preview.png",
+      "archiveSha256": "94c0b45beeabb44ad20bed2cb6f882d85ce36e59b6e6023be1af972ee63a48a4",
+      "stage2Sha256": "6f7389bffa4b8124c24bad97ea5a4d1cc2279823004b88a660069c5d46f33c19",
+      "stage1Sha256": "940aedfe9541f74a6ef827d706611548a9fcb3164caabf2dcedc9904ed1b973e",
+      "canvas": [
+        512,
+        512
+      ],
+      "visibleSize": [
+        496,
+        363
+      ],
+      "offset": [
+        8,
+        149
+      ],
+      "referenceAlphaBox": [
+        8,
+        8,
+        1273,
+        934
+      ],
+      "category": "advanced",
+      "bookOrder": 5,
+      "provisionalRules": {},
+      "recipe": "game/public/assets/foods/batatas_sorridentes/recipe.json"
+    },
+    {
+      "id": "salmao_alcaparras",
+      "archive": "artes-referencia/receitas-cruzadas/lote-04/gerados/salmao_alcaparras-preview.png",
+      "archiveSha256": "de2b5cf4ddd72bded66a15bcb2e84f627ce63fce76343fa5177df81edf0e6e20",
+      "stage2Sha256": "33095a86594eb8220a2943625e0cb7fdd5372a8dce2a3bd42922c048a5d1666f",
+      "stage1Sha256": "940aedfe9541f74a6ef827d706611548a9fcb3164caabf2dcedc9904ed1b973e",
+      "canvas": [
+        512,
+        512
+      ],
+      "visibleSize": [
+        496,
+        273
+      ],
+      "offset": [
+        8,
+        239
+      ],
+      "referenceAlphaBox": [
+        8,
+        8,
+        1595,
+        881
+      ],
+      "category": "advanced",
+      "bookOrder": 6,
+      "provisionalRules": {},
+      "recipe": "game/public/assets/foods/salmao_alcaparras/recipe.json"
+    },
+    {
+      "id": "pimentao_recheado_chef",
+      "archive": "artes-referencia/receitas-cruzadas/lote-04/gerados/pimentao_recheado_chef-preview.png",
+      "archiveSha256": "f8d8df6bcd32962ba575ca49a8a8802ac7052c2db960b35de5bee9c31ae57469",
+      "stage2Sha256": "2b3a85fe1556321aead3c8433ff379436021acac2ee4ddf41172f310bac5beaa",
+      "stage1Sha256": "940aedfe9541f74a6ef827d706611548a9fcb3164caabf2dcedc9904ed1b973e",
+      "canvas": [
+        512,
+        512
+      ],
+      "visibleSize": [
+        496,
+        275
+      ],
+      "offset": [
+        8,
+        237
+      ],
+      "referenceAlphaBox": [
+        8,
+        8,
+        1578,
+        879
+      ],
+      "category": "advanced",
+      "bookOrder": 7,
+      "provisionalRules": {},
+      "recipe": "game/public/assets/foods/pimentao_recheado_chef/recipe.json"
+    },
+    {
+      "id": "banana_split",
+      "archive": "artes-referencia/receitas-cruzadas/lote-04/gerados/banana_split-preview.png",
+      "archiveSha256": "7662f16a40683519ccb801d7e053cd8d022fd76e6e783f4e9ff81bfce1e3e558",
+      "stage2Sha256": "4e098414b87ad77fce372786f98fb66af950c22d96f12b4ad9f717a8c2866e0d",
+      "stage1Sha256": "940aedfe9541f74a6ef827d706611548a9fcb3164caabf2dcedc9904ed1b973e",
+      "canvas": [
+        512,
+        512
+      ],
+      "visibleSize": [
+        496,
+        298
+      ],
+      "offset": [
+        8,
+        214
+      ],
+      "referenceAlphaBox": [
+        8,
+        8,
+        1321,
+        797
+      ],
+      "category": "advanced",
+      "bookOrder": 8,
+      "provisionalRules": {},
+      "recipe": "game/public/assets/foods/banana_split/recipe.json"
+    }
+  ],
+  "preparation": "Reused generic lidded pot, not a recovered historical preparation sprite.",
+  "provisionalPolicy": "Missing historical fields use explicit provisionalRules; archive observations remain unchanged."
+}

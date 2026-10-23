@@ -1,0 +1,17 @@
+# Aviso de fogão vazio
+
+Arte gerada pela ferramenta integrada Image Gen, com transparência, usando `reference.jpg` como referência visual. A folha selecionada está em `source.png`. Os PNGs finais são `game/public/assets/ui/stove-hover/panel.png` e `book.png`; `pack-art.py` apenas recorta e reduz as peças, preservando o alpha.
+
+Prompt utilizado:
+
+> Create a clean transparent production sprite sheet recreating the hover badge in the supplied Café Mania screenshot. The supplied screenshot is a STYLE AND SHAPE REFERENCE, not a background to reproduce. Two isolated modular assets only, separated by a large transparent gap. TOP asset: the empty horizontal rounded rectangular speech panel from the screenshot, ivory-white center, thick pale butter-yellow/olive outer rim, a thin cream inner highlight, subtle flat shading. The rectangle is about 3.3 times as wide as its height. It has a short downward-pointing cream triangular speech tail near its lower LEFT edge, just like the reference. No text inside the panel. BOTTOM asset: the reference's exact small upright closed recipe book icon, cover facing viewer slightly angled, orange-red cover and dark burnt-orange spine, golden yellow rectangular front label with white fork and knife inside a small yellow circular badge, cream page edges visible on top, little cream paper tabs protruding, bold rounded brown-orange outlines. It must look like the flat cute 2010 Flash game icon in the screenshot, NOT a modern 3D glossy book. Keep the book separate from the panel so it can overlap the panel's left edge in the game. Book is portrait, width about 0.85 of its height. Sharp anti-aliased edges, flat painted cartoon raster art faithful to the reference. Absolutely NO letters, words, numbers, watermarks, stove, furniture, people, environment, decorative extras, glow, large shadow, or background. Actual transparent alpha outside both assets and in every gap. Frame each part with transparent margins. Top panel fills top half of sheet; separate book icon centered in bottom half. This is UI game art, not a mockup.
+
+A moldura e o livro são independentes. O texto é renderizado no jogo em Arial: “Clique no fogão para”, regular, e “preparar um prato!”, negrito, em marrom. As medidas ficam em `IdleStoveCallout.ts`, em coordenadas do mundo 2x; a origem acompanha o topo do fogão. O aviso só aparece no hover de fogão livre e limpo, fora de decoração, arrasto, menus ou modais. Não recebe eventos de ponteiro e não cobre o clique no equipamento.
+
+## Edição sem marcador
+
+O livro final usa `book-clean-source.png`, editado no Image Gen integrado. O empacotador mantém o arquivo final em 256×317 px com transparência. A folha original fica como origem da moldura.
+
+Prompt da edição:
+
+> Edit this exact transparent recipe-book sprite. Remove ONLY the small cream/beige bookmark tab protruding above the TOP LEFT of the book (the separate cream paper rectangle rising above the upper orange cover). Replace the removed tab with true alpha-zero transparency. Preserve absolutely everything else unchanged: the orange book cover outline, spine, golden label, white fork and knife, the horizontal cream page edges inside the book, colors, shape, lighting, pixel dimensions and placement. Do not remove the cream page block INSIDE the book. No replacement bookmark, no new objects, no background, no shadow. Keep the existing transparent background. This is a minimal asset cleanup, not a redraw.

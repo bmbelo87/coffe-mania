@@ -125,18 +125,21 @@ const (
 	npcGiveUpAfter = 20 * time.Second
 )
 
-func (r *room) noteStuck(a *entity, now time.Time) {
-	if a.Kind == "npc" && a.stuckSince.IsZero() {
-		a.stuckSince = now
+func (r *room) noteStuck(a *entity, now time.Time, actorsOnly bool) {
+	if autonomous(a) {
+		if a.stuckSince.IsZero() {
+			a.stuckSince = now
+		}
+		a.blockedByActors = actorsOnly
 	}
 }
 
 func (r *room) mayGhost(a *entity, now time.Time) bool {
-	return a.Kind == "npc" && !a.stuckSince.IsZero() && now.Sub(a.stuckSince) >= npcGhostAfter
+	return autonomous(a) && a.blockedByActors && !a.stuckSince.IsZero() && now.Sub(a.stuckSince) >= npcGhostAfter
 }
 
 func (r *room) gaveUp(a *entity, now time.Time) bool {
-	return !a.stuckSince.IsZero() && now.Sub(a.stuckSince) >= npcGiveUpAfter
+	return !a.blockedByActors && !a.stuckSince.IsZero() && now.Sub(a.stuckSince) >= npcGiveUpAfter
 }
 
 // reachableTiles floods the floor from a tile through furniture only, with the same

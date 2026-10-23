@@ -3,6 +3,7 @@ import { Container, Graphics, Rectangle, Text, TextStyle, type FederatedPointerE
 import { DEFAULT_AUDIO_PREFERENCES, sanitizeAudioPreferences, type AudioPreferences } from '../audio/preferences';
 import { FONT_FAMILY } from '../core/font-tokens';
 import { STAGE_HEIGHT, STAGE_WIDTH } from '../core/stage';
+import { PopupOpening } from '../screens/room/PopupOpening';
 
 export interface SettingsModalOptions {
   playerName?: string;
@@ -46,6 +47,7 @@ const LIGHT_BROWN = 0xc69a60;
 export class SettingsModal {
   readonly view = new Container();
   private readonly panel = new Container();
+  private readonly popup: PopupOpening;
   private readonly closeButton = new Container();
   private readonly closeFocus = new Graphics();
   private readonly sliders: VolumeSlider[] = [];
@@ -110,6 +112,7 @@ export class SettingsModal {
         () => this.options.getDevMode?.(), (checked) => this.options.onDevModeChange?.(checked));
     }
     this.view.addChild(backdrop, this.panel);
+    this.popup = new PopupOpening(this.panel, STAGE_WIDTH / 2, STAGE_HEIGHT / 2, backdrop);
     if (typeof window !== 'undefined') {
       window.addEventListener('keydown', this.onKeyDown, true);
       window.addEventListener('blur', this.cancelDrag);
@@ -133,6 +136,11 @@ export class SettingsModal {
     this.syncCloseFeedback();
     this.syncFocus();
     this.view.visible = true;
+    this.popup.open();
+  }
+
+  update(deltaMs: number): void {
+    if (this.isOpen) this.popup.update(deltaMs);
   }
 
   close(): void {

@@ -185,6 +185,11 @@ async function boot(): Promise<void> {
     const artProvider = await loadRoomItemArt(roomSnapshot, art ? { art, textureFor: indoorTexture } : undefined);
     const model = new RoomModel({ items: roomModelItems(roomSnapshot, artProvider.art), walls: false, tilesX: roomSnapshot.tilesX, tilesY: roomSnapshot.tilesY, patioX: roomSnapshot.patioX, patioY: roomSnapshot.patioY });
     const room = new RoomScreen({
+      onRenameCafe: () => {
+        const address = new URL(window.location.href);
+        address.searchParams.set('renameCafe', '1');
+        window.location.assign(address);
+      },
       landSaleSignTexture,
       playerState,
       cookingClient,

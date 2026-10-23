@@ -18,6 +18,9 @@ type catalog struct {
 
 var itemSlots, slotCount = loadCatalog()
 
+// SlotOf shares the validation catalogue with server-side appearance generators.
+func SlotOf(itemID int) string { return itemSlots[itemID] }
+
 func loadCatalog() (map[int]string, int) {
 	var data catalog
 	if err := json.Unmarshal(catalogJSON, &data); err != nil {

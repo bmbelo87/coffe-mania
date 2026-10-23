@@ -51,8 +51,21 @@ func finishJob(t *testing.T, app core.App, stoveID string) {
 	}
 }
 
+func setCookingTestLevel(t *testing.T, app core.App, userID string, level int) {
+	t.Helper()
+	state, err := app.FindFirstRecordByData(playerstate.Collection, "user", userID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	playerstate.SetLevel(state, level)
+	if err := app.Save(state); err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestCatalogStoveAndCounter(t *testing.T) {
 	app, owner := newCookingTestApp(t)
+	setCookingTestLevel(t, app, owner, 3)
 	stove, err := app.FindFirstRecordByData("player_stoves", "user", owner)
 	if err != nil {
 		t.Fatal(err)
@@ -108,6 +121,7 @@ func TestCatalogStoveAndCounter(t *testing.T) {
 
 func TestMousseGoesToCounterAndPaysPerPortion(t *testing.T) {
 	app, userID := newCookingTestApp(t)
+	setCookingTestLevel(t, app, userID, 3)
 	stove, err := app.FindFirstRecordByData("player_stoves", "user", userID)
 	if err != nil {
 		t.Fatal(err)
@@ -192,6 +206,7 @@ func TestMousseGoesToCounterAndPaysPerPortion(t *testing.T) {
 
 func TestServeWithoutCounterKeepsDishOnStove(t *testing.T) {
 	app, userID := newCookingTestApp(t)
+	setCookingTestLevel(t, app, userID, 3)
 	counters, err := app.FindRecordsByFilter("player_inventory", "user={:user} && item_id={:item}", "", 0, 0, dbx.Params{"user": userID, "item": starterCounterItemID})
 	if err != nil {
 		t.Fatal(err)

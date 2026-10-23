@@ -1,0 +1,31 @@
+{
+  "tool": "image_gen.imagegen (integrado)",
+  "padlock": {
+    "references": [
+      "padlock-simple-reference.png",
+      "padlock-reference.jpg"
+    ],
+    "output": "game/public/assets/ui/padlock.png",
+    "transparent_background": true,
+    "prompt": "Production game UI icon, matching these Café Mania reference padlocks. Create ONE isolated closed grey padlock with a chunky rounded rectangular dark grey body, thick dark charcoal outline, broad silver grey curved shackle attached on top, subtle broad low-poly shaded facets like reference 2, slightly asymmetric 3/4 front view, black keyhole in the middle. Faithful early-2010 browser social game cartoon raster style, not photorealistic and not a modern thin vector icon. Large clear silhouette legible when reduced to 16 pixels. Entire lock visible, centered, tightly framed with 6% transparent margin. Actual transparent background, no beige/yellow overlay, no text, no buttons, no separate objects, no watermark, no ground shadow."
+  },
+  "window": {
+    "references": [
+      "popup-reference.png"
+    ],
+    "output": "game/public/assets/ui/level-up/window.png",
+    "transparent_background": true,
+    "prompt": "Production reusable popup background, faithful recreation of this Café Mania level-up window. Portrait aspect ratio 392:460. Preserve exact layout and early 2010 browser game raster style: thick warm brown rounded rectangular frame with very pale white/aqua tiny checker patterned interior; at the top, huge chunky golden yellow heading 'Parabéns!!!' with dark brown outline, extruded brown shadow, slightly arched letters, fully visible and not clipped. Grey-white triangular celebratory rays peek behind heading at top corners. Near top center below heading, retain the same tilted cyan blue rectangular level plaque with rounded corners and darker blue extrusion; make the plaque EMPTY (remove 'Nível' and number). Remove ALL other interior text, waiter icon, gold coin icon, dish icon, every reward number, 'Agora disponível', translation keys, and both bottom buttons. Keep remaining interior completely blank with subtle original white checker pattern. No placeholder text. Do not generate an entire scene, no background beyond panel, no game UI behind it. Actual transparency outside the panel and decorative rays. This background is used at logical 392x460 px; live game code adds all level/reward text, icons and interactive buttons in the same positions as reference."
+  },
+  "rewardIcons": {
+    "references": [
+      "popup-reference.png"
+    ],
+    "output": [
+      "game/public/assets/ui/level-up/waiter.png",
+      "game/public/assets/ui/level-up/dish.png"
+    ],
+    "transparent_background": true,
+    "prompt": "Production raster UI sprite sheet for a Café Mania level-up popup. Square canvas, TWO isolated icons only, side by side separated by ample transparency. Left half: the small waiter symbol from the reference, a faceless pale beige round head, white/pale aqua waiter's shirt with golden buttons, one arm raised holding a small silver serving cloche tray; warm brown thick outline. Right half: a silver domed serving cloche with small round knob, dark grey outline and warm beige oval plate at bottom, like the third reward row in reference. Both icons must be distinct and centered in their half of the square, same visual height. Faithful simple chunky 2010 browser social game style, broad flat shading, slightly irregular brown outlines, no photorealism, no modern thin vector. No text, no numbers, no background scene, no logos, no watermark. Actual alpha transparency outside both icons. Do not include the coin, the popup frame or the game scene."
+  }
+}

@@ -1,0 +1,972 @@
+{
+  "version": 1,
+  "name": "Café Mania — personagem inicial",
+  "objects": [
+    "hairStarter",
+    "shirt01",
+    "armleft",
+    "armright",
+    "pants01",
+    "face0"
+  ],
+  "width": 4096,
+  "height": 1536,
+  "cell": 256,
+  "ground": {
+    "x": 125.632,
+    "y": 224.256
+  },
+  "scale": 1.3205,
+  "cells": [
+    {
+      "clip": 0,
+      "direction": 0,
+      "frame": 20,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "clip": 0,
+      "direction": 0,
+      "frame": 21,
+      "x": 256,
+      "y": 0
+    },
+    {
+      "clip": 0,
+      "direction": 0,
+      "frame": 22,
+      "x": 512,
+      "y": 0
+    },
+    {
+      "clip": 0,
+      "direction": 0,
+      "frame": 23,
+      "x": 768,
+      "y": 0
+    },
+    {
+      "clip": 0,
+      "direction": 1,
+      "frame": 20,
+      "x": 1024,
+      "y": 0
+    },
+    {
+      "clip": 0,
+      "direction": 1,
+      "frame": 21,
+      "x": 1280,
+      "y": 0
+    },
+    {
+      "clip": 0,
+      "direction": 1,
+      "frame": 22,
+      "x": 1536,
+      "y": 0
+    },
+    {
+      "clip": 0,
+      "direction": 1,
+      "frame": 23,
+      "x": 1792,
+      "y": 0
+    },
+    {
+      "clip": 0,
+      "direction": 2,
+      "frame": 20,
+      "x": 2048,
+      "y": 0
+    },
+    {
+      "clip": 0,
+      "direction": 2,
+      "frame": 21,
+      "x": 2304,
+      "y": 0
+    },
+    {
+      "clip": 0,
+      "direction": 2,
+      "frame": 22,
+      "x": 2560,
+      "y": 0
+    },
+    {
+      "clip": 0,
+      "direction": 2,
+      "frame": 23,
+      "x": 2816,
+      "y": 0
+    },
+    {
+      "clip": 0,
+      "direction": 3,
+      "frame": 20,
+      "x": 3072,
+      "y": 0
+    },
+    {
+      "clip": 0,
+      "direction": 3,
+      "frame": 21,
+      "x": 3328,
+      "y": 0
+    },
+    {
+      "clip": 0,
+      "direction": 3,
+      "frame": 22,
+      "x": 3584,
+      "y": 0
+    },
+    {
+      "clip": 0,
+      "direction": 3,
+      "frame": 23,
+      "x": 3840,
+      "y": 0
+    },
+    {
+      "clip": 0,
+      "direction": 4,
+      "frame": 20,
+      "x": 0,
+      "y": 256
+    },
+    {
+      "clip": 0,
+      "direction": 4,
+      "frame": 21,
+      "x": 256,
+      "y": 256
+    },
+    {
+      "clip": 0,
+      "direction": 4,
+      "frame": 22,
+      "x": 512,
+      "y": 256
+    },
+    {
+      "clip": 0,
+      "direction": 4,
+      "frame": 23,
+      "x": 768,
+      "y": 256
+    },
+    {
+      "clip": 1,
+      "direction": 0,
+      "frame": 0,
+      "x": 1024,
+      "y": 256
+    },
+    {
+      "clip": 1,
+      "direction": 0,
+      "frame": 1,
+      "x": 1280,
+      "y": 256
+    },
+    {
+      "clip": 1,
+      "direction": 0,
+      "frame": 2,
+      "x": 1536,
+      "y": 256
+    },
+    {
+      "clip": 1,
+      "direction": 0,
+      "frame": 3,
+      "x": 1792,
+      "y": 256
+    },
+    {
+      "clip": 1,
+      "direction": 1,
+      "frame": 0,
+      "x": 2048,
+      "y": 256
+    },
+    {
+      "clip": 1,
+      "direction": 1,
+      "frame": 1,
+      "x": 2304,
+      "y": 256
+    },
+    {
+      "clip": 1,
+      "direction": 1,
+      "frame": 2,
+      "x": 2560,
+      "y": 256
+    },
+    {
+      "clip": 1,
+      "direction": 1,
+      "frame": 3,
+      "x": 2816,
+      "y": 256
+    },
+    {
+      "clip": 1,
+      "direction": 2,
+      "frame": 0,
+      "x": 3072,
+      "y": 256
+    },
+    {
+      "clip": 1,
+      "direction": 2,
+      "frame": 1,
+      "x": 3328,
+      "y": 256
+    },
+    {
+      "clip": 1,
+      "direction": 2,
+      "frame": 2,
+      "x": 3584,
+      "y": 256
+    },
+    {
+      "clip": 1,
+      "direction": 2,
+      "frame": 3,
+      "x": 3840,
+      "y": 256
+    },
+    {
+      "clip": 1,
+      "direction": 3,
+      "frame": 0,
+      "x": 0,
+      "y": 512
+    },
+    {
+      "clip": 1,
+      "direction": 3,
+      "frame": 1,
+      "x": 256,
+      "y": 512
+    },
+    {
+      "clip": 1,
+      "direction": 3,
+      "frame": 2,
+      "x": 512,
+      "y": 512
+    },
+    {
+      "clip": 1,
+      "direction": 3,
+      "frame": 3,
+      "x": 768,
+      "y": 512
+    },
+    {
+      "clip": 1,
+      "direction": 4,
+      "frame": 0,
+      "x": 1024,
+      "y": 512
+    },
+    {
+      "clip": 1,
+      "direction": 4,
+      "frame": 1,
+      "x": 1280,
+      "y": 512
+    },
+    {
+      "clip": 1,
+      "direction": 4,
+      "frame": 2,
+      "x": 1536,
+      "y": 512
+    },
+    {
+      "clip": 1,
+      "direction": 4,
+      "frame": 3,
+      "x": 1792,
+      "y": 512
+    },
+    {
+      "clip": 2,
+      "direction": 1,
+      "frame": 35,
+      "x": 2048,
+      "y": 512
+    },
+    {
+      "clip": 2,
+      "direction": 3,
+      "frame": 35,
+      "x": 2304,
+      "y": 512
+    },
+    {
+      "clip": 3,
+      "direction": 1,
+      "frame": 36,
+      "x": 2560,
+      "y": 512
+    },
+    {
+      "clip": 3,
+      "direction": 1,
+      "frame": 37,
+      "x": 2816,
+      "y": 512
+    },
+    {
+      "clip": 3,
+      "direction": 1,
+      "frame": 38,
+      "x": 3072,
+      "y": 512
+    },
+    {
+      "clip": 3,
+      "direction": 1,
+      "frame": 39,
+      "x": 3328,
+      "y": 512
+    },
+    {
+      "clip": 3,
+      "direction": 3,
+      "frame": 36,
+      "x": 3584,
+      "y": 512
+    },
+    {
+      "clip": 3,
+      "direction": 3,
+      "frame": 37,
+      "x": 3840,
+      "y": 512
+    },
+    {
+      "clip": 3,
+      "direction": 3,
+      "frame": 38,
+      "x": 0,
+      "y": 768
+    },
+    {
+      "clip": 3,
+      "direction": 3,
+      "frame": 39,
+      "x": 256,
+      "y": 768
+    },
+    {
+      "clip": 4,
+      "direction": 0,
+      "frame": 10,
+      "x": 512,
+      "y": 768,
+      "carryingHand": {
+        "x": 87.936,
+        "y": 187.008
+      },
+      "carryingLeftHand": {
+        "x": 158.59199999999998,
+        "y": 198.912
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 0,
+      "frame": 11,
+      "x": 768,
+      "y": 768,
+      "carryingHand": {
+        "x": 84.352,
+        "y": 186.112
+      },
+      "carryingLeftHand": {
+        "x": 157.44,
+        "y": 191.10399999999998
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 0,
+      "frame": 12,
+      "x": 1024,
+      "y": 768,
+      "carryingHand": {
+        "x": 87.936,
+        "y": 187.008
+      },
+      "carryingLeftHand": {
+        "x": 160.89600000000002,
+        "y": 184.576
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 0,
+      "frame": 13,
+      "x": 1280,
+      "y": 768,
+      "carryingHand": {
+        "x": 92.032,
+        "y": 183.552
+      },
+      "carryingLeftHand": {
+        "x": 165.12,
+        "y": 193.664
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 1,
+      "frame": 10,
+      "x": 1536,
+      "y": 768,
+      "carryingHand": {
+        "x": 112.384,
+        "y": 198.4
+      },
+      "carryingLeftHand": {
+        "x": 164.096,
+        "y": 184.832
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 1,
+      "frame": 11,
+      "x": 1792,
+      "y": 768,
+      "carryingHand": {
+        "x": 109.824,
+        "y": 198.784
+      },
+      "carryingLeftHand": {
+        "x": 152.32,
+        "y": 179.712
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 1,
+      "frame": 12,
+      "x": 2048,
+      "y": 768,
+      "carryingHand": {
+        "x": 112.384,
+        "y": 198.4
+      },
+      "carryingLeftHand": {
+        "x": 143.61599999999999,
+        "y": 174.336
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 1,
+      "frame": 13,
+      "x": 2304,
+      "y": 768,
+      "carryingHand": {
+        "x": 115.2,
+        "y": 193.40800000000002
+      },
+      "carryingLeftHand": {
+        "x": 157.824,
+        "y": 179.584
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 2,
+      "frame": 10,
+      "x": 2560,
+      "y": 768,
+      "carryingHand": {
+        "x": 145.664,
+        "y": 197.76
+      },
+      "carryingLeftHand": {
+        "x": 148.224,
+        "y": 173.05599999999998
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 2,
+      "frame": 11,
+      "x": 2816,
+      "y": 768,
+      "carryingHand": {
+        "x": 145.536,
+        "y": 198.656
+      },
+      "carryingLeftHand": {
+        "x": 132.736,
+        "y": 173.56799999999998
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 2,
+      "frame": 12,
+      "x": 3072,
+      "y": 768,
+      "carryingHand": {
+        "x": 145.664,
+        "y": 197.76
+      },
+      "carryingLeftHand": {
+        "x": 116.992,
+        "y": 173.312
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 2,
+      "frame": 13,
+      "x": 3328,
+      "y": 768,
+      "carryingHand": {
+        "x": 145.664,
+        "y": 192.256
+      },
+      "carryingLeftHand": {
+        "x": 132.736,
+        "y": 172.288
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 3,
+      "frame": 10,
+      "x": 3584,
+      "y": 768,
+      "carryingHand": {
+        "x": 168.32,
+        "y": 185.6
+      },
+      "carryingLeftHand": {
+        "x": 120.19200000000001,
+        "y": 170.24
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 3,
+      "frame": 11,
+      "x": 3840,
+      "y": 768,
+      "carryingHand": {
+        "x": 170.88,
+        "y": 185.984
+      },
+      "carryingLeftHand": {
+        "x": 110.08,
+        "y": 176.128
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 3,
+      "frame": 12,
+      "x": 0,
+      "y": 1024,
+      "carryingHand": {
+        "x": 168.32,
+        "y": 185.6
+      },
+      "carryingLeftHand": {
+        "x": 96.512,
+        "y": 181.888
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 3,
+      "frame": 13,
+      "x": 256,
+      "y": 1024,
+      "carryingHand": {
+        "x": 165.376,
+        "y": 180.608
+      },
+      "carryingLeftHand": {
+        "x": 104.576,
+        "y": 176
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 4,
+      "frame": 10,
+      "x": 512,
+      "y": 1024,
+      "carryingHand": {
+        "x": 167.04,
+        "y": 168.96
+      },
+      "carryingLeftHand": {
+        "x": 96.512,
+        "y": 178.176
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 4,
+      "frame": 11,
+      "x": 768,
+      "y": 1024,
+      "carryingHand": {
+        "x": 170.752,
+        "y": 168.064
+      },
+      "carryingLeftHand": {
+        "x": 97.664,
+        "y": 185.856
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 4,
+      "frame": 12,
+      "x": 1024,
+      "y": 1024,
+      "carryingHand": {
+        "x": 167.04,
+        "y": 168.96
+      },
+      "carryingLeftHand": {
+        "x": 94.208,
+        "y": 195.2
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 4,
+      "frame": 13,
+      "x": 1280,
+      "y": 1024,
+      "carryingHand": {
+        "x": 162.94400000000002,
+        "y": 165.504
+      },
+      "carryingLeftHand": {
+        "x": 89.98400000000001,
+        "y": 188.54399999999998
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 5,
+      "frame": 10,
+      "x": 1536,
+      "y": 1024,
+      "carryingHand": {
+        "x": 142.72,
+        "y": 157.568
+      },
+      "carryingLeftHand": {
+        "x": 91.00800000000001,
+        "y": 192.256
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 5,
+      "frame": 11,
+      "x": 1792,
+      "y": 1024,
+      "carryingHand": {
+        "x": 145.28,
+        "y": 155.392
+      },
+      "carryingLeftHand": {
+        "x": 102.78399999999999,
+        "y": 197.248
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 5,
+      "frame": 12,
+      "x": 2048,
+      "y": 1024,
+      "carryingHand": {
+        "x": 142.72,
+        "y": 157.568
+      },
+      "carryingLeftHand": {
+        "x": 111.488,
+        "y": 205.44
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 5,
+      "frame": 13,
+      "x": 2304,
+      "y": 1024,
+      "carryingHand": {
+        "x": 139.776,
+        "y": 155.648
+      },
+      "carryingLeftHand": {
+        "x": 97.28,
+        "y": 202.49599999999998
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 6,
+      "frame": 10,
+      "x": 2560,
+      "y": 1024,
+      "carryingHand": {
+        "x": 109.44,
+        "y": 158.208
+      },
+      "carryingLeftHand": {
+        "x": 106.88,
+        "y": 204.03199999999998
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 6,
+      "frame": 11,
+      "x": 2816,
+      "y": 1024,
+      "carryingHand": {
+        "x": 109.44,
+        "y": 155.52
+      },
+      "carryingLeftHand": {
+        "x": 122.368,
+        "y": 203.392
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 6,
+      "frame": 12,
+      "x": 3072,
+      "y": 1024,
+      "carryingHand": {
+        "x": 109.44,
+        "y": 158.208
+      },
+      "carryingLeftHand": {
+        "x": 138.112,
+        "y": 206.59199999999998
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 6,
+      "frame": 13,
+      "x": 3328,
+      "y": 1024,
+      "carryingHand": {
+        "x": 109.44,
+        "y": 156.8
+      },
+      "carryingLeftHand": {
+        "x": 122.368,
+        "y": 209.92000000000002
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 7,
+      "frame": 10,
+      "x": 3584,
+      "y": 1024,
+      "carryingHand": {
+        "x": 86.78399999999999,
+        "y": 170.368
+      },
+      "carryingLeftHand": {
+        "x": 134.912,
+        "y": 206.848
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 7,
+      "frame": 11,
+      "x": 3840,
+      "y": 1024,
+      "carryingHand": {
+        "x": 84.22399999999999,
+        "y": 168.192
+      },
+      "carryingLeftHand": {
+        "x": 145.024,
+        "y": 200.832
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 7,
+      "frame": 12,
+      "x": 0,
+      "y": 1280,
+      "carryingHand": {
+        "x": 86.78399999999999,
+        "y": 170.368
+      },
+      "carryingLeftHand": {
+        "x": 158.59199999999998,
+        "y": 197.888
+      }
+    },
+    {
+      "clip": 4,
+      "direction": 7,
+      "frame": 13,
+      "x": 256,
+      "y": 1280,
+      "carryingHand": {
+        "x": 89.72800000000001,
+        "y": 168.32
+      },
+      "carryingLeftHand": {
+        "x": 150.4,
+        "y": 206.208
+      }
+    },
+    {
+      "clip": 5,
+      "direction": 1,
+      "frame": 30,
+      "x": 512,
+      "y": 1280,
+      "carryingHand": {
+        "x": 128.768,
+        "y": 199.168
+      },
+      "carryingLeftHand": {
+        "x": 164.48,
+        "y": 177.28
+      }
+    },
+    {
+      "clip": 5,
+      "direction": 1,
+      "frame": 31,
+      "x": 768,
+      "y": 1280,
+      "carryingHand": {
+        "x": 129.152,
+        "y": 197.376
+      },
+      "carryingLeftHand": {
+        "x": 164.992,
+        "y": 174.72
+      }
+    },
+    {
+      "clip": 5,
+      "direction": 1,
+      "frame": 32,
+      "x": 1024,
+      "y": 1280,
+      "carryingHand": {
+        "x": 123.776,
+        "y": 198.01600000000002
+      },
+      "carryingLeftHand": {
+        "x": 165.76,
+        "y": 175.10399999999998
+      }
+    },
+    {
+      "clip": 5,
+      "direction": 1,
+      "frame": 33,
+      "x": 1280,
+      "y": 1280,
+      "carryingHand": {
+        "x": 124.672,
+        "y": 198.656
+      },
+      "carryingLeftHand": {
+        "x": 165.376,
+        "y": 176.256
+      }
+    },
+    {
+      "clip": 5,
+      "direction": 3,
+      "frame": 30,
+      "x": 1536,
+      "y": 1280,
+      "carryingHand": {
+        "x": 167.296,
+        "y": 178.688
+      },
+      "carryingLeftHand": {
+        "x": 129.792,
+        "y": 157.568
+      }
+    },
+    {
+      "clip": 5,
+      "direction": 3,
+      "frame": 31,
+      "x": 1792,
+      "y": 1280,
+      "carryingHand": {
+        "x": 166.784,
+        "y": 177.024
+      },
+      "carryingLeftHand": {
+        "x": 134.272,
+        "y": 152.704
+      }
+    },
+    {
+      "clip": 5,
+      "direction": 3,
+      "frame": 32,
+      "x": 2048,
+      "y": 1280,
+      "carryingHand": {
+        "x": 162.304,
+        "y": 182.528
+      },
+      "carryingLeftHand": {
+        "x": 135.168,
+        "y": 152.192
+      }
+    },
+    {
+      "clip": 5,
+      "direction": 3,
+      "frame": 33,
+      "x": 2304,
+      "y": 1280,
+      "carryingHand": {
+        "x": 163.45600000000002,
+        "y": 182.144
+      },
+      "carryingLeftHand": {
+        "x": 132.992,
+        "y": 154.496
+      }
+    }
+  ]
+}

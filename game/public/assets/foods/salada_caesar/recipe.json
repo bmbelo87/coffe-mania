@@ -1,0 +1,14 @@
+{
+  "id": "salada_caesar",
+  "name": "Salada Caesar",
+  "level": 26,
+  "durationSeconds": 600,
+  "portions": 95,
+  "profitGold": 2,
+  "costGold": 40,
+  "xp": 15,
+  "inBook": true,
+  "category": "basic",
+  "bookOrder": 11,
+  "source": "artes-referencia/receitas-cruzadas/lote-03/cruzamento.json; receita Salada Caesar. Ordem/categoria observadas no vídeo, não ordem de desbloqueio. Preparo provisório reutiliza a panela tampada de churrasco; sprite histórico específico não recuperado. "
+}

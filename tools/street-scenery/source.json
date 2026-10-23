@@ -1,0 +1,27 @@
+{
+  "created": "2026-10-22",
+  "origin": "Restaurant City game_asset.swf, Road (2055), exported with JPEXS 26.3.0 at zoom 2. This is existing technical placeholder scenery, not recovered Cafe Mania beach art.",
+  "sourceFile": "source/Road.svg",
+  "sourceSha256": "e455304d0bd99509bd0554e83bf7db2ccef9997ae1c28772012334450cfa143a",
+  "operation": "Recompose native road paths and reflected branch with world-space clipping. Whole lane markings are omitted in the junction. Slice one raster master across existing texture boundaries. No Image Gen, no new illustrated geometry.",
+  "patchWorldRect": [
+    -340,
+    -1400,
+    1990,
+    2200
+  ],
+  "preserved": [
+    "texture dimensions and offsets",
+    "all pixels outside patch",
+    "west and far-east textures",
+    "logical world navigation and camera calibration"
+  ],
+  "baseFiles": {
+    "CityBackground.png": "ff780c4937bfd7e9eacdc2be25c4c7b1999e79c3b8ac2fcd4e4a1b3647bf65d2",
+    "CityBackground-East.png": "87057609b0c0838bece938df060651b90bc55757c7b4694052af16202054fa3c"
+  },
+  "outputs": {
+    "CityBackground.png": "66c1c2f9c785f39461db540cefa6c5841bb1b2814618b11417cbab824b4cac8b",
+    "CityBackground-East.png": "d72962b81bd151d96334edb6247f8fc1582b1f53993ff96318427ef6f0dccd05"
+  }
+}

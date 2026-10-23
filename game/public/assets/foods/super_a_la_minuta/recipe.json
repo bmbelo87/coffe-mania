@@ -1,0 +1,14 @@
+{
+  "id": "super_a_la_minuta",
+  "name": "Super À La Minuta",
+  "level": 50,
+  "durationSeconds": 10800,
+  "portions": 105,
+  "profitGold": 7,
+  "costGold": 160,
+  "xp": 70,
+  "inBook": true,
+  "category": "advanced",
+  "bookOrder": 1,
+  "source": "artes-referencia/receitas-cruzadas/lote-03/cruzamento.json; receita Super À La Minuta. Ordem/categoria observadas no vídeo, não ordem de desbloqueio. Preparo provisório reutiliza a panela tampada de churrasco; sprite histórico específico não recuperado. "
+}

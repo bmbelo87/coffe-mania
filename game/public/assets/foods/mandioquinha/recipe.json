@@ -1,0 +1,20 @@
+{
+  "id": "mandioquinha",
+  "name": "Mandioquinha",
+  "level": 5,
+  "durationSeconds": 720,
+  "portions": 32,
+  "profitGold": 4,
+  "costGold": 50,
+  "xp": 50,
+  "inBook": true,
+  "category": "basic",
+  "bookOrder": 8,
+  "source": "artes-referencia/receitas-cruzadas/lote-02/cruzamento.json; receita Mandioquinha. Ordem/categoria observadas no vídeo, não ordem de desbloqueio. PROVISÓRIO: campos estimados identificados em provisionalRules, não confirmados como regras originais. Preparo provisório reutiliza a panela tampada de churrasco; sprite histórico específico não recuperado. ",
+  "provisionalRules": {
+    "level": {
+      "value": 5,
+      "reason": "Nível estimado para progressão inicial; custo, porções, venda, tempo e XP vêm do vídeo."
+    }
+  }
+}

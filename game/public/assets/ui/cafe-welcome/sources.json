@@ -1,0 +1,81 @@
+{
+  "project": {
+    "title": "Color for Cafemania Artwork (Vostu)",
+    "url": "https://www.behance.net/gallery/13020873/Color-for-Cafemania-Artwork-%28Vostu%29",
+    "id": "13020873",
+    "artist": "Pablo Andreetta",
+    "published": "11 de dezembro de 2013",
+    "category": "Cor e ilustração",
+    "summary": "Trabalhos de pintura e ilustração para Café Mania da Vostu. A página identifica a contribuição artística, sem descrever as mecânicas ou estatísticas de cada item retratado.",
+    "mixed": false
+  },
+  "wallpapers": [
+    {
+      "id": "cafe-cozinha",
+      "file": "cafe-cozinha.webp",
+      "alt": "Os chefs reunidos na cozinha do Café Mania.",
+      "source": "artes-referencia/cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/13020873/007.jpg",
+      "sourceSHA256": "257b4ed5caf3479ccb4ac3a7c4d101f07c7ba53e80bec97f03a7cd13b2f5a846",
+      "width": 1920,
+      "height": 1320
+    },
+    {
+      "id": "cafe-encontro",
+      "file": "cafe-encontro.webp",
+      "alt": "Um encontro de personagens na frente do café.",
+      "source": "artes-referencia/cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/13020873/009.jpg",
+      "sourceSHA256": "3fb3f2b4206984e2425f0a00e09d8856233cf350b87db5153861b866eeb62ec7",
+      "width": 1287,
+      "height": 869
+    },
+    {
+      "id": "natal",
+      "file": "natal.webp",
+      "alt": "Papai Noel e os presentes de Natal do Café Mania.",
+      "source": "artes-referencia/cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/13020873/008.jpg",
+      "sourceSHA256": "bfbee104ca4fe97ff0600ed4efa3f266a647abcea8defce245d023af2fd05694",
+      "width": 1291,
+      "height": 894
+    },
+    {
+      "id": "pascoa",
+      "file": "pascoa.webp",
+      "alt": "Os personagens e o coelho de Páscoa do Café Mania.",
+      "source": "artes-referencia/cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/13020873/010.jpg",
+      "sourceSHA256": "02ff2206d740e180aadf27340120ed91117cb17bc8aff2abb915caacf4202caf",
+      "width": 1090,
+      "height": 750
+    },
+    {
+      "id": "festa-junina",
+      "file": "festa-junina.webp",
+      "alt": "Os personagens do Café Mania na festa junina.",
+      "source": "artes-referencia/cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/13020873/013.jpg",
+      "sourceSHA256": "b36f7a8b1bca79581b579c8be8c3eeeb4f445ae6597f73a03f6a16724052aabf",
+      "width": 981,
+      "height": 676
+    },
+    {
+      "id": "praia",
+      "file": "praia.webp",
+      "alt": "Os personagens no café da praia.",
+      "source": "artes-referencia/cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/13020873/005.jpg",
+      "sourceSHA256": "61490219d3059285f538bd71e0fa183363dc669534cb25488a6df73c7ba5a923",
+      "width": 1501,
+      "height": 1034
+    }
+  ],
+  "classicRestoration": "classic-source.json",
+  "frame": {
+    "file": "name-frame.png",
+    "method": "Built-in Image Gen; alpha crop and downscale only",
+    "prompt": "tools/cafe-name/frame-prompt.txt",
+    "master": "tools/cafe-name/name-frame-source.png"
+  },
+  "button": {
+    "file": "ok-button.png",
+    "method": "Built-in Image Gen reconstruction from the user crop; live text rendered separately",
+    "prompt": "tools/cafe-name/ok-button-prompt.txt",
+    "master": "tools/cafe-name/ok-button-source.png"
+  }
+}

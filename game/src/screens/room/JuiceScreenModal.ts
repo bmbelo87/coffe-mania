@@ -2,6 +2,7 @@ import { Container, Graphics, Rectangle, Sprite, type Texture } from 'pixi.js';
 import { STAGE_WIDTH, STAGE_HEIGHT } from '../../core/stage';
 import { JuiceClient, loadJuiceArt, loadJuiceInterfaceArt, type JuiceInterfaceArt, type JuiceSnapshot, type JuiceRecipe } from '../../game/juices';
 import type { PlayerState } from '../../game/player-state';
+import { PopupOpening } from './PopupOpening';
 import { fitJuiceImage, juiceButton, juiceCard, juicePart, juiceProgress, juiceSmile, juiceTab, juiceText, JUICE_ROWS, JUICE_SHEET, JUICE_TAB_X } from './JuiceInterfaceParts';
 
 const TABS = [
@@ -14,6 +15,7 @@ const TABS = [
 export class JuiceScreenModal {
   readonly view = new Container();
   private readonly panel = new Container();
+  private readonly popup: PopupOpening;
   private machineId = '';
   private group = 'basic';
   private state?: JuiceSnapshot;
@@ -38,6 +40,7 @@ export class JuiceScreenModal {
     this.panel.eventMode = 'static'; this.panel.hitArea = new Rectangle(0, -JUICE_SHEET.overhang, JUICE_SHEET.width, totalHeight);
     for (const event of ['pointerdown', 'pointerup', 'pointertap', 'wheel'] as const) this.panel.on(event, e => e.stopPropagation());
     this.view.addChild(backdrop, this.panel); window.addEventListener('keydown', this.onKey);
+    this.popup = new PopupOpening(this.panel, STAGE_WIDTH / 2, STAGE_HEIGHT / 2, backdrop);
   }
   get isOpen() { return this.view.visible; }
   private onKey = (event: KeyboardEvent) => {
@@ -45,9 +48,11 @@ export class JuiceScreenModal {
     event.preventDefault(); if (this.help) { this.help = false; this.draw(); } else this.close();
   };
   async open(machineId: string) {
+    const wasOpen = this.isOpen;
     const generation = ++this.generation;
     this.machineId = machineId; this.state = undefined; this.help = false; this.group = 'basic';
     this.view.visible = true; this.message = 'Carregando sucos…'; this.draw();
+    if (!wasOpen) this.popup.open();
     try {
       const [drinks, art, state] = await Promise.all([loadJuiceArt(), loadJuiceInterfaceArt(), this.client.refresh()]);
       if (this.disposed || generation !== this.generation) return;
@@ -59,6 +64,7 @@ export class JuiceScreenModal {
     }
   }
   close() { this.generation++; this.view.visible = false; }
+  update(deltaMs: number): void { if (this.isOpen) this.popup.update(deltaMs); }
   async refresh() {
     if (!this.isOpen || this.busy) return;
     const generation = this.generation;
@@ -98,9 +104,11 @@ export class JuiceScreenModal {
     if (parts) {
       for (const [index, tab] of TABS.entries()) {
         const locked = tab.id === 'exotic' || tab.id === 'tropical' && !this.state?.groups.includes(tab.id);
-        this.panel.addChild(juiceTab({ active: parts.tabActive, inactive: parts.tabInactive, locked: parts.tabLocked }, tab.label, JUICE_TAB_X[index], this.group === tab.id, locked,
+        this.panel.addChild(juiceTab({ active: parts.tabActive, inactive: parts.tabInactive, locked: parts.tabLocked, padlock: parts.padlock }, tab.label, JUICE_TAB_X[index], this.group === tab.id, locked,
           () => { this.group = tab.id; this.help = false; this.message = ''; this.draw(); }));
       }
+      // A faixa frontal mascara os 2 px finais de todas as abas, alinhando a emenda.
+      this.panel.addChild(juicePart(parts.panelFront, 0, 119, 594, 389));
       this.drawMachine(parts);
     }
     if (this.state?.unlocked) this.drawRecipes();

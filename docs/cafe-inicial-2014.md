@@ -1,6 +1,6 @@
 # Café inicial de 2014 — assets que faltam
 
-Referência: captura do café de um jogador novo, 7 de janeiro de 2014 (cenário de inverno). O layout já foi reproduzido em `ensureRoom` (`database/room.go`) com os assets que existem hoje. Esta lista mostra o que ainda falta para o início ficar idêntico. Para testar numa conta existente, use **Ferramentas de desenvolvimento → Recriar café inicial**. O comando apaga os móveis, os pratos e o tamanho do café da conta; moedas e nível são mantidos.
+Referência: captura do café de um jogador novo, 7 de janeiro de 2014 (cenário de inverno). `ensureRoom` (`database/room.go`) usa os assets disponíveis e preserva o salão da referência; a cozinha foi adaptada para duas fileiras com corredor. Esta lista mostra o que ainda falta na arte histórica. Para testar numa conta existente, use **Ferramentas de desenvolvimento → Recriar café inicial**. O comando apaga os móveis, os pratos e o tamanho do café da conta; moedas e nível são mantidos.
 
 ## Como o café inicial está montado
 
@@ -8,8 +8,8 @@ Piso 6x9: x de 1 a 6 ao longo da parede da porta (direita) e y de 1 a 9 ao longo
 
 | Peça | Tile (x,y) e rotação | Asset atual | Na captura |
 | --- | --- | --- | --- |
-| Fogão ×3 | (1,7) r3 · (3,7) r3 · (2,8) r1 | `starter_stove` | Fogão-grelha cinza de inox |
-| Balcão ×3 | (2,7) r3 · (1,8) r1 · (3,8) r1 | `starter_counter` | Balcão de vidro com base de inox, com prato em cima |
+| Fogão ×3 | (1,9) r3 · (2,9) r3 · (3,9) r3 | `starter_stove` | Fogão-grelha cinza de inox; fileira adaptada junto à borda, voltada ao nordeste |
+| Balcão ×3 | (1,7) r1 · (2,7) r1 · (3,7) r1 | `starter_counter` | Balcão de vidro com base de inox; fileira voltada ao corredor y=8 |
 | Mesa quadrada ×4 | (2,2) · (2,4) · (4,3) · (4,5) | `white_cloth_table` | Toalha branca com saia vermelha |
 | Cadeira ×4 | (1,2) r0 · (1,4) r0 · (5,3) r2 · (5,5) r2 | `classic_chair` | Madeira escura com assento vermelho |
 | Mesa redonda | (6,2) | `acervo_lote02_table_italy_green_check` (reconstrução) | Toalha xadrez verde |
@@ -19,7 +19,7 @@ Piso 6x9: x de 1 a 6 ao longo da parede da porta (direita) e y de 1 a 9 ao longo
 | Quadro de cardápio | (0,1) | `menu_holder` | Quadro-negro com moldura de madeira |
 | Painel de conquistas | (0,4) | `achievement_panel` | Possivelmente o quadro grande com toldo (ver abaixo) |
 
-As posições foram estimadas a olho a partir de uma única captura em perspectiva. A disposição (cozinha em xadrez na frente esquerda, mesas no meio, mesa verde junto ao fim da parede da porta) está fiel; o tile exato de cada peça pode variar em um. Caixa de correio e arbustos saíram do café inicial porque não aparecem na captura.
+As posições históricas foram estimadas a olho a partir de uma única captura em perspectiva. A cozinha atual tem duas fileiras de três peças, com os tiles (1,8), (2,8) e (3,8) livres e acesso pelo tile (4,8). A migração `202610200001_kitchen_rows.go` reorganiza apenas cozinhas que ainda correspondem integralmente ao padrão antigo e têm a área nova livre; mantém unidades, pratos e vínculos de cozimento. Salas personalizadas ficam intactas. Caixa de correio e arbustos saíram do café inicial porque não aparecem na captura.
 
 ## Assets que faltam
 

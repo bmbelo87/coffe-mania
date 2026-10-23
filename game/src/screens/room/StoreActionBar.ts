@@ -5,6 +5,7 @@ import { prefersReducedMotion } from '../../core/flags';
 import type { ActionBarButtonTextures, ActionBarIconTexture, StoreToolbarTextures } from '../../game/asset-manifest';
 import { CATEGORY_PULSE_DURATION_MS, drawCategorySelectionPulse } from './CategorySelectionPulse';
 import { FONT_FAMILY } from '../../core/fonts';
+import { PopupOpening } from './PopupOpening';
 import type { RoomCatalogItem, RoomUnit } from '../../game/room-inventory';
 
 export interface StoreEntry { item: RoomCatalogItem; unit?: RoomUnit; texture?: Texture; quantity?: number }
@@ -62,6 +63,8 @@ const TOP_TABS = ['news', 'shop', 'inventory'] as const;
 
 /** Store category toolbar: room stays visible, only the bottom toolbar swaps. */
 export class StoreActionBar {
+  private readonly popup: PopupOpening;
+  private readonly content = new Container();
   readonly view = new Container();
   private readonly croppedTexture: Texture;
   private readonly categoryHolders: Container[] = [];
@@ -103,7 +106,7 @@ export class StoreActionBar {
     this.view.pivot.set(STAGE_WIDTH / 2, STAGE_HEIGHT);
     this.view.position.set(STAGE_WIDTH / 2, STAGE_HEIGHT);
 
-    const content = new Container();
+    const content = this.content;
     const frame = STORE_ACTION_BAR_FRAME;
     const barWidth = MAIN_ACTION_BAR_FRAME.width;
     const barHeight = frame.height * barWidth / frame.width;
@@ -383,6 +386,7 @@ export class StoreActionBar {
       this.syncTopTabs.forEach((sync) => sync());
     }
     this.view.addChild(content);
+    this.popup = new PopupOpening(content, STAGE_WIDTH / 2, STAGE_HEIGHT - barHeight * MAIN_ACTION_BAR_SCALE / 2);
   }
 
   get isOpen(): boolean { return this.view.visible; }
@@ -404,9 +408,9 @@ export class StoreActionBar {
 
   containsGlobalPoint(global: { x: number; y: number }): boolean {
     if (!this.isOpen) return false;
-    const content = this.view.getChildByLabel('store-action-bar') as Container;
-    const point = content.toLocal(global);
-    return Boolean(content.hitArea?.contains(point.x, point.y));
+    // A camada animada pode intermediar o painel; o layout continua sendo a referência da hitbox.
+    const point = this.content.toLocal(global);
+    return Boolean(this.content.hitArea?.contains(point.x, point.y));
   }
 
   selectCategory(name: string): void {
@@ -584,6 +588,7 @@ export class StoreActionBar {
   open(): void {
     if (this.isOpen) return;
     this.view.visible = true;
+    this.popup.open();
     this.syncCategorySelection();
     this.onVisibilityChange?.(true);
   }
@@ -597,6 +602,7 @@ export class StoreActionBar {
   setHudScale(scale: number): void { this.view.scale.set(scale); }
 
   update(deltaMs: number): void {
+    if (this.isOpen) this.popup.update(deltaMs);
     if (!this.isOpen || !this.categoryHolders.length || this.reducedMotion) return;
     const elapsed = Math.max(0, deltaMs);
     this.categoryPulseMs = (this.categoryPulseMs + elapsed) % CATEGORY_PULSE_DURATION_MS;

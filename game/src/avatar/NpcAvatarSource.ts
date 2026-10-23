@@ -1,3 +1,4 @@
+import { CLIP } from './clips';
 import { Texture } from 'pixi.js';
 import { AVATAR_URLS, loadAvatarAssets } from '../game/asset-manifest';
 import { bakeAvatarIncrementally } from './AvatarBaker';
@@ -11,6 +12,7 @@ import { restoreAppearance } from './appearance';
 export interface NpcAvatarSource {
   next(): Promise<BakedAvatarBundle>;
   bakeAppearance?(appearance: string, human?: boolean, signal?: AbortSignal): Promise<BakedAvatarBundle>;
+  bakePortrait?(appearance: string, signal?: AbortSignal): Promise<BakedAvatarBundle>;
   destroy(): void;
 }
 
@@ -51,7 +53,9 @@ class IncrementalNpcAvatarSource implements NpcAvatarSource {
     return this.bakeLook(appearance, human, signal);
   }
 
-  private bakeLook(appearance?: string, human = false, actorSignal?: AbortSignal): Promise<BakedAvatarBundle> {
+  bakePortrait(appearance: string, signal?: AbortSignal): Promise<BakedAvatarBundle> { return this.bakeLook(appearance, false, signal, true); }
+
+  private bakeLook(appearance?: string, human = false, actorSignal?: AbortSignal, portrait = false): Promise<BakedAvatarBundle> {
     const signal = actorSignal ? AbortSignal.any([this.controller.signal, actorSignal]) : this.controller.signal;
     const task = this.queue.then(async () => {
       signal.throwIfAborted();
@@ -59,7 +63,7 @@ class IncrementalNpcAvatarSource implements NpcAvatarSource {
       const missing = this.renderer.setLook(resolveLook(this.wardrobe, look));
       if (missing.length) throw new Error('O visual do NPC possui texturas indisponíveis.');
       const baked = await bakeAvatarIncrementally(this.renderer, {
-        clips: human ? PLAYER_ROOM_CLIPS : ROOM_CLIPS, cell: DEFAULT_CELL, signal,
+        clips: portrait ? [CLIP.IDLE] : human ? PLAYER_ROOM_CLIPS : ROOM_CLIPS, cell: DEFAULT_CELL, signal,
       });
       if (signal.aborted) {
         baked.canvas.width = 0;

@@ -177,7 +177,7 @@ async function main() {
   const windowsGo = join(process.env.ProgramFiles ?? 'C:/Program Files', 'Go', 'bin', 'go.exe');
   const go = process.env.COFFE_GO ?? (process.platform === 'win32' && existsSync(windowsGo) ? windowsGo : 'go');
   const databaseDir = resolve(root, process.env.COFFE_DATABASE_DIR ?? 'database/pb_data');
-  console.info(`Coffe Mania ${version}: preparando PocketBase e servidor WebSocket…`);
+  console.info(`Café Mania ${version}: preparando PocketBase e servidor WebSocket…`);
   // Compila ao lado e só troca depois de compilar: um erro de compilação mantém os servidores atuais.
   const build = async () => {
     await compile(go, './database', databaseBinary + '.next');

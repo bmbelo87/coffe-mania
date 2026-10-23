@@ -19,7 +19,17 @@ export interface Recipe {
   xp: number;
   /** Receitas fora do livro só resolvem preparos e porções já salvos. */
   inBook: boolean;
+  category?: 'basic' | 'advanced' | 'specials' | 'deluxe';
+  /** Position observed in its category; independent of duration and unlock level. */
+  bookOrder?: number;
+  /** Explicit estimates awaiting historical evidence; other fields retain their sources. */
+  provisionalRules?: Partial<Record<'level' | 'costGold' | 'portions' | 'profitGold', { value: number; reason: string }>>;
   source: string;
+}
+
+export function recipeBlockReason(recipe: Recipe, level: number, gold?: number): string {
+  if (level < recipe.level) return `Disponível no nível ${recipe.level}`;
+  return gold !== undefined && gold < recipe.costGold ? 'caféOuros insuficientes' : '';
 }
 
 /** Receita com os dois estágios: o item no fogão durante o preparo (tábua, panela) e o prato pronto. */

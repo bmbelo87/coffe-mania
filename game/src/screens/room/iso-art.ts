@@ -1,6 +1,7 @@
-import { Graphics, Sprite, type Texture } from 'pixi.js';
+import { Container, Graphics, Matrix, Sprite, TilingSprite, type Texture } from 'pixi.js';
 
-import type { IndoorArtFrame, IndoorSceneBackground } from '../../game/indoor-art';
+import type { IndoorArtFrame, IndoorSceneBackground, SceneBackgroundPart } from '../../game/indoor-art';
+import { WALL_THICKNESS } from '../../world/wallGeometry';
 import {
   DEPTH_BIAS_ITEM,
   DEPTH_BIAS_WALL,
@@ -205,14 +206,43 @@ export function createFloorViews(model: RoomModel, frame: IndoorArtFrame, textur
 }
 
 /** Cenário fora do quarto, na mesma raiz para acompanhar a câmera. */
+export function sceneBackgroundOffset(background: Pick<IndoorSceneBackground, 'wallContact'>): { x: number; y: number } {
+  // Both exterior wall normals have the same vertical clearance in the 2:1 projection.
+  // Only the decoration layer moves; floor tiles, door logic and actors keep their origin.
+  return { x: 0, y: background.wallContact === 'outer' ? -WALL_THICKNESS : 0 };
+}
+
 export function createSceneBackgroundView(
-  background: Pick<IndoorSceneBackground, 'left' | 'top'>,
+  background: Pick<SceneBackgroundPart, 'left' | 'top'> & Partial<SceneBackgroundPart>,
   texture: Texture,
   label = 'room-city-background',
-): Sprite {
-  const sprite = new Sprite(texture);
+): Container {
+  const view = new Container();
+  view.label = background.id ?? label;
+  view.eventMode = 'none';
+  const { width = texture.width, height = texture.height, matrix, repeat } = background;
+  if (background.sampling === 'direct') {
+    texture.source.autoGenerateMipmaps = false;
+    texture.source.mipLevelCount = 1;
+    texture.source.scaleMode = 'linear';
+  }
+  const sprite = repeat ? new TilingSprite({ texture, width, height }) : new Sprite(texture);
+  if (sprite instanceof TilingSprite && repeat) {
+    if (background.textureMatrix) {
+      const [a, b, c, d] = background.textureMatrix;
+      sprite.tileTransform.setFromMatrix(new Matrix(a * repeat.x, b * repeat.x, c * repeat.y, d * repeat.y));
+    } else sprite.tileScale.set(repeat.x, repeat.y);
+  }
+  else { sprite.width = width; sprite.height = height; }
   sprite.roundPixels = true;
-  sprite.label = label;
-  sprite.position.set(background.left, background.top);
-  return sprite;
+  view.addChild(sprite);
+  if (background.clip) {
+    const mask = new Graphics().poly(background.clip).fill(0xffffff);
+    mask.eventMode = 'none';
+    view.addChild(mask);
+    sprite.mask = mask;
+  }
+  if (matrix) view.setFromMatrix(new Matrix(...matrix, background.left, background.top));
+  else view.position.set(background.left, background.top);
+  return view;
 }

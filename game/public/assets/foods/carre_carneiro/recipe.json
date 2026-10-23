@@ -1,0 +1,14 @@
+{
+  "id": "carre_carneiro",
+  "name": "Carré de Carneiro",
+  "level": 51,
+  "durationSeconds": 28800,
+  "portions": 100,
+  "profitGold": 9,
+  "costGold": 210,
+  "xp": 90,
+  "inBook": true,
+  "category": "advanced",
+  "bookOrder": 2,
+  "source": "artes-referencia/receitas-cruzadas/lote-03/cruzamento.json; receita Carré de Carneiro. Ordem/categoria observadas no vídeo, não ordem de desbloqueio. Preparo provisório reutiliza a panela tampada de churrasco; sprite histórico específico não recuperado. "
+}

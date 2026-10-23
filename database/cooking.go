@@ -26,6 +26,7 @@ var errStoveNotOwned = errors.New("stove not owned")
 var errDishNotReady = errors.New("O prato ainda não está pronto.")
 var errCookingCannotCancel = errors.New("Não há prato neste fogão.")
 var errUnknownRecipe = errors.New("unknown recipe")
+var errRecipeLevel = errors.New("A receita ainda não foi desbloqueada neste nível.")
 var errNoCounter = errors.New("Não há balcão livre para este prato.")
 var errStoveDirty = errors.New("Limpe o fogão antes de cozinhar.")
 var errStoveClean = errors.New("O fogão já está limpo.")
@@ -131,7 +132,7 @@ func jobSpoilsAt(job *core.Record) types.DateTime {
 	return job.GetDateTime("ready_at").Add(validity)
 }
 
-// Starting a dish pays its cost and grants its XP immediately, as in the original game.
+// Starting a dish debits its cost; XP is carried to the counter and paid per portion.
 func startCooking(app core.App, userID, stoveID, recipeID string, now types.DateTime) error {
 	recipe, ok := recipecatalog.Cookable(recipeID)
 	if !ok {
@@ -165,6 +166,9 @@ func startCooking(app core.App, userID, stoveID, recipeID string, now types.Date
 		state, err := txApp.FindFirstRecordByData(playerstate.Collection, "user", userID)
 		if err != nil {
 			return err
+		}
+		if state.GetInt("level") < recipe.Level {
+			return errRecipeLevel
 		}
 		if state.GetInt64("gold") < recipe.CostGold {
 			return errRoomGold
@@ -376,7 +380,7 @@ func registerCookingRoutes(e *core.ServeEvent) {
 				return r.NotFoundError("Fogão indisponível.", nil)
 			case errors.Is(err, errStoveOccupied):
 				return apis.NewApiError(http.StatusConflict, "Fogão ocupado.", nil)
-			case errors.Is(err, errRoomGold), errors.Is(err, errStoveDirty):
+			case errors.Is(err, errRoomGold), errors.Is(err, errStoveDirty), errors.Is(err, errRecipeLevel):
 				return apis.NewApiError(http.StatusConflict, err.Error(), nil)
 			default:
 				return r.InternalServerError("Não foi possível iniciar o preparo.", err)

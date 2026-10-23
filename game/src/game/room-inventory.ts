@@ -38,6 +38,7 @@ export function sellGold(item: RoomCatalogItem, snapshot: RoomSnapshot): number 
   return Math.floor(item.priceGold * (snapshot.sellPercent ?? 30) / 100);
 }
 export interface ItemManifest extends RoomCatalogItem {
+  seatingBackrests?: IndoorArtEntry['seatingBackrests'];
   itemHeight: number; parts: (IndoorArtFrame & { rotation?: number; flipX?: boolean })[];
   wallpaperRotation?: 0 | 1; door?: IndoorArtEntry['door'];
   /** Folha de sprites em grade; cada quadro tem `gutter` px transparentes em volta. */
@@ -129,6 +130,7 @@ export async function loadRoomItemArt(snapshot: RoomSnapshot, legacy?: ArtProvid
       animation = { fps: sheet.fps, files, resolution };
     }
     entries[manifest.classname] = {
+      seatingBackrests: manifest.seatingBackrests,
       ...(animation ? { animation } : {}),
       characterId: manifest.id, frames, sizeX: manifest.sizeX, sizeY: manifest.sizeY,
       itemHeight: manifest.itemHeight, wallpaperRotation: manifest.wallpaperRotation, door: manifest.door,

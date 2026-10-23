@@ -31,14 +31,13 @@ export function juicePart(texture: Texture, x: number, y: number, width: number,
   return view;
 }
 /** Tab label over the exported blank tab; locked tabs reserve room on the left for the padlock. */
-export function juiceTab(art: { active: Texture; inactive: Texture; locked: Texture }, label: string, x: number, selected: boolean, locked: boolean, click: () => void): Container {
+export function juiceTab(art: { active: Texture; inactive: Texture; locked: Texture; padlock: Texture }, label: string, x: number, selected: boolean, locked: boolean, click: () => void): Container {
   const view = new Container();
   view.label = 'juice-tab:' + label;
   view.position.set(x, JUICE_TAB_Y);
   view.addChild(juicePart(locked ? art.locked : selected ? art.active : art.inactive, 0, 0, 130, 35));
   if (locked) {
-    view.addChild(new Graphics().roundRect(12, 12, 10, 11, 2).fill(0x818181).stroke({ color: 0x5d6263, width: 1 })
-      .roundRect(14, 6, 6, 9, 3).stroke({ color: 0x62696a, width: 2 }));
+    view.addChild(fitJuiceImage(art.padlock, 10, 4, 15, 23));
   }
   const text = juiceText(label, 0, 5, 15, locked ? 0xa0a4a4 : selected ? 0xffffff : 0x629fa8, '700', locked ? 0x777f80 : selected ? 0x62a8b1 : 0x5aa3ad);
   text.x = locked ? 27 : (130 - text.width) / 2;
@@ -52,14 +51,14 @@ export function juiceCard(texture: Texture, y: number): Container {
   view.addChild(juicePart(texture, -1, 0, 362, 77));
   return view;
 }
-export function juiceButton(label: string, x: number, y: number, width: number, click: () => void, enabled = true, tone: 'green' | 'red' | 'blue' = 'green'): Container {
+export function juiceButton(label: string, x: number, y: number, width: number, click: () => void, enabled = true, tone: 'green' | 'red' | 'blue' | 'grey' = 'green'): Container {
   const view = new Container(); view.label = 'juice-button:' + label; view.position.set(x, y);
-  const edge = tone === 'red' ? 0xa00009 : tone === 'blue' ? 0x047289 : 0x003d02;
-  const face = tone === 'red' ? gradient(0xff4450, 0xe40012, 0xbe0012) : tone === 'blue' ? gradient(0x51e8ef, 0x03bdda, 0x0586ae) : GREEN;
+  const edge = tone === 'grey' ? 0x888888 : tone === 'red' ? 0xa00009 : tone === 'blue' ? 0x047289 : 0x003d02;
+  const face = tone === 'grey' ? gradient(0xf2f2f2, 0xe5e5e5, 0xcccccc) : tone === 'red' ? gradient(0xff4450, 0xe40012, 0xbe0012) : tone === 'blue' ? gradient(0x51e8ef, 0x03bdda, 0x0586ae) : GREEN;
   view.addChild(new Graphics().roundRect(-1, 1, width + 2, 25, 4).fill({ color: 0, alpha: .23 })
     .roundRect(0, 0, width, 23, 4).fill(edge).roundRect(1.4, 1.4, width - 2.8, 20.2, 3).fill(face)
     .roundRect(3, 2, width - 6, 7, 2).fill({ color: 0xffffff, alpha: .14 }));
-  const text = juiceText(label, 0, 1, label.length > 20 ? 11 : 15, 0xffffff, '700', edge);
+  const text = juiceText(label, 0, 1, label.length > 20 ? 11 : 15, tone === 'grey' ? 0x999999 : 0xffffff, '700', tone === 'grey' ? 0xeeeeee : edge);
   text.x = (width - text.width) / 2; view.addChild(text);
   view.alpha = enabled ? 1 : .55; view.eventMode = enabled ? 'static' : 'none'; view.cursor = 'pointer';
   view.hitArea = new Rectangle(0, 0, width, 26);

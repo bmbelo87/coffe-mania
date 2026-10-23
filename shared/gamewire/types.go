@@ -26,6 +26,12 @@ type Food struct {
 	Portions int    `json:"portions,omitempty"`
 }
 
+// MealReturn is created by the room from a customer's live meal, never by browser input.
+type MealReturn struct {
+	CustomerID string `json:"customerId"`
+	RecipeID   string `json:"recipeId"`
+}
+
 type JuiceStock struct {
 	MachineID string `json:"machineId"`
 	RecipeID  string `json:"recipeId"`
@@ -33,18 +39,25 @@ type JuiceStock struct {
 	Unlocked  bool   `json:"unlocked"`
 	Stage     int    `json:"stage"`
 }
+type Employee struct {
+	ID         string `json:"id"`
+	Name       string `json:"name"`
+	Appearance string `json:"appearance"`
+}
 type World struct {
-	RoomID   string          `json:"roomId"`
-	Revision int             `json:"revision"`
-	TilesX   int             `json:"tilesX"`
-	TilesY   int             `json:"tilesY"`
+	RoomID   string `json:"roomId"`
+	Revision int    `json:"revision"`
+	TilesX   int    `json:"tilesX"`
+	TilesY   int    `json:"tilesY"`
 	// PatioX and PatioY are the patio floor beyond the café's front-left edge (0 without one).
-	PatioX int `json:"patioX"`
-	PatioY int `json:"patioY"`
-	Units    []Unit          `json:"units"`
-	Foods    []Food          `json:"foods"`
-	Cooking  json.RawMessage `json:"cooking,omitempty"`
-	Juices   []JuiceStock    `json:"juices"`
+	PatioX  int             `json:"patioX"`
+	PatioY  int             `json:"patioY"`
+	Units   []Unit          `json:"units"`
+	Foods   []Food          `json:"foods"`
+	Cooking json.RawMessage `json:"cooking,omitempty"`
+	Juices  []JuiceStock    `json:"juices"`
+	// nil denotes a legacy room without waiter simulation; an empty list requires hiring.
+	Employees []Employee `json:"employees"`
 }
 type Movement struct {
 	From      Tile  `json:"from"`
@@ -86,9 +99,11 @@ type Actor struct {
 	Path   []Tile `json:"path,omitempty"`
 	Visits int    `json:"visits,omitempty"`
 	// A customer's verdict is applied once: Ate marks a served meal, Judged a recorded visit.
-	Ate            bool   `json:"ate,omitempty"`
-	Judged         bool   `json:"judged,omitempty"`
-	JuiceRequestID string `json:"juiceRequestId,omitempty"`
+	Ate              bool   `json:"ate,omitempty"`
+	Judged           bool   `json:"judged,omitempty"`
+	JuiceRequestID   string `json:"juiceRequestId,omitempty"`
+	WaiterCustomerID string `json:"waiterCustomerId,omitempty"`
+	WaiterFoodID     string `json:"waiterFoodId,omitempty"`
 }
 
 // Business is the owner's private progress that drives the room: customer frequency
@@ -102,9 +117,11 @@ type Seed struct {
 	NPCs     []Actor  `json:"npcs"`
 	Looks    []string `json:"looks"`
 	Business Business `json:"business"`
+	Waiters  []Actor  `json:"waiters"`
 }
 type Sleep struct {
-	NPCs []Actor `json:"npcs"`
+	NPCs    []Actor `json:"npcs"`
+	Waiters []Actor `json:"waiters"`
 }
 type Operation struct {
 	Owner  string          `json:"owner"`
@@ -119,16 +136,16 @@ type Result struct {
 	Business *Business       `json:"business,omitempty"`
 }
 type Event struct {
-	Type      string          `json:"type"`
-	Epoch     string          `json:"epoch"`
-	Seq       uint64          `json:"seq"`
-	ServerNow int64           `json:"serverNow"`
-	SelfID    string          `json:"selfId,omitempty"`
-	World     *World          `json:"world,omitempty"`
-	Actors    []Actor         `json:"actors,omitempty"`
-	Removed   []string        `json:"removed,omitempty"`
-	Units     []Unit          `json:"units,omitempty"`
-	Revision  int             `json:"revision,omitempty"`
+	Type      string   `json:"type"`
+	Epoch     string   `json:"epoch"`
+	Seq       uint64   `json:"seq"`
+	ServerNow int64    `json:"serverNow"`
+	SelfID    string   `json:"selfId,omitempty"`
+	World     *World   `json:"world,omitempty"`
+	Actors    []Actor  `json:"actors,omitempty"`
+	Removed   []string `json:"removed,omitempty"`
+	Units     []Unit   `json:"units,omitempty"`
+	Revision  int      `json:"revision,omitempty"`
 	// TilesX and TilesY accompany a "world" event when the café or its patio changed size; the
 	// patio fields are then the full patio size (omitted when there is none).
 	TilesX    int             `json:"tilesX,omitempty"`
@@ -149,6 +166,7 @@ type Command struct {
 	Y         *int   `json:"ty,omitempty"`
 	ChairID   string `json:"chairId,omitempty"`
 	StoveID   string `json:"stoveId,omitempty"`
+	UnitID    string `json:"unitId,omitempty"`
 }
 
 // Latency is private transport telemetry, outside the ordered room event stream.

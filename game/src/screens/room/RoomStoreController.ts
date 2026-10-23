@@ -66,6 +66,7 @@ export class RoomStoreController {
   readonly cursorView = new Container();
   private snapshot: RoomSnapshot;
   private selection?: StoreEntry;
+  private selectionReady?: Promise<boolean>;
   private tile?: Tile;
   private rotation = 0;
   private dragging?: number;
@@ -92,6 +93,9 @@ export class RoomStoreController {
     snapshot: RoomSnapshot; client: RoomInventoryClient; model: RoomModel; world: Container; art: ArtProvider;
     apply(snapshot: RoomSnapshot): void; alpha(unitId: string, alpha: number): void;
     canPlace?(item: RoomCatalogItem, tile: Tile, rotation: number, unitId?: string): boolean;
+    /** The server frees customers and claims a placed table before it can move. */
+    prepareSelection?(item: RoomCatalogItem, unitId: string): Promise<void>;
+    releaseSelection?(item: RoomCatalogItem, unitId: string): void;
     isOverUI?(event: FederatedPointerEvent): boolean;
     /** Asks the player; true when the sale is confirmed. */
     confirmSell?(item: RoomCatalogItem, gold: number): Promise<boolean>;
@@ -170,12 +174,22 @@ export class RoomStoreController {
     this.cancel(); this.selection = entry; this.rotation = entry.unit?.rotation ?? 0;
     this.message(`${entry.item.name}: mova a prévia e clique para ${entry.unit ? 'colocar' : `comprar por ${entry.item.priceGold} ouro`}. R: girar. Esc: cancelar.${entry.unit ? ' Delete: guardar.' : ''}`);
     if (entry.unit?.placed) this.options.alpha(entry.unit.unitId, 0);
+    if (entry.unit?.placed && entry.item.kind === 'table' && this.options.prepareSelection) {
+      this.selectionReady = this.options.prepareSelection(entry.item, entry.unit.unitId).then(() => true, (error: unknown) => {
+        if (this.selection === entry) {
+          this.cancel();
+          this.message(error instanceof Error ? error.message : 'Não foi possível liberar a mesa.');
+        }
+        return false;
+      });
+    }
   }
   cancel(): boolean {
     if (this.busy) return Boolean(this.selection);
     const selected = Boolean(this.selection);
+    if (this.selection?.unit?.placed && this.selection.item.kind === 'table') this.options.releaseSelection?.(this.selection.item, this.selection.unit.unitId);
     if (this.selection?.unit) this.options.alpha(this.selection.unit.unitId, 1);
-    this.selection = undefined; this.tile = undefined; this.dragging = undefined; this.painting = undefined; this.pickOrigin = undefined;
+    this.selection = undefined; this.selectionReady = undefined; this.tile = undefined; this.dragging = undefined; this.painting = undefined; this.pickOrigin = undefined;
     this.cardDragStart = undefined; this.cardDragMoved = false; this.pointer = undefined; this.overUI = false; this.overRegister = false;
     this.store?.setRegisterActive(false);
     this.clearPreview(); this.cursorImage?.destroy(); this.cursorImage = undefined;
@@ -389,8 +403,8 @@ export class RoomStoreController {
     const item = this.snapshot.catalog.find((item) => item.id === unit?.itemId);
     if (!unit || !item || item.type < 2 || item.kind === 'wall') return false;
     event.stopPropagation();
-    // Cadeira com cliente sentado (ou a caminho) e a mesa dele não podem sair do lugar.
-    if (!(this.options.canPlace?.(item, { tx: unit.tx, ty: unit.ty }, unit.rotation, unit.unitId) ?? true)) {
+    // Occupied chairs stay protected. Tables are released by the shared simulation.
+    if (!(item.kind === 'table' && this.options.prepareSelection) && !(this.options.canPlace?.(item, { tx: unit.tx, ty: unit.ty }, unit.rotation, unit.unitId) ?? true)) {
       this.message(`${item.name} está sendo usado por um cliente agora.`);
       return true;
     }
@@ -411,6 +425,8 @@ export class RoomStoreController {
   async sell(): Promise<void> {
     const selection = this.selection;
     if (!selection?.unit || this.busy || !this.store?.isOpen) return;
+    if (this.selectionReady && !await this.selectionReady) return;
+    if (this.destroyed || this.busy || this.selection !== selection || !this.store?.isOpen) return;
     const { item, unit } = selection;
     const gold = sellGold(item, this.snapshot);
     if (gold <= 0) { this.message(`${item.name} não pode ser vendido.`); return; }
@@ -441,6 +457,8 @@ export class RoomStoreController {
   private async commit(store = false): Promise<void> {
     const selection = this.selection;
     if (!selection || this.busy) return;
+    if (this.selectionReady && !await this.selectionReady) return;
+    if (this.destroyed || this.busy || this.selection !== selection || !this.store?.isOpen) return;
     if (!store && (this.overUI || !this.tile || !this.validPlacement(selection.item, this.tile, this.rotation, selection.unit?.unitId))) {
       // Continua no mouse: o jogador só escolhe outro lugar (Esc cancela).
       if (this.painting === undefined) this.message('Não dá para colocar aqui. Escolha outro lugar ou aperte Esc.');

@@ -1,0 +1,32 @@
+{
+  "id": "arroz_carreteiro",
+  "name": "Arroz de Carreteiro",
+  "level": 10,
+  "durationSeconds": 7200,
+  "portions": 120,
+  "profitGold": 4,
+  "costGold": 180,
+  "xp": 100,
+  "inBook": true,
+  "category": "basic",
+  "bookOrder": 9,
+  "source": "artes-referencia/receitas-cruzadas/lote-03/cruzamento.json; receita Arroz de Carreteiro. Ordem/categoria observadas no vídeo, não ordem de desbloqueio. PROVISÓRIO: campos estimados identificados em provisionalRules, não confirmados como regras originais. Preparo provisório reutiliza a panela tampada de churrasco; sprite histórico específico não recuperado. ",
+  "provisionalRules": {
+    "level": {
+      "value": 10,
+      "reason": "Nível estimado para um prato intermediário de duas horas."
+    },
+    "costGold": {
+      "value": 180,
+      "reason": "Custo estimado; referência histórica ausente."
+    },
+    "portions": {
+      "value": 120,
+      "reason": "Rendimento estimado; referência histórica ausente."
+    },
+    "profitGold": {
+      "value": 4,
+      "reason": "Venda estimada; 480 brutos e 300 líquidos por lote de duas horas."
+    }
+  }
+}

@@ -45,7 +45,7 @@ func main() {
 		}
 		_ = server.Shutdown(ctx)
 	}()
-	log.Printf("Coffe Mania %s: instâncias Go disponíveis em %s", buildinfo.Version, addr)
+	log.Printf("Café Mania %s: instâncias Go disponíveis em %s", buildinfo.Version, addr)
 	if err = server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		log.Fatal(err)
 	}

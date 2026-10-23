@@ -1,4 +1,5 @@
 import type { Look, Wardrobe } from './wardrobe';
+import { starterLook } from './starter-look';
 
 /** Small, versioned wardrobe snapshot; geometry and textures stay in the catalogue. */
 export function serializeAppearance(look: Look): string {
@@ -6,7 +7,7 @@ export function serializeAppearance(look: Look): string {
 }
 
 export function restoreAppearance(wardrobe: Wardrobe, appearance?: string): Look {
-  const fallback = wardrobe.defaultLook();
+  const fallback = starterLook(wardrobe);
   if (!appearance) return fallback;
   try {
     const value = JSON.parse(appearance) as Record<string, unknown>;

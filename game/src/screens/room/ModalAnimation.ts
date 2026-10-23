@@ -4,7 +4,7 @@ export const MODAL_OPEN_DURATION_MS = 260;
 export const MODAL_CLOSE_DURATION_MS = 200;
 export const MODAL_OVERLAY_ALPHA = 0.65;
 
-/** Livro e temperos usam a mesma escala, fade e pequeno rebote ao abrir. */
+/** Curva compartilhada pelos popups: escala, fade e pequeno rebote ao abrir. */
 export function modalAnimationFrame(phase: 'opening' | 'closing', elapsedMs: number): {
   scale: number; alpha: number; backdropAlpha: number; finished: boolean;
 } {

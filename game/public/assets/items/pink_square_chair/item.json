@@ -47,5 +47,81 @@
     "art": "Reconstrução geométrica inspirada nas capturas do Café Mania fornecidas pelo responsável.",
     "calibration": "Tile 160×80, origem traseira. Alturas referenciadas em white_cloth_table e classic_chair.",
     "priceGold": "Valor escolhido para o projeto; não confirmado na configuração histórica."
-  }
+  },
+  "seatingBackrests": [
+    {
+      "rotation": 2,
+      "polygons": [
+        [
+          35,
+          0,
+          82,
+          0,
+          82,
+          56,
+          43,
+          76,
+          35,
+          70
+        ],
+        [
+          35,
+          18,
+          45,
+          18,
+          45,
+          121,
+          37,
+          122
+        ],
+        [
+          73,
+          0,
+          82,
+          0,
+          82,
+          104,
+          73,
+          104
+        ]
+      ]
+    },
+    {
+      "rotation": 3,
+      "polygons": [
+        [
+          47,
+          0,
+          0,
+          0,
+          0,
+          56,
+          39,
+          76,
+          47,
+          70
+        ],
+        [
+          47,
+          18,
+          37,
+          18,
+          37,
+          121,
+          45,
+          122
+        ],
+        [
+          9,
+          0,
+          0,
+          0,
+          0,
+          104,
+          9,
+          104
+        ]
+      ]
+    }
+  ]
 }

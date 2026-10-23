@@ -1,8 +1,13 @@
-# Coffe Mania — instruções para agentes de IA
+# Café Mania — instruções para agentes de IA
 
 Este documento reúne contexto técnico, referências, comandos e critérios de verificação para continuar o desenvolvimento. O README.md da raiz fica reservado aos textos do responsável pelo projeto; não o preencha automaticamente.
 
 ## Referências e regras de trabalho
+
+- Antes de implementar novas features, apresente ao responsável o plano do lote, as referências visuais e os assets que serão reutilizados ou criados. Uma solicitação de levantamento e planejamento termina na apresentação do plano; não inicie a implementação nesse mesmo levantamento.
+- Reutilize primeiro os assets existentes e adequados ao padrão visual atual. Se a arte necessária não estiver pronta e aproveitável, crie-a com Image Gen a partir das imagens de referência. Painéis, ícones, personagens e elementos ilustrados devem usar arte baseada em imagens; não substitua a arte por desenhos improvisados em SVG/CSS/Graphics. Texto dinâmico, áreas de clique e indicadores funcionais podem continuar separados no runtime.
+- Para os assets do cenário original do Café Mania, a fidelidade ao estilo original é obrigatória: usar capturas/pranchas como referência de silhueta, paleta, proporção, contornos e sombras. Não reinterpretar com realismo, brilho extra, enfeites ou estética diferente. Revisar ou descartar gerações divergentes; identificar reconstruções e detalhes sem evidência, sem apresentá-los como PNGs originais recuperados.
+- Diferencie PNG pronto para execução, imagem de referência que exige recorte/calibração e reconstrução gerada. Não anuncie que uma feature está pronta apenas porque seu ícone já existe. Registre fontes, lacunas nas regras e diferenças entre versões históricas.
 
 - Use o [Nitro Renderer](https://github.com/billsonnn/nitro-renderer) como uma das principais referências de arquitetura e boas práticas para o jogo. Ao investigar bugs atuais ou futuros, consulte seu código e explique como a solução se aplica ao nosso runtime.
 - Para renderização, examine RoomGeometry, RoomObjectLocationCacheItem, RoomSpriteCanvas, MovingObjectLogic, RoomPlane, FurnitureVisualization e AvatarVisualization. São referências para projeção, profundidade, camadas, cache, postura e interpolação. O Nitro é uma referência técnica, e nosso código possui adaptações próprias; não presuma que os algoritmos são idênticos.
@@ -154,6 +159,14 @@ O comando valida os manifestos e sincroniza os catálogos do cliente e de `share
 ### Versionamento e changelog
 
 Pull requests de contribuição não alteram a versão do jogo nem os títulos do Asset Studio. Quem mantém o projeto atualiza os arquivos de versão em conjunto ao preparar uma release e registra nela as mudanças do `CHANGELOG.md`, usando as seções Adicionado, Alterado, Corrigido, Removido e Observações. O título do `README.md` é do responsável pelo projeto: avise-o em vez de editar.
+
+O tamanho da mudança escolhe o número:
+
+- `0.X.0`: lote de funcionalidades;
+- `0.X.Y`: atualização pequena;
+- `0.X.Y1`, `0.X.Y2`…: correção pontual de um bug isolado sobre a `0.X.Y`. As correções logo depois de um lote usam `0.X.01`, `0.X.02`…
+
+A ordem de lançamento é a do `CHANGELOG.md`, não a ordem numérica do SemVer: `0.5.11` sai antes de `0.5.2`. O nome exibido do jogo é **Café Mania**. Os identificadores técnicos com `coffe` (variáveis `COFFE_*`, rotas `/api/coffe`, módulo Go, binários e chaves salvas) continuam como estão, por compatibilidade.
 
 ## Ferramentas de assets
 

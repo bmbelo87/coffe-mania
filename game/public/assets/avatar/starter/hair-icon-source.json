@@ -1,0 +1,12 @@
+{
+  "method": "Built-in Image Gen; generated faceless thumbnail matched to Hair03; alpha crop and downscale",
+  "master": "tools/avatar-fallback/hair-icon-source.png",
+  "prompt": "tools/avatar-fallback/hair-icon-prompt.txt",
+  "styleReference": "tools/avatar-fallback/hair-icon-style-reference.png",
+  "output": "game/public/assets/avatar/starter/hair-icon.png",
+  "symbol": "StarterHairIcon",
+  "size": [
+    128,
+    128
+  ]
+}

@@ -7,7 +7,7 @@ import { login, logout, type PlayerSession } from '../game/session';
 function card(host: HTMLElement): HTMLElement {
   host.innerHTML = `
     <main class="login-card">
-      <h1>Coffe Mania</h1>
+      <h1>Café Mania</h1>
       <div class="login-content"></div>
       <p class="login-error" role="alert" aria-live="polite"></p>
     </main>`;

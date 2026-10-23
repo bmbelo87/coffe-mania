@@ -1,0 +1,23 @@
+{
+  "tool": "image_gen.imagegen (integrado)",
+  "body": {
+    "references": [
+      "uv-template.png",
+      "reference.jpg"
+    ],
+    "output": "game/public/assets/avatar/starter/body.png",
+    "prompt": "Use case: precise-object-edit. Asset type: production UV albedo texture for existing low-poly 3D game character. Image 1 is the EXACT UV texture layout to edit, image 2 is the character appearance reference. Output a square 1024x1024 UV texture, NOT a rendered character. Preserve absolutely every region boundary and position from image 1. The face stays in upper left quarter, eyes centers at (160,207) and (360,207), eyebrows at y147, smiling mouth centered (255,294). Skin flat warm pale golden tan #efd79d, all upper and right blank skin regions remain skin. Match image2 large black cartoon eyes with white outer sclera, thick brown eyebrows and happy open red smile with white upper teeth. Keep facial features at identical locations and approximately same sizes as image1. Replace the lower half ivory chef uniform with very pale aqua blue fabric #bbefed and subtle cyan seams, retain exact collar shape and all six buttons arranged 2 columns x3 at same coordinates; make buttons golden yellow. Lower right trouser rectangle (x704..1024,y744..988) dark chocolate brown, bottom shoe strip dark brown. Top right blank skin region remains entirely blank for back of head and arms. No hair painted onto skin! Existing mesh supplies hair separately. Keep all boundaries, no new islands, no text, no labels, no outlines of UV mesh. Flat hand-painted simple 2010 low-poly social game textures, no perspective, no cast shadows."
+  },
+  "hair": {
+    "output": "game/public/assets/avatar/starter/hair.png",
+    "prompt": "Use case: stylized-concept. Asset type: square seamless albedo texture for low-poly brown hair of the Café Mania male starter character. Flat dark chocolate chestnut brown (#593011), very subtle broad angular polygon patches in #633717 and #49250c, only 10 percent tonal variation. Absolutely no strands, no fur, no drawing of hairstyle, no head, no eyes, no objects, no perspective, no cast shadows or baked lighting, no text, no border. Fill entire square edge to edge with brown material, opaque. The 3D geometry supplies the tall pointed angular hairstyle; this image supplies only subtle painted brown color variation."
+  },
+  "modular": {
+    "references": [
+      "game/public/assets/avatar/starter/body.png"
+    ],
+    "output": "game/public/assets/avatar/starter/modular-source.png",
+    "transparent_background": true,
+    "prompt": "Precise production asset edit: this is a square UV texture for a low-poly game character. Preserve the EXACT positions, proportions and colors of every existing eye, eyebrow, mouth, shirt, collar, button, pants and shoes. Replace ONLY all golden/beige skin colored areas with true transparent alpha, including the large blank top and right areas, the holes inside the collar, and all empty areas between eyes and brows. Keep both eyes including white sclera and black pupils, both brown eyebrows, the entire red open smiling mouth with white teeth, the pale cyan shirt with golden buttons, cyan collar and sleeves and the brown trouser rectangle and shoe band. No skin pixels or beige matte may remain around facial features. Do not redraw or move anything. Do NOT output a character rendering. Output the same square flat UV layout on actual transparent background. No checkerboard baked into image, no text, no extra objects. This texture will be sliced into independently selectable eyes, eyebrows, mouth, shirt and trousers."
+  }
+}

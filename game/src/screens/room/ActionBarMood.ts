@@ -19,10 +19,11 @@ export class ActionBarMood {
     scale: number,
     satisfaction?: ResourceValue,
     cafeName = '',
+    onRenameCafe?: () => void,
   ) {
     this.view.label = 'room-action-bar-mood';
     this.view.scale.set(scale);
-    this.view.eventMode = 'none';
+    this.view.eventMode = onRenameCafe ? 'passive' : 'none';
 
     this.icon = new Sprite(textures.satisfied[0]);
     this.icon.label = 'room-action-bar-mood-icon';
@@ -71,19 +72,27 @@ export class ActionBarMood {
     this.testerText.label = 'room-action-bar-mood-tester';
     this.testerText.anchor.set(0.5, 0);
     this.testerText.position.set(356, 727);
+    if (onRenameCafe) {
+      this.testerText.eventMode = 'static';
+      this.testerText.cursor = 'pointer';
+      this.testerText.on('pointertap', (event) => { event.stopPropagation(); onRenameCafe(); });
+    }
 
     this.view.addChild(this.icon, this.valueText, this.maximumText, this.testerText);
+    this.setCafeName(cafeName);
     this.setSatisfaction(satisfaction ?? { current: 0, maximum: 105 });
     this.view.visible = satisfaction !== undefined;
   }
 
   setCafeName(name: string): void {
     this.testerText.text = name;
+    this.testerText.scale.x = 1;
+    if (this.testerText.width > 265) this.testerText.scale.x = 265 / this.testerText.width;
   }
 
   setSatisfaction(value: ResourceValue): void {
     this.view.visible = true;
-    // Do vermelho mais irritado ao sorriso mais aberto, em dez faixas iguais.
+    // PROVISIONAL: ten equal score bands; historical HUD expression thresholds are unverified.
     const step = Math.min(9, Math.floor(resourcePercentage(value) / 10));
     const texture = step < 5
       ? this.textures.dissatisfied[4 - step]

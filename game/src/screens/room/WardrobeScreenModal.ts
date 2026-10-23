@@ -10,6 +10,7 @@ import { FONT_FAMILY } from '../../core/font-tokens';
 import { AVATAR_URLS, loadAvatarAssets, type ActionBarButtonTextures } from '../../game/asset-manifest';
 import { CATEGORY_PULSE_DURATION_MS, drawCategorySelectionPulse } from './CategorySelectionPulse';
 import './wardrobe-colour-editor.css';
+import { PopupOpening, animatePopupElement } from './PopupOpening';
 
 export interface WardrobeScreenTextures {
   light1: Texture;
@@ -65,6 +66,8 @@ type ColourGroup = 'SkinColour' | 'HairColour';
 
 /** Guarda-roupa sobre toda a janela, independente do zoom do mapa. */
 export class WardrobeScreenModal {
+  private readonly popupContent = new Container();
+  private readonly popup: PopupOpening;
   readonly view = new Container();
 
   private readonly background = new Container();
@@ -261,6 +264,10 @@ export class WardrobeScreenModal {
     this.closeButton.on('pointertap', (event) => { event.stopPropagation(); this.close(); });
     this.view.addChild(this.closeButton);
 
+    const foreground = this.view.children.filter(child => child !== this.background);
+    this.popupContent.addChild(...foreground);
+    this.view.addChild(this.popupContent);
+    this.popup = new PopupOpening(this.popupContent, STAGE_WIDTH / 2, STAGE_HEIGHT / 2);
     this.setStageScale(1);
     if (typeof window !== 'undefined') window.addEventListener('keydown', this.onKeyDown);
   }
@@ -288,6 +295,7 @@ export class WardrobeScreenModal {
     if (!this.confirmSaving) this.confirmStatus.text = '';
     this.syncConfirmFeedback();
     this.view.visible = true;
+    this.popup.open();
     this.onVisibilityChange?.(true);
     void this.ensureAvatar().catch((error) => {
       console.warn('[wardrobe-avatar] modelo 3D indisponível', error);
@@ -305,6 +313,7 @@ export class WardrobeScreenModal {
 
   update(deltaMs: number): void {
     if (!this.isOpen) return;
+    this.popup.update(deltaMs);
     const elapsedMs = Math.max(0, deltaMs);
     this.categoryPulseMs = (this.categoryPulseMs + elapsedMs) % CATEGORY_PULSE_DURATION_MS;
     this.categoryPulseDrawMs += elapsedMs;
@@ -330,6 +339,7 @@ export class WardrobeScreenModal {
     this.stageScale = scale;
     const width = typeof window === 'undefined' ? STAGE_WIDTH : window.innerWidth / scale;
     const height = typeof window === 'undefined' ? STAGE_HEIGHT : window.innerHeight / scale;
+    this.popup.setCenter(width / 2, height / 2);
     // Compensa o letterbox da stage para cobrir inclusive suas sobras laterais.
     this.view.position.set((STAGE_WIDTH - width) / 2, (STAGE_HEIGHT - height) / 2);
     this.view.hitArea = new Rectangle(0, 0, width, height);
@@ -688,6 +698,7 @@ export class WardrobeScreenModal {
     });
     document.body.appendChild(backdrop);
     this.colourEditor = backdrop;
+    animatePopupElement(dialog, backdrop);
     hex.focus();
     hex.select();
   }

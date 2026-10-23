@@ -1,0 +1,14 @@
+{
+  "id": "pimentao_recheado_chef",
+  "name": "Pimentão Recheado do Chef",
+  "level": 56,
+  "durationSeconds": 1500,
+  "portions": 135,
+  "profitGold": 3,
+  "costGold": 100,
+  "xp": 38,
+  "inBook": true,
+  "category": "advanced",
+  "bookOrder": 7,
+  "source": "artes-referencia/receitas-cruzadas/lote-04/cruzamento.json; receita Pimentão Recheado do Chef. Ordem/categoria observadas no vídeo, não ordem de desbloqueio. Preparo provisório reutiliza a panela tampada de churrasco; sprite histórico específico não recuperado. "
+}

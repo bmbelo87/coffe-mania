@@ -24,9 +24,12 @@ type Resource struct {
 }
 
 type Snapshot struct {
+	LevelUps       []LevelReward    `json:"levelUps"`
+	WaiterSlots    int              `json:"waiterSlots"`
 	SpiceInventory map[string]int64 `json:"spiceInventory"`
 	Appearance     string           `json:"appearance"`
 	CafeName       string           `json:"cafeName"`
+	CafeNameChosen bool             `json:"cafeNameChosen"`
 	Cash           int64            `json:"cash"`
 	Gold           int64            `json:"gold"`
 	Level          int              `json:"level"`
@@ -47,6 +50,9 @@ func NewRecord(collection *core.Collection, userID string) *core.Record {
 		"crates_current": 4, "crates_max": 4,
 		"satisfaction_current_tenths": DefaultPopularityTenths, "satisfaction_max_tenths": MaxPopularityTenths,
 	})
+	if collection.Fields.GetByName("appearance") != nil {
+		record.Set("appearance", appearance.Initial())
+	}
 	return record
 }
 
@@ -63,9 +69,12 @@ func View(record *core.Record) Snapshot {
 	level := record.GetInt("level")
 	experience.Minimum = float64(RequiredXP(min(level, MaxLevel()-1)))
 	return Snapshot{
+		LevelUps:       PendingLevelRewards(record),
+		WaiterSlots:    WaiterSlots(level),
 		SpiceInventory: stock,
 		Appearance:     record.GetString("appearance"),
 		CafeName:       record.GetString("cafe_name"),
+		CafeNameChosen: record.GetBool("cafe_name_chosen"),
 		Cash:           record.GetInt64("cash"), Gold: record.GetInt64("gold"), Level: record.GetInt("level"),
 		Experience:   experience,
 		Energy:       resource("energy_current", "energy_max", 1),

@@ -8,5 +8,7 @@
   "costGold": 60,
   "xp": 30,
   "inBook": true,
+  "category": "basic",
+  "bookOrder": 3,
   "source": "Tabela de jogadores 'Alimentos, lucro e XP' (dicas-cafemania.blogspot.com, 10/09/2010): lucro 12, quantidade 22, preço 60, XP 30, tempo 35 min. Nível 3 na tabela de níveis iniciais (cafemaniamania.blogspot.com, 2014). 3º prato do livro."
 }

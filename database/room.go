@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"coffe-mania/database/playerstate"
+	"coffe-mania/database/starterroom"
 	"coffe-mania/shared/roomcatalog"
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/apis"
@@ -123,6 +124,11 @@ func ensureRoom(app core.App, userID string) error {
 						return err
 					}
 					starterStoveUsed = true
+					stove.Set("tx", x)
+					stove.Set("ty", y)
+					if err := tx.Save(stove); err != nil {
+						return err
+					}
 				} else {
 					stove = core.NewRecord(stoves)
 					stove.Load(map[string]any{"user": userID, "item_id": id, "tx": x, "ty": y})
@@ -136,17 +142,14 @@ func ensureRoom(app core.App, userID string) error {
 			}
 			return tx.Save(unit)
 		}
-		// The starter café of the original (January 2014 capture), on its 6x9 floor (x 1..6 along
-		// the door wall, y 1..9 along the other): the kitchen is a checkerboard of three stoves and
-		// three counters at the front-left, each facing a free tile where the chef or the waiter
-		// stands; four white-cloth tables with one chair each fill the dining room, the green check
-		// table with two chairs sits by the end of the door wall, and the tile inside the door stays
-		// free; door and windows on the right wall, the menu board, the
-		// achievement panel and a window on the left one. docs/cafe-inicial-2014.md lists the
-		// pieces of the capture that still have no art (lamps, payphone, clock, poster).
+		// The kitchen has two parallel rows with a free aisle. The dining room and wall pieces
+		// follow the January 2014 reference on a 6x9 floor; the tile inside the door stays free.
+		for _, piece := range starterroom.Kitchen() {
+			if err := add(piece.ItemID, piece.TX, piece.TY, piece.Rotation); err != nil {
+				return err
+			}
+		}
 		starters := [][4]int{
-			{3070000, 1, 7, 3}, {3070000, 3, 7, 3}, {3070000, 2, 8, 1},
-			{starterCounterItemID, 2, 7, 3}, {starterCounterItemID, 1, 8, 1}, {starterCounterItemID, 3, 8, 1},
 			{3030010, 2, 2, 0}, {3040001, 1, 2, 0}, {3030010, 2, 4, 0}, {3040001, 1, 4, 0},
 			{3030010, 4, 3, 0}, {3040001, 5, 3, 2}, {3030010, 4, 5, 0}, {3040001, 5, 5, 2},
 			{9030302, 6, 2, 0}, {9040301, 6, 1, 1}, {9040301, 5, 2, 0},

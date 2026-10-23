@@ -1,0 +1,89 @@
+{
+  "source": "tools/cafe-name/classic-reference.png",
+  "sourceSHA256": "f986d8bfd906e9f97c58d72a7d1a89612f929bc02654c2aace26e8b09f483dfa",
+  "restoredSource": "tools/cafe-name/classic-restoration-source.png",
+  "prompt": "tools/cafe-name/classic-background-prompt.txt",
+  "method": "Built-in Image Gen reconstruction restricted to UI/capture marks; original pixels retained elsewhere",
+  "patches": [
+    {
+      "id": "caption",
+      "bounds": [
+        449,
+        635,
+        1054,
+        681
+      ],
+      "radius": 5
+    },
+    {
+      "id": "name-field",
+      "bounds": [
+        510,
+        682,
+        993,
+        807
+      ],
+      "radius": 22
+    },
+    {
+      "id": "confirm-button",
+      "bounds": [
+        995,
+        699,
+        1160,
+        789
+      ],
+      "radius": 12
+    },
+    {
+      "id": "capture-mark-top",
+      "bounds": [
+        1257,
+        10,
+        1497,
+        36
+      ],
+      "radius": 3
+    },
+    {
+      "id": "capture-mark-bottom",
+      "bounds": [
+        0,
+        804,
+        227,
+        829
+      ],
+      "radius": 3
+    }
+  ],
+  "crop": [
+    178,
+    5,
+    1329,
+    830
+  ],
+  "nativeSize": [
+    1151,
+    825
+  ],
+  "outputSize": [
+    3453,
+    2475
+  ],
+  "upscale": "3x uniform Lanczos, no invented detail",
+  "preservedPixelsUnchanged": true,
+  "controls": {
+    "field": {
+      "left": 338,
+      "top": 681,
+      "width": 469,
+      "height": 113
+    },
+    "button": {
+      "left": 822,
+      "top": 699,
+      "width": 153,
+      "height": 79
+    }
+  }
+}

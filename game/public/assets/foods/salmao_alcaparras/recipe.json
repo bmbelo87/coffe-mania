@@ -1,0 +1,14 @@
+{
+  "id": "salmao_alcaparras",
+  "name": "Salmão com Alcaparras",
+  "level": 55,
+  "durationSeconds": 75600,
+  "portions": 265,
+  "profitGold": 5,
+  "costGold": 260,
+  "xp": 130,
+  "inBook": true,
+  "category": "advanced",
+  "bookOrder": 6,
+  "source": "artes-referencia/receitas-cruzadas/lote-04/cruzamento.json; receita Salmão com Alcaparras. Ordem/categoria observadas no vídeo, não ordem de desbloqueio. Preparo provisório reutiliza a panela tampada de churrasco; sprite histórico específico não recuperado. "
+}

@@ -102,6 +102,10 @@ type entity struct {
 	// successful step since.
 	stuckSince time.Time
 	ghost      bool
+	// A furniture-valid route is temporarily unavailable because of actor occupancy.
+	blockedByActors bool
+	// A held table cannot acquire a new customer before its placement is committed.
+	editingTable string
 }
 type room struct {
 	manager       *Manager
@@ -178,6 +182,7 @@ func (m *Manager) get(ctx context.Context, id string) (*room, error) {
 				}
 				r.indexActor(r.actors[a.ID])
 			}
+			r.syncWaiters(seed.Waiters, r.frozenAt)
 			s.room = r
 			go r.run()
 		}
@@ -303,6 +308,15 @@ func (m *Manager) Operate(ctx context.Context, op gamewire.Operation) (gamewire.
 		}
 		if result.Status >= 200 && result.Status < 300 && result.World != nil {
 			r.updateWorld(*result.World)
+			if op.Action == "move" || op.Action == "store" || op.Action == "sell" {
+				var body struct {
+					UnitID string `json:"unitId"`
+				}
+				_ = json.Unmarshal(op.Body, &body)
+				if actor := r.actors["human:"+op.User]; actor != nil && actor.editingTable == body.UnitID {
+					actor.editingTable = ""
+				}
+			}
 			r.finishJuiceOperation(op, time.Now())
 			if result.Business != nil {
 				r.business = *result.Business
@@ -523,8 +537,9 @@ func (r *room) sleep(now time.Time) error {
 		r.frozenAt = now
 	}
 	npcs := []gamewire.Actor{}
+	waiters := []gamewire.Actor{}
 	for _, a := range r.actors {
-		if a.Kind != "npc" {
+		if !autonomous(a) {
 			continue
 		}
 		state := r.status(a, true)
@@ -540,11 +555,15 @@ func (r *room) sleep(now time.Time) error {
 		state.Visits = a.visits
 		state.Ate = a.Ate
 		state.Judged = a.Judged
-		npcs = append(npcs, state)
+		if a.Kind == "waiter" {
+			waiters = append(waiters, state)
+		} else {
+			npcs = append(npcs, state)
+		}
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 8*time.Second)
 	defer cancel()
-	err := r.manager.store.Sleep(ctx, r.id, gamewire.Sleep{NPCs: npcs})
+	err := r.manager.store.Sleep(ctx, r.id, gamewire.Sleep{NPCs: npcs, Waiters: waiters})
 	// A failed save keeps the room and final state for retry, without continuing simulation.
 	if err != nil {
 		r.sleepFailures++
@@ -738,10 +757,10 @@ func (r *room) indexActor(a *entity) {
 	}
 }
 func (r *room) canWalk(t Tile, a *entity) bool {
+	return r.canWalkGeometry(t, a) && (a.ghost || !r.occupied(t, a.ID))
+}
+func (r *room) canWalkGeometry(t Tile, a *entity) bool {
 	if !r.grid.inside(t) {
-		return false
-	}
-	if !a.ghost && r.occupied(t, a.ID) {
 		return false
 	}
 	if r.grid.walkable(t) {
@@ -787,17 +806,21 @@ func (r *room) route(a *entity, dest Tile, now time.Time) bool {
 	limit := r.grid.width * r.grid.height * 4
 	a.ghost = false
 	path := findPath(start, dest, func(t Tile) bool { return r.canWalk(t, a) }, limit)
-	if path == nil && r.mayGhost(a, now) {
-		a.ghost = true
-		if path = findPath(start, dest, func(t Tile) bool { return r.canWalk(t, a) }, limit); path == nil {
-			a.ghost = false
+	if path == nil {
+		var staticPath []Tile
+		if autonomous(a) {
+			staticPath = findPath(start, dest, func(t Tile) bool { return r.canWalkGeometry(t, a) }, limit)
+		}
+		r.noteStuck(a, now, staticPath != nil)
+		if staticPath != nil && r.mayGhost(a, now) {
+			a.ghost, path = true, staticPath
 		}
 	}
 	if path == nil {
-		r.noteStuck(a, now)
 		return false
 	}
 	a.stuckSince = time.Time{}
+	a.blockedByActors = false
 	a.path = path
 	if a.Move == nil {
 		r.nextStep(a, now)
@@ -825,17 +848,19 @@ func (r *room) nextStep(a *entity, now time.Time) bool {
 		return false
 	}
 	external := a.Kind == "npc" && a.Outside && (dest.X <= 0 || dest.Y <= 0)
-	if !external && !r.canWalk(dest, a) {
-		r.noteStuck(a, now)
+	cornerBlocked := dest.X != from.X && dest.Y != from.Y && !r.canWalk(Tile{X: dest.X, Y: from.Y}, a) && !r.canWalk(Tile{X: from.X, Y: dest.Y}, a)
+	if !external && (!r.canWalk(dest, a) || cornerBlocked) {
 		goal := a.path[len(a.path)-1]
 		limit := r.grid.width * r.grid.height * 4
 		alternative := findPath(from, goal, func(t Tile) bool { return r.canWalk(t, a) }, limit)
-		if len(alternative) == 0 && r.mayGhost(a, now) {
-			// Nobody can get out of the way (a one-tile aisle, two customers face to face):
-			// let this customer pass through the others rather than wait forever.
-			a.ghost = true
-			if alternative = findPath(from, goal, func(t Tile) bool { return r.canWalk(t, a) }, limit); len(alternative) == 0 {
-				a.ghost = false
+		if len(alternative) == 0 {
+			var staticPath []Tile
+			if autonomous(a) {
+				staticPath = findPath(from, goal, func(t Tile) bool { return r.canWalkGeometry(t, a) }, limit)
+			}
+			r.noteStuck(a, now, len(staticPath) > 0)
+			if len(staticPath) > 0 && r.mayGhost(a, now) {
+				a.ghost, alternative = true, staticPath
 			}
 		}
 		if len(alternative) == 0 {
@@ -845,13 +870,8 @@ func (r *room) nextStep(a *entity, now time.Time) bool {
 		a.path = alternative
 		dest = alternative[0]
 	}
-	if !external && dest.X != from.X && dest.Y != from.Y && !r.canWalk(Tile{X: dest.X, Y: from.Y}, a) && !r.canWalk(Tile{X: from.X, Y: dest.Y}, a) {
-		a.path = nil
-		return false
-	}
-	if !a.ghost {
-		a.stuckSince = time.Time{}
-	}
+	a.stuckSince = time.Time{}
+	a.blockedByActors = false
 	a.path = a.path[1:]
 	a.Direction = direction(from, dest)
 	a.Move = &gamewire.Movement{From: from, To: dest, StartedAt: now.UnixMilli(), Duration: stepDuration(r.manager.options.Step, from, dest).Milliseconds()}
@@ -866,6 +886,18 @@ func (r *room) command(p *Peer, c gamewire.Command) {
 	}
 	fail := func(message string) {
 		r.send(p, gamewire.Event{Type: "error", RequestID: c.RequestID, Message: message})
+	}
+	if c.Type == "edit_table" {
+		if p.Ticket.User != r.id {
+			fail("Somente o dono pode decorar.")
+			return
+		}
+		if message := r.prepareTableEdit(a, c.UnitID); message != "" {
+			fail(message)
+			return
+		}
+		r.send(p, gamewire.Event{Type: "ack", RequestID: c.RequestID})
+		return
 	}
 	if busyAtStove(a.State) && time.Now().Before(a.due) {
 		if c.Type == "serve_prepare" && a.State == "serving" && a.Action != nil && a.Action.StoveID == c.StoveID {
@@ -967,7 +999,7 @@ func (r *room) reserveChair(a *entity, id string, now time.Time) bool {
 			break
 		}
 	}
-	if !r.route(a, Tile{X: chair.X, Y: chair.Y}, now) {
+	if r.tableBeingEdited(a.TableID) || !r.route(a, Tile{X: chair.X, Y: chair.Y}, now) {
 		if oldChair != id {
 			delete(r.seats, id)
 		}
@@ -1144,6 +1176,7 @@ func (r *room) updateWorld(w gamewire.World) {
 	juicesChanged := fmt.Sprint(w.Juices) != fmt.Sprint(r.world.Juices)
 	resized := w.TilesX != r.world.TilesX || w.TilesY != r.world.TilesY || w.PatioX != r.world.PatioX || w.PatioY != r.world.PatioY
 	r.world = w
+	r.syncWaiters(nil, time.Now())
 	if resized && w.TilesX >= 2 && w.TilesY >= 2 {
 		// Expansion only adds rows and columns at the far edges and the patio follows the café's
 		// front-left edge; the units that moved with it arrive in the same world update.
@@ -1291,6 +1324,11 @@ func (r *room) tick(now time.Time) {
 				changed = true
 			}
 		}
+		if a.Kind == "waiter" {
+			before := a.Actor
+			r.advanceWaiter(a, now)
+			changed = changed || before.State != a.State || before.Move != a.Move || before.Food != a.Food || before.WaiterCustomerID != a.WaiterCustomerID || before.WaiterFoodID != a.WaiterFoodID
+		}
 		if changed {
 			updates = append(updates, r.status(a, false))
 		}
@@ -1332,11 +1370,22 @@ func line(from, to Tile) []Tile {
 
 // Moving between the two sidewalks stays outside both walls.
 func streetLine(from, to Tile) []Tile {
-	if from.X <= 0 && to.X <= 0 || from.Y <= 0 && to.Y <= 0 {
+	if (from.X <= 0) == (to.X <= 0) {
 		return line(from, to)
 	}
 	corner := Tile{X: -1, Y: -1}
 	return append(line(from, corner), line(corner, to)...)
+}
+
+func (r *room) streetEndpoint(side int) Tile {
+	switch side {
+	case 0:
+		return Tile{X: -1, Y: -8}
+	case 1:
+		return Tile{X: -1, Y: r.grid.height + 8}
+	default:
+		return Tile{X: r.grid.width + 8, Y: -1}
+	}
 }
 func (r *room) spawnNPC(now time.Time) {
 	if len(r.looks) == 0 {
@@ -1347,18 +1396,12 @@ func (r *room) spawnNPC(now time.Time) {
 		return
 	}
 	entry := opening(door)
-	start := Tile{X: entry.X, Y: -8}
+	start := r.streetEndpoint(rand.IntN(3))
 	turn := Tile{X: entry.X, Y: entry.Y}
-	if entry.Y == 0 {
-		start = Tile{X: r.grid.width + 8, Y: entry.Y}
-		turn = Tile{X: entry.X, Y: entry.Y}
-	}
 	// External actors stay one tile beyond the walls until the actual doorway.
 	if entry.X == 0 {
-		start.X = -1
 		turn.X = -1
 	} else {
-		start.Y = -1
 		turn.Y = -1
 	}
 	inUse := map[string]bool{}
@@ -1378,7 +1421,7 @@ func (r *room) spawnNPC(now time.Time) {
 	}
 	look := available[rand.IntN(len(available))]
 	a := &entity{Actor: gamewire.Actor{ID: "npc:" + uuid.NewString(), Kind: "npc", Name: "Cliente", Appearance: look, X: start.X, Y: start.Y, Outside: true, State: "entering"}}
-	a.path = append(line(start, turn), line(turn, entry)...)
+	a.path = append(streetLine(start, turn), line(turn, entry)...)
 	a.path = append(a.path, Tile{X: door.X, Y: door.Y})
 	r.actors[a.ID] = a
 	r.nextStep(a, now)
@@ -1391,55 +1434,68 @@ func (r *room) advanceNPC(a *entity, now time.Time) bool {
 		a.State = "wandering"
 		a.due = now.Add(time.Second)
 	case "wandering":
+		waitingForActors := false
 		if a.visits < 2 {
 			for _, u := range r.world.Units {
 				it, _ := roomcatalog.ByID(u.ItemID)
-				if it.Kind == "chair" && r.seats[u.ID] == "" && r.reserveChair(a, u.ID, now) {
-					return false
+				if it.Kind == "chair" && r.seats[u.ID] == "" {
+					if r.reserveChair(a, u.ID, now) {
+						return false
+					}
+					waitingForActors = waitingForActors || a.blockedByActors
 				}
 			}
+		}
+		if waitingForActors {
+			r.noteStuck(a, now, true)
+			a.due = now.Add(time.Second)
+			return false
 		}
 		if a.visits >= 3 {
 			r.exitNPC(a, now)
 			return false
 		}
 		tiles := []Tile{}
+		occupiedTiles := []Tile{}
+		start := Tile{X: a.X, Y: a.Y}
 		reachable := r.reachableTiles(Tile{X: a.X, Y: a.Y})
 		for y := 1; y < r.grid.height; y++ {
 			for x := 1; x < r.grid.width; x++ {
 				t := Tile{X: x, Y: y}
-				if reachable[t] && r.grid.walkable(t) && !r.occupied(t, a.ID) {
-					tiles = append(tiles, t)
+				if t != start && reachable[t] && r.grid.walkable(t) {
+					if r.occupied(t, a.ID) {
+						occupiedTiles = append(occupiedTiles, t)
+					} else {
+						tiles = append(tiles, t)
+					}
 				}
 			}
 		}
+		if len(tiles) == 0 && len(occupiedTiles) > 0 {
+			r.noteStuck(a, now, true)
+			if r.mayGhost(a, now) {
+				tiles = occupiedTiles
+			} else {
+				a.due = now.Add(time.Second)
+				return false
+			}
+		}
 		if len(tiles) > 0 {
-			r.route(a, tiles[rand.IntN(len(tiles))], now)
+			if !r.route(a, tiles[rand.IntN(len(tiles))], now) && a.blockedByActors {
+				a.due = now.Add(time.Second)
+				return false
+			}
 		}
 		a.visits++
 		a.due = now.Add(2 * time.Second)
 	case "seated":
-		if index := r.servingFood(); a.TableID != "" && index >= 0 {
-			food := r.world.Foods[index]
-			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-			business, err := r.manager.store.Consume(ctx, r.id, food.ID)
-			cancel()
-			if err == nil {
-				r.business = business
-				a.Ate = true
-				if food.Portions > 1 {
-					r.world.Foods[index].Portions--
-				} else {
-					r.world.Foods = append(r.world.Foods[:index:index], r.world.Foods[index+1:]...)
-				}
-				a.Food = &gamewire.Food{ID: food.ID, Recipe: food.Recipe}
-				a.State = "eating"
-				a.due = now.Add(8 * time.Second)
-				a.Action = &gamewire.ActorAction{Kind: "eating", StartedAt: now.UnixMilli(), Duration: 8000}
-				r.broadcast(gamewire.Event{Type: "food", Foods: r.world.Foods}, "")
+		// nil supports old saved/protocol fixtures; current worlds always include a roster.
+		if r.world.Employees == nil {
+			if index := r.servingFood(); a.TableID != "" && index >= 0 && r.deliverMeal(a, index, now) {
 				return false
 			}
 		}
+
 		a.due = nextFoodCheck(a.due, now)
 		a.visits++
 		if a.visits >= int(customerFoodWait/customerFoodCheck) {
@@ -1462,7 +1518,8 @@ func (r *room) advanceNPC(a *entity, now time.Time) bool {
 func (r *room) standNPC(a *entity, now time.Time) {
 	dest, ok := r.freeNeighbour(Tile{X: a.X, Y: a.Y}, a, false)
 	if !ok {
-		r.noteStuck(a, now)
+		_, actorsOnly := r.freeNeighbour(Tile{X: a.X, Y: a.Y}, a, true)
+		r.noteStuck(a, now, actorsOnly)
 		// Boxed in by customers: step onto a neighbour tile through them.
 		if r.mayGhost(a, now) {
 			dest, ok = r.freeNeighbour(Tile{X: a.X, Y: a.Y}, a, true)
@@ -1502,14 +1559,13 @@ func (r *room) exitNPC(a *entity, now time.Time) {
 	a.Outside = true
 	openingTile := opening(door)
 	turn := openingTile
-	exit := Tile{X: -1, Y: r.grid.height + 8}
+	exit := r.streetEndpoint(rand.IntN(3))
 	if openingTile.X == 0 {
 		turn.X = -1
 	} else {
 		turn.Y = -1
-		exit = Tile{X: r.grid.width + 8, Y: -1}
 	}
 	a.path = append(line(entry, openingTile), line(openingTile, turn)...)
-	a.path = append(a.path, line(turn, exit)...)
+	a.path = append(a.path, streetLine(turn, exit)...)
 	r.nextStep(a, now)
 }

@@ -1,0 +1,14 @@
+{
+  "id": "bolo_cenoura",
+  "name": "Bolo de Cenoura",
+  "level": 5,
+  "durationSeconds": 64800,
+  "portions": 450,
+  "profitGold": 2,
+  "costGold": 200,
+  "xp": 90,
+  "inBook": true,
+  "category": "basic",
+  "bookOrder": 12,
+  "source": "artes-referencia/receitas-cruzadas/lote-03/cruzamento.json; receita Bolo de Cenoura. Ordem/categoria observadas no vídeo, não ordem de desbloqueio. Preparo provisório reutiliza a panela tampada de churrasco; sprite histórico específico não recuperado. "
+}

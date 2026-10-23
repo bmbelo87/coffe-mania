@@ -11,6 +11,7 @@
   "sourceHeight": 40
  },
  "sceneBackground": {
+  "source": "Restaurant City game_asset.swf; provenance and native-vector junction repair: tools/street-scenery/source.json",
   "file": "CityBackground.png",
   "left": -3200,
   "top": -1630,

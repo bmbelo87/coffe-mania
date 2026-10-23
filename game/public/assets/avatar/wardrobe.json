@@ -106,6 +106,18 @@
  ],
  "items": [
   {
+   "id": 1000021,
+   "name": "Calça castanha Café Mania",
+   "group": "Pants",
+   "objects": [
+    "pants01"
+   ],
+   "hideGroups": [],
+   "texture": "StarterPants",
+   "cost": 0,
+   "priority": 0
+  },
+  {
    "id": 1000000,
    "group": "Pants",
    "name": "Placeholder Pants",
@@ -697,6 +709,20 @@
     "dress"
    ],
    "hideGroups": [],
+   "priority": 0
+  },
+  {
+   "id": 1020056,
+   "name": "Uniforme azul Café Mania",
+   "group": "Shirt",
+   "objects": [
+    "shirt01",
+    "armleft",
+    "armright"
+   ],
+   "hideGroups": [],
+   "texture": "StarterShirt",
+   "cost": 0,
    "priority": 0
   },
   {
@@ -1921,6 +1947,18 @@
    "priority": 0
   },
   {
+   "id": 1040016,
+   "name": "Cabelo pontudo Café Mania",
+   "group": "Hair",
+   "objects": [
+    "hairStarter"
+   ],
+   "hideGroups": [],
+   "cost": 0,
+   "priority": 0,
+   "iconName": "StarterHairIcon"
+  },
+  {
    "id": 1040000,
    "group": "Hair",
    "name": "Placeholder Hair",
@@ -2131,6 +2169,16 @@
    ],
    "hideGroups": [],
    "priority": 0
+  },
+  {
+   "id": 1050022,
+   "name": "Olhos Café Mania",
+   "group": "Eyes",
+   "objects": [],
+   "hideGroups": [],
+   "texture": "StarterEyes",
+   "cost": 0,
+   "priority": 1
   },
   {
    "id": 1050000,
@@ -2350,6 +2398,16 @@
    "cost": 200,
    "objects": [],
    "hideGroups": [],
+   "priority": 1
+  },
+  {
+   "id": 1060025,
+   "name": "Sorriso Café Mania",
+   "group": "Mouth",
+   "objects": [],
+   "hideGroups": [],
+   "texture": "StarterMouth",
+   "cost": 0,
    "priority": 1
   },
   {
@@ -2601,6 +2659,16 @@
    "objects": [],
    "hideGroups": [],
    "priority": 1
+  },
+  {
+   "id": 1070012,
+   "name": "Sobrancelhas Café Mania",
+   "group": "Eyebrows",
+   "objects": [],
+   "hideGroups": [],
+   "texture": "StarterEyebrows",
+   "cost": 0,
+   "priority": 2
   },
   {
    "id": 1070000,

@@ -1,0 +1,14 @@
+{
+  "id": "pamonha",
+  "name": "Pamonha",
+  "level": 3,
+  "durationSeconds": 43200,
+  "portions": 50,
+  "profitGold": 20,
+  "costGold": 230,
+  "xp": 100,
+  "inBook": true,
+  "category": "basic",
+  "bookOrder": 5,
+  "source": "artes-referencia/receitas-cruzadas/lote-01/cruzamento.json; receita Pamonha. Ordem/categoria observadas no vídeo, não ordem de desbloqueio. Preparo provisório reutiliza a panela tampada de churrasco; sprite histórico específico não recuperado. "
+}

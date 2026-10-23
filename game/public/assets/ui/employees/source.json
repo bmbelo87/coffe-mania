@@ -1,0 +1,21 @@
+{
+  "type": "imagegen-reconstruction",
+  "reference": "artes-referencia/cafe-mania-acervo-documentado/cafe-mania-acervo/imagens/interface-eventos-guias/P039_01_empregadoscafemania_7259ac6b.jpg",
+  "master": "tools/waiters/panel-master.png",
+  "originalSize": [
+    1201,
+    1309
+  ],
+  "runtimeSize": [
+    824,
+    898
+  ],
+  "sha256": "bf6b52ac245ce7012fe77b2bcabf11fd5b6c501a2f8b02e1fb052da160f04cf3",
+  "reused": [
+    "ui/padlock.png",
+    "ui/spices/button-close.png",
+    "ui/cafe-welcome/ok-button.png",
+    "ui/recipe-book/page-arrow.png",
+    "avatar/placeholder/starter-atlas.png"
+  ]
+}

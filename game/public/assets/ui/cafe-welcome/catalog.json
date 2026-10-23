@@ -1,0 +1,22 @@
+{
+  "timeZone": "America/Fortaleza",
+  "rotationDays": 1,
+  "activeSeason": null,
+  "defaultPool": ["cafe-classico"],
+  "seasons": {
+    "natal": ["natal"],
+    "pascoa": ["pascoa"],
+    "festa-junina": ["festa-junina"],
+    "verao": ["praia"]
+  },
+  "calendar": [],
+  "wallpapers": [
+    {"id":"cafe-classico", "file":"cafe-classico.png", "width":1151, "height":825, "alt":"A entrada original do Café Mania ao pôr do sol, com seus cinco personagens."},
+    {"id":"cafe-cozinha", "file":"cafe-cozinha.webp", "alt":"Os chefs reunidos na cozinha do Café Mania."},
+    {"id":"cafe-encontro", "file":"cafe-encontro.webp", "alt":"Um encontro de personagens na frente do café."},
+    {"id":"natal", "file":"natal.webp", "alt":"Papai Noel e os presentes de Natal do Café Mania."},
+    {"id":"pascoa", "file":"pascoa.webp", "alt":"Os personagens e o coelho de Páscoa do Café Mania."},
+    {"id":"festa-junina", "file":"festa-junina.webp", "alt":"Os personagens do Café Mania na festa junina."},
+    {"id":"praia", "file":"praia.webp", "alt":"Os personagens no café da praia."}
+  ]
+}

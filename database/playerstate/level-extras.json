@@ -1,0 +1,5 @@
+{
+  "source": "employees.amountLocks em ripped/game-config.xml.txt (modificado). Títulos: Chef Informal no tutorial de 2010; Mestre do Churrasco na captura P022, nível 80 inferido pelo prêmio de 20000. Divergências e estimativas em docs/progressao-niveis.md.",
+  "waiterLevels": [1, 7, 15, 23, 31, 39, 47],
+  "titles": { "1": "Chef Informal", "80": "Mestre do Churrasco" }
+}

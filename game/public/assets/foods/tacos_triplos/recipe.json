@@ -1,0 +1,14 @@
+{
+  "id": "tacos_triplos",
+  "name": "Tacos Triplos",
+  "level": 4,
+  "durationSeconds": 14400,
+  "portions": 50,
+  "profitGold": 11,
+  "costGold": 120,
+  "xp": 55,
+  "inBook": true,
+  "category": "basic",
+  "bookOrder": 6,
+  "source": "artes-referencia/receitas-cruzadas/lote-01/cruzamento.json; receita Tacos Triplos. Ordem/categoria observadas no vídeo, não ordem de desbloqueio. Preparo provisório reutiliza a panela tampada de churrasco; sprite histórico específico não recuperado. "
+}

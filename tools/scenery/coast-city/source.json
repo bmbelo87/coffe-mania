@@ -1,0 +1,548 @@
+{
+  "created": "2026-10-22",
+  "scope": "Static urban coast beside the city cafe; no beach branch, boat trip, or new navigation.",
+  "method": "Built-in Image Gen; source crops are references, published art is reconstructed, not original extracted sprites. Cropping, resizing, transparent padding and mirrored repetition only during export; no new illustrated vector paths. Road markings reuse one generated crosswalk paint block.",
+  "references": [
+    "references/urban-coast.png",
+    "references/pier-boat.png",
+    "references/umbrellas-rock.png",
+    "references/trees.png",
+    "references/surfboards.png",
+    "references/original-city-dock.png",
+    "references/pier-lamp-reference.png",
+    "references/wet-sand-detail.png",
+    "references/road-curb-original.png",
+    "references/pier-gate-original.png"
+  ],
+  "sources": [
+    "artes-referencia/cenario-praia/detalhes/118s.png",
+    "artes-referencia/cafe-mania-acervo-complementar-2/cafe-mania-acervo-2/artes/49023909/002.png"
+  ],
+  "assets": [
+    {
+      "id": "water",
+      "file": "terrain/water.png",
+      "width": 2048,
+      "height": 2048,
+      "alpha": true,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/water-calm-aligned.png",
+      "masterSha256": "9e5a5eea5e3881447c07e5d503ecd80b9f329042bd7971e8a2a2581f9f20a490",
+      "prompt": "prompts/water-calm-aligned.txt",
+      "sha256": "76889b075806bd99f49a4b7f74d99ad0ed668a6717545103c287497e0b3e127a",
+      "export": {
+        "mirrorTile": 1024
+      }
+    },
+    {
+      "id": "sand",
+      "file": "terrain/sand.png",
+      "width": 512,
+      "height": 512,
+      "alpha": true,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/sand.png",
+      "masterSha256": "f133e219374daf7991a490399df5df0b448f1ec4da63fc8f183596346e9354a9",
+      "prompt": "prompts/sand.txt",
+      "sha256": "e62fe7ee1e9945ca93f072bfb3c7010941e74a3225e9f375ee9946c11d61b52d",
+      "export": {
+        "mirrorTile": 256
+      }
+    },
+    {
+      "id": "wet-sand",
+      "file": "terrain/wet-sand.png",
+      "width": 1024,
+      "height": 96,
+      "alpha": true,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/wet-sand.png",
+      "masterSha256": "f9f5b4ea48d1fda38fc1c07c4951fba1fec7c8c07e1d27c6365ae5def757d431",
+      "prompt": "prompts/wet-sand.txt",
+      "crop": {
+        "left": 0,
+        "top": 196,
+        "width": 2172,
+        "height": 287
+      },
+      "sha256": "efe224cc66530467f92dba86ca85c40fc44d1f197ef527896cd6f46ad9a6c0ba",
+      "export": {
+        "width": 1024,
+        "height": 96
+      }
+    },
+    {
+      "id": "grass",
+      "file": "terrain/grass.png",
+      "width": 128,
+      "height": 128,
+      "alpha": true,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/grass.png",
+      "masterSha256": "cdaff30df6be66337ad90189358851877ba0fbaa875a75e25988d8b75d6d541b",
+      "prompt": "prompts/grass.txt",
+      "sha256": "19a86d05d85d548fc40ba93dbdd17fa32583c461b959226a4287874734c3d255",
+      "export": {
+        "mirrorTile": 64
+      }
+    },
+    {
+      "id": "sidewalk",
+      "file": "terrain/sidewalk.png",
+      "width": 512,
+      "height": 512,
+      "alpha": true,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/sidewalk-muted.png",
+      "masterSha256": "c6adfa60894b95b3fc7b3211ab14be66766b75d0fdeca75fe3f5d56773506b41",
+      "prompt": "prompts/sidewalk-muted.txt",
+      "sha256": "f28596ffc9f1a6c0787e628b3d73603ce0bd062c1c487c4f87013d8c049fea0b",
+      "export": {
+        "mirrorTile": 256
+      }
+    },
+    {
+      "id": "road",
+      "file": "terrain/road.png",
+      "width": 1024,
+      "height": 320,
+      "alpha": false,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/road-start.png",
+      "masterSha256": "e720d7b2055b6a226b8129b0397f6c9c7eaa8ff10a51cbf7e0c4109f1c198be3",
+      "prompt": "prompts/road-start.txt",
+      "crop": {
+        "left": 0,
+        "top": 85,
+        "width": 2172,
+        "height": 550
+      },
+      "sha256": "12b72c37318e8781562ab44263e0282efb6f4f2f28a2a77c1ea6ccf7ac90c5f8",
+      "export": {
+        "width": 1024,
+        "height": 320,
+        "crop": {
+          "left": 0,
+          "top": 85,
+          "width": 2172,
+          "height": 550
+        }
+      }
+    },
+    {
+      "id": "road-start",
+      "file": "terrain/road-start.png",
+      "width": 1024,
+      "height": 320,
+      "alpha": false,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/road-start.png",
+      "masterSha256": "e720d7b2055b6a226b8129b0397f6c9c7eaa8ff10a51cbf7e0c4109f1c198be3",
+      "prompt": "prompts/road-start.txt",
+      "crop": {
+        "left": 0,
+        "top": 85,
+        "width": 2172,
+        "height": 550
+      },
+      "sha256": "12b72c37318e8781562ab44263e0282efb6f4f2f28a2a77c1ea6ccf7ac90c5f8",
+      "export": {
+        "width": 1024,
+        "height": 320,
+        "crop": {
+          "left": 0,
+          "top": 85,
+          "width": 2172,
+          "height": 550
+        }
+      }
+    },
+    {
+      "id": "road-marking",
+      "file": "terrain/road-marking.png",
+      "width": 256,
+      "height": 16,
+      "alpha": true,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/crosswalk-crisp.png",
+      "masterSha256": "3506e874e1bb57591323693d784ee461ea0e664a52e0ac8f649190bb6ed9b8c1",
+      "prompt": "prompts/crosswalk-crisp.txt",
+      "crop": {
+        "left": 90,
+        "top": 139,
+        "width": 1937,
+        "height": 461
+      },
+      "sha256": "f2c075d236587f65fe043d7a8cf7e38d8fd6572712d5f95a19b7ae622adb3629",
+      "export": {
+        "paintTile": true
+      }
+    },
+    {
+      "id": "curb",
+      "file": "terrain/curb.png",
+      "width": 1024,
+      "height": 24,
+      "alpha": false,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/curb-blocks.png",
+      "masterSha256": "8ba1bbc40a6d4f4e0984826c9cdc3f860e7ac655d84980644c9aa64ba1639750",
+      "prompt": "prompts/curb-blocks.txt",
+      "crop": {
+        "left": 0,
+        "top": 150,
+        "width": 2172,
+        "height": 424
+      },
+      "sha256": "b9017ec582a6c82b75538f939bc30b80e0d597bdb47603d80fea2fe28512033e",
+      "export": {
+        "width": 1024,
+        "height": 24,
+        "crop": {
+          "left": 0,
+          "top": 150,
+          "width": 2172,
+          "height": 424
+        }
+      }
+    },
+    {
+      "id": "shoreline",
+      "file": "terrain/shoreline.png",
+      "width": 1024,
+      "height": 64,
+      "alpha": true,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/shoreline-clean.png",
+      "masterSha256": "98698b5e6ad9be2e53f02abe00e2a188adf87efea63e3f508cfe23240ffb82de",
+      "prompt": "prompts/shoreline-clean.txt",
+      "crop": {
+        "left": 0,
+        "top": 313,
+        "width": 2172,
+        "height": 119
+      },
+      "sha256": "1719445417673d1491c432173a600f72170834ee9990f636f00ff65d6abecb7a",
+      "export": {}
+    },
+    {
+      "id": "crosswalk",
+      "file": "terrain/crosswalk.png",
+      "width": 540,
+      "height": 110,
+      "alpha": true,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/crosswalk-crisp.png",
+      "masterSha256": "3506e874e1bb57591323693d784ee461ea0e664a52e0ac8f649190bb6ed9b8c1",
+      "prompt": "prompts/crosswalk-crisp.txt",
+      "crop": {
+        "left": 90,
+        "top": 139,
+        "width": 1937,
+        "height": 461
+      },
+      "sha256": "39ce4b139a1571461d65f3ee1f98cbcde1d546615b4fb6cb90b34370314e708e",
+      "export": {
+        "width": 540,
+        "height": 110
+      }
+    },
+    {
+      "id": "tree-round",
+      "file": "props/tree-round.png",
+      "width": 300,
+      "height": 415,
+      "alpha": true,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/tree-round.png",
+      "masterSha256": "bc879e2bc917ffbbda2451dd62e01e9f524c49646f667f9a308adb5274c88fdb",
+      "prompt": "prompts/tree-round.txt",
+      "crop": {
+        "left": 310,
+        "top": 239,
+        "width": 610,
+        "height": 843
+      },
+      "sha256": "a151a14ba9ed94e95eefd1f7b27fba4cafb5b8fcf198a58a1b4f4e4d90d9cb3a",
+      "export": {
+        "width": 300
+      }
+    },
+    {
+      "id": "tree-conifer",
+      "file": "props/tree-conifer.png",
+      "width": 220,
+      "height": 484,
+      "alpha": true,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/tree-conifer.png",
+      "masterSha256": "bbe400aba2581454dcb0ff2da9c3b74ea210d5c9ca05b21c14d5f075727b1ca6",
+      "prompt": "prompts/tree-conifer.txt",
+      "crop": {
+        "left": 267,
+        "top": 176,
+        "width": 534,
+        "height": 1174
+      },
+      "sha256": "f146787f533c819cf1a00f82865d8cc5a1ebbce575aad2b782e8419ea1f937aa",
+      "export": {
+        "width": 220
+      }
+    },
+    {
+      "id": "umbrella-green",
+      "file": "props/umbrella-green.png",
+      "width": 300,
+      "height": 256,
+      "alpha": true,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/umbrella-green.png",
+      "masterSha256": "41ed71da62fd50546df1b8d3d0130d386f7fe8c8c3b15ad8b694d25c7afb56bd",
+      "prompt": "prompts/umbrella-green.txt",
+      "crop": {
+        "left": 313,
+        "top": 181,
+        "width": 853,
+        "height": 728
+      },
+      "sha256": "5a467be2121080c4b6903364648c52319cc2c5fab2abc0b954cac5a3c018b93a",
+      "export": {
+        "width": 300
+      }
+    },
+    {
+      "id": "umbrella-orange",
+      "file": "props/umbrella-orange.png",
+      "width": 300,
+      "height": 263,
+      "alpha": true,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/umbrella-orange.png",
+      "masterSha256": "94f1fa6d6342c99a4160529c004637ec6710cd3b60a07a6ab68f8bb27c5096f0",
+      "prompt": "prompts/umbrella-orange.txt",
+      "crop": {
+        "left": 286,
+        "top": 112,
+        "width": 957,
+        "height": 840
+      },
+      "sha256": "4ce7d39032e8d91353ff1afa23e462f9856f18bedf7a16bccc1cea05d9150711",
+      "export": {
+        "width": 300
+      }
+    },
+    {
+      "id": "umbrella-folded",
+      "file": "props/umbrella-folded.png",
+      "width": 180,
+      "height": 488,
+      "alpha": true,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/umbrella-folded.png",
+      "masterSha256": "a8d256178a473933b6ad7ea27ea5ee94fdf4b3ca1fc0ab3a4b8add943d2368b8",
+      "prompt": "prompts/umbrella-folded.txt",
+      "crop": {
+        "left": 309,
+        "top": 236,
+        "width": 391,
+        "height": 1061
+      },
+      "sha256": "ce1ded28f3f701e4558777194573b9cf4509ddf933924e6c59de267ef2f74ccb",
+      "export": {
+        "width": 180
+      }
+    },
+    {
+      "id": "beach-chair",
+      "file": "props/beach-chair.png",
+      "width": 180,
+      "height": 192,
+      "alpha": true,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/beach-chair.png",
+      "masterSha256": "b0d01d64f976f9db4c10e4f93414e9aa47018e759dba6efeb556d4da9304d227",
+      "prompt": "prompts/beach-chair.txt",
+      "crop": {
+        "left": 264,
+        "top": 93,
+        "width": 845,
+        "height": 902
+      },
+      "sha256": "c13b62d8652cc38baff58cc20f21e1a2a4d6484f23f2cf628d10e5f0bf386b77",
+      "export": {
+        "width": 180
+      }
+    },
+    {
+      "id": "rock-palm",
+      "file": "props/rock-palm.png",
+      "width": 320,
+      "height": 203,
+      "alpha": true,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/rock-palm.png",
+      "masterSha256": "0e715c54bf30a044f80c1de4a6ebd7214f9ba972da3c9b42ebbaa65134331df3",
+      "prompt": "prompts/rock-palm.txt",
+      "crop": {
+        "left": 286,
+        "top": 195,
+        "width": 1063,
+        "height": 674
+      },
+      "sha256": "637ad3046875f2104aa47430c57e27c3adcf0bf6337d17afbc9e358ae8a1f524",
+      "export": {
+        "width": 320
+      }
+    },
+    {
+      "id": "pier",
+      "file": "props/pier.png",
+      "width": 700,
+      "height": 675,
+      "alpha": true,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/pier-open-entry.png",
+      "masterSha256": "ac61e7b5a34fdd72cff1de34733aabb7c2a1b3fad217608622b5f16f80de6f77",
+      "prompt": "prompts/pier-open-entry.txt",
+      "crop": {
+        "left": 0,
+        "top": 0,
+        "width": 1277,
+        "height": 1231
+      },
+      "sha256": "6e41923de3a6e6eb3e70ff6f8ab57366cc430baefcc8d5fc85f5652cdf50b38b",
+      "export": {
+        "width": 700,
+        "height": 675
+      }
+    },
+    {
+      "id": "pier-arch",
+      "file": "props/pier-arch.png",
+      "width": 300,
+      "height": 600,
+      "alpha": true,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/pier-arch.png",
+      "masterSha256": "bf70bf675467b0399f271dae96c4d99277cbe6a8cdaa88397e770071d81056df",
+      "prompt": "prompts/pier-arch.txt",
+      "crop": {
+        "left": 252,
+        "top": 94,
+        "width": 642,
+        "height": 1302
+      },
+      "sha256": "1e56233f84e37ff0026ad8d125757245748209dca4cc557310dba5e11aa331bd",
+      "export": {
+        "width": 300,
+        "height": 600
+      }
+    },
+    {
+      "id": "pier-steps",
+      "file": "props/pier-steps.png",
+      "width": 300,
+      "height": 234,
+      "alpha": true,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/pier-steps.png",
+      "masterSha256": "23a78765a39cfc5935c0978d94886fd2954455ee1781afb8efad6a70294c243e",
+      "prompt": "prompts/pier-steps.txt",
+      "crop": {
+        "left": 282,
+        "top": 124,
+        "width": 1003,
+        "height": 782
+      },
+      "sha256": "b7815ab7d4169f857c3e1bf9ff010959c72f6fd152a3c0cf1655dfd197462b22",
+      "export": {
+        "width": 300
+      }
+    },
+    {
+      "id": "pier-shadow",
+      "file": "props/pier-shadow.png",
+      "width": 700,
+      "height": 420,
+      "alpha": true,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/pier-shadow.png",
+      "masterSha256": "2514b71e227f9168d5df53958c74d362126d6dac2e11d159efdcd1df1fbaa6b5",
+      "prompt": "prompts/pier-shadow.txt",
+      "crop": {
+        "left": 63,
+        "top": 340,
+        "width": 1164,
+        "height": 836
+      },
+      "sha256": "196aed68757893349556fb15c82b5c3d71b712575dc7b8f07b360ddde8601ef9",
+      "export": {
+        "width": 700,
+        "height": 420
+      }
+    },
+    {
+      "id": "boat",
+      "file": "props/boat.png",
+      "width": 400,
+      "height": 241,
+      "alpha": true,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/boat-clean.png",
+      "masterSha256": "34a3f482a8d72c43319633f3f7f6eff014810c0a853556dcb66beca48d4a8ed3",
+      "prompt": "prompts/boat-clean.txt",
+      "crop": {
+        "left": 138,
+        "top": 119,
+        "width": 1269,
+        "height": 764
+      },
+      "sha256": "dc98004fe96809c73b97ca374009e8cdcd36e85b6922d0b182d6286227e4aa5b",
+      "export": {
+        "width": 400
+      }
+    },
+    {
+      "id": "surfboards",
+      "file": "props/surfboards.png",
+      "width": 240,
+      "height": 291,
+      "alpha": true,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/surfboards.png",
+      "masterSha256": "06e5380805b6e8a589f77779ca833e281c774311abf9b0c2867a4343dba7ab1b",
+      "prompt": "prompts/surfboards.txt",
+      "crop": {
+        "left": 377,
+        "top": 45,
+        "width": 779,
+        "height": 945
+      },
+      "sha256": "54ea2e4a4c5f75ff2422b122d4ce6f6f4829bb9189235e622908eec59e250bbd",
+      "export": {
+        "width": 240
+      }
+    },
+    {
+      "id": "lifebuoy",
+      "file": "props/lifebuoy.png",
+      "width": 160,
+      "height": 108,
+      "alpha": true,
+      "origin": "imagegen-reconstruction",
+      "master": "masters/lifebuoy.png",
+      "masterSha256": "5c626a542bc594fa74d973105aed4a56806c528fca925d19623cb35fc44bc5b9",
+      "prompt": "prompts/lifebuoy.txt",
+      "crop": {
+        "left": 590,
+        "top": 376,
+        "width": 385,
+        "height": 260
+      },
+      "sha256": "79c30aae983ac83ba2cee15d4b104ea321935e2f12b757a96676c01b27731400",
+      "export": {
+        "width": 160
+      }
+    }
+  ]
+}

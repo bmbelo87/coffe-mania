@@ -13,6 +13,8 @@ export interface IndoorArtFrame {
 }
 
 export interface IndoorArtEntry {
+  /** Polygons in the assembled frame's pixel coordinates; clipping only, never room depth. */
+  seatingBackrests?: { rotation: number; polygons: number[][] }[];
   characterId: number;
   /** Um por rotação, na ordem em que `rotate()` percorre. */
   frames: IndoorArtFrame[];
@@ -32,6 +34,25 @@ export interface IndoorArtEntry {
   animation?: { fps: number; files: string[]; resolution: number };
 }
 
+export interface SceneBackgroundPart {
+  id?: string;
+  file: string;
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  /** Texture scale in local coordinates; absence means one independently sized sprite. */
+  repeat?: { x: number; y: number };
+  /** UV basis independent of the silhouette; already projected art must not be sheared twice. */
+  textureMatrix?: readonly [number, number, number, number];
+  /** Thin painted markings need direct sampling rather than anisotropically blurred mip levels. */
+  sampling?: 'direct';
+  /** Ground-plane basis; positions remain in world pixels, independent of PNG margins. */
+  matrix?: readonly [number, number, number, number];
+  /** Local polygon clips terrain; this is geometry, never an illustrated substitute. */
+  clip?: number[];
+}
+
 /** Cenário urbano externo, alinhado à origem isométrica da sala. */
 export interface IndoorSceneBackground {
   file: string;
@@ -39,13 +60,12 @@ export interface IndoorSceneBackground {
   height: number;
   left: number;
   top: number;
-  tiles?: readonly {
-    file: string;
-    left: number;
-    top: number;
-    width: number;
-    height: number;
-  }[];
+  groundColor?: number;
+  /** Align a scene authored at the inner floor edge with the wall's outer footprint. */
+  wallContact?: 'outer';
+  /** Repeating terrain may extend past the intended camera coverage. */
+  horizontalCover?: { left: number; right: number };
+  tiles?: readonly SceneBackgroundPart[];
   sources: readonly {
     className: string;
     characterId: number;

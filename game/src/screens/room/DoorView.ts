@@ -75,10 +75,10 @@ export class DoorView {
   destroy(): void { if (!this.view.destroyed) this.view.destroy({ children: true }); }
 
   /** Atualiza a malha apenas enquanto a folha se move. */
-  update(deltaMs: number, actors: readonly Actor[]): void {
+  update(deltaMs: number, actors: readonly Actor[], forceClosed = false): void {
     const target = actors.some((actor) => this.atDoorTile(actor.tileX, actor.tileY)) ? 1 : 0;
     const duration = target ? OPEN_DURATION_MS : CLOSE_DURATION_MS;
-    const next = Math.max(0, Math.min(1, this.progress + Math.sign(target - this.progress) * Math.max(0, deltaMs) / duration));
+    const next = forceClosed ? 0 : Math.max(0, Math.min(1, this.progress + Math.sign(target - this.progress) * Math.max(0, deltaMs) / duration));
     if (next === this.progress) return;
     this.progress = next;
     const eased = next * next * (3 - 2 * next);

@@ -15,6 +15,8 @@ async function start(): Promise<void> {
         window.location.replace(room ? '/?room=' + encodeURIComponent(room) : '/');
         return;
       }
+      const { prepareCafeEntry } = await import('./auth/CafeNameScreen');
+      await prepareCafeEntry(host);
       document.body.classList.remove('auth-page');
       host.replaceChildren();
       await import('./play');
@@ -33,6 +35,8 @@ async function start(): Promise<void> {
       renderLoginPage(host, session);
     }
   } catch (error) {
+    document.body.classList.remove('cafe-name-page');
+    document.body.classList.add('auth-page');
     renderSessionError(host, error);
   }
 }

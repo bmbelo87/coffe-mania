@@ -1,0 +1,14 @@
+{
+  "id": "banana_split",
+  "name": "Banana Split",
+  "level": 57,
+  "durationSeconds": 47880,
+  "portions": 160,
+  "profitGold": 12,
+  "costGold": 490,
+  "xp": 190,
+  "inBook": true,
+  "category": "advanced",
+  "bookOrder": 8,
+  "source": "artes-referencia/receitas-cruzadas/lote-04/cruzamento.json; receita Banana Split. Ordem/categoria observadas no vídeo, não ordem de desbloqueio. Preparo provisório reutiliza a panela tampada de churrasco; sprite histórico específico não recuperado. U08 nomeia Banana Split, nível57, 160 porções e 12/porção. U11 nomeia 13h18min e lucro1430. Linha numérica U04 sem nome: 1920 brutos, 490 custo, 1430 líquidos, 190XP, 798min. Associação inferida pela combinação exata de receita bruta, líquido e tempo; não é uma linha nominal única. Vídeo confirma XP190 e duração arredondada 13.3hs, sem provar sozinho 798min."
+}

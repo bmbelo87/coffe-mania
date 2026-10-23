@@ -1,0 +1,14 @@
+{
+  "id": "vatapa",
+  "name": "Vatapá",
+  "level": 4,
+  "durationSeconds": 3600,
+  "portions": 65,
+  "profitGold": 4,
+  "costGold": 60,
+  "xp": 25,
+  "inBook": true,
+  "category": "basic",
+  "bookOrder": 7,
+  "source": "artes-referencia/receitas-cruzadas/lote-02/cruzamento.json; receita Vatapá. Ordem/categoria observadas no vídeo, não ordem de desbloqueio. Preparo provisório reutiliza a panela tampada de churrasco; sprite histórico específico não recuperado. "
+}

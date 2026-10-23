@@ -45,7 +45,7 @@ Outras escolhas do projeto: domínio após **80 copos de cada sabor**, próximo 
 
 Verificações executadas: testes Go específicos de transações, posse, energia, recarga e pedidos de NPC; regressão de profundidade da cadeira; geometria da oficina; catálogo e typecheck. Uma sessão isolada com banco temporário e dois clientes reais confirmou compra, desbloqueio, preparo, restrição do visitante, pedido do NPC, estoque compartilhado e repetição sem duplicar recompensas. A conferência WebGL usou o avatar real sentado e comendo nas quatro direções; o menu foi exercitado com uma API de fixture, complementada pela verificação real dos serviços. As capturas registram quadros específicos, não todas as combinações de móveis de uma sala.
 
-A cadeira usa a pegada e a camada do móvel de apoio para ordenar seu ocupante. A referência técnica foi o [Nitro Renderer](https://github.com/billsonnn/nitro-renderer), especialmente as camadas de FurnitureVisualization e AvatarVisualization; a solução mantém a geometria e as adaptações deste runtime. A interpolação de movimento e a troca do tile lógico na metade do passo permanecem preservadas.
+A cadeira usa a pegada e a camada do móvel de apoio para ordenar seu ocupante. A revisão separa assento, corpo e encosto traseiro, conforme [encostos e personagem sentado](encostos-cadeiras.md). A referência técnica foi o [Nitro Renderer](https://github.com/billsonnn/nitro-renderer), especialmente as camadas de FurnitureVisualization e AvatarVisualization; a solução mantém a geometria e as adaptações deste runtime. A interpolação de movimento e a troca do tile lógico na metade do passo permanecem preservadas.
 
 ## Interface modular e evolução visual
 

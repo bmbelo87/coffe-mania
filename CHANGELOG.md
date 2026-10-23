@@ -1,8 +1,82 @@
 # Changelog
 
-Mudanças desta distribuição, da versão mais nova para a mais antiga. A numeração própria começa em `0.1.0`: cada conjunto de funcionalidades novas aumenta o número do meio (`0.2.0`, `0.3.0`…) e correções sem funcionalidade nova aumentam o último. A versão fica em `VERSION`, nos `package.json` (`version` e `gameVersion`), no `package-lock.json`, em `shared/buildinfo/version.go`, em `game/src/core/version.ts` e no título do Asset Studio.
+Mudanças do Café Mania, da versão mais nova para a mais antiga. A versão fica em `VERSION`, nos `package.json` (`version` e `gameVersion`), no `package-lock.json`, em `shared/buildinfo/version.go`, em `game/src/core/version.ts` e no título do Asset Studio.
+
+## Como as versões são numeradas
+
+A partir da `0.5.0`, cada número diz o tamanho da mudança:
+
+| Exemplo | Quando usar |
+| --- | --- |
+| `0.5.0` | Lote de funcionalidades novas. Aumenta o número do meio e zera o resto. |
+| `0.5.1`, `0.5.2`… | Atualização pequena: uma funcionalidade isolada ou um ajuste visível. |
+| `0.5.11`, `0.5.12`… | Correção pontual sobre a atualização pequena: um bug isolado. `0.5.11` é a primeira correção da `0.5.1`; a próxima atualização pequena volta para `0.5.2`. |
+
+Logo depois de um lote, as correções usam `0.5.01`, `0.5.02`… A ordem de lançamento é a deste arquivo, não a ordem numérica do SemVer: `0.5.11` sai antes de `0.5.2`. Cada atualização pequena comporta até nove correções.
 
 Seções usadas: **Adicionado**, **Alterado**, **Corrigido**, **Removido** e **Observações** (limites conhecidos e o que ficou para depois).
+
+## [0.5.0] — Garçons, orla da cidade e primeira entrada (2026-10-22)
+
+### Adicionado
+
+- **Nome do café na primeira entrada.** Depois do login, quem ainda não escolheu um nome vê a tela de boas-vindas com a ilustração do Café Mania e a sugestão editável "Meu Café". O nome aceita de 1 a 40 caracteres, é validado de novo no servidor e pode ser trocado depois, clicando nele abaixo da carinha de satisfação. Migração `202610200002_cafe_name_onboarding`.
+- **Personagem inicial.** Contas novas já começam com a aparência do chef de uniforme azul-claro, gravada como aparência própria (`shared/avatarappearance/starter.json`), e ela também serve de reserva enquanto o visual do jogador carrega. Migração `202610200003_initial_appearance` para quem ainda não tinha visual.
+- **Garçons.** Janela "Empregados" com quatro vagas por página, cadeados e contratação persistida. As vagas abrem nos níveis 1, 7, 15, 23, 31, 39 e 47. Os garçons:
+  - buscam o prato no balcão pelo lado livre mais perto e o levam até a mesa;
+  - reservam o cliente que vão atender;
+  - cobram só na entrega;
+  - têm rostos variados, montados com olhos, bocas, sobrancelhas e cabelos existentes, com o uniforme preservado.
+
+  Migração `202610210001_waiters`.
+- **Fila do chef.** Pedidos de cozinhar, limpar e levar ao balcão entram numa fila por ordem de clique. Os fogões que aguardam ficam semitransparentes, e o livro de outro fogão pode ser aberto enquanto o chef trabalha.
+- **Subida de nível com recompensas.** Janela "Parabéns!!!" com o nível, o título quando houver, as vagas de garçom, os caféOuros e as receitas liberadas. As recompensas ficam salvas até serem vistas (migração `202610190001_level_notifications`).
+- **16 receitas novas, 20 no livro.** Entre elas Pamonha, Tacos Triplos, Vatapá, Mandioquinha, Quindim, Arroz de Carreteiro, Salada Caesar, Bolo de Cenoura, Super À La Minuta, Carré de Carneiro, Torta de Limão da Vovó, Lagosta Nobre, Batatas Sorridentes, Salmão com Alcaparras, Pimentão Recheado do Chef e Banana Split.
+  - As artes dos pratos prontos são reconstruções revisadas.
+  - A ordem das páginas segue o vídeo de referência.
+  - Receitas acima do nível aparecem em cartão cinza, com o prato desbotado e um cadeado.
+- **Orla da cidade modular.** O fundo atrás do café passou a ser montado com 25 PNGs em 41 partes independentes (`game/public/assets/scenery/coast-city/scene.json`):
+  - mar, areia molhada e areia seca;
+  - calçadas, meio-fio, rua com faixa de pedestres;
+  - árvores, guarda-sóis, espreguiçadeiras;
+  - píer com o arco "CAFÉ DE PRAIA" e lancha.
+
+  Todas são reconstruções, não sprites originais recuperados.
+- **Balão de pensamento modular** para os pedidos de suco: moldura em três PNGs, com o ícone do pedido trocável.
+- **Encosto das cadeiras na frente de quem senta de costas.** A ordem de desenho passou a ser assento, ocupante e depois o encosto. Os polígonos de cada modelo ficam em `seatingBackrests` no manifesto.
+- **Decoração com mesa ocupada.** Pegar uma mesa no modo decoração dispensa os clientes dela sem penalidade. Quem estava comendo devolve a porção ao balcão, sem pagar duas vezes (`room_food.prepaid_portions`, migração `202610220001_returned_meals`).
+- Clientes chegam e saem pelas duas calçadas e passam pelo encontro dos passeios.
+- Café inicial com duas fileiras de cozinha e corredor (migração `202610200001_kitchen_rows`).
+- Abertura animada comum, a mesma curva do Livro de Receitas, também nas Configurações, Sucos, subida de nível, guarda-roupa e loja.
+- Páginas de prévia isoladas em `game/dev/`, para conferir telas sem mexer numa conta.
+- Testes novos:
+  - Go: nome do café, aparência inicial, garçons, notificações de nível, porções devolvidas, decoração e obstrução entre personagens;
+  - Node, em `tests/` e `tools/`: fila do chef, profundidade do assento, peças dos itens, livro de receitas, cenário e móveis.
+
+### Alterado
+
+- O nome do jogo nas telas, títulos, registros dos servidores e Asset Studio passou de "Coffe Mania" para **Café Mania**. Variáveis `COFFE_*`, rotas `/api/coffe`, módulo Go, binários e chaves salvas continuam iguais, para não quebrar configurações nem saves.
+- A aba Avançado do livro pode ser consultada desde o nível 1. O nível de cada receita continua sendo conferido no servidor ao cozinhar.
+- Cadeiras do acervo (lote 02, poltronas e cadeira rosa) agora usam frente e costas com espelhamento nas vistas complementares, e a poltrona dourada gira na ordem correta.
+- A porta fica fechada enquanto o modo decoração estiver aberto.
+- Garçons escolhem o acesso ao balcão pela menor caminhada entre os lados livres. Se nenhum lado tiver caminho, mantêm o cerco clássico.
+
+### Corrigido
+
+- Faixas da rua recortadas e calçadas atravessando o entroncamento.
+- Calçadas desencostadas da parede externa e bordas duplicadas no asfalto.
+- Clientes que esgotavam as tentativas de achar cadeira por ocupação temporária e desistiam.
+
+### Removido
+
+- PNGs antigos da poltrona amarela e preta (`rotation-0` a `rotation-3`), substituídos pelas vistas de frente e costas.
+
+### Observações
+
+- **Arte reconstruída.** Muitas artes deste lote foram reconstruídas com Image Gen a partir de capturas: orla, janelas de empregados e de nível, balão, tela de nome, personagem inicial e pratos. Os documentos em `docs/` dizem o que é reconstrução e qual referência foi usada.
+- **Arte-fonte fora do repositório.** Masters, rascunhos e imagens de referência das ferramentas de arte (`tools/**/*.png|jpg|webp`) agora ficam fora do repositório, assim como o acervo local (`artes-referencia/`) e o vídeo de referência. Por isso, alguns links dos documentos apontam para arquivos que só existem na máquina de quem produziu a arte.
+- **Pendências.** O preparo dos pratos novos ainda usa a panela do Churrasco como imagem provisória, e o botão de compra antecipada das receitas bloqueadas não foi implementado. Também ficam para depois a filial na praia, a viagem de barco e os cortes exatos das expressões de satisfação.
+- O nome padrão gravado em contas sem nome escolhido continua `Coffe Mania` (`DefaultCafeName`), porque a migração do onboarding usa esse valor para decidir quem precisa escolher o nome. Na tela, a sugestão é "Meu Café".
 
 ## [0.4.0] — Vovó Chef (2026-10-13)
 

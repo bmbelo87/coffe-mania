@@ -25,7 +25,7 @@ func main() {
 	migratecmd.MustRegister(app, app.RootCmd, migratecmd.Config{Automigrate: false})
 	app.OnServe().BindFunc(func(e *core.ServeEvent) error {
 		e.InstallerFunc = nil
-		log.Printf("Coffe Mania %s: PocketBase", buildinfo.Version)
+		log.Printf("Café Mania %s: PocketBase", buildinfo.Version)
 		registerSessionRoutes(e)
 		registerPlayerStateRoutes(e)
 		registerAppearanceRoutes(e)
@@ -36,6 +36,7 @@ func main() {
 		startRoomActivityWatchdog(e.App)
 		registerCookingRoutes(e)
 		registerJuiceRoutes(e)
+		registerWaiterRoutes(e)
 		registerDevRoutes(e)
 		registerRoomRoutes(e)
 		publicDir := os.Getenv("COFFE_PUBLIC_DIR")

@@ -23,7 +23,7 @@ export async function createApplication(host: HTMLElement): Promise<Application>
   });
 
   app.canvas.setAttribute('role', 'img');
-  app.canvas.setAttribute('aria-label', 'Coffe Mania');
+  app.canvas.setAttribute('aria-label', 'Café Mania');
   host.appendChild(app.canvas);
 
   return app;

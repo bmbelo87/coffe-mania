@@ -1,0 +1,32 @@
+{
+  "id": "quindim",
+  "name": "Quindim",
+  "level": 6,
+  "durationSeconds": 1500,
+  "portions": 60,
+  "profitGold": 4,
+  "costGold": 90,
+  "xp": 55,
+  "inBook": true,
+  "category": "basic",
+  "bookOrder": 10,
+  "source": "artes-referencia/receitas-cruzadas/lote-03/cruzamento.json; receita Quindim. Ordem/categoria observadas no vídeo, não ordem de desbloqueio. PROVISÓRIO: campos estimados identificados em provisionalRules, não confirmados como regras originais. Preparo provisório reutiliza a panela tampada de churrasco; sprite histórico específico não recuperado. ",
+  "provisionalRules": {
+    "level": {
+      "value": 6,
+      "reason": "Nível estimado para sobremesa inicial de 25 minutos."
+    },
+    "costGold": {
+      "value": 90,
+      "reason": "Custo estimado; referência histórica ausente."
+    },
+    "portions": {
+      "value": 60,
+      "reason": "Rendimento estimado; referência histórica ausente."
+    },
+    "profitGold": {
+      "value": 4,
+      "reason": "Venda estimada; 240 brutos e 150 líquidos por lote de 25 minutos."
+    }
+  }
+}

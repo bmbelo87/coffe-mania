@@ -2,7 +2,7 @@ import { Assets, Rectangle, Texture } from 'pixi.js';
 
 import { LOADING_ASSET_URLS } from '../screens/loading/assets';
 import { Wardrobe } from '../avatar/wardrobe';
-import { IndoorArt } from './indoor-art';
+import { IndoorArt, type IndoorSceneBackground } from './indoor-art';
 import { ItemCatalog } from './item-catalog';
 import { RECIPE_CATALOG_URL, loadRecipeArt, type RecipeArt } from './recipes';
 import { SPICE_ASSET_URLS } from './spices';
@@ -25,10 +25,22 @@ export const AVATAR_URLS = {
   wardrobe: avatarUrl('wardrobe.json'),
 } as const;
 
-/** Shared white loading silhouette, baked once during asset generation. */
+/** Personagem inicial compartilhado, pré-renderizado para aparecer antes dos looks individuais. */
 export const AVATAR_PLACEHOLDER_URLS = {
-  sheet: avatarUrl('placeholder/atlas.png'),
-  metadata: avatarUrl('placeholder/atlas.json'),
+  sheet: avatarUrl('placeholder/starter-atlas.png'),
+  metadata: avatarUrl('placeholder/starter-atlas.json'),
+} as const;
+
+/** Cadeado raster gerado a partir das referências do jogo. */
+export const UI_PADLOCK_URL = new URL('assets/ui/padlock.png', new URL(base, document.baseURI)).href;
+export const UI_STOVE_HOVER_URLS = {
+  panel: new URL('assets/ui/stove-hover/panel.png', new URL(base, document.baseURI)).href,
+  book: new URL('assets/ui/stove-hover/book.png', new URL(base, document.baseURI)).href,
+} as const;
+export const UI_THOUGHT_BUBBLE_URLS = {
+  oval: new URL('assets/ui/thought-bubble/oval.png', new URL(base, document.baseURI)).href,
+  dotLarge: new URL('assets/ui/thought-bubble/dot-large.png', new URL(base, document.baseURI)).href,
+  dotSmall: new URL('assets/ui/thought-bubble/dot-small.png', new URL(base, document.baseURI)).href,
 } as const;
 
 /** Barra de ações da UI do jogo. */
@@ -59,6 +71,7 @@ const recipeBookUrl = (file: string) => new URL(`assets/ui/recipe-book/${file}`,
 export const UI_RECIPE_BOOK_URLS = {
   book: recipeBookUrl('book.png'),
   card: new URL('assets/ui/inside_food_card.png', new URL(base, document.baseURI)).href,
+  cardLocked: recipeBookUrl('card-locked.png'),
   tab: recipeBookUrl('tab.png'),
   tabHover: recipeBookUrl('tab-hover.png'),
   tabActive: recipeBookUrl('tab-active.png'),
@@ -162,6 +175,11 @@ export const INDOOR_ART_URL = new URL(
   new URL(base, document.baseURI),
 ).href;
 
+export const CITY_SCENE_URL = new URL(
+  'assets/scenery/coast-city/scene.json',
+  new URL(base, document.baseURI),
+).href;
+
 const indoorFileUrl = (file: string) =>
   new URL(`assets/indoor/${file}`, new URL(base, document.baseURI)).href;
 
@@ -170,12 +188,15 @@ const indoorFileUrl = (file: string) =>
  * carregadas na sequência, dentro da mesma barra de progresso.
  */
 export const GAME_ASSET_URLS: readonly string[] = [
+  ...Object.values(UI_THOUGHT_BUBBLE_URLS),
+  ...Object.values(UI_STOVE_HOVER_URLS),
   ...SPICE_ASSET_URLS,
   ...Object.values(AVATAR_PLACEHOLDER_URLS),
   LOADING_ASSET_URLS.frame,
   ...LOADING_ASSET_URLS.banners,
   ITEM_CATALOG_URL,
   INDOOR_ART_URL,
+  CITY_SCENE_URL,
   UI_ACTION_BAR_URL,
   UI_STORE_ACTION_BAR_URL,
   UI_STORE_TOP_BUTTON_URL,
@@ -200,6 +221,14 @@ export const GAME_ASSET_URLS: readonly string[] = [
 let catalogCache: ItemCatalog | null = null;
 let artCache: IndoorArt | null = null;
 
+function indoorWithCityScene(raw: unknown, scene: IndoorSceneBackground): IndoorArt {
+  const indoor = IndoorArt.from(raw);
+  if (!scene || !Array.isArray(scene.tiles) || scene.tiles.length === 0) {
+    throw new Error('Cenário urbano sem peças cadastradas');
+  }
+  return new IndoorArt(indoor.entries, scene);
+}
+
 /** Passa pelo Assets do Pixi, então aproveita o que a barra já baixou. */
 export async function loadItemCatalog(): Promise<ItemCatalog> {
   if (catalogCache) return catalogCache;
@@ -209,7 +238,11 @@ export async function loadItemCatalog(): Promise<ItemCatalog> {
 
 export async function loadIndoorArt(): Promise<IndoorArt> {
   if (artCache) return artCache;
-  artCache = IndoorArt.from(await Assets.load<unknown>(INDOOR_ART_URL));
+  const [raw, scene] = await Promise.all([
+    Assets.load<unknown>(INDOOR_ART_URL),
+    Assets.load<IndoorSceneBackground>(CITY_SCENE_URL),
+  ]);
+  artCache = indoorWithCityScene(raw, scene);
   const textures = await Assets.load<Texture>(artCache.files().map(indoorFileUrl));
   for (const texture of Object.values(textures)) {
     texture.source.scaleMode = 'nearest';
@@ -403,6 +436,7 @@ export interface ButtonsCollectionJson {
 export interface RecipeBookTextures {
   book: Texture;
   card: Texture;
+  cardLocked?: Texture;
   tab: { idle: Texture; hover: Texture; active: Texture };
   clock: Texture;
   pageArrow: Texture;
@@ -412,6 +446,7 @@ export interface RecipeBookTextures {
 
 /** Carrega as texturas do Livro de Receitas e do preparo no fogão. */
 export async function loadCookScreenTextures(): Promise<{
+  padlock: Texture;
   book: RecipeBookTextures;
   closeButton: Texture;
   recipes: RecipeArt[];
@@ -421,13 +456,14 @@ export async function loadCookScreenTextures(): Promise<{
   calloutClock: Texture;
 }> {
   const urls = UI_RECIPE_BOOK_URLS;
-  const [bookTextures, hudIcons] = await Promise.all([
-    Promise.all([urls.book, urls.card, urls.tab, urls.tabHover, urls.tabActive, urls.clock, urls.pageArrow].map(loadResourceIcon)),
+  const [bookTextures, hudIcons, padlock] = await Promise.all([
+    Promise.all([urls.book, urls.card, urls.tab, urls.tabHover, urls.tabActive, urls.clock, urls.pageArrow, urls.cardLocked].map(loadResourceIcon)),
     loadResourceIcon(UI_TOP_BARS_URLS.icons),
+    loadResourceIcon(UI_PADLOCK_URL),
   ]);
-  const [bookArt, card, tab, tabHover, tabActive, clock, pageArrow] = bookTextures;
+  const [bookArt, card, tab, tabHover, tabActive, clock, pageArrow, cardLocked] = bookTextures;
   const book: RecipeBookTextures = {
-    book: bookArt, card, clock, pageArrow, hudIcons,
+    book: bookArt, card, cardLocked, clock, pageArrow, hudIcons,
     tab: { idle: tab, hover: tabHover, active: tabActive },
   };
   const [buttonsSheet, buttonsData, recipes, progressBack, progressFront, progressCallout, calloutClock] = await Promise.all([
@@ -455,7 +491,7 @@ export async function loadCookScreenTextures(): Promise<{
   progressFront.source.autoGenerateMipmaps = true;
   progressCallout.source.autoGenerateMipmaps = true;
 
-  return { book, closeButton, recipes, progressBack, progressFront, progressCallout, calloutClock };
+  return { book, closeButton, recipes, progressBack, progressFront, progressCallout, calloutClock, padlock };
 }
 
 /**
@@ -469,7 +505,7 @@ export async function loadGameAssets(onProgress: (progress: number) => void): Pr
 
   await Assets.load([...GAME_ASSET_URLS], (progress) => onProgress(progress * PESO_INDICE));
 
-  artCache ??= IndoorArt.from(Assets.get(INDOOR_ART_URL) as unknown);
+  artCache ??= indoorWithCityScene(Assets.get(INDOOR_ART_URL) as unknown, Assets.get(CITY_SCENE_URL) as IndoorSceneBackground);
   const arquivos = artCache.files().map(indoorFileUrl);
   if (arquivos.length > 0) {
     await Assets.load(arquivos, (progress) => onProgress(PESO_INDICE + progress * (1 - PESO_INDICE)));

@@ -76,10 +76,15 @@ func GrantExperience(record *core.Record, amount int64) int {
 	level := record.GetInt("level")
 	total := record.GetInt64("experience_current") + amount
 	gained := 0
+	notifications := PendingLevelRewards(record)
 	for level < len(levels) && total >= RequiredXP(level+1) {
 		level++
 		gained++
 		record.Set("gold", record.GetInt64("gold")+levels[level-1].RewardGold)
+		notifications = append(notifications, RewardForLevel(level))
+	}
+	if gained > 0 {
+		record.Set("level_notifications", notifications)
 	}
 	setExperience(record, level, total)
 	return gained

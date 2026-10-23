@@ -90,6 +90,10 @@ func publicWorld(app core.App, owner string) (gamewire.World, error) {
 		return w, err
 	}
 	w.Cooking, _ = json.Marshal(cooking)
+	w.Employees, err = publicEmployees(app, owner)
+	if err != nil {
+		return w, err
+	}
 	w.Juices, err = publicJuices(app, owner)
 	if err != nil {
 		return w, err
@@ -114,6 +118,23 @@ func persistenceOperation(app core.App, op gamewire.Operation) gamewire.Result {
 	var body any
 	var err error
 	switch op.Action {
+	case "return_meals":
+		var meals []gamewire.MealReturn
+		if json.Unmarshal(op.Body, &meals) != nil {
+			return fail(400, "Pedido inválido.")
+		}
+		err = returnMeals(app, op.Owner, meals)
+		body = map[string]bool{"ok": err == nil}
+	case "waiter_hire":
+		var command waiterCommand
+		if json.Unmarshal(op.Body, &command) != nil {
+			return fail(400, "Pedido inválido.")
+		}
+		if err = hireWaiter(app, op.Owner, command.CandidateID); err != nil {
+			return fail(409, err.Error())
+		}
+		body, err = snapshotWaiters(app, op.Owner)
+
 	case "juice_unlock", "juice_prepare", "juice_serve", "juice_recharge":
 		var command juiceCommand
 		if json.Unmarshal(op.Body, &command) != nil {
@@ -188,6 +209,8 @@ func persistenceOperation(app core.App, op gamewire.Operation) gamewire.Result {
 			return fail(400, err.Error())
 		case errors.Is(err, errUnknownRecipe):
 			return fail(400, "Receita inválida.")
+		case errors.Is(err, errRecipeLevel):
+			return fail(409, err.Error())
 		case errors.Is(err, errUnknownSpice):
 			return fail(400, err.Error())
 		case errors.Is(err, errAlreadySpiced), errors.Is(err, errSpiceNotUsable), errors.Is(err, errNoSpice):
@@ -218,7 +241,7 @@ func persistenceOperation(app core.App, op gamewire.Operation) gamewire.Result {
 	return result
 }
 func saveDormantRoom(app core.App, owner string, state gamewire.Sleep) error {
-	if len(state.NPCs) > 32 {
+	if len(state.NPCs) > 32 || len(state.Waiters) > 16 {
 		return errors.New("too many NPCs")
 	}
 	return app.RunInTransaction(func(tx core.App) error {
@@ -261,6 +284,23 @@ func saveDormantRoom(app core.App, owner string, state gamewire.Sleep) error {
 				return err
 			}
 		}
+		candidates, err := waiterCandidates(tx, owner)
+		if err != nil {
+			return err
+		}
+		employees := employeesFromRecord(room, candidates)
+		allowed := map[string]bool{}
+		for _, employee := range employees {
+			allowed["waiter:"+employee.ID] = true
+		}
+		for _, waiter := range state.Waiters {
+			if !allowed[waiter.ID] || waiter.Kind != "waiter" || len(waiter.Path) > 256 {
+				return errors.New("invalid waiter")
+			}
+			delete(allowed, waiter.ID)
+		}
+		room.Set("employees", employees)
+		room.Set("waiter_actors", state.Waiters)
 		room.Set("active", false)
 		room.Set("human_count", 0)
 		return tx.Save(room)
@@ -362,7 +402,13 @@ func registerGameBridge(e *core.ServeEvent) error {
 		if err != nil {
 			return err
 		}
-		return r.JSON(200, gamewire.Seed{World: world, NPCs: npcs, Looks: looks, Business: business})
+		roomRecord, err := r.App.FindFirstRecordByData("player_rooms", "user", owner)
+		if err != nil {
+			return err
+		}
+		waiters := []gamewire.Actor{}
+		_ = roomRecord.UnmarshalJSONField("waiter_actors", &waiters)
+		return r.JSON(200, gamewire.Seed{World: world, NPCs: npcs, Waiters: waiters, Looks: looks, Business: business})
 	})
 	group.POST("/{owner}/active", func(r *core.RequestEvent) error {
 		var body struct {
@@ -462,18 +508,28 @@ func consumePortion(tx core.App, owner, foodID string) error {
 		return errFoodUnavailable
 	}
 	portions := int64(foodPortions(food))
+	prepaid := min(portions, max(int64(0), food.GetInt64("prepaid_portions")))
 	// Rounding up pays every portion while XP remains; the total never exceeds the book's.
 	pool := max(0, food.GetInt64("experience"))
-	experience := (pool + portions - 1) / portions
+	experience := int64(0)
+	if prepaid == 0 {
+		experience = (pool + portions - 1) / portions
+	}
 	if portions > 1 {
 		food.Set("portions", portions-1)
 		food.Set("experience", pool-experience)
+		if prepaid > 0 {
+			food.Set("prepaid_portions", prepaid-1)
+		}
 		err = tx.Save(food)
 	} else {
 		err = tx.Delete(food)
 	}
 	if err != nil {
 		return err
+	}
+	if prepaid > 0 {
+		return nil
 	}
 	state, err := tx.FindFirstRecordByData(playerstate.Collection, "user", owner)
 	if err != nil {

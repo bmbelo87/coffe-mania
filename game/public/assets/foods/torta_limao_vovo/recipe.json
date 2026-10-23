@@ -1,0 +1,14 @@
+{
+  "id": "torta_limao_vovo",
+  "name": "Torta de Limão da Vovó",
+  "level": 52,
+  "durationSeconds": 3000,
+  "portions": 270,
+  "profitGold": 2,
+  "costGold": 130,
+  "xp": 50,
+  "inBook": true,
+  "category": "advanced",
+  "bookOrder": 3,
+  "source": "artes-referencia/receitas-cruzadas/lote-04/cruzamento.json; receita Torta de Limão da Vovó. Ordem/categoria observadas no vídeo, não ordem de desbloqueio. Preparo provisório reutiliza a panela tampada de churrasco; sprite histórico específico não recuperado. Versão escolhida: ficha P076_03 com 270 porções, líquido410; alternativa170/líquido210 preservada no acervo. "
+}

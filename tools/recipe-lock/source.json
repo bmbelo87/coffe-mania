@@ -1,0 +1,22 @@
+{
+  "reference": "artes-referencia/video-cafe-mania-muito-tempo/receitas-0029-0046/selecionados/avancado-06-card-05.png",
+  "referenceRecipe": "Ovos Benedict",
+  "generationTool": "built-in image_gen",
+  "prompt": "prompt.txt",
+  "master": "card-locked-imagegen.png",
+  "crop": [
+    37,
+    63,
+    1734,
+    833
+  ],
+  "output": "game/public/assets/ui/recipe-book/card-locked.png",
+  "size": [
+    792,
+    398
+  ],
+  "sha256": "a8a387492f99675bc0767ba0a83716489c03f4b423f4a60161c3ebc7a89c4a7c",
+  "processing": "Alpha-bounds crop and Lanczos resize only; generated master preserved.",
+  "reusedPadlock": "game/public/assets/ui/padlock.png",
+  "limitation": "The source has a paid early-unlock button; this visual change implements level locking only. Prices and purchases remain unimplemented."
+}

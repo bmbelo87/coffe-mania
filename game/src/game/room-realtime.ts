@@ -1,3 +1,4 @@
+import type { Employee } from './waiters';
 import type { CookingSnapshot } from './cooking';
 import type { RoomUnit } from './room-inventory';
 import type { Tile } from '../world/iso';
@@ -8,7 +9,7 @@ export interface SharedFood { id: string; recipeId: string; counterId?: string; 
 export interface SharedAction { kind: 'cooking' | 'serving' | 'cleaning' | 'placing' | 'seated' | 'eating'; stoveId?: string; startedAt: number; duration: number }
 export interface SharedEmotion { id: string; kind: 'satisfied' | 'dissatisfied'; startedAt: number; duration: number }
 export interface SharedActor {
-  id: string; kind?: 'human' | 'npc'; name?: string; appearance?: string;
+  id: string; kind?: 'human' | 'npc' | 'waiter'; name?: string; appearance?: string;
   tx: number; ty: number; direction: number; outside: boolean; state: string;
   move?: { from: Tile; to: Tile; startedAt: number; duration: number };
   chairId?: string; tableId?: string; food?: SharedFood; actionRemaining?: number;
@@ -19,6 +20,7 @@ export interface SharedWorld {
   roomId: string; revision: number; tilesX: number; tilesY: number; patioX?: number; patioY?: number;
   units: RoomUnit[]; foods: SharedFood[]; cooking?: CookingSnapshot;
   juices?: JuiceStock[];
+  employees?: Employee[] | null;
 }
 export interface RoomEvent {
   type: 'welcome' | 'actors' | 'world' | 'food' | 'juices' | 'ack' | 'error'; epoch: string; seq: number; serverNow: number;
@@ -111,7 +113,7 @@ export class RoomRealtime {
   }
   private setConnected(value: boolean): void { this.connected = value; if (!value) this.pingMs = null; for (const listener of this.statuses) listener(value); }
   private retry(): void { if (this.stopped) return; clearTimeout(this.timer); this.timer = setTimeout(() => { void this.connect(); }, Math.min(10000, 500 * 2 ** Math.min(5, this.retries++))); }
-  command(type: 'walk' | 'sit' | 'stand' | 'serve_prepare', data: { tx?: number; ty?: number; chairId?: string; stoveId?: string } = {}): Promise<void> {
+  command(type: 'walk' | 'sit' | 'stand' | 'serve_prepare' | 'edit_table', data: { tx?: number; ty?: number; chairId?: string; stoveId?: string; unitId?: string } = {}): Promise<void> {
     if (!this.connected || this.socket?.readyState !== WebSocket.OPEN) return Promise.reject(new Error('Aguarde a conexão com o quarto.'));
     const requestId = crypto.randomUUID();
     return new Promise((resolve, reject) => {

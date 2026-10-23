@@ -1,0 +1,14 @@
+{
+  "id": "batatas_sorridentes",
+  "name": "Batatas Sorridentes",
+  "level": 54,
+  "durationSeconds": 600,
+  "portions": 225,
+  "profitGold": 1,
+  "costGold": 50,
+  "xp": 15,
+  "inBook": true,
+  "category": "advanced",
+  "bookOrder": 5,
+  "source": "artes-referencia/receitas-cruzadas/lote-04/cruzamento.json; receita Batatas Sorridentes. Ordem/categoria observadas no vídeo, não ordem de desbloqueio. Preparo provisório reutiliza a panela tampada de churrasco; sprite histórico específico não recuperado. Versão escolhida: P076_05 com 10min; alternativa30min do vídeo preservada no acervo. "
+}

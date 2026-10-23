@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';
+import { build } from 'esbuild';
+import { readFile } from 'node:fs/promises';
+
+const result = await build({ entryPoints: ['game/src/game/welcome-wallpapers.ts'], bundle: true, format: 'esm', write: false });
+const { chooseWelcomeWallpaper } = await import('data:text/javascript;base64,' + Buffer.from(result.outputFiles[0].text).toString('base64'));
+const catalog = JSON.parse(await readFile('game/public/assets/ui/cafe-welcome/catalog.json', 'utf8'));
+const choose = (date, overrides = {}) => chooseWelcomeWallpaper({ ...catalog, ...overrides }, new Date(date)).id;
+assert.equal(choose('2026-10-20T03:00:00Z'), choose('2026-10-21T02:59:59Z'), 'rotation changed before local midnight');
+const rotating = { defaultPool: ['cafe-cozinha', 'cafe-encontro'] };
+assert.notEqual(choose('2026-10-21T02:59:59Z', rotating), choose('2026-10-21T03:00:00Z', rotating), 'daily rotation did not advance');
+assert.equal(choose('2026-10-20T12:00:00Z', { activeSeason: 'natal' }), 'natal');
+const calendar = [{ season: 'pascoa', from: '2026-04-01', through: '2026-04-07' }];
+assert.equal(choose('2026-04-01T03:00:00Z', { calendar }), 'pascoa');
+assert.equal(choose('2026-04-08T02:59:59Z', { calendar }), 'pascoa');
+assert.notEqual(choose('2026-04-08T03:00:00Z', { calendar }), 'pascoa');
+assert.equal(choose('2026-04-02T12:00:00Z', { calendar, activeSeason: 'natal' }), 'natal');
+assert.equal(choose('2026-10-20T12:00:00Z', { defaultPool: ['nonexistent'] }), 'cafe-classico');
+for (const image of catalog.wallpapers) await readFile('game/public/assets/ui/cafe-welcome/' + image.file);
+console.log('Wallpaper calendar, override, daily rotation, fallback and image files: OK');

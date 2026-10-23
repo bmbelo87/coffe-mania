@@ -1,0 +1,14 @@
+{
+  "id": "lagosta_nobre",
+  "name": "Lagosta Nobre",
+  "level": 53,
+  "durationSeconds": 54000,
+  "portions": 170,
+  "profitGold": 10,
+  "costGold": 430,
+  "xp": 170,
+  "inBook": true,
+  "category": "advanced",
+  "bookOrder": 4,
+  "source": "artes-referencia/receitas-cruzadas/lote-04/cruzamento.json; receita Lagosta Nobre. Ordem/categoria observadas no vídeo, não ordem de desbloqueio. Preparo provisório reutiliza a panela tampada de churrasco; sprite histórico específico não recuperado. "
+}

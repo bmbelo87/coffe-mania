@@ -1,7 +1,7 @@
 {
  "sheet": [
   2048,
-  1935
+  2191
  ],
  "texSize": 256,
  "symbols": {
@@ -2612,7 +2612,64 @@
    "h": 3,
    "tx": 54.95,
    "ty": 78.25
+  },
+  "StarterEyes": {
+   "sx": 0,
+   "sy": 1935,
+   "w": 76,
+   "h": 19,
+   "tx": 26,
+   "ty": 43
+  },
+  "StarterMouth": {
+   "sx": 256,
+   "sy": 1935,
+   "w": 31,
+   "h": 16,
+   "tx": 49,
+   "ty": 67
+  },
+  "StarterEyebrows": {
+   "sx": 512,
+   "sy": 1935,
+   "w": 76,
+   "h": 11,
+   "tx": 27,
+   "ty": 31
+  },
+  "StarterPants": {
+   "sx": 768,
+   "sy": 1935,
+   "w": 81,
+   "h": 70,
+   "tx": 175,
+   "ty": 186
+  },
+  "StarterShirt": {
+   "sx": 1024,
+   "sy": 1935,
+   "w": 256,
+   "h": 133,
+   "tx": 0,
+   "ty": 123
+  },
+  "StarterHairShading": {
+   "sx": 1280,
+   "sy": 1935,
+   "w": 256,
+   "h": 256,
+   "tx": 0,
+   "ty": 0
+  },
+  "StarterHairIcon": {
+   "sx": 1536,
+   "sy": 1935,
+   "w": 128,
+   "h": 128,
+   "tx": 0,
+   "ty": 0
   }
  },
- "maxSymbolWidth": 263
+ "maxSymbolWidth": 263,
+ "starterRow": 1935
 }

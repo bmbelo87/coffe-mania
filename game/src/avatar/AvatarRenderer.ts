@@ -25,6 +25,7 @@ import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader.js';
 import { composeAvatarTexture, parseAtlas, type AtlasFile } from './AvatarTexture';
 import { ANGLE_PER_DIRECTION, frameTimeSeconds } from './clips';
 import { ANIMATION_OBJECT_NAMES, isCustomisableObject, type ResolvedLook } from './wardrobe';
+import { addStarterHair } from './starter-hair';
 
 /** Renderizador ortográfico do avatar Collada. O look controla a visibilidade das peças e a composição da textura. */
 
@@ -115,6 +116,7 @@ export class AvatarRenderer {
   private action: AnimationAction | null = null;
   private model: Object3D | null = null;
   private hairMaterials: Material[] = [];
+  private starterHair?: SkinnedMesh;
   private animationCount = 0;
   private readonly margin: number;
   private readonly upAxisFix: number;
@@ -194,6 +196,9 @@ export class AvatarRenderer {
     this.fixTextureChannel();
     this.applyMaterials();
     this.frameCamera();
+    // O novo corte usa o mesmo enquadramento e apoio dos looks existentes.
+    this.starterHair = addStarterHair(this.model, this.atlasImage, this.atlas);
+    if (this.starterHair) this.hairMaterials.push(this.starterHair.material as Material);
 
     // A animação do Collada é uma trilha de 146 keyframes, subdividida em clipes.
 
@@ -680,6 +685,12 @@ export class AvatarRenderer {
   }
 
   destroy(): void {
+    if (this.starterHair) {
+      const material = this.starterHair.material as MeshBasicMaterial;
+      material.map?.dispose();
+      material.dispose();
+      this.starterHair.geometry.dispose();
+    }
     this.texture.dispose();
     this.renderer.dispose();
     // dispose() frees Three's resources but keeps the browser's WebGL context alive until

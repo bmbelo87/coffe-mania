@@ -3,6 +3,17 @@ import type { Graphics } from 'pixi.js';
 import type { StageTransform } from '../../core/stage';
 import { BACKGROUND_STRIPE_WIDTH, COLORS } from './layout';
 
+/** HTML entry screens share the loading palette, stage alignment and stripe width. */
+export function applyLoadingStripes(element: HTMLElement, width: number, height: number): void {
+  const scale = Math.min(width / 1920, height / 1080);
+  if (scale <= 0) return;
+  const color = (value: number) => '#' + value.toString(16).padStart(6, '0');
+  element.style.backgroundColor = color(COLORS.backgroundStripeLight);
+  element.style.backgroundImage = `linear-gradient(to right, ${color(COLORS.backgroundStripeDark)} 50%, ${color(COLORS.backgroundStripeLight)} 50%)`;
+  element.style.backgroundSize = `${2 * BACKGROUND_STRIPE_WIDTH * scale}px 100%`;
+  element.style.backgroundPosition = `${(width - 1920 * scale) / 2}px 0`;
+}
+
 /** Faixas alinhadas à stage, mas estendidas até as bordas reais do viewport. */
 export function drawLoadingStripes(
   graphics: Graphics,

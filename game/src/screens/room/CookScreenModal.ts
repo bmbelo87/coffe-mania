@@ -1,15 +1,16 @@
-import { Container, Graphics, NineSliceSprite, Rectangle, Sprite, Text, TextStyle, Texture } from 'pixi.js';
+import { ColorMatrixFilter, Container, Graphics, NineSliceSprite, Rectangle, Sprite, Text, TextStyle, Texture } from 'pixi.js';
 
 import { playRandomSfx } from '../../audio/sfx';
 import { FONT_FAMILY } from '../../core/fonts';
 import { STAGE_HEIGHT, STAGE_WIDTH } from '../../core/stage';
 import { SFX_BOOK_URLS, type RecipeBookTextures } from '../../game/asset-manifest';
 import type { PlayerState } from '../../game/player-state';
-import { recipeBookTime, recipeBookTimeLabel, type RecipeArt } from '../../game/recipes';
+import { recipeBlockReason, recipeBookTime, recipeBookTimeLabel, type RecipeArt } from '../../game/recipes';
 import { TOP_BAR_ICON_FRAMES } from './TopBars';
 import { modalAnimationFrame, MODAL_OVERLAY_ALPHA, type ModalPhase } from './ModalAnimation';
 
 export interface CookScreenTextures {
+  padlock?: Texture;
   book: RecipeBookTextures;
   closeButton?: Texture;
   /** Todas as receitas conhecidas; o livro mostra só as marcadas com inBook. */
@@ -84,7 +85,7 @@ const COOK_BUTTON = {
 
 const TABS: { id: TabId; label: string; minLevel?: number; locked?: boolean }[] = [
   { id: 'basic', label: 'Básico' },
-  { id: 'advanced', label: 'Avançado', minLevel: 30 },
+  { id: 'advanced', label: 'Avançado' },
   { id: 'specials', label: 'Especiais', locked: true },
   { id: 'favorites', label: '★ Favoritos!' },
   { id: 'deluxe', label: 'Deluxe' },
@@ -163,6 +164,7 @@ export class CookScreenModal {
   private readonly cardItems: CardItem[] = [];
 
   private readonly textures: RecipeBookTextures;
+  private readonly padlockTexture?: Texture;
   private readonly recipes: RecipeArt[];
   private readonly hudIcons: Texture[];
   private readonly onCookRecipe?: (recipe: CookRecipeEvent) => void;
@@ -183,6 +185,7 @@ export class CookScreenModal {
 
   constructor(options: CookScreenModalOptions) {
     this.textures = options.textures.book;
+    this.padlockTexture = options.textures.padlock;
     this.recipes = (options.textures.recipes ?? []).filter((recipe) => recipe.inBook);
     this.hudIcons = TOP_BAR_ICON_FRAMES.map((frame) => new Texture({
       source: this.textures.hudIcons.source,
@@ -351,19 +354,20 @@ export class CookScreenModal {
     });
   }
 
-  /** Cadeado desenhado: a arte do cadeado da aba Especiais ainda não foi recortada. */
-  private padlock(x: number, y: number): Graphics {
-    return new Graphics()
-      .arc(x, y - 4, 7, Math.PI, 0).stroke({ color: 0x5a4632, width: 3 })
-      .roundRect(x - 10, y - 4, 20, 15, 3).fill(0x8c7a64).stroke({ color: 0x5a4632, width: 2 });
+  private padlock(x: number, y: number): Sprite {
+    const view = new Sprite(this.padlockTexture ?? Texture.EMPTY);
+    view.anchor.set(0.5);
+    view.scale.set(Math.min(24 / view.texture.width, 30 / view.texture.height));
+    view.position.set(x, y);
+    view.eventMode = 'none';
+    return view;
   }
 
   private recipesOfTab(): RecipeArt[] {
     if (this.tab === 'favorites') {
       return this.favorites.map((id) => this.recipes.find((recipe) => recipe.id === id)).filter((recipe): recipe is RecipeArt => Boolean(recipe));
     }
-    // O catálogo ainda não separa cardápios: todos os pratos do livro são do Básico.
-    return this.tab === 'basic' ? this.recipes : [];
+    return this.recipes.filter((recipe) => (recipe.category ?? 'basic') === this.tab);
   }
 
   private renderPage(): void {
@@ -397,6 +401,7 @@ export class CookScreenModal {
 
   private card(recipe: RecipeArt): Container {
     const { width, height } = CARD;
+    const levelLocked = (this.playerState?.level ?? 1) < recipe.level;
     const card = new Container();
     card.label = `cook-card-${recipe.id}`;
     card.eventMode = 'static';
@@ -408,7 +413,7 @@ export class CookScreenModal {
     card.addChild(inner);
 
     // Card original (faixa caramelo com arabescos e painel claro), com os cantos arredondados do jogo.
-    const background = new Sprite(this.textures.card);
+    const background = new Sprite(levelLocked ? this.textures.cardLocked ?? this.textures.card : this.textures.card);
     background.width = width;
     background.height = height;
     const corners = new Graphics().roundRect(0, 0, width, height, CARD_LAYOUT.radius).fill(0xffffff);
@@ -420,37 +425,59 @@ export class CookScreenModal {
     const title = new Text({
       text: recipe.name,
       style: style({ fontSize: 26, fontWeight: '700', fill: 0xffffff,
-        dropShadow: { color: COLORS.cardTitleShadow, alpha: 0.55, blur: 1, distance: 2, angle: Math.PI / 2 } }),
+        dropShadow: { color: levelLocked ? 0x888888 : COLORS.cardTitleShadow, alpha: levelLocked ? 0.15 : 0.55, blur: 1, distance: 2, angle: Math.PI / 2 } }),
     });
     title.anchor.set(0.5);
-    title.position.set(width / 2, CARD_LAYOUT.titleY);
+    title.position.set(width / 2, levelLocked ? 24 : CARD_LAYOUT.titleY);
     if (title.width > width - 120) title.scale.set((width - 120) / title.width);
     inner.addChild(title);
 
-    inner.addChild(containSprite(recipe.stage2, CARD_LAYOUT.photo.x, CARD_LAYOUT.photo.y, CARD_LAYOUT.photo.width, CARD_LAYOUT.photo.height));
+    const dish = containSprite(recipe.stage2, CARD_LAYOUT.photo.x, CARD_LAYOUT.photo.y, CARD_LAYOUT.photo.width, CARD_LAYOUT.photo.height);
+    inner.addChild(dish);
 
-    const { iconX, numberRight, timeY, xpY } = CARD_LAYOUT;
-    const numberStyle = style({ fontSize: 31, fontWeight: '700', fill: COLORS.cardNumber });
-    // Mesmo relógio do painel da direita.
-    const clockSize = CARD_LAYOUT.clockRadius * 2;
-    inner.addChild(containSprite(this.textures.clock, iconX, timeY, clockSize, clockSize));
-    const time = new Text({ text: recipeBookTimeLabel(recipe.durationSeconds), style: numberStyle });
-    time.anchor.set(1, 0.5);
-    time.position.set(numberRight, timeY);
-    // "XP" amarelo com contorno marrom e um halo claro por fora: dois textos sobrepostos.
-    const xpHalo = new Text({ text: 'XP', style: style({ fontSize: 25, fontWeight: '700', fill: COLORS.xpHalo, stroke: { color: COLORS.xpHalo, width: 10, join: 'round' } }) });
-    const xpLabel = new Text({ text: 'XP', style: style({ fontSize: 25, fontWeight: '700', fill: COLORS.xpFill, stroke: { color: COLORS.xpStroke, width: 5, join: 'round' } }) });
-    for (const label of [xpHalo, xpLabel]) {
-      label.anchor.set(0.5);
-      label.position.set(iconX, xpY);
+    if (levelLocked) {
+      const faded = new ColorMatrixFilter();
+      faded.desaturate();
+      dish.filters = [faded];
+      dish.alpha = 0.5;
+      const lock = new Sprite(this.padlockTexture ?? Texture.EMPTY);
+      lock.label = `cook-card-lock-${recipe.id}`;
+      lock.anchor.set(0.5);
+      lock.scale.set(Math.min(58 / lock.texture.width, 76 / lock.texture.height));
+      lock.position.set(140, 154);
+      lock.eventMode = 'none';
+      const message = new Text({
+        text: `Disponível No\nnível ${recipe.level}`,
+        style: style({ fontSize: 27, fontWeight: '700', fill: 0xffffff, align: 'center', lineHeight: 26 }),
+      });
+      message.anchor.set(0.5);
+      message.position.set(282, 91);
+      inner.addChild(lock, message);
+    } else {
+
+      const { iconX, numberRight, timeY, xpY } = CARD_LAYOUT;
+      const numberStyle = style({ fontSize: 31, fontWeight: '700', fill: COLORS.cardNumber });
+      // Mesmo relógio do painel da direita.
+      const clockSize = CARD_LAYOUT.clockRadius * 2;
+      inner.addChild(containSprite(this.textures.clock, iconX, timeY, clockSize, clockSize));
+      const time = new Text({ text: recipeBookTimeLabel(recipe.durationSeconds), style: numberStyle });
+      time.anchor.set(1, 0.5);
+      time.position.set(numberRight, timeY);
+      // "XP" amarelo com contorno marrom e um halo claro por fora: dois textos sobrepostos.
+      const xpHalo = new Text({ text: 'XP', style: style({ fontSize: 25, fontWeight: '700', fill: COLORS.xpHalo, stroke: { color: COLORS.xpHalo, width: 10, join: 'round' } }) });
+      const xpLabel = new Text({ text: 'XP', style: style({ fontSize: 25, fontWeight: '700', fill: COLORS.xpFill, stroke: { color: COLORS.xpStroke, width: 5, join: 'round' } }) });
+      for (const label of [xpHalo, xpLabel]) {
+        label.anchor.set(0.5);
+        label.position.set(iconX, xpY);
+      }
+      const xp = new Text({ text: String(recipe.xp), style: numberStyle });
+      xp.anchor.set(1, 0.5);
+      xp.position.set(numberRight, xpY);
+      inner.addChild(time, xpHalo, xpLabel, xp);
+
+      inner.addChild(this.favoriteButton(recipe));
+      inner.addChild(this.cookButton(recipe));
     }
-    const xp = new Text({ text: String(recipe.xp), style: numberStyle });
-    xp.anchor.set(1, 0.5);
-    xp.position.set(numberRight, xpY);
-    inner.addChild(time, xpHalo, xpLabel, xp);
-
-    inner.addChild(this.favoriteButton(recipe));
-    inner.addChild(this.cookButton(recipe));
 
     const item: CardItem = { inner, highlight, currentScale: 1, targetScale: 1 };
     this.cardItems.push(item);
@@ -504,10 +531,9 @@ export class CookScreenModal {
     return button;
   }
 
-  /** Por que o prato não pode ser cozido agora ('' se pode). O servidor confere o mesmo ouro. */
+  /** O servidor valida novamente o nível e o ouro antes de criar o preparo. */
   private blockReason(recipe: RecipeArt): string {
-    const gold = this.playerState?.gold;
-    return gold !== undefined && gold < recipe.costGold ? 'caféOuros insuficientes' : '';
+    return recipeBlockReason(recipe, this.playerState?.level ?? 1, this.playerState?.gold);
   }
 
   /**
