@@ -39,6 +39,7 @@ jogo.example.com {
 		# Durante o reinício de um serviço, o Caddy segura a requisição (até 15 s) em vez de
 		# responder erro: é isso que deixa a atualização sem queda para quem está jogando.
 		reverse_proxy /game/* 127.0.0.1:8091 {
+			header_up X-Real-IP {client_ip}
 			lb_try_duration 15s
 			lb_try_interval 250ms
 		}

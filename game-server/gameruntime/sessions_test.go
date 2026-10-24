@@ -153,3 +153,50 @@ func TestMaintenanceCountdownThenOnlyStaffStays(t *testing.T) {
 	server.SetStatus(gamewire.OperationStatus{Mode: gamewire.ModeOpen})
 	join(t, address, "bia", false, buildinfo.Version).expect(t, "welcome")
 }
+
+func TestConnectionsPerAddressAreLimited(t *testing.T) {
+	server := NewServer(New(sessionStore{}, Options{}), sessionTestSecret)
+	now := time.Now()
+	for i := range maxConnectionsPerIP {
+		if !server.admitIP("203.0.113.7", now) {
+			t.Fatalf("conexão %d recusada", i+1)
+		}
+	}
+	if server.admitIP("203.0.113.7", now) {
+		t.Fatal("passou do limite de conexões abertas por endereço")
+	}
+	if !server.admitIP("198.51.100.1", now) {
+		t.Fatal("outro endereço não é afetado")
+	}
+	server.releaseIP("203.0.113.7")
+	if !server.admitIP("203.0.113.7", now) {
+		t.Fatal("fechar uma conexão libera a vaga")
+	}
+	// Reconnecting over and over runs out of attempts even when nothing stays open.
+	for i := range attemptBurstPerIP {
+		if !server.admitIP("192.0.2.9", now) {
+			t.Fatalf("tentativa %d dentro da rajada", i+1)
+		}
+		server.releaseIP("192.0.2.9")
+	}
+	if server.admitIP("192.0.2.9", now) {
+		t.Fatal("tentativas seguidas demais são recusadas")
+	}
+	if !server.admitIP("192.0.2.9", now.Add(10*time.Second)) {
+		t.Fatal("as tentativas voltam com o tempo")
+	}
+}
+
+func TestProxyHeaderIsTrustedOnlyFromThisMachine(t *testing.T) {
+	t.Setenv("COFFE_TRUSTED_PROXY_HEADER", "X-Real-IP")
+	request := httptest.NewRequest("GET", "/game/ws", nil)
+	request.Header.Set("X-Real-IP", "203.0.113.7")
+	request.RemoteAddr = "127.0.0.1:50000"
+	if got := clientIP(request); got != "203.0.113.7" {
+		t.Fatalf("pelo proxy local: %s", got)
+	}
+	request.RemoteAddr = "198.51.100.1:50000"
+	if got := clientIP(request); got != "198.51.100.1" {
+		t.Fatalf("cabeçalho forjado de fora: %s", got)
+	}
+}

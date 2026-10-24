@@ -1,4 +1,6 @@
 import './styles/base.css';
+// Pixi sem eval: a página roda com CSP sem 'unsafe-eval' (database/main.go).
+import 'pixi.js/unsafe-eval';
 
 import { bakeRoomAvatars } from './avatar/bake';
 import { createNpcAvatarSource } from './avatar/NpcAvatarSource';

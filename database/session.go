@@ -79,16 +79,22 @@ func requestUsesHTTPS(request *http.Request) bool {
 }
 
 // Cookie authentication needs an origin check for mutations, including login/logout.
+// Browsers send Origin on every POST; a mutation without it does not come from the game.
 func sameOrigin(e *core.RequestEvent) error {
-	if origin := e.Request.Header.Get("Origin"); origin != "" {
-		parsed, err := url.Parse(origin)
-		scheme := "http"
-		if requestUsesHTTPS(e.Request) {
-			scheme = "https"
+	origin := e.Request.Header.Get("Origin")
+	if origin == "" {
+		if e.Request.Method == http.MethodGet || e.Request.Method == http.MethodHead {
+			return e.Next()
 		}
-		if err != nil || parsed.Scheme != scheme || !strings.EqualFold(parsed.Host, e.Request.Host) {
-			return e.ForbiddenError("Origem inválida.", nil)
-		}
+		return e.ForbiddenError("Origem inválida.", nil)
+	}
+	parsed, err := url.Parse(origin)
+	scheme := "http"
+	if requestUsesHTTPS(e.Request) {
+		scheme = "https"
+	}
+	if err != nil || parsed.Scheme != scheme || !strings.EqualFold(parsed.Host, e.Request.Host) {
+		return e.ForbiddenError("Origem inválida.", nil)
 	}
 	return e.Next()
 }
@@ -109,16 +115,28 @@ func registerSessionRoutes(e *core.ServeEvent) {
 	})
 	g.POST("/login", func(r *core.RequestEvent) error {
 		data := struct {
-			Email    string `json:"email"`
-			Password string `json:"password"`
+			Email     string `json:"email"`
+			Password  string `json:"password"`
+			Turnstile string `json:"turnstile"`
 		}{}
 		if err := r.BindBody(&data); err != nil || data.Email == "" || data.Password == "" {
 			return r.BadRequestError("Informe email e senha.", nil)
 		}
-		record, err := r.App.FindAuthRecordByEmail("users", strings.ToLower(strings.TrimSpace(data.Email)))
+		email := strings.ToLower(strings.TrimSpace(data.Email))
+		now := time.Now()
+		// Unknown emails are counted too, so the challenge does not reveal which accounts exist.
+		if accountLogins.needsChallenge(email, now) && !verifyTurnstile(r.Request.Context(), data.Turnstile, r.RealIP()) {
+			return r.JSON(http.StatusForbidden, map[string]any{
+				"status": http.StatusForbidden, "code": "challenge", "siteKey": turnstileSiteKey(),
+				"message": "Muitas tentativas com este email. Confirme que você não é um robô para tentar de novo.",
+			})
+		}
+		record, err := r.App.FindAuthRecordByEmail("users", email)
 		if err != nil || !record.ValidatePassword(data.Password) {
+			accountLogins.fail(email, now)
 			return r.UnauthorizedError("Email ou senha inválidos.", nil)
 		}
+		accountLogins.succeed(email)
 		// Only after the password: the notice must not reveal which emails have accounts.
 		if until, suspended := suspendedUntil(record, time.Now()); suspended {
 			return suspendedResponse(r, record, until)
@@ -151,13 +169,5 @@ func registerSessionRoutes(e *core.ServeEvent) {
 		}
 		clearSessionCookie(r)
 		return r.NoContent(http.StatusNoContent)
-	}).BindFunc(requireOrigin)
-}
-
-// requireOrigin is sameOrigin for mutations that browsers always send with an Origin header.
-func requireOrigin(r *core.RequestEvent) error {
-	if r.Request.Header.Get("Origin") == "" {
-		return r.ForbiddenError("Origem inválida.", nil)
-	}
-	return sameOrigin(r)
+	}).BindFunc(sameOrigin)
 }

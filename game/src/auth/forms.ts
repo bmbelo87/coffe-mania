@@ -1,4 +1,5 @@
-import { login } from '../game/session';
+import { login, LoginChallengeError } from '../game/session';
+import { mountTurnstile, type TurnstileWidget } from './turnstile';
 
 export function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : 'Ocorreu um erro. Tente novamente.';
@@ -41,8 +42,22 @@ export function mountLoginForm(content: HTMLElement, error: HTMLElement): void {
       <button class="login-primary" type="submit">Entrar</button>
     </form>
     <a class="login-link" href="/senha">Esqueci minha senha</a>`;
-  handleSubmit(content.querySelector('form')!, error, 'Entrando…', async (data) => {
-    await login(text(data, 'email').trim(), text(data, 'password'));
+  const form = content.querySelector('form')!;
+  let challenge: Promise<TurnstileWidget> | undefined;
+  handleSubmit(form, error, 'Entrando…', async (data) => {
+    const widget = challenge ? await challenge : undefined;
+    try {
+      await login(text(data, 'email').trim(), text(data, 'password'), widget?.token() ?? '');
+    } catch (reason) {
+      widget?.reset();
+      if (reason instanceof LoginChallengeError && !challenge) {
+        const slot = document.createElement('div');
+        slot.className = 'login-turnstile';
+        form.querySelector('button[type="submit"]')!.before(slot);
+        challenge = mountTurnstile(slot, reason.siteKey);
+      }
+      throw reason;
+    }
     const room = new URLSearchParams(window.location.search).get('room');
     window.location.assign(room ? '/play?room=' + encodeURIComponent(room) : '/play');
   });

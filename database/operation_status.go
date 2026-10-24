@@ -212,7 +212,7 @@ func registerOperationStatus(e *core.ServeEvent) {
 	e.App.OnRecordAfterUpdateSuccess("game_status").BindFunc(refresh)
 	e.App.OnRecordAfterCreateSuccess("game_status").BindFunc(refresh)
 	reloadStatus(e.App)
-	e.Router.BindFunc(operationGate)
+	e.Router.BindFunc(rateLimitGame, operationGate)
 
 	e.Router.GET("/api/coffe/status", func(r *core.RequestEvent) error {
 		r.Response.Header().Set("Cache-Control", "no-store")
@@ -233,5 +233,5 @@ func registerOperationStatus(e *core.ServeEvent) {
 			return err
 		}
 		return r.JSON(http.StatusOK, viewStatus(status, time.Now()))
-	}).Bind(apis.BodyLimit(2048)).BindFunc(requireOrigin)
+	}).Bind(apis.BodyLimit(2048)).BindFunc(sameOrigin)
 }

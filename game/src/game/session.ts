@@ -39,13 +39,20 @@ export async function resolveSession(): Promise<PlayerSession | null> {
   return response.json() as Promise<PlayerSession>;
 }
 
-export async function login(email: string, password: string): Promise<PlayerSession> {
+/** Depois de várias senhas erradas, o servidor pede a verificação anti-robô na conta. */
+export class LoginChallengeError extends Error {
+  constructor(message: string, readonly siteKey: string) { super(message); }
+}
+
+export async function login(email: string, password: string, turnstile = ''): Promise<PlayerSession> {
   const response = await request('/login', {
-    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }),
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password, turnstile }),
   });
   if (response.status === 401) throw new Error('Email ou senha inválidos.');
+  if (response.status === 429) throw new Error('Muitas tentativas seguidas. Aguarde um minuto e tente de novo.');
   if (response.status === 403) {
-    const body = await response.json().catch(() => ({})) as { message?: string };
+    const body = await response.json().catch(() => ({})) as { message?: string; code?: string; siteKey?: string };
+    if (body.code === 'challenge') throw new LoginChallengeError(body.message ?? 'Confirme que você não é um robô.', body.siteKey ?? '');
     throw new Error(body.message ?? 'Esta conta não pode entrar agora.');
   }
   if (!response.ok) throw new Error('Não foi possível entrar. Tente novamente.');

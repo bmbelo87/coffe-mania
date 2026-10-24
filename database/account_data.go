@@ -123,7 +123,7 @@ func registerAccountRoutes(e *core.ServeEvent) {
 		}
 		setSessionCookie(r, token, sessionLifetime)
 		return r.NoContent(http.StatusNoContent)
-	}).Bind(apis.BodyLimit(4096)).BindFunc(requireOrigin)
+	}).Bind(apis.BodyLimit(4096)).BindFunc(sameOrigin)
 	group.GET("/export", func(r *core.RequestEvent) error {
 		data, err := exportAccount(r.App, sessionRecord(r))
 		if err != nil {
@@ -148,5 +148,5 @@ func registerAccountRoutes(e *core.ServeEvent) {
 		}
 		clearSessionCookie(r)
 		return r.NoContent(http.StatusNoContent)
-	}).Bind(apis.BodyLimit(1024)).BindFunc(requireOrigin)
+	}).Bind(apis.BodyLimit(1024)).BindFunc(sameOrigin)
 }

@@ -75,6 +75,9 @@ type Manager struct {
 	wg       sync.WaitGroup
 	steps    atomic.Uint64
 	events   atomic.Uint64
+	// Time each room spends on one unit of work: a tick or a queued task (command, join…).
+	tickTime durationHistogram
+	taskTime durationHistogram
 }
 
 func New(store Storage, options Options) *Manager {
@@ -451,7 +454,13 @@ func (m *Manager) Stats() map[string]any {
 	m.mu.Lock()
 	n := len(m.rooms)
 	m.mu.Unlock()
-	return map[string]any{"rooms": n, "steps": m.steps.Load(), "events": m.events.Load()}
+	return map[string]any{"rooms": n, "steps": m.steps.Load(), "events": m.events.Load(), "tick": m.tickTime.snapshot(), "task": m.taskTime.snapshot()}
+}
+
+// ResetTimings starts a new measurement window for the tick and task histograms.
+func (m *Manager) ResetTimings() {
+	m.tickTime.reset()
+	m.taskTime.reset()
 }
 func (r *room) run() {
 	ticker := time.NewTicker(r.manager.options.Tick)
@@ -488,7 +497,9 @@ func (r *room) run() {
 		stepTimer.Reset(wait)
 		select {
 		case t := <-r.tasks:
+			started := time.Now()
 			t.reply <- t.fn(r)
+			r.manager.taskTime.observe(time.Since(started))
 		case now := <-ticker.C:
 			for id, p := range r.peers {
 				if p.Closed.Load() {
@@ -500,6 +511,7 @@ func (r *room) run() {
 			}
 			if len(r.peers) > 0 || r.activated && now.Sub(r.idleAt) < r.manager.options.Grace {
 				r.tick(now)
+				r.manager.tickTime.observe(time.Since(now))
 			}
 			if len(r.peers) == 0 && now.Sub(r.idleAt) >= r.manager.options.Grace && !now.Before(r.sleepRetry) {
 				if r.sleep(now) == nil {
@@ -509,6 +521,7 @@ func (r *room) run() {
 		case now := <-stepTimer.C:
 			if len(r.peers) > 0 || r.activated && now.Sub(r.idleAt) < r.manager.options.Grace {
 				r.tick(now)
+				r.manager.tickTime.observe(time.Since(now))
 			}
 		case <-r.stop:
 			for _, p := range r.peers {

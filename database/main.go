@@ -7,6 +7,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"regexp"
 
 	"coffe-mania/database/playerstate"
 	"coffe-mania/shared/buildinfo"
@@ -66,9 +67,34 @@ func main() {
 	}
 }
 
+var safeHost = regexp.MustCompile(`^[A-Za-z0-9.-]+(:[0-9]+)?$`)
+
+// setPageHeaders protects the game pages: scripts only from the game itself (and the
+// Turnstile widget), no framing by other sites, sockets only to this host. Pixi runs
+// without eval (pixi.js/unsafe-eval is imported by the client).
+func setPageHeaders(r *core.RequestEvent) {
+	sockets := "'self'"
+	if public := os.Getenv("COFFE_PUBLIC_URL"); public != "" {
+		if parsed, err := url.Parse(public); err == nil && safeHost.MatchString(parsed.Host) {
+			sockets += " wss://" + parsed.Host
+		}
+	} else if safeHost.MatchString(r.Request.Host) {
+		sockets += " ws://" + r.Request.Host + " wss://" + r.Request.Host
+	}
+	header := r.Response.Header()
+	header.Set("Content-Security-Policy", "default-src 'self'; script-src 'self' https://challenges.cloudflare.com; "+
+		"frame-src https://challenges.cloudflare.com; connect-src "+sockets+"; img-src 'self' data: blob:; media-src 'self' data: blob:; "+
+		"font-src 'self' data:; style-src 'self' 'unsafe-inline'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; "+
+		"form-action 'self'; frame-ancestors 'none'")
+	header.Set("X-Content-Type-Options", "nosniff")
+	header.Set("Referrer-Policy", "strict-origin-when-cross-origin")
+	header.Set("X-Frame-Options", "DENY")
+}
+
 func registerPageRoutes(e *core.ServeEvent, publicDir string) {
 	page := func(r *core.RequestEvent) error {
 		r.Response.Header().Set("Cache-Control", "no-store")
+		setPageHeaders(r)
 		index, err := os.ReadFile(filepath.Join(publicDir, "index.html"))
 		if err != nil || !bytes.Contains(index, []byte(`name="coffe-auth"`)) {
 			return r.String(http.StatusServiceUnavailable, "Frontend indisponível ou desatualizado. Execute npm run build na raiz do projeto.")

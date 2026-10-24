@@ -9,7 +9,9 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"net/http"
+	"os"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -80,6 +82,7 @@ func (s *HTTPStorage) Consume(ctx context.Context, id, food string) (gamewire.Bu
 	err := s.request(ctx, "POST", id+"/consume", map[string]string{"foodId": food}, &out)
 	return out, err
 }
+
 // Status reads the operation mode (open, maintenance, closed) when the service starts.
 func (s *HTTPStorage) Status(ctx context.Context) (gamewire.OperationStatus, error) {
 	var out gamewire.OperationStatus
@@ -104,6 +107,77 @@ type Server struct {
 	sessions map[string]*liveSession
 	status   gamewire.OperationStatus
 	lockAt   *time.Timer
+	// Per client IP: open connections and a bucket of connection attempts. Generous on
+	// purpose: mobile carriers put many players behind one address.
+	ipOpen     map[string]int
+	ipAttempts map[string]*attemptBucket
+}
+
+type attemptBucket struct {
+	tokens float64
+	last   time.Time
+}
+
+const (
+	maxConnectionsPerIP = 20
+	attemptBurstPerIP   = 30
+	attemptRatePerIP    = 0.5 // per second
+)
+
+// clientIP trusts the proxy header (COFFE_TRUSTED_PROXY_HEADER) only on connections from
+// this machine, where the proxy runs; anyone else could forge it.
+func clientIP(r *http.Request) string {
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		host = r.RemoteAddr
+	}
+	if ip := net.ParseIP(host); ip != nil && ip.IsLoopback() {
+		if header := os.Getenv("COFFE_TRUSTED_PROXY_HEADER"); header != "" {
+			if values := r.Header.Values(header); len(values) > 0 {
+				parts := strings.Split(values[len(values)-1], ",")
+				if forwarded := strings.TrimSpace(parts[len(parts)-1]); net.ParseIP(forwarded) != nil {
+					return forwarded
+				}
+			}
+		}
+	}
+	return host
+}
+
+// admitIP reserves a connection slot for the address, or refuses it.
+func (s *Server) admitIP(ip string, now time.Time) bool {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if len(s.ipAttempts) > 10000 {
+		for key, bucket := range s.ipAttempts {
+			if bucket.tokens+now.Sub(bucket.last).Seconds()*attemptRatePerIP >= attemptBurstPerIP {
+				delete(s.ipAttempts, key)
+			}
+		}
+	}
+	bucket := s.ipAttempts[ip]
+	if bucket == nil {
+		bucket = &attemptBucket{tokens: attemptBurstPerIP, last: now}
+		s.ipAttempts[ip] = bucket
+	}
+	bucket.tokens = min(attemptBurstPerIP, bucket.tokens+now.Sub(bucket.last).Seconds()*attemptRatePerIP)
+	bucket.last = now
+	if bucket.tokens < 1 || s.ipOpen[ip] >= maxConnectionsPerIP {
+		return false
+	}
+	bucket.tokens--
+	s.ipOpen[ip]++
+	return true
+}
+
+func (s *Server) releaseIP(ip string) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if s.ipOpen[ip] <= 1 {
+		delete(s.ipOpen, ip)
+	} else {
+		s.ipOpen[ip]--
+	}
 }
 
 type liveSession struct {
@@ -112,7 +186,7 @@ type liveSession struct {
 }
 
 func NewServer(m *Manager, secret string) *Server {
-	return &Server{Manager: m, Secret: secret, tickets: map[string]int64{}, sessions: map[string]*liveSession{}, status: gamewire.OperationStatus{Mode: gamewire.ModeOpen}}
+	return &Server{Manager: m, Secret: secret, tickets: map[string]int64{}, sessions: map[string]*liveSession{}, ipOpen: map[string]int{}, ipAttempts: map[string]*attemptBucket{}, status: gamewire.OperationStatus{Mode: gamewire.ModeOpen}}
 }
 
 // closeSession ends a connection with a final code; the client does not reconnect by itself.
@@ -251,6 +325,12 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("GET /internal/metrics", s.internal(func(w http.ResponseWriter, r *http.Request) {
 		out := s.Manager.Stats()
 		out["connections"] = s.connections.Load()
+		s.mu.Lock()
+		out["players"] = len(s.sessions)
+		s.mu.Unlock()
+		if r.URL.Query().Get("reset") == "1" {
+			s.Manager.ResetTimings()
+		}
 		writeJSON(w, 200, out)
 	}))
 	mux.HandleFunc("POST /internal/shutdown", s.internal(func(w http.ResponseWriter, r *http.Request) {
@@ -322,6 +402,13 @@ func (s *Server) socket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer s.connections.Add(-1)
+	ip := clientIP(r)
+	if !s.admitIP(ip, time.Now()) {
+		w.Header().Set("Retry-After", "10")
+		http.Error(w, "too many connections", http.StatusTooManyRequests)
+		return
+	}
+	defer s.releaseIP(ip)
 	// Default Accept verifies Origin against Host; proxies preserve the public Host.
 	conn, err := websocket.Accept(w, r, &websocket.AcceptOptions{CompressionMode: websocket.CompressionDisabled})
 	if err != nil {

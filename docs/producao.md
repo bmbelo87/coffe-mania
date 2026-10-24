@@ -13,7 +13,8 @@ jogador ──HTTPS/WSS──> Cloudflare (DDoS, cache dos assets) ──> Caddy
 - Só o Caddy escuta na internet, e o firewall só aceita conexões vindas da Cloudflare (e SSH do administrador).
 - O PocketBase e o servidor do jogo escutam em 127.0.0.1. O painel `/_/` e as APIs genéricas do PocketBase (`/api/collections`, `/api/settings`, `/api/backups`…) respondem 404 pelo Caddy; a administração usa um túnel SSH.
 - O IP real do jogador vem do `CF-Connecting-IP`, aceito só de endereços da Cloudflare. O Caddy o repassa ao PocketBase em `X-Real-IP` (`COFFE_TRUSTED_PROXY_HEADER`), usado pelos limites de requisições e pelos registros.
-- Uma máquina basta para dezenas a centenas de jogadores (SQLite em WAL, um processo por serviço). O teste de carga da fase A4 confirma o tamanho; o ponto de partida é uma VPS com 4 vCPU e 8 GB em São Paulo, pela latência.
+- Uma máquina basta para dezenas a centenas de jogadores (SQLite em WAL, um processo por serviço). No [teste de carga](carga.md), 300 jogadores ao mesmo tempo usaram menos de um núcleo e cerca de 200 MB. VPS em São Paulo, pela latência: 2 vCPU e 4 GB no mínimo, 4 vCPU e 8 GB com folga.
+- Proteções, limites e a auditoria das rotas: [segurança](seguranca.md).
 
 ## Instalação inicial
 
@@ -150,3 +151,5 @@ Com o túnel aberto, o dashboard fica em http://127.0.0.1:8090/_/. Nunca abra a 
 - [ ] Suspensão derruba a sessão aberta e mostra o motivo no login.
 - [ ] Atualização com jogadores conectados: reconectam, e veem "Nova versão" quando a versão muda.
 - [ ] O restauro do Litestream funciona.
+- [ ] `govulncheck ./database/... ./game-server/... ./shared/...` e `npm audit` limpos.
+- [ ] Teste de carga contra o servidor de teste (não o de produção) com o tamanho da próxima onda.

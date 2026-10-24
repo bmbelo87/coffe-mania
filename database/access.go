@@ -502,7 +502,7 @@ func registerAccessRoutes(e *core.ServeEvent) {
 			return apiError(r, err, "Não foi possível entrar na lista agora.")
 		}
 		return r.JSON(http.StatusAccepted, map[string]bool{"ok": true})
-	}).Bind(apis.BodyLimit(4096)).BindFunc(noStore, requireOrigin)
+	}).Bind(apis.BodyLimit(4096)).BindFunc(noStore, sameOrigin)
 	e.Router.POST("/api/coffe/waitlist/confirm", func(r *core.RequestEvent) error {
 		var body struct {
 			Token string `json:"token"`
@@ -515,7 +515,7 @@ func registerAccessRoutes(e *core.ServeEvent) {
 			return apiError(r, err, "Não foi possível confirmar agora.")
 		}
 		return r.JSON(http.StatusOK, map[string]int{"position": position})
-	}).Bind(apis.BodyLimit(1024)).BindFunc(noStore, requireOrigin)
+	}).Bind(apis.BodyLimit(1024)).BindFunc(noStore, sameOrigin)
 	e.Router.POST("/api/coffe/invite/check", func(r *core.RequestEvent) error {
 		var body struct {
 			Code string `json:"code"`
@@ -528,7 +528,7 @@ func registerAccessRoutes(e *core.ServeEvent) {
 			return err
 		}
 		return r.JSON(http.StatusOK, map[string]any{"email": invite.GetString("email"), "expiresAt": invite.GetDateTime("expires_at").Time().UnixMilli()})
-	}).Bind(apis.BodyLimit(1024)).BindFunc(noStore, requireOrigin)
+	}).Bind(apis.BodyLimit(1024)).BindFunc(noStore, sameOrigin)
 	e.Router.POST("/api/coffe/signup", func(r *core.RequestEvent) error {
 		var body signupRequest
 		if r.BindBody(&body) != nil {
@@ -544,7 +544,7 @@ func registerAccessRoutes(e *core.ServeEvent) {
 		}
 		setSessionCookie(r, token, sessionLifetime)
 		return r.JSON(http.StatusCreated, sessionView(user))
-	}).Bind(apis.BodyLimit(4096)).BindFunc(noStore, requireOrigin)
+	}).Bind(apis.BodyLimit(4096)).BindFunc(noStore, sameOrigin)
 	e.Router.POST("/api/coffe/password/forgot", func(r *core.RequestEvent) error {
 		var body struct {
 			Email     string `json:"email"`
@@ -560,7 +560,7 @@ func registerAccessRoutes(e *core.ServeEvent) {
 			return apiError(r, err, "Não foi possível pedir a nova senha agora.")
 		}
 		return r.JSON(http.StatusAccepted, map[string]bool{"ok": true})
-	}).Bind(apis.BodyLimit(4096)).BindFunc(noStore, requireOrigin)
+	}).Bind(apis.BodyLimit(4096)).BindFunc(noStore, sameOrigin)
 	e.Router.POST("/api/coffe/password/reset", func(r *core.RequestEvent) error {
 		var body struct {
 			Token           string `json:"token"`
@@ -575,10 +575,10 @@ func registerAccessRoutes(e *core.ServeEvent) {
 		}
 		clearSessionCookie(r)
 		return r.NoContent(http.StatusNoContent)
-	}).Bind(apis.BodyLimit(4096)).BindFunc(noStore, requireOrigin)
+	}).Bind(apis.BodyLimit(4096)).BindFunc(noStore, sameOrigin)
 
 	admin := e.Router.Group("/api/coffe/admin/invites")
-	admin.BindFunc(noStore, requireAdmin, requireOrigin)
+	admin.BindFunc(noStore, requireAdmin, sameOrigin)
 	// Invites the N oldest confirmed people of the waitlist (one wave).
 	admin.POST("/waitlist", func(r *core.RequestEvent) error {
 		var body struct {

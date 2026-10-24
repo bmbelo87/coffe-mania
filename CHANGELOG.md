@@ -16,6 +16,43 @@ Logo depois de um lote, as correções usam `0.5.01`, `0.5.02`… A ordem de lan
 
 Seções usadas: **Adicionado**, **Alterado**, **Corrigido**, **Removido** e **Observações** (limites conhecidos e o que ficou para depois).
 
+## [0.6.1] — Segurança e carga (2026-10-24)
+
+Fase A4 do alpha fechado: proteção das rotas, limites de abuso e teste de carga com 300 jogadores.
+
+### Adicionado
+
+- **Limites de pedidos:**
+  - por sessão nas rotas do jogo: 60 de uma vez e 6 por segundo;
+  - sem sessão: por IP, mais folgado, porque operadoras de celular põem muita gente no mesmo IP;
+  - no WebSocket: até 20 conexões abertas e 30 tentativas seguidas por IP.
+
+  O IP real chega pelo Caddy em `X-Real-IP`.
+- **Desafio no login.** Da 5ª senha errada em 30 minutos, a conta passa a pedir o Turnstile a cada tentativa. Não há bloqueio total, para ninguém conseguir trancar a conta de outra pessoa.
+- **Cabeçalhos de segurança nas páginas:** CSP sem `unsafe-eval` (o Pixi passa a usar `pixi.js/unsafe-eval`), `frame-ancestors 'none'`, `X-Frame-Options`, `nosniff` e `Referrer-Policy`.
+- **Medição do servidor do jogo.** `/internal/metrics` passa a informar os jogadores conectados e os tempos (p50, p95, p99 e máximo) de cada passo de simulação e de cada tarefa dos quartos.
+- **Teste de carga** (`tools/loadtest`). Robôs com conta e IP próprios entram, abrem o quarto pelo WebSocket, andam e consultam o estado. Resultado com 300 jogadores ao mesmo tempo: comandos com p95 de 1 ms, simulação com p99 de 4 ms, 2,4 KB/s por jogador, PocketBase com 0,6 núcleo e 105 MB, servidor do jogo com 0,3 núcleo e 66 MB (`docs/carga.md`).
+- `docs/seguranca.md`: as camadas de proteção e a auditoria de todas as rotas.
+- Testes Go dos limites, do desafio no login, das conexões por IP e da confiança no cabeçalho do proxy.
+
+### Alterado
+
+- Toda mutação exige o cabeçalho `Origin` igual ao host. Antes, a ausência dele era aceita em algumas rotas.
+- O `go.mod` pede o toolchain Go 1.27.3 e o `golang.org/x/net` v0.60.0, que corrigem 13 vulnerabilidades conhecidas da 1.27.0 (http2, net/http, TLS, x509, html/template). `govulncheck` fica limpo.
+- npm: `@xmldom/xmldom` com correção de patch (usado pelo Pixi) e Vite 7.3.7 (só no modo dev). `npm audit` fica limpo.
+
+### Corrigido
+
+- **Ponte interna limitada por engano.** Com centenas de quartos ativos, as chamadas internas do servidor do jogo ao banco recebiam 429 do limite padrão do PocketBase, porque todas saem de 127.0.0.1. Entradas em quartos falhavam e refeições deixariam de ser registradas (migração `202610250003_internal_rate_limit`).
+
+### Observações
+
+- **Entrada no quarto.** Com 300 entradas em 60 s na mesma máquina dos robôs, ela leva p95 de 1,4 s. Sem concorrência, carregar um café leva cerca de 20 ms. Se a cauda incomodar, o próximo passo é guardar em cache a aparência dos NPCs e os candidatos a garçom.
+- **Tamanho do servidor:** 2 vCPU e 4 GB bastam para o alpha; 4 vCPU e 8 GB dão folga.
+- **Limites do teste:** os robôs não cozinham nem compram, e o teste não foi rodado por horas seguidas.
+- O jogo ainda não tem `favicon.ico`.
+- O teste `tests/unit/decoration.test.mjs` continua falhando ao rodar no Node (`import.meta.env` indefinido), como antes desta versão.
+
 ## [0.6.0] — Alpha fechado: acesso por convite, produção, encomendas e orla revisada (2026-10-24)
 
 Primeiro lote preparado para colocar o jogo online, só para convidados. Junta a fundação de produção (fase A0), o acesso por convite (fase A1) e os lotes de fidelidade visual e de mecânica feitos depois da 0.5.0.
