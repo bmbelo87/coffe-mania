@@ -1,0 +1,40 @@
+{
+  "origin": "measured-from-original-video",
+  "video": "videos-jogo/cafe mania muito tempo de jogo.mp4",
+  "frames": [
+    "1:52",
+    "1:58",
+    "2:04",
+    "2:10",
+    "2:12"
+  ],
+  "scale": "1 video px = 2.39 world px (floor grid period 33.5 px = one 160x80 tile)",
+  "note": "Flat rasters drawn by this script from the measured colors and sizes; not extracted sprites. The video blur is not reproduced.",
+  "files": {
+    "terrain/curb.png": {
+      "width": 640,
+      "height": 118,
+      "sha256": "44215264b2dcadb86d7d3dbb59d4d6133d6feacd798692a213c910cc4e48e312"
+    },
+    "terrain/curb-top.png": {
+      "width": 640,
+      "height": 60,
+      "sha256": "46d33cc677dfb83f9f4c5debd6bc860a276db683e04975787f35d0ca9e92373e"
+    },
+    "terrain/curb-top-beach.png": {
+      "width": 640,
+      "height": 56,
+      "sha256": "cbdd87ca51c73042419dc353e6283721bc51b1e9531abe83fc646aa5a5e03332"
+    },
+    "terrain/crosswalk.png": {
+      "width": 540,
+      "height": 120,
+      "sha256": "f98594f2267ef3f35348cdab5e5fb131163cd536c4a0b8be256d79c3b6ab5a19"
+    },
+    "terrain/road-marking.png": {
+      "width": 270,
+      "height": 17,
+      "sha256": "3cd5ec3caa501dc048376990ac33e9f8424bd5a90944ef8deec0aa5fce0a42f5"
+    }
+  }
+}

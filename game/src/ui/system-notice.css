@@ -1,0 +1,59 @@
+.system-notice-banner {
+  position: fixed;
+  /* Below the HUD top bars (currencies, XP, energy). */
+  top: 76px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  max-width: calc(100vw - 32px);
+  box-sizing: border-box;
+  padding: 8px 18px;
+  border: 2px solid #956829;
+  border-radius: 999px;
+  background: #fffdf7f0;
+  color: #66401e;
+  font: 600 16px/1.3 'Fredoka', sans-serif;
+  text-align: center;
+  box-shadow: 0 4px 14px #66401e33;
+  pointer-events: none;
+}
+
+.system-notice-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: #2a1a0c99;
+}
+
+.system-notice-card {
+  width: min(100%, 380px);
+  box-sizing: border-box;
+  padding: 26px 28px;
+  border: 2px solid #b7863b;
+  border-radius: 14px;
+  background: #fffdf7;
+  color: #66401e;
+  font-family: 'Fredoka', sans-serif;
+  text-align: center;
+  box-shadow: 0 8px 25px #00000040;
+}
+
+.system-notice-card h2 { margin: 0 0 12px; font-size: 24px; font-weight: 600; }
+.system-notice-card p { margin: 0 0 20px; font-size: 17px; line-height: 1.4; }
+
+.system-notice-button {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid #956829;
+  border-radius: 6px;
+  background: #b7863b;
+  color: white;
+  font: inherit;
+  font-size: 18px;
+  cursor: pointer;
+}
+.system-notice-button:hover { background: #a87530; }
+.system-notice-button:focus-visible { outline: 2px solid #66401e; outline-offset: 2px; }

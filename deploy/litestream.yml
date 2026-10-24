@@ -1,0 +1,13 @@
+# Cópia contínua do banco para um armazenamento compatível com S3 (Cloudflare R2, Backblaze B2…).
+# Instale o Litestream como serviço e copie este arquivo para /etc/litestream.yml.
+# As chaves vêm do ambiente do serviço (LITESTREAM_ACCESS_KEY_ID e LITESTREAM_SECRET_ACCESS_KEY).
+dbs:
+  - path: /var/lib/coffe/pb_data/data.db
+    replicas:
+      - type: s3
+        bucket: cafe-mania-backup
+        path: data.db
+        endpoint: https://SUA-CONTA.r2.cloudflarestorage.com
+        region: auto
+        retention: 168h
+        snapshot-interval: 6h

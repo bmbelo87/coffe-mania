@@ -1,7 +1,7 @@
 {
   "name": "coffe-mania-source",
-  "version": "0.5.0",
-  "gameVersion": "0.5.0",
+  "version": "0.6.0",
+  "gameVersion": "0.6.0",
   "private": true,
   "type": "module",
   "license": "MIT",
@@ -20,6 +20,7 @@
     "build": "npm run build --workspace game",
     "assets:room": "node scripts/sync-room-catalog.mjs",
     "assets:fit": "node scripts/fit-item-art.mjs",
-    "tools": "node scripts/serve-tools.mjs"
+    "tools": "node scripts/serve-tools.mjs",
+    "release": "node scripts/build-release.mjs"
   }
 }

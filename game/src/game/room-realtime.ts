@@ -3,6 +3,7 @@ import type { CookingSnapshot } from './cooking';
 import type { RoomUnit } from './room-inventory';
 import type { Tile } from '../world/iso';
 import type { JuiceStock } from './juices';
+import { GAME_VERSION } from '../core/version';
 
 /** Prato de um balcão; `counterId` é a unidade do balcão no inventário (vazio em pratos antigos). */
 export interface SharedFood { id: string; recipeId: string; counterId?: string; portions?: number }
@@ -34,6 +35,21 @@ export interface RoomEvent {
 
 export interface RoomLatency { type: 'latency'; rttMs: number }
 
+/** Modo de operação definido pela administração; instantes em ms do relógio do servidor. */
+export interface OperationNotice {
+  type: 'status'; mode: 'open' | 'maintenance' | 'closed'; message?: string;
+  startsAt?: number; endsAt?: number; serverNow: number;
+}
+
+/**
+ * Fechamentos finais (códigos de `shared/gamewire`): o cliente não reconecta sozinho.
+ * - replaced: a conta abriu o jogo em outra janela;
+ * - maintenance: manutenção ou alpha encerrado;
+ * - outdated: o servidor foi atualizado e esta página é de uma versão anterior.
+ */
+export type FinalClose = 'replaced' | 'maintenance' | 'outdated';
+const FINAL_CLOSES: Record<number, FinalClose> = { 4001: 'replaced', 4002: 'maintenance', 4003: 'outdated' };
+
 /** One connection for live room changes; PocketBase SSE remains for private player state. */
 export class RoomRealtime {
   connected = false;
@@ -51,10 +67,14 @@ export class RoomRealtime {
   private localAnchor = 0;
   private listeners = new Set<(event: RoomEvent) => void>();
   private statuses = new Set<(connected: boolean) => void>();
+  private notices = new Set<(notice: OperationNotice) => void>();
+  private finals = new Set<(reason: FinalClose) => void>();
   private pending = new Map<string, { resolve(): void; reject(error: Error): void; timer: ReturnType<typeof setTimeout> }>();
   constructor(readonly roomId: string) {}
   onEvent(listener: (event: RoomEvent) => void): () => void { this.listeners.add(listener); return () => this.listeners.delete(listener); }
   onStatus(listener: (connected: boolean) => void): () => void { this.statuses.add(listener); return () => this.statuses.delete(listener); }
+  onNotice(listener: (notice: OperationNotice) => void): () => void { this.notices.add(listener); return () => this.notices.delete(listener); }
+  onFinal(listener: (reason: FinalClose) => void): () => void { this.finals.add(listener); return () => this.finals.delete(listener); }
   serverNowMs(): number { return this.serverAnchor + performance.now() - this.localAnchor; }
   async connect(): Promise<void> {
     if (this.stopped) return;
@@ -63,6 +83,10 @@ export class RoomRealtime {
       const response = await fetch('/api/coffe/game-ticket', { method: 'POST', credentials: 'same-origin', cache: 'no-store',
         headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ roomId: this.roomId }), signal: AbortSignal.timeout(10000) });
       if (response.status === 401) { this.destroy(); window.location.replace('/'); return; }
+      if (response.status === 503) {
+        const body = await response.json().catch(() => ({})) as { code?: string };
+        if (body.code === 'maintenance' || body.code === 'closed') { this.finish('maintenance'); return; }
+      }
       if (!response.ok) throw new Error('Quarto indisponível.');
       const { ticket } = await response.json() as { ticket: string };
       if (this.stopped || generation !== this.generation) return;
@@ -70,11 +94,16 @@ export class RoomRealtime {
       const socket = new WebSocket(address.href); this.socket = socket;
       let joined = false;
       const timeout = setTimeout(() => { if (!joined) socket.close(); }, 15000);
-      socket.onopen = () => socket.send(JSON.stringify({ type: 'join', ticket }));
+      socket.onopen = () => socket.send(JSON.stringify({ type: 'join', ticket, version: GAME_VERSION }));
       socket.onmessage = (message) => {
         if (this.stopped || generation !== this.generation) return;
         try {
-          const event = JSON.parse(String(message.data)) as RoomEvent | RoomLatency;
+          const event = JSON.parse(String(message.data)) as RoomEvent | RoomLatency | OperationNotice;
+          // Server-wide notices sit outside the ordered room stream, like the heartbeat.
+          if (event?.type === 'status') {
+            if (Number.isFinite(event.serverNow)) for (const listener of this.notices) listener(event);
+            return;
+          }
           // Heartbeat measurements never advance the room sequence or its animation clock.
           if (event?.type === 'latency') {
             if (joined && Number.isFinite(event.rttMs) && event.rttMs >= 0) this.pingMs = Math.round(event.rttMs);
@@ -103,13 +132,21 @@ export class RoomRealtime {
           for (const listener of this.listeners) listener(event);
         } catch (error) { console.warn('[room] Falha ao sincronizar o quarto.', error); socket.close(); }
       };
-      socket.onclose = () => {
+      socket.onclose = (closed) => {
         clearTimeout(timeout);
         if (generation !== this.generation) return;
+        const final = FINAL_CLOSES[closed.code];
+        // Without the status listeners: "Reconectando…" would be false under the final notice.
+        if (final) { this.connected = false; this.pingMs = null; this.rejectPending('Conexão encerrada.'); this.finish(final); return; }
         this.setConnected(false); this.rejectPending('Conexão interrompida.'); this.retry();
       };
       socket.onerror = () => socket.close();
     } catch { if (generation === this.generation && !this.stopped) { this.setConnected(false); this.retry(); } }
+  }
+  private finish(reason: FinalClose): void {
+    const listeners = [...this.finals];
+    this.destroy();
+    for (const listener of listeners) listener(reason);
   }
   private setConnected(value: boolean): void { this.connected = value; if (!value) this.pingMs = null; for (const listener of this.statuses) listener(value); }
   private retry(): void { if (this.stopped) return; clearTimeout(this.timer); this.timer = setTimeout(() => { void this.connect(); }, Math.min(10000, 500 * 2 ** Math.min(5, this.retries++))); }
@@ -123,5 +160,5 @@ export class RoomRealtime {
     });
   }
   private rejectPending(message: string): void { for (const pending of this.pending.values()) { clearTimeout(pending.timer); pending.reject(new Error(message)); } this.pending.clear(); }
-  destroy(): void { this.stopped = true; this.generation++; clearTimeout(this.timer); this.socket?.close(); this.rejectPending('Quarto encerrado.'); this.listeners.clear(); this.statuses.clear(); this.connected = false; this.pingMs = null; }
+  destroy(): void { this.stopped = true; this.generation++; clearTimeout(this.timer); this.socket?.close(); this.rejectPending('Quarto encerrado.'); this.listeners.clear(); this.statuses.clear(); this.notices.clear(); this.finals.clear(); this.connected = false; this.pingMs = null; }
 }

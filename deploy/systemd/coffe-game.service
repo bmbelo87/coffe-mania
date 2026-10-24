@@ -1,0 +1,26 @@
+[Unit]
+Description=Café Mania: servidor do jogo (quartos, NPCs e WebSocket)
+After=coffe-database.service
+Wants=coffe-database.service
+
+[Service]
+User=coffe
+Group=coffe
+WorkingDirectory=/opt/coffe/current
+EnvironmentFile=/etc/coffe/production.env
+ExecStart=/opt/coffe/current/bin/coffe-game-server
+Restart=on-failure
+RestartSec=2
+# SIGTERM salva todos os quartos antes de sair (até 35 s).
+KillSignal=SIGTERM
+TimeoutStopSec=45
+LimitNOFILE=65536
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadOnlyPaths=/var/lib/coffe
+
+[Install]
+WantedBy=multi-user.target

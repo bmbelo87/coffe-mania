@@ -80,6 +80,12 @@ func (s *HTTPStorage) Consume(ctx context.Context, id, food string) (gamewire.Bu
 	err := s.request(ctx, "POST", id+"/consume", map[string]string{"foodId": food}, &out)
 	return out, err
 }
+// Status reads the operation mode (open, maintenance, closed) when the service starts.
+func (s *HTTPStorage) Status(ctx context.Context) (gamewire.OperationStatus, error) {
+	var out gamewire.OperationStatus
+	err := s.request(ctx, "GET", "status", nil, &out)
+	return out, err
+}
 func (s *HTTPStorage) Dissatisfied(ctx context.Context, id string) (gamewire.Business, error) {
 	var out gamewire.Business
 	err := s.request(ctx, "POST", id+"/dissatisfied", map[string]string{}, &out)
@@ -93,10 +99,107 @@ type Server struct {
 	tickets     map[string]int64
 	connections atomic.Int64
 	Shutdown    func()
+	// One live connection per account: a second window replaces the first, so the same
+	// player never acts twice at once from two tabs.
+	sessions map[string]*liveSession
+	status   gamewire.OperationStatus
+	lockAt   *time.Timer
+}
+
+type liveSession struct {
+	peer *Peer
+	conn *websocket.Conn
 }
 
 func NewServer(m *Manager, secret string) *Server {
-	return &Server{Manager: m, Secret: secret, tickets: map[string]int64{}}
+	return &Server{Manager: m, Secret: secret, tickets: map[string]int64{}, sessions: map[string]*liveSession{}, status: gamewire.OperationStatus{Mode: gamewire.ModeOpen}}
+}
+
+// closeSession ends a connection with a final code; the client does not reconnect by itself.
+func closeSession(session *liveSession, code int, reason string) {
+	session.peer.Closed.Store(true)
+	go func() { _ = session.conn.Close(websocket.StatusCode(code), reason) }()
+}
+
+func statusMessage(status gamewire.OperationStatus) []byte {
+	status.Type = "status"
+	data, _ := json.Marshal(struct {
+		gamewire.OperationStatus
+		ServerNow int64 `json:"serverNow"`
+	}{status, time.Now().UnixMilli()})
+	return data
+}
+
+// SetStatus applies a new operation mode: everyone online sees it (the countdown of a
+// scheduled maintenance included) and, once it is active, only staff stays connected.
+func (s *Server) SetStatus(status gamewire.OperationStatus) {
+	if status.Mode == "" {
+		status.Mode = gamewire.ModeOpen
+	}
+	s.mu.Lock()
+	s.status = status
+	if s.lockAt != nil {
+		s.lockAt.Stop()
+		s.lockAt = nil
+	}
+	if wait := time.Until(time.UnixMilli(status.StartsAt)); status.Mode == gamewire.ModeMaintenance && wait > 0 {
+		s.lockAt = time.AfterFunc(wait, s.enforceStatus)
+	}
+	data := statusMessage(status)
+	for _, session := range s.sessions {
+		select {
+		case session.peer.Out <- data:
+		default: // A full queue belongs to a slow client; the lock below still applies.
+		}
+	}
+	s.mu.Unlock()
+	s.enforceStatus()
+}
+
+func (s *Server) currentStatus() gamewire.OperationStatus {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.status
+}
+
+func (s *Server) enforceStatus() {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if !s.status.Active(time.Now().UnixMilli()) {
+		return
+	}
+	for user, session := range s.sessions {
+		if !session.peer.Ticket.Staff {
+			delete(s.sessions, user)
+			closeSession(session, gamewire.CloseMaintenance, "Manutenção.")
+		}
+	}
+}
+
+// WatchStatus reads the mode at start and every minute, covering a push lost while the
+// persistence service restarted.
+func (s *Server) WatchStatus(ctx context.Context, read func(context.Context) (gamewire.OperationStatus, error)) {
+	known := false
+	for {
+		callCtx, cancel := context.WithTimeout(ctx, 8*time.Second)
+		status, err := read(callCtx)
+		cancel()
+		if err == nil && (!known || status != s.currentStatus()) {
+			known = true
+			s.SetStatus(status)
+		} else if err != nil && !known {
+			log.Printf("Modo de operação indisponível; nova tentativa em seguida: %v", err)
+		}
+		wait := time.Minute
+		if !known {
+			wait = 5 * time.Second
+		}
+		select {
+		case <-ctx.Done():
+			return
+		case <-time.After(wait):
+		}
+	}
 }
 func (s *Server) Handler() http.Handler {
 	mux := http.NewServeMux()
@@ -125,6 +228,15 @@ func (s *Server) Handler() http.Handler {
 			return
 		}
 		s.Manager.Appearance(r.Context(), body.User, body.Appearance)
+		writeJSON(w, 200, map[string]bool{"ok": true})
+	}))
+	mux.HandleFunc("POST /internal/status", s.internal(func(w http.ResponseWriter, r *http.Request) {
+		var status gamewire.OperationStatus
+		if decode(r, &status) != nil {
+			http.Error(w, "invalid", 400)
+			return
+		}
+		s.SetStatus(status)
 		writeJSON(w, 200, map[string]bool{"ok": true})
 	}))
 	mux.HandleFunc("POST /internal/kick", s.internal(func(w http.ResponseWriter, r *http.Request) {
@@ -235,12 +347,42 @@ func (s *Server) socket(w http.ResponseWriter, r *http.Request) {
 		_ = conn.Close(websocket.StatusPolicyViolation, "Entre novamente.")
 		return
 	}
+	// A cached page from before an update cannot speak the current protocol: ask for a reload.
+	if join.Version != buildinfo.Version {
+		_ = conn.Close(websocket.StatusCode(gamewire.CloseOutdated), "Nova versão.")
+		return
+	}
+	status := s.currentStatus()
+	if !ticket.Staff && status.Active(time.Now().UnixMilli()) {
+		_ = conn.Close(websocket.StatusCode(gamewire.CloseMaintenance), "Manutenção.")
+		return
+	}
 	p := &Peer{ID: uuid.NewString(), Ticket: ticket, Out: make(chan []byte, 128)}
 	p.Kick = func() { p.Closed.Store(true); cancel(); _ = conn.CloseNow() }
 	defer p.Kick()
+	session := &liveSession{peer: p, conn: conn}
+	s.mu.Lock()
+	if old := s.sessions[ticket.User]; old != nil {
+		closeSession(old, gamewire.CloseReplaced, "Aberto em outra janela.")
+	}
+	s.sessions[ticket.User] = session
+	s.mu.Unlock()
+	defer func() {
+		s.mu.Lock()
+		if s.sessions[ticket.User] == session {
+			delete(s.sessions, ticket.User)
+		}
+		s.mu.Unlock()
+	}()
 	if err = s.Manager.Join(ctx, p); err != nil {
 		_ = conn.Close(websocket.StatusTryAgainLater, "Quarto indisponível.")
 		return
+	}
+	if status.Mode != gamewire.ModeOpen {
+		select {
+		case p.Out <- statusMessage(status):
+		default:
+		}
 	}
 	defer func() {
 		leaveCtx, done := context.WithTimeout(context.Background(), 10*time.Second)

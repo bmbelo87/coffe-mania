@@ -1,0 +1,58 @@
+# Café Mania em produção: Cloudflare → Caddy (esta máquina) → serviços em 127.0.0.1.
+# Troque jogo.example.com pelo domínio. Guia completo: docs/producao.md.
+{
+	servers {
+		# O IP real do jogador chega no CF-Connecting-IP, aceito só quando a conexão vem da
+		# Cloudflare. Lista de https://www.cloudflare.com/ips/ (confira antes de publicar).
+		trusted_proxies static 173.245.48.0/20 103.21.244.0/22 103.22.200.0/22 103.31.4.0/22 141.101.64.0/18 108.162.192.0/18 190.93.240.0/20 188.114.96.0/20 197.234.240.0/22 198.41.128.0/17 162.158.0.0/15 104.16.0.0/13 104.24.0.0/14 172.64.0.0/13 131.0.72.0/22 2400:cb00::/32 2606:4700::/32 2803:f800::/32 2405:b500::/32 2405:8100::/32 2a06:98c0::/29 2c0f:f248::/32
+		client_ip_headers CF-Connecting-IP
+	}
+}
+
+jogo.example.com {
+	# Certificado de origem da Cloudflare (SSL/TLS "Full (strict)").
+	tls /etc/caddy/cloudflare-origin.pem /etc/caddy/cloudflare-origin-key.pem
+
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+		Cross-Origin-Opener-Policy "same-origin"
+		-Server
+	}
+
+	# Os arquivos que o Vite gera com hash no nome (direto em /assets/) nunca mudam: o
+	# navegador e a Cloudflare podem guardá-los. A arte em subpastas de /assets/ não tem hash.
+	@hashed path_regexp ^/assets/[^/]+-[A-Za-z0-9_-]{8}\.(js|css)$
+	header @hashed Cache-Control "public, max-age=31536000, immutable"
+
+	# A administração do PocketBase e suas APIs genéricas ficam só no túnel SSH; o jogo usa
+	# /api/coffe/*, /api/realtime e /api/health.
+	@blocked path /_/* /_ /api/collections/* /api/superusers* /api/settings* /api/logs* /api/backups* /api/crons* /api/batch* /api/files/* /api/coffe/game-internal/*
+
+	route {
+		respond @blocked 404
+		# Durante o reinício de um serviço, o Caddy segura a requisição (até 15 s) em vez de
+		# responder erro: é isso que deixa a atualização sem queda para quem está jogando.
+		reverse_proxy /game/* 127.0.0.1:8091 {
+			lb_try_duration 15s
+			lb_try_interval 250ms
+		}
+		reverse_proxy 127.0.0.1:8090 {
+			header_up X-Real-IP {client_ip}
+			lb_try_duration 15s
+			lb_try_interval 250ms
+		}
+	}
+
+	log {
+		output file /var/log/caddy/cafe-mania.log {
+			roll_size 50MiB
+			roll_keep 10
+		}
+	}
+}

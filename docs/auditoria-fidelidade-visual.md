@@ -178,6 +178,19 @@ O cartão branco comum (`normal.png`) ficou guardado, mas ainda não é usado. O
 - "Avançado" é a antiga janela de Configurações, agora com a moldura creme e o fechar vermelho, sem a linha do nome do jogador. Ela guarda o volume fino, o modo bitter e o modo dev.
 - O botão HTML de tela cheia do canto some na sala e continua no carregamento e no guarda-roupa.
 
+### Correção pelo menu original (24/10/2026)
+
+O vídeo "Café Mania level 400" (1:00–1:12) mostra o menu da engrenagem aberto, e ele era diferente da reconstrução acima (prancha `.runtime/auditoria-visual/20-menu-engrenagem-original.png`). O menu passou a seguir o vídeo:
+
+- **Formato:** grade 2x3 alinhada pela direita da engrenagem. De cima para baixo, as linhas são − e +, olho e tela cheia, som e música. As medidas estão em fração da engrenagem: botão de 0,82, passo de 0,87 e 0,2 de folga até ela.
+- **Direção:** no vídeo a grade **desce**, porque a engrenagem fica acima da barra. Aqui a engrenagem fica dentro da barra de ações do visual final, e descendo a grade cobria a barra de vizinhos e passava da borda da tela. Por isso ela **sobe**, com a mesma ordem de linhas e as mesmas medidas.
+- **Comportamento:**
+  - a grade fica aberta enquanto se joga, inclusive com janelas abertas, e só fecha com um novo clique na engrenagem;
+  - fica acima das barras e abaixo das janelas.
+- **Desligado:** som e música desligados aparecem só esmaecidos, com o mesmo ícone. As variantes `sound-off` e `music-off` foram retiradas; "sair da tela cheia" continua, porque o jogo em tela cheia mostra as setas para dentro.
+- **Olho:** usa o botão `visualizar` da folha azul. Nenhuma fonte diz o que ele fazia. Aqui ele esconde as barras e os textos da interface, deixando só o café, a engrenagem e a grade. **Reconstrução sem evidência.**
+- **"Avançado":** não existe no original. A engrenagem pequena fica à direita da engrenagem principal, porque à esquerda está o envelope.
+
 ## Andamento do F3 (23/10/2026)
 
 - **Placa "Expansão à venda"** (`scenery/expansion-sale/`), reconstruída do quadro 002 do vídeo de ~2013 no estilo da "Terreno à venda". Fica no gramado em frente ao estacionamento, além da próxima expansão. Ao passar o mouse, o piso novo aparece em verde e surge o balão "Clique para expandir seu Café!". O clique abre "Comprar Expansão?" ou "Bloqueado!". Só aparece para o dono e enquanto houver expansão.
@@ -186,3 +199,114 @@ O cartão branco comum (`normal.png`) ficou guardado, mas ainda não é usado. O
   - o estacionamento é só cenário: ainda não recebe a entrega de suprimentos;
   - a posição foi estimada pelo vídeo de uma conta já expandida;
   - os personagens não desviam das barreiras, porque o cenário externo não entra na grade de navegação.
+
+## Andamento do F5, parte 1 (23/10/2026)
+
+O "estacionamento" do F3 era, no original, a **plataforma de encomendas** (área de descarga de suprimentos). Foi refeita a partir do café novo do vídeo "Testando o Game" (5:06, pasta `videos-jogo/`):
+
+- **Plataforma** (`scenery/coast-city/parking/platform.png`): piso 4x4 tiles com a borda tracejada. As 4 lajes pequenas do canto de trás são as vagas das encomendas (`PLATFORM_SLOTS`).
+- **Entrada** (`entry.png`): asfalto com faixas brancas, setas ← → e a barreira zebrada na beira da rua.
+- **Posição medida no vídeo:** no quadro de 4:36 do "Testando o Game" (café novo 6x9, sem a loja aberta), a grade isométrica foi ajustada pelos cantos do piso, e cada peça foi convertida em tiles a partir do canto direito do piso, onde termina a parede da porta. O resultado fica em `CAFE_SCENERY_LAYOUT` (`cafe-scenery.ts`):
+  - plataforma 1 tile além da borda da frente, rente à linha da parede da porta;
+  - placa "E" na quina do café;
+  - duas barreiras sobre a borda do lado do café e duas um tile para fora da borda da frente;
+  - barraca e vendedora quase 2 tiles adiante da frente do café, alinhadas com a plataforma.
+
+  O erro de medida fica em torno de 0,2 tile. A conferência sobrepõe o clone ao quadro original no mesmo enquadramento (`.runtime/auditoria-visual/18-f5-posicoes-medidas.png`).
+- A entrada foi encurtada 0,58 tile no asfalto liso entre as setas e a barreira, para a barreira ficar na mesma distância do vídeo.
+- Tudo acompanha a borda do café atual, como no original. A prévia verde da próxima expansão pode passar por baixo da plataforma.
+- **Barraca de feira** (`scenery/market-stall/`): toldo listrado e caixotes de frutas, com a vendedora separada, em frente ao café.
+- Saíram o ladrilho e o meio-fio zebrado do F3. A placa "E" e as barreiras continuam.
+
+Falta a parte 2: van, janela de encomenda, cone a caminho, caixas, recolher com energia, entrega imediata e estragar.
+
+## F4 — interface da barra social (23/10/2026)
+
+Concluída a parte visual da barra: cartões beta removidos, convite laranja da variante observada no vídeo, seis posições de jogadores entre dois convites, paginação, quatro banners originais e alternância pelo envelope. Dados de jogadores entram por contrato tipado, sem nomes/níveis/XP aleatórios. O convite por link usa a moldura atual como adaptação local. Fontes, recortes, reconstruções e verificações estão em [barra-social.md](barra-social.md).
+
+Ainda pendentes neste F4: popularidade com estrelas, balão Café Estrela e janela de estrela nova. M12 também segue pendente na parte de relações persistentes, pedidos/aceitação/remoção e busca; a preparação visual não conclui essas mecânicas.
+
+## Ajustes de contato e recorte (23/10/2026)
+
+- Concluídas as sombras de chão da barraca, da vendedora (elipse nos pés) e das placas de venda. Apoios e camadas separados conforme [sombras-cenario.md](sombras-cenario.md).
+- Plataforma: separadores e faixa zebrada regularizados com ImageGen e exportação calibrada no mesmo losango 2:1, com alfa real.
+- Cadeira clássica: máscara traseira corrigida para excluir o assento que cobria o cliente. Técnica reutilizável e ferramentas de verificação em [encostos-cadeiras.md](encostos-cadeiras.md).
+- Verificação específica: regressão dos pixels de assento, profundidade, tipos, sincronização dos catálogos e render isolado dos sete modelos de cadeira em quatro rotações. Não conclui as mecânicas pendentes de encomendas, relações sociais ou outras etapas do plano.
+
+
+## Revisão dos apoios e da borda da plataforma (23/10/2026)
+
+A conferência ampliada encontrou afunilamento que persistia no PNG gerado da plataforma, além de contatos estimados no centro do canvas em vez do centro das bases. A composição agora regulariza a faixa com um ciclo raster existente, em cache, nos quatro lados, preservando alfa, lajes e apoio. As sombras acompanham os contatos medidos nos pixels dos sapatos e da madeira, incluindo as duas estacas da placa de expansão. Conferência no RoomScreen real, sem acessar o banco, com zoom ampliado e apoios marcados. Medições, contrato e testes em [sombras-cenario.md](sombras-cenario.md).
+
+### Cadeira clássica: faixa junto da haste
+
+Concluída a revisão da máscara na região afunilada do poste, que ainda promovia uma faixa de assento sobre a camisa. A regressão agora varre a área inteira do banco em vez de depender somente de pontos isolados, e textura/máscara compartilham o arredondamento de pixels. Reprodução no RoomScreen com look contrastante e os mesmos frames sentado/comendo nas duas vistas traseiras; conferência nos zooms 0,55, 1 e 2,4. Procedimento e limites em [encostos-cadeiras.md](encostos-cadeiras.md).
+
+### Ajuste fino da parte 1 (23/10/2026)
+
+Conferido por sobreposição com o quadro de 4:36 do "Testando o Game", ampliado 8x a 10x:
+
+- **Barreiras:** posições medidas no quadro: duas logo antes da borda do lado do café e duas a 0,8 tile da borda da frente-direita. As hastes da arte gerada eram curtas; foram alongadas 50 px sem mexer no trilho nem nos pés.
+- **Barreira zebrada da entrada:** na geração ela passava das bordas da pista e foi aparada na largura do asfalto.
+- **Plataforma:** mede 4,15 tiles no vídeo e foi ajustada para isso.
+- **Barraca:** arte refeita pelo responsável, recolocada na posição e no tamanho do vídeo.
+- **Placa "Terreno à venda":** sem pátio comprado, fica a 3,8 tiles da borda da frente, na linha da quina direita do piso.
+- **Placa "Expansão à venda":** não aparece em nenhum vídeo de café novo (níveis 1 a 6), só em cafés já expandidos (níveis 130 a 300). Agora ela só aparece depois da primeira expansão.
+
+Prancha: `.runtime/auditoria-visual/19-f5-cafe-novo.jpg`.
+
+## Meio-fio, faixa de pedestres e fim da rua (24/10/2026)
+
+Comparados com o vídeo "cafe mania muito tempo de jogo" (1:52–2:12), sobrepondo o clone ao quadro na mesma escala. A escala veio da grade do piso do café: 1 px do vídeo = 2,39 px do mundo.
+
+- **Meio-fio da rua:** no original ele tem cerca de 59 px de mundo (topo 22, quina iluminada 5, espelho 21, linha escura 7), com juntas a cada ~160 px. O nosso tinha 24 px, quase todo espelho. Refeito com as cores medidas: o topo fica sobre a calçada e o espelho sobre o asfalto. Calçada visível 132 px (original 131–136); asfalto visível 288 px (original 306).
+- **Lado da praia:** no original aparece o topo do meio-fio (cinza-claro, junta escura e uma linha clara). Aqui ele quase sumia: a calçada do outro lado da rua cobria a faixa perto da esquina. Agora a faixa segue a areia até a esquina.
+- **Lado do café:** só o topo, com o chanfro claro do lado da calçada, como no vídeo.
+- **Fim da rua:** a areia entra no asfalto numa curva em S de até 12 px de mundo. O traçado foi medido a cada 6 px e suavizado; o espelho do meio-fio termina num corte vertical, onde a curva começa.
+- **Faixa de pedestres:** quatro listras de 26,8 × 17,7 px, com espaçamento desigual (27,7 a 32,9), igual em todos os quadros dessa câmera. As cinco listras antigas estavam juntas demais.
+- **Faixa central:** traço de 38,2 a cada 67,5 px (antes 41,6 a cada 83), na fase do vídeo, a 49,4% do asfalto visível.
+- **Limite:** a rua do clone é cerca de 6% mais estreita que a do vídeo; a geometria do café não foi mexida por isso.
+
+Verificação: sobreposição com o quadro de 1:58 (meio-fio, listras, curva e traços coincidem), conferência no zoom normal e `node --test tests/unit/scenery.test.mjs` (12 testes; os que fixavam as alturas antigas foram atualizados).
+
+## Andamento do F5, parte 2 — encomendas de suprimentos (24/10/2026)
+
+- **Arte:** cone, cinco caixas (Express, Média, Premium, Jumbo e estragada), ícone da van e janela "Encomendas". São gerações do ChatGPT a partir dos vídeos e da captura P125_09; a caixa estragada e a janela são reconstruções sem captura. Recorte e registro em `tools/supplies/cut-art.py`, com âncora no centro da pegada e silhueta convexa para o clique.
+- **Servidor (`database/supplies.go`):** pedido, entrega imediata, recolher, salvar e descartar, cada um numa transação com recibo idempotente (`supply_orders`, `supply_operations`).
+  - **Plataforma:** 4 vagas [Com. 2011-03-21, 2011-04-10].
+  - **Recolher:** gasta 1 de energia [Com. 2011-03-21] e só cabe o que a despensa (`crates_max`) comporta. O resto fica na caixa, como no original.
+  - **Validade:** a caixa estraga 24 h depois de chegar (balanceamento do projeto) e pode ser salva por 1 caféGrana [Blog 2011-09-14]. Descartar é adaptação local.
+  - **Preços em caféOuros:**
+
+    | Tamanho | Suprimentos | Tempo | Preço | Origem |
+    | --- | --- | --- | --- | --- |
+    | Express | 4 | 10 min | 3.000 | fontes |
+    | Média | 15 | 2 h | 20.000 | sem fonte |
+    | Premium | 40 | 12 h | 75.000 | fontes |
+    | Jumbo | 60 | 24 h | 125.000 | fontes; entrega imediata por 4 caféGranas |
+
+  - **Sem fonte:** a Média inteira, os níveis de liberação (1, 2, 4 e 6) e a entrega imediata das outras (1 a 3 caféGranas).
+- **Cliente:**
+  - a van fica entre a galinha e o envelope na barra de ações e abre a janela com os quatro tamanhos, a despensa e as vagas livres;
+  - na plataforma, o cone aparece enquanto a encomenda vem, depois a caixa do tamanho pedido e, por fim, a caixa estragada, nas quatro lajes pequenas (centros medidos na arte);
+  - o balão segue o texto do original ("Premium: chega em HH:MM:SS / Clique para Entrega Imediata");
+  - os pagamentos usam a janela "Confirmação!".
+- **Dev:** os comandos `supplies_arrive` e `supplies_spoil` adiantam o relógio das encomendas, e `reset_cafe` também apaga as encomendas.
+- **Limites:**
+  - só o dono vê as caixas;
+  - nenhum prato gasta suprimentos ainda;
+  - não existem despensas à venda, então um café novo guarda só 4 (despensa base do original) e as encomendas maiores são recolhidas em várias vezes.
+- **Verificação:** `go test` do pacote `database` (inclui 5 testes novos de encomendas) e conferência no Chromium do ambiente isolado. O teste no navegador cobriu a janela, os quatro cones, a chegada, o recolher da caixa da frente e da de trás (energia e despensa), a entrega imediata e o salvar pelo clique, e a caixa estragada.
+
+## Andamento do F5, parte 3 — figurantes da praia (24/10/2026)
+
+- **Arte:** sorveteiro com o carrinho e banhista com picolé (`scenery/beach-extras/`), gerados com o ChatGPT a partir do vídeo "cafe mania muito tempo de jogo" (1:54) e do quadro 005. Recorte em `tools/scenery/beach-extras/cut-art.py`, com apoio no ponto entre os contatos com o chão.
+- **Comportamento (`BeachExtras.ts`):** como no original, os dois ficam **parados**. Uma primeira versão os fazia andar, por engano: entre os quadros quem se movia era a câmera.
+- **Posição:**
+  - medida no quadro de 1:54 e levada para o nosso cenário pelo letreiro "Café de Praia", pelo pé da escada do píer e pela boia;
+  - os objetos da praia do clone não têm exatamente a mesma disposição nem o mesmo tamanho dos do original, por isso a referência é o píer, o objeto mais próximo;
+  - o sorveteiro fica à direita do pé da escada, um pouco afastado dela, e o banhista mais abaixo, à esquerda;
+  - comparação lado a lado em `.runtime/auditoria-visual/23-figurantes-praia.png`.
+- **Escala:** a altura no vídeo é de 62 px para o banhista e 82 px para o sorveteiro, com o guarda-sol. Com 1 px = 2,39 px do mundo, as escalas ficam em 0,31 e 0,32.
+- **Profundidade:** o cenário da orla continua na ordem fixa do `scene.json`. Cada figurante entra entre os objetos de pé pela linha do chão, e a sombra do píer, que é decalque, não conta.
+- **Limites:** só decoração, no cliente: não entram na navegação, no servidor nem no clique. Nossos objetos da praia (boia, cadeiras, guarda-sóis) estão maiores e mais espalhados que no original; isso fica registrado para uma revisão própria do cenário.

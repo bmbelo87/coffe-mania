@@ -1,0 +1,54 @@
+{
+  "origin": "Reconstrução gerada com o ChatGPT (Image Gen) a pedido do responsável pelo projeto, em 23/10/2026, a partir do vídeo \"Café Mania   Testando o Game\" (5:06) e do \"Café mania 4\" (pasta videos-jogo/). Não é PNG original recuperado.",
+  "processing": "Folha de 1200x640 dividida em barraca (0..800) e vendedora (800..1200), sem redimensionar.",
+  "pieces": {
+    "stall": {
+      "anchor": {
+        "x": 400,
+        "y": 628
+      },
+      "sha256": "1503d1303dd4fcf74199c2475cbbda91a2b4f1512020d176d983f20cdd6398c8",
+      "groundContact": {
+        "bases": [
+          [
+            122.5,
+            545
+          ],
+          [
+            296.5,
+            627
+          ],
+          [
+            682,
+            475
+          ]
+        ],
+        "rearClosure": [
+          508,
+          393
+        ],
+        "padding": 14,
+        "note": "Centros das faces inferiores dos pés; vértices frontais mais baixos não são os centros da pegada."
+      }
+    },
+    "vendor": {
+      "anchor": {
+        "x": 200,
+        "y": 628
+      },
+      "sha256": "6446314bd8118f775283bc86c4e32c5feb0a8df0246c8d6a219d28391583b3f9",
+      "groundContact": {
+        "center": [
+          226,
+          620
+        ],
+        "radius": [
+          42,
+          14
+        ],
+        "note": "Centro dos pixels opacos dos dois sapatos; não o centro do canvas nem a sola mais baixa."
+      }
+    }
+  },
+  "revision": "23/10/2026: arte refeita pelo responsável (pés traseiros e laterais completos)."
+}

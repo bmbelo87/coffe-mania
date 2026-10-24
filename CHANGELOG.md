@@ -16,6 +16,111 @@ Logo depois de um lote, as correções usam `0.5.01`, `0.5.02`… A ordem de lan
 
 Seções usadas: **Adicionado**, **Alterado**, **Corrigido**, **Removido** e **Observações** (limites conhecidos e o que ficou para depois).
 
+## [0.6.0] — Alpha fechado: acesso por convite, produção, encomendas e orla revisada (2026-10-24)
+
+Primeiro lote preparado para colocar o jogo online, só para convidados. Junta a fundação de produção (fase A0), o acesso por convite (fase A1) e os lotes de fidelidade visual e de mecânica feitos depois da 0.5.0.
+
+### Adicionado
+
+- **Página inicial para visitantes.** A página tem:
+  - a arte do Café Mania com o logo e a história do projeto de fãs;
+  - três capturas do jogo atual;
+  - os passos para entrar no alpha;
+  - o aviso de projeto sem vínculo com a Vostu;
+  - um cartão com as abas **Lista de espera** e **Entrar**.
+
+  Ela se ajusta ao celular.
+- **Lista de espera com confirmação dupla.** A pessoa informa nome, email, a lembrança do jogo (opcional), confirma ter 18 anos ou mais e aceita a Privacidade.
+  - O link de confirmação vale 3 dias, e a tela mostra a posição na fila.
+  - A resposta é a mesma exista o email ou não, para não revelar quem tem conta.
+  - Há campo-armadilha para robôs, Cloudflare Turnstile em produção e limite por IP.
+- **Convites.** O código é de uso único, preso a um email, tem validade e é guardado só como hash; cada convite registra a onda. O administrador convida os primeiros confirmados da fila em lote (`POST /api/coffe/admin/invites/waitlist`) ou convida um email direto e recebe o link (`POST /api/coffe/admin/invites`).
+- **Cadastro pelo convite** (`/convite`). Pede:
+  - nome no jogo, com filtro de palavrões e de nomes que imitam a equipe;
+  - senha de pelo menos 8 caracteres, recusando as comuns;
+  - 18+ e aceite dos Termos, da Privacidade e da Conduta, com a versão registrada.
+
+  A conta nasce verificada e segue para a tela de nome do café.
+- **Recuperação de senha** (`/senha`). O link vale uma vez, e trocar a senha encerra as sessões em todos os aparelhos.
+- **Minha conta** (`/conta`): trocar a senha, baixar os próprios dados em JSON, sair de todos os aparelhos e excluir a conta. A exclusão apaga o café e o progresso em cascata (LGPD).
+- **Termos de Uso, Política de Privacidade e Código de Conduta**, com versão. Um teste garante que o cliente (`game/src/auth/legal.ts`) e o servidor (`LegalVersion`) usam a mesma versão.
+- **Emails transacionais** com a marca do jogo. No modo dev, sem SMTP, eles ficam na caixa de saída local (`/api/coffe/dev/mailbox`, só para a equipe).
+- **Papéis por conta:** jogador, testador e admin. As ferramentas de desenvolvimento passam a exigir o servidor habilitado e uma conta da equipe.
+- **Suspensões.** Basta preencher `suspended_until` e o motivo para as sessões da conta caírem na hora: a chave dos tokens é trocada e as conexões abertas são encerradas. No login, a pessoa vê o prazo e o motivo.
+- **Uma janela por conta.** Abrir o jogo em outra aba ou aparelho fecha a anterior, com o aviso "Café aberto em outra janela".
+- **Modo de operação:** aberto, manutenção (com horário marcado) ou fechado.
+  - Quem está jogando vê a faixa "Manutenção em mm:ss" e sai na hora marcada; a equipe continua.
+  - A tela de entrada mostra a mensagem e a previsão de volta.
+  - O modo muda pelo dashboard ou por `POST /api/coffe/admin/status`.
+- **Aviso de versão nova.** Uma página de versão anterior recebe "Nova versão disponível" com o botão Atualizar, em vez de travar.
+- **Produção:**
+  - `npm run release` gera o pacote Linux, com o cliente e os dois serviços sem dependências.
+  - `deploy/` traz o Caddyfile (HTTPS, só IPs da Cloudflare, painel do PocketBase bloqueado, cabeçalhos de segurança), os serviços systemd, o Litestream e o modelo do `.env`.
+  - `deploy/update.sh` atualiza sem derrubar quem está jogando.
+  - Com `COFFE_ENV=production`, o servidor se recusa a subir com ferramentas de dev, conta de teste, sem HTTPS, sem email ou sem Turnstile.
+  - O guia completo está em `docs/producao.md`.
+- **Encomendas de suprimentos** (F5, parte 2):
+  - a van na barra de ações abre a janela "Encomendas", com Express, Média, Premium e Jumbo;
+  - na plataforma, o cone mostra a encomenda a caminho, depois vem a caixa do tamanho pedido e, por fim, a caixa estragada;
+  - o balão traz o contador do original;
+  - recolher gasta 1 de energia e respeita o espaço da despensa;
+  - há entrega imediata e salvamento da caixa estragada por caféGranas, e descarte.
+
+  Tudo é validado no servidor, com recibo idempotente (migração `202610240001_supply_orders`).
+- **Plataforma de encomendas** (F5, parte 1). Substitui o estacionamento da 0.5.x: piso 4x4 com quatro vagas, entrada com setas e barreira zebrada, barraca de feira e vendedora, nas posições medidas no vídeo "Testando o Game".
+- **Figurantes da praia** (F5, parte 3): o sorveteiro com o carrinho e o banhista com picolé, parados na posição do original.
+- **Barra social com o visual de 2012–2014** (F4, interface):
+  - convites laranja "Agregar Amigo" nas pontas e seis cartões de jogador com paginação;
+  - os quatro banners originais nas novidades, que abrem pelo envelope;
+  - uma janela de convite que copia o link do próprio café.
+
+  As relações de vizinhança persistentes continuam pendentes.
+- **Sombras de contato** da barraca, da vendedora e das placas de venda, presas à base de cada arte (`docs/sombras-cenario.md`).
+- **Placa "Expansão à venda".** Faz par com a "Terreno à venda" e mostra a prévia em verde do piso novo. Aparece só depois da primeira expansão, como nos vídeos.
+- **Arte no lugar dos desenhos em código:** HUD, balões ("Prato pronto!", prato do balcão, Máquina de Sucos), logo real, janelas de confirmação e bloqueio, e cartões de expansão.
+- Testes novos:
+  - Go: contas, suspensão, manutenção, produção, lista de espera, convites, cadastro, nova senha, exclusão de conta, encomendas e sessões do servidor do jogo (janela única, versão desatualizada, manutenção);
+  - Node: barra social e plataforma;
+  - Python: recorte de vídeo da Vovó Chef.
+
+### Alterado
+
+- **Menu da engrenagem.** Segue o vídeo "level 400":
+  - grade 2x3 aberta para cima (− e +, olho e tela cheia, som e música);
+  - som e música desligados ficam esmaecidos;
+  - o olho esconde a interface;
+  - a grade fica aberta até um novo clique na engrenagem.
+- **Meio-fio, faixa de pedestres e fim da rua** refeitos por sobreposição pixel a pixel com o vídeo:
+  - o meio-fio da rua com topo, quina e espelho medidos;
+  - o meio-fio da praia visível até a esquina;
+  - quatro listras na faixa de pedestres;
+  - a faixa central na fase do vídeo;
+  - a areia entrando no asfalto numa curva em S.
+- A conta de teste local passa a ser admin. Contas novas são jogadoras.
+- Os contadores de depuração no canto da tela (atores, zoom, fps, ping) aparecem só para a equipe.
+- Vovó Chef: o recorte da animação foi refeito a partir do vídeo, com fundo transparente limpo (`tools/video-to-item/repair_grandma.py`).
+- Cadeira clássica e cadeira verde do lote 02: as máscaras do encosto não cobrem mais o cliente sentado.
+
+### Corrigido
+
+- "Sair" apagava só o cookie; a sessão continuava válida por 7 dias. Agora a suspensão, a troca de senha e "Sair de todos os aparelhos" invalidam todas as sessões da conta.
+- Uma conta comum recebia as ferramentas de desenvolvimento sempre que o servidor as habilitava.
+- Excluir uma conta com o café carregado fazia o salvamento final do quarto falhar, e com ele o desligamento de uma atualização.
+
+### Removido
+
+- Ladrilhos e meio-fio zebrado do estacionamento antigo (`parking/curb.png`, `parking/slab.png`).
+- Variantes `sound-off` e `music-off` do menu da engrenagem.
+
+### Observações
+
+- **Para abrir o alpha faltam contas externas:** domínio, VPS, Cloudflare (com as chaves do Turnstile), SMTP de um provedor de email, armazenamento para o backup e o email de contato dos Termos. Caddy, systemd e Litestream ainda não rodaram num servidor real.
+- **Textos legais.** Os Termos, a Privacidade e a Conduta são um rascunho do projeto. Recomenda-se revisão jurídica antes da abertura.
+- **Decisões do alpha:** 18+; email e senha (login com Google depois); o progresso será apagado no beta, mas o selo de Fundador fica; convites em ondas de 15 → 50 → 200.
+- **Encomendas.** Ainda nenhum prato gasta suprimentos, só o dono vê as caixas e não há despensas à venda. A Média e os níveis de liberação não têm fonte.
+- **Figurantes.** Os objetos da praia do clone são maiores e mais espalhados que os do original; isso fica para uma revisão do cenário.
+- A máquina de café em desenvolvimento não faz parte desta versão.
+
 ## [0.5.0] — Garçons, orla da cidade e primeira entrada (2026-10-22)
 
 ### Adicionado

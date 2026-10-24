@@ -1,0 +1,111 @@
+{
+  "generatedOn": "2026-10-23",
+  "historicalTarget": "Café Mania circa 2012–2014, orange runtime invitation variant",
+  "items": [
+    {
+      "output": "game/public/assets/ui/social/add-friend.png",
+      "kind": "composite-original-and-generated",
+      "size": [
+        400,
+        600
+      ],
+      "sources": [
+        {
+          "path": "tools/social-bar/add-friend-frame-generated.png",
+          "kind": "Image Gen reconstructed blank frame and button",
+          "sha256": "3897a04d6ba9f9db86fec2dd32ef4c227e6b0354939ce463f6d13591c7c7d5dc",
+          "size": [
+            1024,
+            1536
+          ]
+        },
+        {
+          "path": "tools/social-bar/add-friend-reference.png",
+          "kind": "crop of original Guido 014 illustration",
+          "sha256": "7cc7f983b51832b4434b7d4fcb7b3f92092582e7f91340037db22f5a7a7138d5",
+          "size": [
+            151,
+            133
+          ]
+        }
+      ],
+      "operations": {
+        "frameCropLTRB": [
+          18,
+          25,
+          1008,
+          1510
+        ],
+        "frameResize": [
+          400,
+          600
+        ],
+        "originalIllustrationCropLTRB": [
+          0,
+          0,
+          151,
+          131
+        ],
+        "originalIllustrationResize": [
+          392,
+          384
+        ],
+        "originalIllustrationPosition": [
+          4,
+          4
+        ],
+        "alphaContour": "rounded contour matching frame, radius27px; outside and corners alpha0"
+      },
+      "limitations": [
+        "Frame/button reconstructed with Image Gen. Chef faces and clothes are original raster pixels resized from the reference.",
+        "No text baked into the output. Original screenshot illustration is low resolution.",
+        "Top of the chef hats remains clipped as in the original reference crop. Illustration fills the upper panel without an extra header strip."
+      ]
+    },
+    {
+      "output": "game/public/assets/ui/social/portrait-placeholder.png",
+      "kind": "imagegen-reconstruction",
+      "size": [
+        82,
+        82
+      ],
+      "sources": [
+        {
+          "path": "tools/social-bar/portrait-placeholder-generated.png",
+          "kind": "Image Gen neutral gray bust based on original runtime placeholder",
+          "sha256": "4b06e65997989464973a6327bdfbf3debea94d3b3a4312abdc587210619e57cb",
+          "size": [
+            1254,
+            1254
+          ]
+        }
+      ],
+      "operations": {
+        "componentThresholdAlpha": 64,
+        "keep": "largest connected bust only",
+        "retainAntialiasNeighborhoodPixels": 2,
+        "cropLTRB": [
+          210,
+          163,
+          1044,
+          1148
+        ],
+        "fitWithin": [
+          74,
+          76
+        ],
+        "transparentCanvas": [
+          82,
+          82
+        ]
+      },
+      "limitations": [
+        "Generated reconstruction, not recovered original silhouette pixels. Replaces the earlier partial video crop."
+      ]
+    }
+  ],
+  "generatorOrigins": {
+    "add-friend-frame-generated.png": "exec-c6cd906a-88b7-4214-91c9-3edba9a6e2c1.png",
+    "portrait-placeholder-generated.png": "exec-2c98561b-be48-4749-b51b-4f5f75d14194.png"
+  }
+}

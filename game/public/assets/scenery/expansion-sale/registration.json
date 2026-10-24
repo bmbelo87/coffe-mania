@@ -10,5 +10,29 @@
     "note": "meio entre as bases das duas estacas, no chão"
   },
   "displayScale": 0.375,
-  "sha256": "1027f6c09416adb18ccd1fd3457af0e26ddf4136e52704d265ed06440b1b9603"
+  "sha256": "1027f6c09416adb18ccd1fd3457af0e26ddf4136e52704d265ed06440b1b9603",
+  "groundContact": {
+    "stakes": [
+      {
+        "center": [
+          175,
+          385
+        ],
+        "radius": [
+          44,
+          22
+        ]
+      },
+      {
+        "center": [
+          450,
+          536
+        ],
+        "radius": [
+          44,
+          22
+        ]
+      }
+    ]
+  }
 }

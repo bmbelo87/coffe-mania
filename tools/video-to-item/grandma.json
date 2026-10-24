@@ -1,0 +1,26 @@
+{
+  "video": "artes-avulsas/Vovó Chef com Omelete e Molho.mp4",
+  "item": "game/public/assets/items/grandma_chef",
+  "sourceSize": [768, 1344],
+  "crop": [54, 163, 763, 941],
+  "loopStart": 32,
+  "loopEnd": 176,
+  "sourceStep": 2,
+  "bodyCrossfade": 4,
+  "steamCrossfade": 16,
+  "opaqueThreshold": 36,
+  "chromaThresholds": [18, 14],
+  "edgeSigma": 2.0,
+  "edgeInset": 0.65,
+  "coverageWidth": 1.6,
+  "steamColor": [241, 247, 249],
+  "steamStrength": 0.85,
+  "steamNoiseFloor": 0.012,
+  "steamSigma": 1.2,
+  "steamRight": 340,
+  "steamTopFade": 35,
+  "animation": {
+    "fps": 15, "frames": 72, "columns": 10,
+    "frameWidth": 189, "frameHeight": 207, "gutter": 4, "resolution": 2
+  }
+}

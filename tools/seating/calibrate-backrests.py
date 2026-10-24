@@ -1,5 +1,6 @@
 """Register foreground masks over the existing, assembled rear chair poses."""
 import json
+import argparse
 from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 ITEMS = ROOT / 'game/public/assets/items'
@@ -7,9 +8,9 @@ ITEMS = ROOT / 'game/public/assets/items'
 # Polygons follow the visible back/post surfaces. They do not change pixels or ground geometry.
 classic = [
     [34,0,83,0,83,62,34,62],
-    [47,71,52,65,58,62,64,62,70,65,74,73,74,85,69,77,65,72,60,70,55,73,50,81,47,84],
-    [37,32,49,32,49,103,47,140,39,143,37,141],
-    [71,15,83,15,83,94,83,124,76,125,69,97],
+    [49,71,54,66,59,63,64,63,69,66,72,71,73,78,69,76,65,72,61,71,57,73,53,78,49,83],
+    [38,35,43,32,49,36,49,102,47,115,47,139,40,142,38,139,39,109,42,102,39.75,67,39,63,38,49],
+    [73,22,78,17,82,20,82,34,80,84,80,99,82,109,83,122,77,124,72,108,70,97,72,86],
 ]
 italy = [
     [0,0,92,0,92,43,0,43],
@@ -28,6 +29,11 @@ shapes = {
     'acervo_chair_yellow_black': ([[18,0,92,0,92,53,48,80,20,64]], False),
     'original_gold_armchair': ([[0,0,82,0,82,57,48,76,0,49]], True),
 }
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--check', action='store_true', help='Validate saved masks without writing manifests.')
+parser.add_argument('--preview', type=Path, help='Export a contact sheet of all masks (requires Pillow).')
+args = parser.parse_args()
+previews = []
 for name, (polygons, reverse) in shapes.items():
     path = ITEMS / name / 'item.json'
     data = json.loads(path.read_text(encoding='utf-8'))
@@ -36,8 +42,39 @@ for name, (polygons, reverse) in shapes.items():
         part = next(p for p in data['parts'] if p.get('rotation',0)==rotation)
         flip = (rotation==3) != reverse
         width = part['width']
-        points = [[(width-value if i%2==0 and flip else value) for i,value in enumerate(polygon)] for polygon in polygons]
+        points = [[max(0, min(part['height'] if i % 2 else width,
+                             width-value if i % 2 == 0 and flip else value))
+                   for i, value in enumerate(polygon)] for polygon in polygons]
         layers.append(dict(rotation=rotation, polygons=points))
+        assert all(0 <= value <= (part['height'] if i % 2 else width)
+                   for polygon in points for i, value in enumerate(polygon)), name
+        if args.preview:
+            from PIL import Image, ImageDraw
+            image = Image.open(path.parent / part['file']).convert('RGBA')
+            mask = Image.new('L', image.size)
+            draw = ImageDraw.Draw(mask)
+            for polygon in points:
+                draw.polygon(list(zip(polygon[::2], polygon[1::2])), fill=255)
+            # Tint only existing pixels; transparent holes stay holes.
+            from PIL import ImageChops
+            mask = ImageChops.multiply(mask, image.getchannel('A')).point(lambda v: round(v * .55))
+            overlay = Image.new('RGBA', image.size, (255, 0, 100, 0))
+            overlay.putalpha(mask)
+            previews.append((name, rotation, Image.alpha_composite(image, overlay)))
+    if args.check:
+        assert data.get('seatingBackrests') == layers, f'{name}: run calibration to synchronize masks'
+        continue
     data['seatingBackrests'] = layers
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2)+'\n',encoding='utf-8')
-print('Registered rear backrest masks for 7 chair models; original PNGs unchanged.')
+if args.preview:
+    from PIL import Image, ImageDraw
+    sheet = Image.new('RGB', (960, len(shapes) * 325), '#e5e0d4')
+    draw = ImageDraw.Draw(sheet)
+    for i, (name, rotation, image) in enumerate(previews):
+        x, y = (i % 2) * 480, (i // 2) * 325
+        draw.text((x + 8, y + 8), f'{name} / {rotation}', fill='black')
+        image = image.resize((image.width * 2, image.height * 2))
+        sheet.paste(image, (x + 140, y + 32), image)
+    args.preview.parent.mkdir(parents=True, exist_ok=True)
+    sheet.save(args.preview)
+print(('Checked' if args.check else 'Registered') + ' rear backrest masks for 7 chair models; original PNGs unchanged.')

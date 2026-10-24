@@ -20,13 +20,23 @@ import (
 )
 
 func main() {
+	if err := checkProductionConfig(); err != nil {
+		log.Fatal(err)
+	}
 	app := pocketbase.New()
 	playerstate.RegisterValidation(app)
+	registerAccountHooks(app)
 	migratecmd.MustRegister(app, app.RootCmd, migratecmd.Config{Automigrate: false})
 	app.OnServe().BindFunc(func(e *core.ServeEvent) error {
 		e.InstallerFunc = nil
 		log.Printf("Café Mania %s: PocketBase", buildinfo.Version)
+		if err := applyServerSettings(e.App); err != nil {
+			return err
+		}
+		registerOperationStatus(e)
 		registerSessionRoutes(e)
+		registerAccessRoutes(e)
+		registerAccountRoutes(e)
 		registerPlayerStateRoutes(e)
 		registerAppearanceRoutes(e)
 		registerNpcAppearanceRoutes(e)
@@ -36,6 +46,7 @@ func main() {
 		startRoomActivityWatchdog(e.App)
 		registerCookingRoutes(e)
 		registerJuiceRoutes(e)
+		registerSupplyRoutes(e)
 		registerWaiterRoutes(e)
 		registerDevRoutes(e)
 		registerRoomRoutes(e)
@@ -80,6 +91,10 @@ func registerPageRoutes(e *core.ServeEvent, publicDir string) {
 	e.Router.GET("/index.html", page)
 	e.Router.GET("/play", play)
 	e.Router.GET("/play/{$}", play)
+	// Pages of the access flow; their secrets travel in the URL fragment, never to the server.
+	for _, path := range []string{"/convite", "/lista/confirmar", "/senha", "/conta", "/termos", "/privacidade", "/conduta"} {
+		e.Router.GET(path, page)
+	}
 	// Public art can be cached independently; only pages and game APIs carry user state.
 	e.Router.GET("/{path...}", apis.Static(os.DirFS(publicDir), false))
 }

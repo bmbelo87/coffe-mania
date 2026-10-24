@@ -18,6 +18,7 @@
     "artes-referencia/cenario-praia/detalhes/118s.png",
     "artes-referencia/cafe-mania-acervo-complementar-2/cafe-mania-acervo-2/artes/49023909/002.png"
   ],
+  "measured": "curbs.json",
   "assets": [
     {
       "id": "water",
@@ -158,55 +159,6 @@
       }
     },
     {
-      "id": "road-marking",
-      "file": "terrain/road-marking.png",
-      "width": 256,
-      "height": 16,
-      "alpha": true,
-      "origin": "imagegen-reconstruction",
-      "master": "masters/crosswalk-crisp.png",
-      "masterSha256": "3506e874e1bb57591323693d784ee461ea0e664a52e0ac8f649190bb6ed9b8c1",
-      "prompt": "prompts/crosswalk-crisp.txt",
-      "crop": {
-        "left": 90,
-        "top": 139,
-        "width": 1937,
-        "height": 461
-      },
-      "sha256": "f2c075d236587f65fe043d7a8cf7e38d8fd6572712d5f95a19b7ae622adb3629",
-      "export": {
-        "paintTile": true
-      }
-    },
-    {
-      "id": "curb",
-      "file": "terrain/curb.png",
-      "width": 1024,
-      "height": 24,
-      "alpha": false,
-      "origin": "imagegen-reconstruction",
-      "master": "masters/curb-blocks.png",
-      "masterSha256": "8ba1bbc40a6d4f4e0984826c9cdc3f860e7ac655d84980644c9aa64ba1639750",
-      "prompt": "prompts/curb-blocks.txt",
-      "crop": {
-        "left": 0,
-        "top": 150,
-        "width": 2172,
-        "height": 424
-      },
-      "sha256": "b9017ec582a6c82b75538f939bc30b80e0d597bdb47603d80fea2fe28512033e",
-      "export": {
-        "width": 1024,
-        "height": 24,
-        "crop": {
-          "left": 0,
-          "top": 150,
-          "width": 2172,
-          "height": 424
-        }
-      }
-    },
-    {
       "id": "shoreline",
       "file": "terrain/shoreline.png",
       "width": 1024,
@@ -224,28 +176,6 @@
       },
       "sha256": "1719445417673d1491c432173a600f72170834ee9990f636f00ff65d6abecb7a",
       "export": {}
-    },
-    {
-      "id": "crosswalk",
-      "file": "terrain/crosswalk.png",
-      "width": 540,
-      "height": 110,
-      "alpha": true,
-      "origin": "imagegen-reconstruction",
-      "master": "masters/crosswalk-crisp.png",
-      "masterSha256": "3506e874e1bb57591323693d784ee461ea0e664a52e0ac8f649190bb6ed9b8c1",
-      "prompt": "prompts/crosswalk-crisp.txt",
-      "crop": {
-        "left": 90,
-        "top": 139,
-        "width": 1937,
-        "height": 461
-      },
-      "sha256": "39ce4b139a1571461d65f3ee1f98cbcde1d546615b4fb6cb90b34370314e708e",
-      "export": {
-        "width": 540,
-        "height": 110
-      }
     },
     {
       "id": "tree-round",

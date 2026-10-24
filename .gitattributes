@@ -1,0 +1,2 @@
+# Arquivos de deploy rodam no servidor Linux: sempre LF, mesmo num checkout do Windows.
+deploy/** text eol=lf

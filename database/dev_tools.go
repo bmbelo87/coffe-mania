@@ -23,9 +23,18 @@ import (
 	"github.com/pocketbase/pocketbase/tools/types"
 )
 
-// Developer tools exist only when the server opts in (the dev launcher does); the client
-// toggle in Settings merely shows the panel.
+// Developer tools exist only when the server opts in (the dev launcher does) and only for
+// staff accounts; the client toggle in Settings merely shows the panel. Production refuses
+// to start with the flag on (production.go).
 func devToolsEnabled() bool { return os.Getenv("COFFE_DEV_TOOLS") == "true" }
+
+func devToolsFor(record *core.Record) bool { return record != nil && devToolsEnabled() && isStaff(record) }
+
+// devToolsForUser checks the account behind a room operation, which only carries its id.
+func devToolsForUser(app core.App, user string) bool {
+	record, err := app.FindRecordById("users", user)
+	return err == nil && devToolsFor(record)
+}
 
 type devCommand struct {
 	RequestID string   `json:"requestId"`
@@ -95,7 +104,7 @@ func decodeDevCommand(reader io.Reader) (devCommand, error) {
 		if !only(false, false, false, false, true) || command.Value == nil || *command.Value < 1 || *command.Value > 10 || *command.Value != math.Trunc(*command.Value) {
 			return command, invalidDev("Informe de 1 a 10 clientes.")
 		}
-	case "refill", "clear_customers", "reset_cafe":
+	case "refill", "clear_customers", "reset_cafe", "supplies_arrive", "supplies_spoil":
 		if !only(false, false, false, false, false) {
 			return command, invalidDev("Pedido inválido.")
 		}
@@ -125,13 +134,30 @@ func registerDevRoutes(e *core.ServeEvent) {
 	group := e.Router.Group("/api/coffe/dev")
 	group.BindFunc(func(r *core.RequestEvent) error {
 		r.Response.Header().Set("Cache-Control", "no-store")
-		if sessionRecord(r) == nil {
+		user := sessionRecord(r)
+		if user == nil {
 			return r.UnauthorizedError("Entre para jogar.", nil)
 		}
 		if !devToolsEnabled() {
 			return r.ForbiddenError("O servidor não habilitou as ferramentas de desenvolvimento.", nil)
 		}
+		if !isStaff(user) {
+			return r.ForbiddenError("As ferramentas de desenvolvimento são só para a equipe de testes.", nil)
+		}
 		return r.Next()
+	})
+	// Messages a development server kept instead of sending (database/mailer.go).
+	group.GET("/mailbox", func(r *core.RequestEvent) error {
+		records, err := r.App.FindRecordsByFilter("dev_mailbox", "", "-created", 20, 0)
+		if err != nil {
+			return r.InternalServerError("Caixa de saída indisponível.", err)
+		}
+		out := make([]map[string]any, 0, len(records))
+		for _, record := range records {
+			out = append(out, map[string]any{"to": record.GetString("to"), "kind": record.GetString("kind"), "subject": record.GetString("subject"),
+				"link": record.GetString("link"), "created": record.GetDateTime("created").String()})
+		}
+		return r.JSON(http.StatusOK, out)
 	})
 	group.GET("", func(r *core.RequestEvent) error {
 		snapshot, err := snapshotDev(r.App, sessionRecord(r).Id)
@@ -186,6 +212,8 @@ func mutateDev(app core.App, user string, command devCommand) error {
 			err = addDevFood(tx, user, command)
 		case command.Command == "reset_cafe":
 			err = resetDevCafe(tx, user)
+		case command.Command == "supplies_arrive" || command.Command == "supplies_spoil":
+			err = ageDevSupplies(tx, user, command.Command == "supplies_spoil")
 		case devRoomCommands[command.Command]:
 			err = nil // The room service applies it after the receipt is saved.
 		default:
@@ -215,6 +243,7 @@ func resetDevCafe(app core.App, user string) error {
 	revision := old.GetInt("revision")
 	for _, collection := range []string{
 		"stove_cooking", "room_food", "juice_state", "juice_operations", "spice_purchases", "room_operations",
+		"supply_orders", "supply_operations",
 		"dev_commands", "player_inventory", "player_stoves", "player_rooms", playerstate.Collection,
 	} {
 		records, err := app.FindRecordsByFilter(collection, "user={:user}", "", 0, 0, dbx.Params{"user": user})
@@ -240,6 +269,27 @@ func resetDevCafe(app core.App, user string) error {
 	}
 	room.Set("revision", revision+1)
 	return app.Save(room)
+}
+
+// ageDevSupplies makes every order arrive now or, with spoil, turns every order into a
+// spoiled box, so the platform states can be tested without waiting hours.
+func ageDevSupplies(app core.App, user string, spoil bool) error {
+	orders, err := app.FindRecordsByFilter("supply_orders", "user={:user}", "", 0, 0, dbx.Params{"user": user})
+	if err != nil {
+		return err
+	}
+	now := types.NowDateTime()
+	for _, order := range orders {
+		at := now
+		if spoil {
+			at = now.Add(-supplyShelfLife - time.Second)
+		}
+		order.Set("arrives_at", at)
+		if err := app.Save(order); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // Energy may exceed its capacity, as with the original's eco-generators; the tool allows a

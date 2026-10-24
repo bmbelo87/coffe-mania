@@ -16,7 +16,9 @@ type Ticket struct {
 	User       string `json:"user"`
 	Name       string `json:"name"`
 	Appearance string `json:"appearance"`
-	Expires    int64  `json:"expires"`
+	// Staff accounts (tester/admin) keep playing during maintenance.
+	Staff   bool  `json:"staff,omitempty"`
+	Expires int64 `json:"expires"`
 }
 
 func SignTicket(secret string, ticket Ticket) string {

@@ -47,19 +47,19 @@ export const UI_EXPANSION_CARD_URLS = {
   highlight: new URL('assets/store/expansion-cards/highlight.png', new URL(base, document.baseURI)).href,
   locked: new URL('assets/store/expansion-cards/locked.png', new URL(base, document.baseURI)).href,
 } as const;
-/** Variantes desligadas dos botões azuis do menu da engrenagem (origem em `ui/settings-menu/source.json`). */
+/** Variante de sair da tela cheia do botão azul do menu da engrenagem (origem em `ui/settings-menu/source.json`). */
 export const UI_SETTINGS_MENU_URLS = {
-  soundOff: new URL('assets/ui/settings-menu/sound-off.png', new URL(base, document.baseURI)).href,
-  musicOff: new URL('assets/ui/settings-menu/music-off.png', new URL(base, document.baseURI)).href,
   fullscreenExit: new URL('assets/ui/settings-menu/fullscreen-exit.png', new URL(base, document.baseURI)).href,
 } as const;
-/** Placa "Expansão à venda" e peças do estacionamento, reconstruídas do vídeo de ~2013. */
+/** Placa "Expansão à venda", plataforma de encomendas e barraca de feira, reconstruídas dos vídeos do original. */
 export const UI_CAFE_SCENERY_URLS = {
   expansionSign: new URL('assets/scenery/expansion-sale/sign.png', new URL(base, document.baseURI)).href,
   noParkingSign: new URL('assets/scenery/coast-city/parking/no-parking-sign.png', new URL(base, document.baseURI)).href,
   barrier: new URL('assets/scenery/coast-city/parking/barrier.png', new URL(base, document.baseURI)).href,
-  slab: new URL('assets/scenery/coast-city/parking/slab.png', new URL(base, document.baseURI)).href,
-  curb: new URL('assets/scenery/coast-city/parking/curb.png', new URL(base, document.baseURI)).href,
+  platform: new URL('assets/scenery/coast-city/parking/platform.png', new URL(base, document.baseURI)).href,
+  entry: new URL('assets/scenery/coast-city/parking/entry.png', new URL(base, document.baseURI)).href,
+  stall: new URL('assets/scenery/market-stall/stall.png', new URL(base, document.baseURI)).href,
+  vendor: new URL('assets/scenery/market-stall/vendor.png', new URL(base, document.baseURI)).href,
 } as const;
 export const UI_HOVER_BALLOON_URL = new URL('assets/ui/spices/spoiled-callout.png', new URL(base, document.baseURI)).href;
 export const UI_STOVE_HOVER_URLS = {
@@ -146,7 +146,7 @@ export const UI_STORE_CONFIRM_FRAME = { x: 1308, y: 301, width: 209, height: 216
 export const UI_BUTTONS_POSITIONS_URL = new URL('assets/jsons/buttons_positions_1.json', new URL(base, document.baseURI)).href;
 const ACTION_BAR_ICON_NAMES = [
   'trophy', 'waiter', 'house', 'gift', 'yellow-box',
-  'shirt', 'map', 'mortar', 'striped-chicken', 'mail',
+  'shirt', 'map', 'mortar', 'striped-chicken', 'van', 'mail',
 ] as const;
 export const UI_ACTION_BAR_ICONS_URLS = ACTION_BAR_ICON_NAMES.map((name) =>
   new URL(`assets/ui/action-icons/${name}.png`, new URL(base, document.baseURI)).href);

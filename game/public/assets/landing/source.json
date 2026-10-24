@@ -1,0 +1,9 @@
+{
+  "origin": "Capturas do próprio jogo (cliente atual, servidor de desenvolvimento) em 24/10/2026, para a página inicial do alpha.",
+  "processing": "Playwright/Chromium em 1280x720, JPEG qualidade 78, contadores de depuração ocultos. Sem retoque.",
+  "files": [
+    "cafe.jpg",
+    "loja.jpg",
+    "orla.jpg"
+  ]
+}

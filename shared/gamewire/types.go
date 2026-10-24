@@ -161,6 +161,8 @@ type Event struct {
 type Command struct {
 	Type      string `json:"type"`
 	Ticket    string `json:"ticket,omitempty"`
+	// Version is the client build (game/src/core/version.ts), sent with "join".
+	Version   string `json:"version,omitempty"`
 	RequestID string `json:"requestId,omitempty"`
 	X         *int   `json:"tx,omitempty"`
 	Y         *int   `json:"ty,omitempty"`
@@ -168,6 +170,34 @@ type Command struct {
 	StoveID   string `json:"stoveId,omitempty"`
 	UnitID    string `json:"unitId,omitempty"`
 }
+
+// OperationStatus is the server-wide mode set by an admin. Maintenance starts at StartsAt
+// (0 = now); EndsAt is only the announced estimate. Times are Unix milliseconds.
+type OperationStatus struct {
+	Type     string `json:"type,omitempty"`
+	Mode     string `json:"mode"`
+	Message  string `json:"message,omitempty"`
+	StartsAt int64  `json:"startsAt,omitempty"`
+	EndsAt   int64  `json:"endsAt,omitempty"`
+}
+
+const (
+	ModeOpen        = "open"
+	ModeMaintenance = "maintenance"
+	ModeClosed      = "closed"
+)
+
+// Active reports whether ordinary players are locked out at the given instant.
+func (s OperationStatus) Active(nowMs int64) bool {
+	return s.Mode == ModeClosed || s.Mode == ModeMaintenance && nowMs >= s.StartsAt
+}
+
+// WebSocket close codes the client treats as final (no automatic reconnection).
+const (
+	CloseReplaced    = 4001 // the account opened the game in another window
+	CloseMaintenance = 4002 // maintenance or closed alpha
+	CloseOutdated    = 4003 // client build differs from the server
+)
 
 // Latency is private transport telemetry, outside the ordered room event stream.
 type Latency struct {

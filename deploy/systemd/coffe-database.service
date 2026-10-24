@@ -1,0 +1,25 @@
+[Unit]
+Description=Café Mania: PocketBase (contas, inventário e transações)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=coffe
+Group=coffe
+WorkingDirectory=/opt/coffe/current
+EnvironmentFile=/etc/coffe/production.env
+# serve aplica as migrações pendentes antes de aceitar conexões.
+ExecStart=/opt/coffe/current/bin/coffe-database serve --http=127.0.0.1:8090 --dir=/var/lib/coffe/pb_data
+Restart=on-failure
+RestartSec=2
+TimeoutStopSec=20
+LimitNOFILE=65536
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/coffe
+
+[Install]
+WantedBy=multi-user.target

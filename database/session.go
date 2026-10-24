@@ -19,8 +19,12 @@ type playerSession struct {
 	DisplayName string `json:"displayName"`
 	Email       string `json:"email"`
 	DevTools    bool   `json:"devTools"`
+	Role        string `json:"role"`
+	Staff       bool   `json:"staff"`
 }
 
+// sessionRecord is the only way game routes identify a player. A suspended account has no
+// session even if a cookie from before the suspension survived somewhere.
 func sessionRecord(e *core.RequestEvent) *core.Record {
 	cookie, err := e.Request.Cookie(sessionCookie)
 	if err != nil || cookie.Value == "" {
@@ -28,6 +32,9 @@ func sessionRecord(e *core.RequestEvent) *core.Record {
 	}
 	record, err := e.App.FindAuthRecordByToken(cookie.Value, core.TokenTypeAuth)
 	if err != nil || record.Collection().Name != "users" {
+		return nil
+	}
+	if _, suspended := suspendedUntil(record, time.Now()); suspended {
 		return nil
 	}
 	return record
@@ -38,7 +45,7 @@ func sessionView(record *core.Record) playerSession {
 	if name == "" {
 		name = strings.Split(record.Email(), "@")[0]
 	}
-	return playerSession{PlayerID: record.Id, DisplayName: name, Email: record.Email(), DevTools: devToolsEnabled()}
+	return playerSession{PlayerID: record.Id, DisplayName: name, Email: record.Email(), DevTools: devToolsFor(record), Role: accountRole(record), Staff: isStaff(record)}
 }
 
 func setSessionCookie(e *core.RequestEvent, token string, maxAge int) {
@@ -112,6 +119,10 @@ func registerSessionRoutes(e *core.ServeEvent) {
 		if err != nil || !record.ValidatePassword(data.Password) {
 			return r.UnauthorizedError("Email ou senha inválidos.", nil)
 		}
+		// Only after the password: the notice must not reveal which emails have accounts.
+		if until, suspended := suspendedUntil(record, time.Now()); suspended {
+			return suspendedResponse(r, record, until)
+		}
 		token, err := record.NewAuthToken()
 		if err != nil {
 			return r.InternalServerError("Não foi possível iniciar a sessão.", err)
@@ -128,4 +139,25 @@ func registerSessionRoutes(e *core.ServeEvent) {
 		clearSessionCookie(r)
 		return r.NoContent(http.StatusNoContent)
 	}).BindFunc(sameOrigin)
+	// Ends the sessions on every device, e.g. after using a shared computer.
+	g.POST("/logout-all", func(r *core.RequestEvent) error {
+		user := sessionRecord(r)
+		if user == nil {
+			clearSessionCookie(r)
+			return r.UnauthorizedError("Entre para jogar.", nil)
+		}
+		if err := revokeSessions(r.App, user); err != nil {
+			return r.InternalServerError("Não foi possível encerrar as sessões.", err)
+		}
+		clearSessionCookie(r)
+		return r.NoContent(http.StatusNoContent)
+	}).BindFunc(requireOrigin)
+}
+
+// requireOrigin is sameOrigin for mutations that browsers always send with an Origin header.
+func requireOrigin(r *core.RequestEvent) error {
+	if r.Request.Header.Get("Origin") == "" {
+		return r.ForbiddenError("Origem inválida.", nil)
+	}
+	return sameOrigin(r)
 }

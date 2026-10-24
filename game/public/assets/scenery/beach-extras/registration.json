@@ -1,0 +1,28 @@
+{
+  "origin": "Reconstruções geradas com o ChatGPT (Image Gen) a pedido do responsável pelo projeto, em 24/10/2026, a partir do vídeo \"cafe mania muito tempo de jogo\" (1:54) e do quadro 005 do vídeo da orla. Não são PNGs originais recuperados.",
+  "processing": "tools/scenery/beach-extras/cut-art.py: recorte pela caixa do alfa com 4 px de margem, sem redimensionar. Âncora = ponto no chão entre os contatos mais baixos.",
+  "pieces": {
+    "ice-cream-vendor": {
+      "anchor": {
+        "x": 311.5,
+        "y": 600.0
+      },
+      "size": [
+        588,
+        613
+      ],
+      "sha256": "3543d03b0013b645ed15a6f992066effc1a0a859b047f4e101c691edfcdecb73"
+    },
+    "bather": {
+      "anchor": {
+        "x": 125.5,
+        "y": 472.0
+      },
+      "size": [
+        253,
+        485
+      ],
+      "sha256": "cf70f7db8bc57ca2f717bc2ce0dfbffc767f97575466d6b37096a33227da583e"
+    }
+  }
+}

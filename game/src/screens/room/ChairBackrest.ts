@@ -12,6 +12,8 @@ export function createChairBackrest(item: RoomItem, entry: IndoorArtEntry, textu
   const { frame } = rotatedArt(entry, item.rotation);
   const view = createArtView(item, frame, texture, { suffix: ':backrest' });
   const mask = new Graphics();
+  // The texture and stencil must snap to the same physical pixel at fractional zooms.
+  mask.roundPixels = view.roundPixels;
   for (const polygon of shape.polygons) mask.poly(polygon).fill(0xffffff);
   mask.eventMode = 'none';
   view.addChild(mask);

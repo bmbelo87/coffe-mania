@@ -2,6 +2,7 @@ import { WaiterScreenModal } from './WaiterScreenModal';
 import { ChefQueue } from '../../game/chef-queue';
 import { GAME_VERSION } from '../../core/version';
 import { LAND_SALE_SIGN_FRAME } from '../../game/land-sale-sign';
+import { createSceneryShadow } from './scenery-shadow';
 import {
   Container,
   Graphics,
@@ -13,7 +14,7 @@ import {
   TextStyle,
   type FederatedPointerEvent,
   type FederatedWheelEvent,
-  type Texture,
+  Texture,
 } from 'pixi.js';
 
 import { FONT_FAMILY } from '../../core/fonts';
@@ -24,7 +25,10 @@ import { Actor } from '../../world/Actor';
 import { CLIP } from '../../avatar/clips';
 import { SFX_START_COOKING_URL, type ActionBarButtonTextures, type ActionBarIconTexture, type NpcEmotionTextures, type StoreToolbarTextures } from '../../game/asset-manifest';
 import { ActionBarMood } from './ActionBarMood';
-import { createActionBarBetaSlots } from './ActionBarBetaSlots';
+import { SocialBar, type SocialBarPlayer } from './SocialBar';
+import { SocialNews, SOCIAL_NEWS_FRAME } from './SocialNews';
+import { SocialInviteModal } from './SocialInviteModal';
+import type { SocialArt } from '../../game/social-art';
 import { MAIN_ACTION_BAR_SCALE, StoreActionBar } from './StoreActionBar';
 import { RoomStoreController } from './RoomStoreController';
 import { roomModelItems, type RoomExpansionStep, type RoomSnapshot, type RoomInventoryClient } from '../../game/room-inventory';
@@ -46,8 +50,8 @@ import {JuiceClient,loadJuiceArt,loadJuiceMachineArt,type JuiceStock} from '../.
 import { CookProgressCallout } from './CookProgressCallout';
 import { IdleStoveCallout, loadIdleStoveArt } from './IdleStoveCallout';
 import { loadDialogExtras } from './dialog-art';
-import { buildParking, EXPANSION_SIGN_SCALE, groundSprite, loadCafeSceneryArt, PARKING_SIZE, type CafeSceneryArt } from './cafe-scenery';
-import { loadSettingsMenuTextures, SettingsMenu, type SettingsMenuAction, type SettingsMenuState } from './SettingsMenu';
+import { buildMarketStall, buildPlatform, CAFE_SCENERY_LAYOUT, EXPANSION_SIGN_SCALE, groundSprite, loadCafeSceneryArt, type CafeSceneryArt } from './cafe-scenery';
+import { loadSettingsMenuTextures, SettingsMenu, type SettingsMenuAction, type SettingsMenuAnchor, type SettingsMenuState } from './SettingsMenu';
 import { HoverBalloon } from './HoverBalloon';
 import { carriedDishPose, fitDish } from './DishPresentation';
 import { DoorView } from './DoorView';
@@ -80,10 +84,14 @@ import { RoomDepthSorter, setItemOverlayDepth, setSeatedActorRoomDepth } from '.
 import { createChairBackrest } from './ChairBackrest';
 import { OutsideNpcManager, type PreparedNpcView } from './OutsideNpcManager';
 import { createProceduralWallView, type WallWallpaper } from './ProceduralWallView';
-import { TopBars, type TopBarsTextures } from './TopBars';
+import { TopBars, TOP_BAR_ICON_FRAMES, type TopBarsTextures } from './TopBars';
 import { loadPlayerState, type PlayerState } from '../../game/player-state';
 import { canUseSpice, type SpiceId, type SpiceScreenTextures } from '../../game/spices';
 import { SpiceScreenModal } from './SpiceScreenModal';
+import { SupplyOrderModal } from './SupplyOrderModal';
+import { createBeachExtras, loadBeachExtrasArt } from './BeachExtras';
+import { SupplyPlatform } from './SupplyPlatform';
+import { loadSupplyArt, SupplyClient } from '../../game/supplies';
 import { DevToolsModal, loadDevToolsTextures } from './DevToolsModal';
 import { GoldBurstEffect } from './GoldBurstEffect';
 import { alphaHitArea } from './alpha-hit';
@@ -251,6 +259,12 @@ export interface RoomScreenOptions {
   outsideNpcs?: boolean;
   /** Textura da barra de ações da UI do jogo (inferior central). */
   actionBarTexture?: Texture;
+  socialArt?: SocialArt;
+  socialPlayers?: readonly SocialBarPlayer[];
+  onVisitPlayer?: (player: SocialBarPlayer) => void;
+  onAddFriend?: () => void;
+  inviteUrl?: string;
+  onCopyInvite?: () => Promise<void>;
   storeBarTexture?: Texture;
   storeBarIcons?: readonly ActionBarIconTexture[];
   storeTopButtonTexture?: Texture;
@@ -300,6 +314,8 @@ export class RoomScreen implements Screen {
   private readonly fullscreenControl?: RoomScreenOptions['fullscreen'];
   /** Volume de antes de desligar pelo menu; ligar de novo devolve esse valor. */
   private readonly restoredVolume: { musicPercent?: number; effectsPercent?: number } = {};
+  /** Botão do olho: barras e textos da interface escondidos, só a engrenagem e o menu dela à vista. */
+  private interfaceHidden = false;
   private readonly levelUpModal: LevelUpModal;
   private devModal?: DevToolsModal;
   private devModalLoading = false;
@@ -362,6 +378,11 @@ export class RoomScreen implements Screen {
   private sharedFoods: SharedFood[] = [];
   private sharedJuices: JuiceStock[] = [];
   private readonly juiceClient = new JuiceClient();
+  private readonly supplyClient = new SupplyClient();
+  /** Encomendas do dono na plataforma; visitantes não veem as caixas privadas. */
+  private supplyPlatform?: SupplyPlatform;
+  private supplyModal?: SupplyOrderModal;
+  private supplyOrigin?: { tx: number; ty: number };
   private juiceModal?: JuiceScreenModal;
   private waiterModal?: WaiterScreenModal;
   private readonly juiceRequests = new Map<string, { bubble: ThoughtBubble; nonce: string; recipeId?: string }>();
@@ -407,6 +428,10 @@ export class RoomScreen implements Screen {
   private readonly actionBarMood?: ActionBarMood;
   private readonly chairBackrests = new Map<RoomItem, Sprite>();
   private readonly actionBarLayer = new Container();
+  private socialBar?: SocialBar;
+  private socialNews?: SocialNews;
+  private socialInviteModal?: SocialInviteModal;
+  private socialSpatula?: Texture;
   private readonly actionIconHovers: Array<{ sprite: Sprite; targetY: number }> = [];
   private topBarsBaseWidth = 0;
   private readonly stoveViews = new Map<RoomItem, Array<Sprite | Graphics>>();
@@ -635,11 +660,34 @@ export class RoomScreen implements Screen {
 
       const left = bar.x - bar.width / 2;
       const top = bar.y - bar.height;
-      if (options.topBarsTextures) {
-        const betaSlots = createActionBarBetaSlots(options.topBarsTextures.icons);
-        betaSlots.position.set(left, top);
-        betaSlots.scale.set(scale);
-        this.actionBarLayer.addChild(betaSlots);
+      if (options.topBarsTextures && options.socialArt) {
+        const frame = TOP_BAR_ICON_FRAMES[2];
+        const spatula = new Texture({ source: options.topBarsTextures.icons.source,
+          frame: new Rectangle(frame.x, frame.y, frame.width, frame.height) });
+        this.socialSpatula = spatula;
+        this.socialBar = new SocialBar({
+          textures: { ...options.socialArt, spatula }, players: options.socialPlayers,
+          onVisit: (_id, player) => { if (!this.isModalOpen) options.onVisitPlayer?.(player); },
+          onAddFriend: () => {
+            if (this.isModalOpen || this.storeBar?.isOpen) return;
+            if (options.onAddFriend) options.onAddFriend();
+            else this.socialInviteModal?.open();
+          },
+        });
+        this.socialBar.view.position.set(left, top);
+        this.socialBar.view.scale.set(scale);
+        this.actionBarLayer.addChild(this.socialBar.view);
+        if (options.actionBarButtons && options.spiceTextures) {
+          this.socialNews = new SocialNews({ banners: options.socialArt.banners, background: options.socialArt.newsBackground,
+            buttons: { leftArrow: options.actionBarButtons.leftArrow, rightArrow: options.actionBarButtons.rightArrow, close: options.spiceTextures.close },
+            onClose: () => { if (this.socialBar) this.socialBar.view.visible = true; },
+          });
+          // The news strip and cards use the same native row and toolbar scale.
+          this.socialNews.view.position.set(left + SOCIAL_NEWS_FRAME.x * scale, top + SOCIAL_NEWS_FRAME.y * scale);
+          this.socialNews.view.scale.set(scale);
+          this.socialNews.hide();
+          this.actionBarLayer.addChild(this.socialNews.view);
+        }
       }
       if (options.npcEmotionTextures) {
         this.actionBarMood = new ActionBarMood(
@@ -654,6 +702,8 @@ export class RoomScreen implements Screen {
       options.actionBarIcons?.forEach(({ name, texture }, index) => {
         const isTrophy = name === 'trophy';
         const isMail = name === 'mail';
+        // Entre a galinha e o envelope, como na barra de ~2013.
+        const isVan = name === 'van';
         const holder = new Container();
         const icon = new Sprite(texture);
         holder.label = `room-action-bar-icon-${name}`;
@@ -674,7 +724,7 @@ export class RoomScreen implements Screen {
         }
         holder.addChild(icon);
         holder.position.set(
-          left + (isTrophy ? 470 : isMail ? 1300 : 552 + (index - 1) * 86) * scale,
+          left + (isTrophy ? 470 : isMail ? 1300 : isVan ? 1227 : 552 + (index - 1) * 86) * scale,
           top + (isTrophy ? 710 : 730) * scale,
         );
         holder.hitArea = new Rectangle(
@@ -699,6 +749,12 @@ export class RoomScreen implements Screen {
           if (name === 'house') this.openStoreBar();
           if (name === 'mortar') this.openSpiceScreen();
           if (name === 'waiter') this.openWaiterScreen();
+          if (name === 'van') this.openSupplyOrders();
+          if (name === 'mail' && !this.isModalOpen && this.socialNews) {
+            const open = !this.socialNews.view.visible;
+            this.socialNews.view.visible = open;
+            if (this.socialBar) this.socialBar.view.visible = !open;
+          }
         });
         this.actionBarLayer.addChild(holder);
       });
@@ -744,7 +800,13 @@ export class RoomScreen implements Screen {
           button.on('pointerupoutside', () => { pressed = false; syncFeedback(); });
           button.on('pointertap', (event) => {
             event.stopPropagation();
-            if (placement.name === 'settings') this.openSettings(button);
+            if (placement.name === 'settings') this.openSettings(button, placement.texture.height * baseScale);
+            if (this.isModalOpen) return;
+            const news = this.socialNews?.view.visible ? this.socialNews : undefined;
+            if (placement.name === 'left-arrow') { if (news) news.previous(); else this.socialBar?.previous(); }
+            if (placement.name === 'right-arrow') { if (news) news.next(); else this.socialBar?.next(); }
+            if (placement.name === 'left-edge-arrow') { if (news) news.setPage(0); else this.socialBar?.first(); }
+            if (placement.name === 'right-edge-arrow') { if (news) news.setPage(options.socialArt!.banners.length - 1); else this.socialBar?.last(); }
           });
           this.actionBarLayer.addChild(button);
         }
@@ -808,7 +870,10 @@ export class RoomScreen implements Screen {
             this.roomStore?.onOpen();
           } else this.roomStore?.onClose();
         },
-        () => this.openSettings(this.storeBar?.view.getChildByLabel('store-settings-button', true) ?? undefined),
+        () => {
+          const gear = this.storeBar?.view.getChildByLabel('store-settings-button', true) ?? undefined;
+          this.openSettings(gear, gear?.hitArea instanceof Rectangle ? gear.hitArea.height : undefined);
+        },
         // The "Expansões" tab shows the size cards of the café.
         options.storeToolbarTextures?.expansion && this.roomStore && options.roomSnapshot?.canEdit !== false
           ? [...(options.storeBarIcons ?? []), { name: 'expansion', texture: options.storeToolbarTextures.expansion }]
@@ -889,6 +954,7 @@ export class RoomScreen implements Screen {
         onError: (message) => this.showNotice(message),
       });
       this.view.addChild(this.spiceModal.view);
+      if (options.roomSnapshot?.canEdit !== false && this.roomClient) this.createSupplies(options.spiceTextures);
     }
     if (options.wardrobeTextures) {
       const coveredLayers = [this.backdrop, this.cameraLayer, this.actionBarLayer];
@@ -944,7 +1010,9 @@ export class RoomScreen implements Screen {
     void loadSettingsMenuTextures().then((textures) => {
       if (this.destroyed) return;
       this.settingsMenu = new SettingsMenu(textures, (action) => this.runSettingsAction(action, options));
-      this.view.addChild(this.settingsMenu.view);
+      // Acima das barras e abaixo das janelas.
+      const bars = [this.actionBarLayer, this.storeBar?.view].filter((layer) => layer?.parent === this.view);
+      this.view.addChildAt(this.settingsMenu.view, Math.max(0, ...bars.map((layer) => this.view.getChildIndex(layer!) + 1)));
       options.onSettingsMenuReady?.();
     }).catch((error: unknown) => { if (!this.destroyed) console.warn('[configurações] botões indisponíveis', error); });
     this.sellModal = new SellConfirmModal();
@@ -959,6 +1027,13 @@ export class RoomScreen implements Screen {
         this.sellModal?.setArt(art);
         this.expansionModal?.setArt(art);
         this.settingsModal?.setArt(extras.confirmWindow, spices.close);
+        if (options.inviteUrl && this.socialBar) {
+          this.socialInviteModal = new SocialInviteModal({
+            textures: { frame: extras.confirmWindow, button: spices.buy, close: spices.close },
+            inviteUrl: options.inviteUrl, onCopy: options.onCopyInvite,
+          });
+          this.view.addChild(this.socialInviteModal.view);
+        }
       }).catch((error: unknown) => { if (!this.destroyed) console.warn('[janelas] arte indisponível', error); });
     }
     this.levelUpModal = new LevelUpModal();
@@ -2213,9 +2288,10 @@ export class RoomScreen implements Screen {
   }
 
   /**
-   * Do lado da frente-direita do café (vídeo de ~2013, quadros 002 e 003): o estacionamento colado
-   * à calçada e, mais à frente, a placa "Expansão à venda". Os dois ficam além da próxima expansão,
-   * para nunca ficar sobre o piso novo. A placa só aparece para o dono e enquanto houver expansão.
+   * Do lado direito do café, nas posições medidas no vídeo "Testando o Game" (`CAFE_SCENERY_LAYOUT`):
+   * a plataforma de encomendas ligada à rua, a barraca de feira e a placa "Expansão à venda". Tudo
+   * acompanha a borda da frente do café atual, como no original; a prévia verde da próxima
+   * expansão pode passar por baixo delas. A placa só aparece para o dono e enquanto houver expansão.
    */
   private refreshCafeScenery(): void {
     this.cafeSceneryParts.splice(0).forEach((part) => part.destroy({ children: true }));
@@ -2230,15 +2306,21 @@ export class RoomScreen implements Screen {
     }
     const { tilesX, tilesY } = this.model;
     const offer = this.roomSnapshot?.canEdit !== false && this.roomClient ? this.roomSnapshot?.expansion : undefined;
-    const edge = Math.max(tilesX, offer ? offer.floorX + 1 : tilesX);
+    const origin = { tx: tilesX + CAFE_SCENERY_LAYOUT.platform.dx, ty: 1 + CAFE_SCENERY_LAYOUT.platform.dy };
 
-    const parking = buildParking(art, edge + 1, 0);
-    for (const piece of parking.ground) piece.zIndex = FLOOR_DRAW_PRIORITY + 2;
-    for (const { view, tx, ty } of parking.standing) view.zIndex = itemDepth(tx, ty);
-    this.world.addChild(...parking.ground, ...parking.standing.map(({ view }) => view));
-    this.cafeSceneryParts.push(...parking.ground, ...parking.standing.map(({ view }) => view));
+    this.supplyOrigin = origin;
+    this.supplyPlatform?.place(this.world, origin);
+    for (const pieces of [buildPlatform(art, origin.tx, origin.ty), buildMarketStall(art, origin.tx, origin.ty)]) {
+      for (const piece of pieces.ground) piece.zIndex = FLOOR_DRAW_PRIORITY + 2;
+      for (const { view, tx, ty } of pieces.standing) view.zIndex = itemDepth(tx, ty);
+      this.world.addChild(...pieces.ground, ...pieces.standing.map(({ view }) => view));
+      this.cafeSceneryParts.push(...pieces.ground, ...pieces.standing.map(({ view }) => view));
+    }
 
-    if (!offer) return;
+    // Nos vídeos, o café novo (nível 1 a 6, sem expansão) nunca mostra a placa; os cafés já
+    // expandidos (níveis 130 a 300) mostram. Ela fica para depois da primeira expansão.
+    const expanded = (this.roomSnapshot?.expansions ?? []).some((step) => step.floorX + 1 <= tilesX && step.floorY + 1 <= tilesY);
+    if (!offer || !expanded) return;
     const fx = offer.floorX + 1, fy = offer.floorY + 1;
     const corner = (tx: number, ty: number) => ({ x: tileToScreenX(tx, ty), y: tileToScreenY(tx, ty) });
     // Piso que a próxima expansão acrescenta, em verde como o lote da placa do pátio.
@@ -2250,7 +2332,7 @@ export class RoomScreen implements Screen {
     preview.eventMode = 'none';
     preview.visible = false;
 
-    const spot = { tx: edge + PARKING_SIZE / 2 + 1, ty: Math.max(PARKING_SIZE + 3, tilesY - 3) };
+    const spot = { tx: origin.tx + CAFE_SCENERY_LAYOUT.expansionSign.dx, ty: origin.ty + CAFE_SCENERY_LAYOUT.expansionSign.dy };
     const sign = new Container();
     sign.label = 'expansion-sale-sign';
     const signArt = groundSprite(art.expansionSign, 'expansionSign', 0, 0, EXPANSION_SIGN_SCALE);
@@ -2267,6 +2349,8 @@ export class RoomScreen implements Screen {
     tip.position.set(0, -200 - tipHeight / 2 - 22);
     sign.addChild(signArt, tip);
     sign.position.set(tileToScreenX(spot.tx + 0.5, spot.ty + 0.5), tileToScreenY(spot.tx + 0.5, spot.ty + 0.5));
+    const shadow = createSceneryShadow('expansion-sign', signArt, sign.position);
+    shadow.zIndex = FLOOR_DRAW_PRIORITY + 2;
     sign.zIndex = itemDepth(spot.tx, spot.ty);
     sign.eventMode = 'static'; sign.cursor = 'pointer';
     sign.hitArea = new Rectangle(-120, -190, 230, 200);
@@ -2280,8 +2364,8 @@ export class RoomScreen implements Screen {
       event.stopPropagation();
       void this.buyExpansionFromSign();
     });
-    this.world.addChild(preview, sign);
-    this.cafeSceneryParts.push(preview, sign);
+    this.world.addChild(preview, shadow, sign);
+    this.cafeSceneryParts.push(preview, shadow, sign);
   }
 
   /** A placa vende o próximo tamanho pela janela "Comprar Expansão?", como a do pátio. */
@@ -2323,8 +2407,12 @@ export class RoomScreen implements Screen {
     preview.eventMode = 'none';
     preview.visible = false;
 
-    // Apoio no gramado à direita e à frente do lote; acompanha as duas ofertas de pátio.
-    const spot = { tx: 5 + nx, ty: top + ny / 2 + 1 };
+    // Sem pátio, o pé da placa fica a 3,8 tiles da borda da frente, na linha da quina direita do
+    // piso (vídeo "Testando o Game", 4:36, medido no quadro ampliado). Com pátio, no gramado à
+    // direita e à frente do lote, acompanhando a próxima oferta. O apoio da arte é o centro do tile.
+    const spot = px > 0 && py > 0
+      ? { tx: 5 + nx, ty: top + ny / 2 + 1 }
+      : { tx: this.model.tilesX - 0.63, ty: top + 3.3 };
     const sign = new Container();
     sign.label = 'land-sale-sign';
     const art = new Sprite(this.landSaleSignTexture);
@@ -2344,6 +2432,8 @@ export class RoomScreen implements Screen {
     tip.position.set(0, -204 - tipHeight / 2 - 22);
     sign.addChild(art, tip);
     sign.position.set(tileToScreenX(spot.tx + 0.5, spot.ty + 0.5), tileToScreenY(spot.tx + 0.5, spot.ty + 0.5));
+    const shadow = createSceneryShadow('land-sign', art, sign.position);
+    shadow.zIndex = FLOOR_DRAW_PRIORITY + 2;
     sign.zIndex = itemDepth(spot.tx, spot.ty);
     sign.eventMode = 'static'; sign.cursor = 'pointer';
     sign.hitArea = new Rectangle(-82, -208, 164, 210);
@@ -2359,8 +2449,8 @@ export class RoomScreen implements Screen {
       void this.buyPatio();
     });
     // Both parts sort with the room: the preview under the furniture, the sign by its tile.
-    this.world.addChild(preview, sign);
-    this.landSaleParts.push(preview, sign);
+    this.world.addChild(preview, shadow, sign);
+    this.landSaleParts.push(preview, shadow, sign);
   }
 
   /**
@@ -2506,19 +2596,39 @@ export class RoomScreen implements Screen {
   }
 
   /**
-   * A engrenagem abre o menu suspenso de controles; sem a arte dele, ou pelo botão "Avançado",
-   * abre a janela com volume, modo bitter e modo dev.
+   * A engrenagem abre e fecha a grade de controles; sem a arte dela, ou pelo botão "Avançado", abre
+   * a janela com volume, modo bitter e modo dev. `restHeight` é a altura da engrenagem sem o efeito
+   * de hover, nas coordenadas do pai dela, para a grade não pulsar junto com o botão.
    */
-  openSettings(gear?: Container): void {
+  openSettings(gear?: Container, restHeight?: number): void {
     if (this.isModalOpen) return;
-    if (this.settingsMenu && gear) {
-      const center = this.view.toLocal(gear.getGlobalPosition());
-      const bounds = gear.getBounds();
-      const scale = this.view.worldTransform.a || 1;
-      this.settingsMenu.toggle(center, this.settingsMenuState(), bounds.height / scale);
+    if (this.settingsMenu && gear && restHeight) {
+      const anchor: SettingsMenuAnchor = () => {
+        for (let node: Container | null = gear; node && node !== this.view; node = node.parent) {
+          if (node.destroyed || !node.visible || !node.renderable) return undefined;
+        }
+        if (!gear.parent) return undefined;
+        const center = this.view.toLocal(gear.getGlobalPosition());
+        const parent = gear.parent.worldTransform;
+        const size = restHeight * Math.hypot(parent.c, parent.d) / (this.view.worldTransform.d || 1);
+        return { x: center.x, y: center.y, size };
+      };
+      this.settingsMenu.toggle(anchor, this.settingsMenuState());
       return;
     }
     this.openAdvancedSettings();
+  }
+
+  /** Botão do olho: esconde as barras e os textos da interface; a engrenagem continua para desfazer. */
+  private toggleInterface(): void {
+    this.interfaceHidden = !this.interfaceHidden;
+    const shown = !this.interfaceHidden;
+    // `renderable` também tira as peças do teste de clique, sem mexer no `visible` que elas já controlam.
+    if (this.topBars) this.topBars.view.renderable = shown;
+    for (const child of this.actionBarLayer.children) {
+      if (child.label !== 'room-action-bar-settings') child.renderable = shown;
+    }
+    if (this.hud) this.hud.renderable = shown;
   }
 
   private settingsMenuState(): SettingsMenuState {
@@ -2536,7 +2646,9 @@ export class RoomScreen implements Screen {
 
   private runSettingsAction(action: SettingsMenuAction, options: RoomScreenOptions): void {
     const center = { x: STAGE_WIDTH / 2, y: STAGE_HEIGHT / 2 };
-    if (action === 'zoomIn' || action === 'zoomOut') {
+    if (action === 'view') {
+      this.toggleInterface();
+    } else if (action === 'zoomIn' || action === 'zoomOut') {
       // Dois passos da roda do mouse por clique.
       this.requestZoom(ZOOM_WHEEL_STEP ** (action === 'zoomIn' ? 2 : -2), center);
     } else if (action === 'fullscreen') {
@@ -2576,8 +2688,43 @@ export class RoomScreen implements Screen {
     this.settingsModal?.open();
   }
 
+  /** Janela, plataforma e cliente das encomendas de suprimentos (arte carregada sob demanda). */
+  private createSupplies(buttons: SpiceScreenTextures): void {
+    void loadSupplyArt().then((art) => {
+      if (this.destroyed) return;
+      this.supplyPlatform = new SupplyPlatform({
+        client: this.supplyClient, art, balloon: this.hoverBalloonTexture,
+        canInteract: () => !this.storeBar?.isOpen && !this.isModalOpen && !this.dragCancelledTap,
+        confirm: (text) => this.sellModal?.ask(text) ?? Promise.resolve(false),
+        onSnapshot: (snapshot) => { this.setPlayerState(snapshot.playerState); this.supplyModal?.setSnapshot(snapshot); },
+        onError: (message) => this.showNotice(message),
+      });
+      this.supplyModal = new SupplyOrderModal({
+        textures: { art, buy: buttons.buy, disabled: buttons.disabled, close: buttons.close },
+        onOrder: async (kind) => { await this.supplyPlatform?.act('order', { kind }); },
+        onError: (message) => this.showNotice(message),
+      });
+      const above = this.spiceModal ? this.view.getChildIndex(this.spiceModal.view) + 1 : this.view.children.length;
+      this.view.addChildAt(this.supplyModal.view, above);
+      if (this.supplyOrigin) this.supplyPlatform.place(this.world, this.supplyOrigin);
+      void this.supplyPlatform.refresh();
+    }).catch((error: unknown) => { if (!this.destroyed) console.warn('[encomendas] arte indisponível', error); });
+  }
+
+  /** A van da barra de ações abre a janela de encomendas com o estado mais recente do servidor. */
+  private openSupplyOrders(): void {
+    if (this.isModalOpen || this.storeBar?.isOpen || !this.supplyModal) return;
+    this.supplyModal.open(this.supplyPlatform?.snapshot);
+    void this.supplyPlatform?.refresh();
+  }
+
   private get isModalOpen(): boolean {
-    return Boolean(this.waiterModal?.isOpen || this.levelUpModal?.isOpen || this.juiceModal?.isOpen || this.cookModal?.isOpen || this.spiceModal?.isOpen || this.wardrobeModal?.isOpen || this.settingsModal?.isOpen || this.devModal?.isOpen || this.sellModal?.isOpen || this.expansionModal?.isOpen);
+    return Boolean(this.socialInviteModal?.isOpen || this.waiterModal?.isOpen || this.levelUpModal?.isOpen || this.juiceModal?.isOpen || this.cookModal?.isOpen || this.spiceModal?.isOpen || this.supplyModal?.isOpen || this.wardrobeModal?.isOpen || this.settingsModal?.isOpen || this.devModal?.isOpen || this.sellModal?.isOpen || this.expansionModal?.isOpen);
+  }
+
+  /** Public profile cards are supplied by the social service, independently of room actors. */
+  setSocialPlayers(players: readonly SocialBarPlayer[]): void {
+    this.socialBar?.setPlayers(players);
   }
 
   /** Atores em cena, o jogador primeiro. Usado nos testes. */
@@ -2849,6 +2996,9 @@ export class RoomScreen implements Screen {
     const ground = new Graphics();
     ground.label = 'room-scene-ground';
     ground.rect(-12000, -12000, 24000, 24000).fill(background.groundColor ?? 0xa2c957);
+    // Painter order is the part order; zIndex only lets the beach walkers slip between props.
+    this.sceneArt.sortableChildren = true;
+    ground.zIndex = 0;
     this.sceneArt.addChild(ground);
     for (const { tile, index, texture } of rendered) {
       if (!texture) continue;
@@ -2858,8 +3008,18 @@ export class RoomScreen implements Screen {
         index === 0 ? 'room-city-background' : `room-city-background-${index + 1}`,
       );
       view.position.x += offset.x; view.position.y += offset.y;
+      view.zIndex = index + 1;
       this.sceneArt.addChild(view);
     }
+    // Standing props (not ground decals such as the pier shadow), by the ground line near
+    // their base; the beach extras stand between them.
+    const props = rendered.filter(({ tile, texture }) => texture && tile.file.includes('/props/') && !('matrix' in tile && tile.matrix))
+      .map(({ tile, index }) => ({ footY: tile.top + tile.height * 0.9 + offset.y, zIndex: index + 1 }));
+    if (!props.length || !tiles.some((tile) => 'id' in tile && tile.id === 'sand')) return;
+    void loadBeachExtrasArt().then((textures) => {
+      if (this.destroyed) return;
+      this.sceneArt.addChild(...createBeachExtras(textures, props, offset, Math.min(...props.map(({ zIndex }) => zIndex)) - 1));
+    }).catch((error: unknown) => { if (!this.destroyed) console.warn('[cenário] figurantes da praia indisponíveis', error); });
   }
 
   /** Espalha os pontos de partida sem depender de sorteio. */
@@ -3345,6 +3505,9 @@ export class RoomScreen implements Screen {
   /** Apply an authenticated snapshot to both HUDs without rebuilding the room. */
   setPlayerState(state: PlayerState): void {
     this.playerState = state;
+    // Server-driven rewards take focus before their earlier Escape handler can
+    // acknowledge a reward hidden underneath the link-invitation window.
+    if (state.levelUps?.length) this.socialInviteModal?.close();
     this.levelUpModal?.sync(state.levelUps ?? []);
     if (this.roomSnapshot) this.roomSnapshot.playerState = state;
     this.topBars?.setState(state);
@@ -3396,12 +3559,13 @@ export class RoomScreen implements Screen {
     if (this.hudDirty) { this.hudDirty = false; this.updateHud(); }
     this.cookModal?.update(deltaMs);
     this.spiceModal?.update(deltaMs);
+    this.supplyModal?.update(deltaMs);
+    this.supplyPlatform?.update();
     this.devModal?.update(deltaMs);
     this.sellModal?.update(deltaMs);
     this.expansionModal?.update(deltaMs);
     this.settingsModal?.update(deltaMs);
     this.settingsMenu?.update(deltaMs);
-    if (this.settingsMenu?.isOpen && (this.isModalOpen || this.wardrobeModal?.isOpen)) this.settingsMenu.close();
     this.juiceModal?.update(deltaMs);
     this.waiterModal?.update(deltaMs);
     this.levelUpModal?.update(deltaMs);
@@ -3559,12 +3723,18 @@ export class RoomScreen implements Screen {
     this.clearServingProcess();
     this.storeBar?.destroy();
     this.topBars?.destroy();
+    this.socialBar?.destroy();
+    this.socialSpatula?.destroy(false);
+    this.socialNews?.destroy();
+    this.socialInviteModal?.destroy();
     this.clearCookingProcess();
     this.cookModal?.destroy();
     this.juiceModal?.destroy();
     this.waiterModal?.destroy();
     this.juiceRequests.forEach(request=>request.bubble.destroy());this.juiceRequests.clear();
     this.spiceModal?.destroy();
+    this.supplyModal?.destroy();
+    this.supplyPlatform?.destroy();
     this.devModal?.destroy();
     this.sellModal?.destroy();
     this.expansionModal?.destroy();

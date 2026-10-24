@@ -1,0 +1,68 @@
+{
+  "output": "game/public/assets/ui/social/news-background.png",
+  "size": [
+    1023,
+    150
+  ],
+  "kind": "partial-reconstruction-from-original-raster-slices",
+  "source": {
+    "path": "artes-referencia/cenario-praia/video/quadros/quadro-008.png",
+    "sha256": "049dfc1796e44e497acb4c95d5bcec95b71db79ca001280fc74ce7647588a2d1",
+    "timecode": "01:20.080",
+    "recordingDate": "unconfirmed; existing project audit estimates circa 2013"
+  },
+  "cropLTRB": {
+    "topLeft": [
+      230,
+      551,
+      244,
+      565
+    ],
+    "topEdgeClean": [
+      400,
+      551,
+      450,
+      565
+    ],
+    "leftEdgeClean": [
+      230,
+      580,
+      244,
+      640
+    ],
+    "emptyBlueInterior": [
+      241,
+      657,
+      598,
+      668
+    ]
+  },
+  "operations": [
+    "Stretch original empty blue lower-left strip across the 1023x150 base.",
+    "Nine-slice assembly using only original top-left corner, unobstructed top edge and unobstructed left edge pixels.",
+    "Mirror original left corner/edge to reconstruct the right side without the red close button.",
+    "Vertically mirror original upper edge and corners for the lower edge, because the video clips the actual bottom.",
+    "Resize source regions with Lanczos only; no drawing, generated illustration, new texture, text or icons."
+  ],
+  "sliceLayout": {
+    "cornerPixels": 17,
+    "topEdgeDestination": [
+      17,
+      0,
+      1006,
+      17
+    ],
+    "leftEdgeDestination": [
+      0,
+      17,
+      17,
+      133
+    ]
+  },
+  "alpha": "Fully opaque RGBA (all alpha255), including original gray corner background; covers existing neighbor-slot frames.",
+  "limitations": [
+    "Lower edge is reconstructed from mirrored original top pixels; the complete lower original border is unavailable.",
+    "The original clean blue strip is stretched as a simple background; original promotional artwork and text are excluded.",
+    "This is a technical raster assembly, not a recovered standalone original asset."
+  ]
+}

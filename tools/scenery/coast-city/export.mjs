@@ -80,12 +80,9 @@ await publish('sidewalk', 'sidewalk-muted', 'terrain', { mirrorTile: 256 });
 // Reuse the asphalt band only so no second border bleeds into the intersections.
 await publish('road', 'road-start', 'terrain', { width: 1024, height: 320, crop: { left: 0, top: 85, width: 2172, height: 550 } });
 await publish('road-start', 'road-start', 'terrain', { width: 1024, height: 320, crop: { left: 0, top: 85, width: 2172, height: 550 } });
-await publish('road-marking', 'crosswalk-crisp', 'terrain', { paintTile: true });
-await publish('curb', 'curb-blocks', 'terrain', { width: 1024, height: 24, crop: { left: 0, top: 150, width: 2172, height: 424 } });
+// Curbs, crosswalk and center line are measured from the original video by build_curbs.py
+// (registry in curbs.json); exporting them here would overwrite that calibration.
 await publish('shoreline', 'shoreline-clean', 'terrain');
-// Twice the logical size, with the calibrated aspect baked before projection.
-// Direct runtime sampling keeps the gaps between the five paint bars distinct.
-await publish('crosswalk', 'crosswalk-crisp', 'terrain', { width: 540, height: 110 });
 for (const [id, input, width, height] of [
   ['tree-round', 'tree-round', 300], ['tree-conifer', 'tree-conifer', 220],
   ['umbrella-green', 'umbrella-green', 300], ['umbrella-orange', 'umbrella-orange', 300],
@@ -100,6 +97,7 @@ const provenance = {
   method: 'Built-in Image Gen; source crops are references, published art is reconstructed, not original extracted sprites. Cropping, resizing, transparent padding and mirrored repetition only during export; no new illustrated vector paths. Road markings reuse one generated crosswalk paint block.',
   references: ['references/urban-coast.png', 'references/pier-boat.png', 'references/umbrellas-rock.png', 'references/trees.png', 'references/surfboards.png', 'references/original-city-dock.png', 'references/pier-lamp-reference.png', 'references/wet-sand-detail.png', 'references/road-curb-original.png', 'references/pier-gate-original.png'],
   sources: ['artes-referencia/cenario-praia/detalhes/118s.png', 'artes-referencia/cafe-mania-acervo-complementar-2/cafe-mania-acervo-2/artes/49023909/002.png'],
+  measured: 'curbs.json',
   assets,
 };
 await fs.writeFile(path.join(folder, 'source.json'), JSON.stringify(provenance, null, 2) + '\n');

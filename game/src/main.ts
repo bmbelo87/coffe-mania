@@ -1,5 +1,8 @@
 import { renderLoginPage, renderSessionError } from './auth/LoginPage';
-import { resolveSession } from './game/session';
+import { loadOperationStatus, resolveSession } from './game/session';
+
+/** Páginas do acesso (convite, senha, conta, documentos); o resto cai na entrada. */
+const ACCESS_PATHS = ['/convite', '/lista/confirmar', '/senha', '/conta', '/termos', '/privacidade', '/conduta'];
 
 async function start(): Promise<void> {
   const host = document.getElementById('app');
@@ -8,9 +11,10 @@ async function start(): Promise<void> {
   document.body.classList.add('auth-page');
   host.innerHTML = '<p class="auth-check" role="status">Verificando sessão…</p>';
   try {
-    const session = await resolveSession();
+    const [session, status] = await Promise.all([resolveSession(), loadOperationStatus()]);
     if (playing) {
-      if (!session) {
+      // The server already redirects /play while locked; this covers a page restored from cache.
+      if (!session || status?.active && !session.staff) {
         const room = new URLSearchParams(window.location.search).get('room');
         window.location.replace(room ? '/?room=' + encodeURIComponent(room) : '/');
         return;
@@ -31,8 +35,11 @@ async function start(): Promise<void> {
       window.addEventListener('storage', (event) => {
         if (event.key === 'coffe-auth-change') void checkAccess();
       });
+    } else if (ACCESS_PATHS.includes(window.location.pathname.replace(/\/$/, ''))) {
+      const { renderAccessPage } = await import('./auth/AccessPages');
+      await renderAccessPage(host, window.location.pathname.replace(/\/$/, ''), session);
     } else {
-      renderLoginPage(host, session);
+      renderLoginPage(host, session, status);
     }
   } catch (error) {
     document.body.classList.remove('cafe-name-page');

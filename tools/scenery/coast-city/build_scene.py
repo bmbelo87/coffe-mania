@@ -1,6 +1,6 @@
 """Place generated raster parts in the existing 160x80 world; masks are geometry only."""
 import json
-from math import sqrt, ceil
+from math import sqrt
 from pathlib import Path
 from PIL import Image
 
@@ -71,29 +71,78 @@ def walkway(name, c, height, slope, minimum_s):
     p['textureMatrix']=[1,-slope,0,1]
     return p
 
+# Curb rasters come from build_curbs.py (profiles measured on the original video, 2x textures).
+CURB_TOP_RISER = 27   # far curb: top and lit lip over the sidewalk
+CURB_FAR_HEIGHT = 59  # plus riser and foot line over the asphalt
+CURB_NEAR_HEIGHT = 30
+CURB_BEACH_HEIGHT = 28
 walkway('coast-walkway',NEAR_WALK,WALK_DEPTH,-.5,None)
-# The sand-side edge shows the existing block tops, never a vertical face into grass.
-coast_top = strip('coast-curb-top','curb',NEAR_WALK,24,-.5,None)
-coast_top['matrix']=[1,-.5,1,.5]
-coast_top['clip']=[0,0,16000,0,16000,5,0,5]
 walkway('far-walkway',FAR_WALK,WALK_DEPTH,.5,NEAR_WALK)
+# The sand-side edge shows the block tops with a dark seam, never a vertical face into grass.
+# Drawn over the far sidewalk so the band runs to the street corner; the road covers the rest.
+coast_top = strip('coast-curb-top','curb-top-beach',NEAR_WALK,CURB_BEACH_HEIGHT,-.5,None,scale=(.5,.5))
+coast_top['matrix']=[1,-.5,1,.5]
+coast_top['clip']=[0,0,16000,0,16000,CURB_BEACH_HEIGHT,0,CURB_BEACH_HEIGHT]
 start = strip('city-road-start','road-start',ROAD_FAR,320,.5,NEAR_WALK)
 start['clip']=[8320,0,8470,0,8150,320,8000,320]
 road_start = NEAR_WALK + 150
 strip('city-road','road',ROAD_FAR,320,.5,road_start)
 walkway('cafe-walkway',NEAR_WALK,WALK_DEPTH,.5,0)
-strip('far-curb','curb',ROAD_FAR-6,24,.5,NEAR_WALK)
+far_curb = strip('far-curb','curb',ROAD_FAR-CURB_TOP_RISER,CURB_FAR_HEIGHT,.5,NEAR_WALK,scale=(.5,.5))
+# At the road end the top turns the corner along the beach edge and the riser ends in a
+# vertical cut, as in the video; the sand overlay below meets the foot of that cut.
+far_end = 8000 + NEAR_WALK - (ROAD_FAR - CURB_TOP_RISER)
+far_curb['clip'] = [far_end,0,16000,0,16000,CURB_FAR_HEIGHT,far_end-CURB_TOP_RISER,CURB_FAR_HEIGHT,
+                    far_end-CURB_TOP_RISER,CURB_TOP_RISER]
+# Foot of that cut in world px: origin of the measurements at the road end (A along the
+# road, B across it, in units of the floor axes (2,1) and (-2,1)).
+END_FOOT = (-8000 + far_end - CURB_TOP_RISER, -4000 + ROAD_FAR - CURB_TOP_RISER + .5*(far_end - CURB_TOP_RISER) + CURB_FAR_HEIGHT)
+def from_foot(a, b):
+    return END_FOOT[0] + 2*a - 2*b, END_FOOT[1] + a + b
 # This street edge faces away from the camera: the sidewalk occludes its riser.
-near_top=strip('near-curb-top','curb',NEAR_WALK,24,.5,NEAR_WALK)
+near_top=strip('near-curb-top','curb-top',NEAR_WALK,CURB_NEAR_HEIGHT,.5,NEAR_WALK,scale=(.5,.5))
 near_top['matrix']=[1,.5,-1,.5]
-near_top['clip']=[8000,0,16000,0,16000,5,8000,5]
-# Road paint uses BOTH floor axes, so its ends remain straight across the lane.
-paint_c = ROAD_FAR + 160 - 8
-paint_start = ceil((8000+road_start-paint_c)/(256*.65))*(256*.65)
-part('road-markings','terrain/road-marking.png',-8000,-4000+paint_c,16000,16,
-     matrix=[1,.5,-1,.5],repeat=dict(x=.65,y=1),sampling='direct',
-     clip=[paint_start,0,16000,0,16000,16,paint_start,16])
-part('crossing','terrain/crosswalk.png',345,ROAD_FAR+.5*345+25,270,55,matrix=[-1,.5,1,.5],sampling='direct')
+near_top['clip']=[8000,0,16000,0,16000,CURB_NEAR_HEIGHT,8000,CURB_NEAR_HEIGHT]
+# Road paint uses BOTH floor axes, so its ends remain straight across the lane. The video
+# puts the center line at 49.4% of the visible asphalt; dashes 38.2 long every 67.5, the
+# first one centered 88.1 px along the road from the foot of the curb cut (the crosswalk
+# takes the place of the one before it).
+DASH_PERIOD = 135  # local units along the strip (2 per world px along the road)
+paint_c = ROAD_FAR + 166
+dash = from_foot(88.1 - 38.2/2, (paint_c + 8.5 - ROAD_FAR - CURB_FAR_HEIGHT + CURB_TOP_RISER)/2)
+dash_lx = dash[1] + 4000 - paint_c + .5*(dash[0] + 8000)
+shift = dash_lx % DASH_PERIOD
+part('road-markings','terrain/road-marking.png',round(-8000+shift,2),round(-4000+paint_c+shift/2,2),16000,17,
+     matrix=[1,.5,-1,.5],repeat=dict(x=1,y=1),sampling='direct',
+     clip=[round(dash_lx-shift,2),0,16000,0,16000,17,round(dash_lx-shift,2),17])
+# Four blocks measured from the foot of the curb cut (build_curbs.CROSS_*); the part
+# starts 25.3 px along the road from it.
+cross_x, cross_y = from_foot(25.3, 0)
+part('crossing','terrain/crosswalk.png',round(cross_x,2),round(cross_y,2),270,60,matrix=[-1,.5,1,.5],sampling='direct')
+# The sand runs onto the road end in a slow S (video 1:58): A(B) along the road, measured
+# every 6 px across it from the foot of the curb cut; the last points follow the trend
+# under the cafe wall. Same tiling as the 'sand' plane, so the texture stays continuous.
+WAVE = [(0,0),(6,2.4),(12,5.6),(18,6.6),(24,8.1),(30,8.8),(36,10.1),(42,10.6),(48,11.5),
+        (54,10.8),(60,10.4),(66,9.4),(72,7.7),(78,6.8),(84,6.6),(90,6.6),(96,6.6),(102,7.9),
+        (108,8.2),(114,9.1),(120,10.3),(126,11.4),(132,11.7),(138,12),(144,12.2),(150,12.4)]
+def smooth_wave(step=2, sigma=6):
+    # The video edge is anti-aliased; a light Gaussian over the 6 px samples removes the
+    # measurement jitter so the stencil edge does not zigzag.
+    from math import exp
+    out = []
+    b = 0
+    while b <= WAVE[-1][0]:
+        weights = [(exp(-((bb - b) / sigma) ** 2 / 2), aa) for bb, aa in WAVE]
+        total = sum(w for w, _ in weights)
+        a = sum(w * aa for w, aa in weights) / total if b > 0 else 0
+        out.append((a, b))
+        b += step
+    return out
+wave = [from_foot(-CURB_TOP_RISER/2 - 4, -CURB_TOP_RISER/2 - 4)]
+wave += [from_foot(a, b) for a, b in smooth_wave()]
+wave.append(from_foot(-30, 150))
+wave.append(from_foot(-30, -CURB_TOP_RISER/2 - 4))
+plane('road-end-sand','sand',clip=[round(n + 8000, 2) for point in wave for n in point])
 
 def prop(name, x, y, width, anchor=(.5,.94), suffix=''):
     image=Image.open(DEST/'props'/f'{name}.png')
@@ -104,10 +153,18 @@ def prop(name, x, y, width, anchor=(.5,.94), suffix=''):
 # decorative world positions, never new navigation tiles or owned furniture.
 prop('rock-palm',-1650,575,270,suffix='-west')
 prop('umbrella-orange',-1300,350,230,anchor=(.42,.85),suffix='-west')
-part('pier-shadow','props/pier-shadow.png',-1430,-350,620,372)
+shadow = part('pier-shadow','props/pier-shadow.png',0,0,700,420)
 prop('boat',-915,-320,300,anchor=(.5,.75))
 # Static parts use painter order: the pier rail must occlude the moored hull.
-prop('pier',-900,-40,580,anchor=(.91,.91))
+pier = prop('pier',-900,-40,580,anchor=(.91,.91))
+# Calibrate the existing shadow's six footprint corners to the pier's support
+# plane, not its transparent bounds or the elevated deck. Keep this registration
+# relative to the pier so moving/scaling it cannot detach the shadow again.
+pier_scale = pier['width'] / Image.open(DEST/'props/pier.png').width
+shadow.update(left=round(pier['left'] + 2.179761436*pier_scale,6),
+              top=round(pier['top'] + 268.005282131*pier_scale,6),
+              matrix=[round(v*pier_scale,9) for v in
+                      (1.012752741, .026247217, -.018411051, 1.109612120)])
 steps=prop('pier-steps',0,0,220,anchor=(0,0))
 steps['left'],steps['top']=-992,-80
 part('pier-arch','props/pier-arch.png',-1000,-308,150,300)

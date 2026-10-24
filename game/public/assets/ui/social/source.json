@@ -1,0 +1,426 @@
+{
+  "historicalTarget": "Café Mania circa 2012–2014, orange runtime invitation variant",
+  "provenance": "Original raster crops and original copied banners are distinguished from reconstructed/composited assets below. Portfolio dates do not establish release dates.",
+  "sourceRecords": [
+    "tools/social-bar/crops.json",
+    "tools/social-bar/generated.json",
+    "tools/social-bar/news-background.json"
+  ],
+  "originalAssets": [
+    {
+      "output": "game/public/assets/ui/social/card.png",
+      "source": {
+        "path": "artes-referencia/cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/15414597/007.png",
+        "sha256": "6981e748fe5987432286049298ebff5cebb167fcf72213b28766a6b5810ea121",
+        "size": [
+          1263,
+          1189
+        ]
+      },
+      "cropLTRB": [
+        384,
+        990,
+        498,
+        1155
+      ],
+      "operations": [
+        "sample original flat white interior",
+        "nine-slice assembly from unobscured original upper corners and edges",
+        "vertically mirror upper corners and edge for lower border",
+        "mask existing rounded contour",
+        "resize 100x150"
+      ],
+      "historicalVariant": "Mariano portfolio published 2014 / white friend card raster reconstruction",
+      "size": [
+        100,
+        150
+      ],
+      "mode": "RGBA",
+      "notes": [
+        "Only original raster pixels are reused. Interior is flat white; no title, portrait or progress is baked into the asset.",
+        "Lower rim is reconstructed by vertically mirroring the original upper rim to avoid the source beige gradient. This is not an untouched standalone original PNG."
+      ],
+      "sliceRegionsLTRB": {
+        "whiteInterior": [
+          395,
+          997,
+          408,
+          1005
+        ],
+        "topLeft": [
+          384,
+          990,
+          398,
+          1004
+        ],
+        "topEdge": [
+          398,
+          990,
+          408,
+          1004
+        ],
+        "topRight": [
+          484,
+          990,
+          498,
+          1004
+        ],
+        "leftEdge": [
+          384,
+          1004,
+          398,
+          1014
+        ],
+        "rightEdge": [
+          484,
+          1004,
+          498,
+          1014
+        ]
+      },
+      "sliceLayout": {
+        "workingCanvas": [
+          114,
+          165
+        ],
+        "borderPixels": 14,
+        "lowerEdge": "vertically mirrored upper edge and corners"
+      }
+    },
+    {
+      "output": "game/public/assets/ui/social/portrait-frame.png",
+      "source": {
+        "path": "artes-referencia/cafe-mania-acervo-complementar-2/cafe-mania-acervo-2/artes/4059699/014.jpg",
+        "sha256": "86dbb2f5a20eb20c68b4b87b0778371d00f1147cb60325e45ee888221f97fb51",
+        "size": [
+          1754,
+          1377
+        ]
+      },
+      "cropLTRB": [
+        1081,
+        1011,
+        1209,
+        1139
+      ],
+      "operations": [
+        "crop",
+        "replace obscured lower half with vertically mirrored unobscured upper half",
+        "remove cyan source background by blue-channel matte",
+        "resize 82x82"
+      ],
+      "historicalVariant": "Guido 2012 portfolio / orange-brown frame also observed in circa-2013 video",
+      "size": [
+        82,
+        82
+      ],
+      "mode": "RGBA",
+      "notes": [
+        "The missing lower edge is assembled from original pixels; not a raw untouched crop. No label, name, level or number remains."
+      ]
+    },
+    {
+      "output": "game/public/assets/ui/social/promotion-chef.png",
+      "source": {
+        "path": "artes-referencia/cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/15414597/007.png",
+        "sha256": "6981e748fe5987432286049298ebff5cebb167fcf72213b28766a6b5810ea121",
+        "size": [
+          1263,
+          1189
+        ]
+      },
+      "cropLTRB": [
+        1031,
+        987,
+        1152,
+        1155
+      ],
+      "operations": [
+        "crop",
+        "mask existing rounded card corners",
+        "resize 100x150"
+      ],
+      "historicalVariant": "Mariano portfolio published 2014; older interface variant",
+      "size": [
+        100,
+        150
+      ],
+      "mode": "RGBA",
+      "notes": [
+        "Optional historical promotion; includes original Papa dos Pudins text."
+      ]
+    },
+    {
+      "output": "game/public/assets/ui/social/banner-mobile.png",
+      "source": {
+        "path": "artes-referencia/cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/15414597/021.png",
+        "sha256": "2a062f29cf6e939c6b9e3056adea92ce89c86e8c1f82088af73549e9a821492f",
+        "size": [
+          830,
+          95
+        ]
+      },
+      "cropLTRB": null,
+      "operations": [
+        "byte-for-byte copy"
+      ],
+      "historicalVariant": "Mariano portfolio published 2014",
+      "size": [
+        830,
+        95
+      ],
+      "mode": "RGBA",
+      "notes": [
+        "Full original banner, not Image Gen."
+      ]
+    },
+    {
+      "output": "game/public/assets/ui/social/banner-taqueria.png",
+      "source": {
+        "path": "artes-referencia/cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/15414597/022.png",
+        "sha256": "a277fbd09f0778374e2475ca607066f41b4c273e581f5284fc7b1166a3f8497e",
+        "size": [
+          833,
+          95
+        ]
+      },
+      "cropLTRB": null,
+      "operations": [
+        "byte-for-byte copy"
+      ],
+      "historicalVariant": "Mariano portfolio published 2014",
+      "size": [
+        833,
+        95
+      ],
+      "mode": "RGBA",
+      "notes": [
+        "Full original banner, not Image Gen."
+      ]
+    },
+    {
+      "output": "game/public/assets/ui/social/banner-cash.png",
+      "source": {
+        "path": "artes-referencia/cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/15414597/023.png",
+        "sha256": "e380674de6d788cce1d71f28a4229268c0fb4eecd8330f131dc2c1666320d32f",
+        "size": [
+          831,
+          96
+        ]
+      },
+      "cropLTRB": null,
+      "operations": [
+        "byte-for-byte copy"
+      ],
+      "historicalVariant": "Mariano portfolio published 2014",
+      "size": [
+        831,
+        96
+      ],
+      "mode": "RGBA",
+      "notes": [
+        "Full original banner, not Image Gen."
+      ]
+    },
+    {
+      "output": "game/public/assets/ui/social/banner-beach-stoves.png",
+      "source": {
+        "path": "artes-referencia/cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/15414597/024.png",
+        "sha256": "858fb7da90520de255d2316ca0d032b7eb985b654c66bd63f2ad5b0f14fec470",
+        "size": [
+          832,
+          93
+        ]
+      },
+      "cropLTRB": null,
+      "operations": [
+        "byte-for-byte copy"
+      ],
+      "historicalVariant": "Mariano portfolio published 2014",
+      "size": [
+        832,
+        93
+      ],
+      "mode": "RGBA",
+      "notes": [
+        "Full original banner, not Image Gen."
+      ]
+    }
+  ],
+  "reconstructedAssets": [
+    {
+      "output": "game/public/assets/ui/social/add-friend.png",
+      "kind": "composite-original-and-generated",
+      "size": [
+        400,
+        600
+      ],
+      "sources": [
+        {
+          "path": "tools/social-bar/add-friend-frame-generated.png",
+          "kind": "Image Gen reconstructed blank frame and button",
+          "sha256": "3897a04d6ba9f9db86fec2dd32ef4c227e6b0354939ce463f6d13591c7c7d5dc",
+          "size": [
+            1024,
+            1536
+          ]
+        },
+        {
+          "path": "tools/social-bar/add-friend-reference.png",
+          "kind": "crop of original Guido 014 illustration",
+          "sha256": "7cc7f983b51832b4434b7d4fcb7b3f92092582e7f91340037db22f5a7a7138d5",
+          "size": [
+            151,
+            133
+          ]
+        }
+      ],
+      "operations": {
+        "frameCropLTRB": [
+          18,
+          25,
+          1008,
+          1510
+        ],
+        "frameResize": [
+          400,
+          600
+        ],
+        "originalIllustrationCropLTRB": [
+          0,
+          0,
+          151,
+          131
+        ],
+        "originalIllustrationResize": [
+          392,
+          384
+        ],
+        "originalIllustrationPosition": [
+          4,
+          4
+        ],
+        "alphaContour": "rounded contour matching frame, radius27px; outside and corners alpha0"
+      },
+      "limitations": [
+        "Frame/button reconstructed with Image Gen. Chef faces and clothes are original raster pixels resized from the reference.",
+        "No text baked into the output. Original screenshot illustration is low resolution.",
+        "Top of the chef hats remains clipped as in the original reference crop. Illustration fills the upper panel without an extra header strip."
+      ]
+    },
+    {
+      "output": "game/public/assets/ui/social/portrait-placeholder.png",
+      "kind": "imagegen-reconstruction",
+      "size": [
+        82,
+        82
+      ],
+      "sources": [
+        {
+          "path": "tools/social-bar/portrait-placeholder-generated.png",
+          "kind": "Image Gen neutral gray bust based on original runtime placeholder",
+          "sha256": "4b06e65997989464973a6327bdfbf3debea94d3b3a4312abdc587210619e57cb",
+          "size": [
+            1254,
+            1254
+          ]
+        }
+      ],
+      "operations": {
+        "componentThresholdAlpha": 64,
+        "keep": "largest connected bust only",
+        "retainAntialiasNeighborhoodPixels": 2,
+        "cropLTRB": [
+          210,
+          163,
+          1044,
+          1148
+        ],
+        "fitWithin": [
+          74,
+          76
+        ],
+        "transparentCanvas": [
+          82,
+          82
+        ]
+      },
+      "limitations": [
+        "Generated reconstruction, not recovered original silhouette pixels. Replaces the earlier partial video crop."
+      ]
+    }
+  ],
+  "rebuildOrder": [
+    "python tools/social-bar/pack-crops.py",
+    "python tools/social-bar/finalize-generated.py"
+  ],
+  "warning": "pack-crops.py alone exports the superseded partial silhouette; finalize-generated.py must run last.",
+  "newsBackground": {
+    "output": "game/public/assets/ui/social/news-background.png",
+    "size": [
+      1023,
+      150
+    ],
+    "kind": "partial-reconstruction-from-original-raster-slices",
+    "source": {
+      "path": "artes-referencia/cenario-praia/video/quadros/quadro-008.png",
+      "sha256": "049dfc1796e44e497acb4c95d5bcec95b71db79ca001280fc74ce7647588a2d1",
+      "timecode": "01:20.080",
+      "recordingDate": "unconfirmed; existing project audit estimates circa 2013"
+    },
+    "cropLTRB": {
+      "topLeft": [
+        230,
+        551,
+        244,
+        565
+      ],
+      "topEdgeClean": [
+        400,
+        551,
+        450,
+        565
+      ],
+      "leftEdgeClean": [
+        230,
+        580,
+        244,
+        640
+      ],
+      "emptyBlueInterior": [
+        241,
+        657,
+        598,
+        668
+      ]
+    },
+    "operations": [
+      "Stretch original empty blue lower-left strip across the 1023x150 base.",
+      "Nine-slice assembly using only original top-left corner, unobstructed top edge and unobstructed left edge pixels.",
+      "Mirror original left corner/edge to reconstruct the right side without the red close button.",
+      "Vertically mirror original upper edge and corners for the lower edge, because the video clips the actual bottom.",
+      "Resize source regions with Lanczos only; no drawing, generated illustration, new texture, text or icons."
+    ],
+    "sliceLayout": {
+      "cornerPixels": 17,
+      "topEdgeDestination": [
+        17,
+        0,
+        1006,
+        17
+      ],
+      "leftEdgeDestination": [
+        0,
+        17,
+        17,
+        133
+      ]
+    },
+    "alpha": "Fully opaque RGBA (all alpha255), including original gray corner background; covers existing neighbor-slot frames.",
+    "limitations": [
+      "Lower edge is reconstructed from mirrored original top pixels; the complete lower original border is unavailable.",
+      "The original clean blue strip is stretched as a simple background; original promotional artwork and text are excluded.",
+      "This is a technical raster assembly, not a recovered standalone original asset."
+    ]
+  }
+}

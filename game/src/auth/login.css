@@ -46,3 +46,16 @@ body.auth-page {
 .login-error { color: #a42d24; font-size: 15px; margin: 18px 0 0; }
 .login-error:empty { display: none; }
 .auth-check { padding: 24px; text-align: center; }
+
+.login-link {
+  display: block; margin: 14px auto 0; padding: 4px; border: 0; background: none;
+  font: inherit; font-size: 15px; color: #8a5a22; text-decoration: underline; cursor: pointer;
+}
+.login-link:disabled { opacity: .65; cursor: wait; }
+.login-status-note {
+  margin: 0 0 18px; padding: 8px 12px; border-radius: 8px; background: #f6ead2;
+  color: #66401e; font-size: 15px; text-align: center;
+}
+.login-status-title { margin: 0 0 10px; font-size: 22px; font-weight: 600; text-align: center; }
+.login-status-message { margin-bottom: 12px; }
+.login-status-eta { margin: 0 0 8px; font-size: 15px; text-align: center; color: #8a5a22; }

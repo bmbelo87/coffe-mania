@@ -1,0 +1,400 @@
+{
+  "generatedOn": "2026-10-23",
+  "method": "Original raster crops, alpha isolation, calibration, and byte-preserving banner copies. No Image Gen used for these files.",
+  "sources": {
+    "Guido": "https://www.behance.net/gallery/4059699/Caf-Mania-Social-Games-Vostu",
+    "GuidoPublished": "2012-05-28",
+    "MarianoProject": "15414597",
+    "MarianoPublished": "2014-03-19",
+    "videoDate": "unconfirmed; existing project audit estimates circa 2013"
+  },
+  "items": [
+    {
+      "output": "game/public/assets/ui/social/card.png",
+      "source": {
+        "path": "artes-referencia/cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/15414597/007.png",
+        "sha256": "6981e748fe5987432286049298ebff5cebb167fcf72213b28766a6b5810ea121",
+        "size": [
+          1263,
+          1189
+        ]
+      },
+      "cropLTRB": [
+        384,
+        990,
+        498,
+        1155
+      ],
+      "operations": [
+        "sample original flat white interior",
+        "nine-slice assembly from unobscured original upper corners and edges",
+        "vertically mirror upper corners and edge for lower border",
+        "mask existing rounded contour",
+        "resize 100x150"
+      ],
+      "historicalVariant": "Mariano portfolio published 2014 / white friend card raster reconstruction",
+      "size": [
+        100,
+        150
+      ],
+      "mode": "RGBA",
+      "notes": [
+        "Only original raster pixels are reused. Interior is flat white; no title, portrait or progress is baked into the asset.",
+        "Lower rim is reconstructed by vertically mirroring the original upper rim to avoid the source beige gradient. This is not an untouched standalone original PNG."
+      ],
+      "sliceRegionsLTRB": {
+        "whiteInterior": [
+          395,
+          997,
+          408,
+          1005
+        ],
+        "topLeft": [
+          384,
+          990,
+          398,
+          1004
+        ],
+        "topEdge": [
+          398,
+          990,
+          408,
+          1004
+        ],
+        "topRight": [
+          484,
+          990,
+          498,
+          1004
+        ],
+        "leftEdge": [
+          384,
+          1004,
+          398,
+          1014
+        ],
+        "rightEdge": [
+          484,
+          1004,
+          498,
+          1014
+        ]
+      },
+      "sliceLayout": {
+        "workingCanvas": [
+          114,
+          165
+        ],
+        "borderPixels": 14,
+        "lowerEdge": "vertically mirrored upper edge and corners"
+      }
+    },
+    {
+      "output": "game/public/assets/ui/social/portrait-frame.png",
+      "source": {
+        "path": "artes-referencia/cafe-mania-acervo-complementar-2/cafe-mania-acervo-2/artes/4059699/014.jpg",
+        "sha256": "86dbb2f5a20eb20c68b4b87b0778371d00f1147cb60325e45ee888221f97fb51",
+        "size": [
+          1754,
+          1377
+        ]
+      },
+      "cropLTRB": [
+        1081,
+        1011,
+        1209,
+        1139
+      ],
+      "operations": [
+        "crop",
+        "replace obscured lower half with vertically mirrored unobscured upper half",
+        "remove cyan source background by blue-channel matte",
+        "resize 82x82"
+      ],
+      "historicalVariant": "Guido 2012 portfolio / orange-brown frame also observed in circa-2013 video",
+      "size": [
+        82,
+        82
+      ],
+      "mode": "RGBA",
+      "notes": [
+        "The missing lower edge is assembled from original pixels; not a raw untouched crop. No label, name, level or number remains."
+      ]
+    },
+    {
+      "output": "game/public/assets/ui/social/portrait-placeholder.png",
+      "source": {
+        "path": ".runtime/recipe-video/todos/quadros/quadro-487.png",
+        "sha256": "560ac3a7f31e633caea4cff5272c6f57eb3dbfcc360a86dc0ec3961b4e5033dd",
+        "size": [
+          1280,
+          720
+        ]
+      },
+      "cropLTRB": [
+        390,
+        580,
+        438,
+        623
+      ],
+      "operations": [
+        "crop unobscured head and upper shoulders",
+        "key neutral gray from orange/gold background",
+        "retain largest connected bust component",
+        "resize and place in transparent 82x82 canvas"
+      ],
+      "historicalVariant": "circa-2013 runtime video at 00:45.245",
+      "size": [
+        82,
+        82
+      ],
+      "mode": "RGBA",
+      "notes": [
+        "Low-resolution partial bust. The original level obscures the lower shoulders; no replacement anatomy was painted. Prefer a generated replacement if the upsampled source is insufficient."
+      ]
+    },
+    {
+      "output": "game/public/assets/ui/social/promotion-chef.png",
+      "source": {
+        "path": "artes-referencia/cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/15414597/007.png",
+        "sha256": "6981e748fe5987432286049298ebff5cebb167fcf72213b28766a6b5810ea121",
+        "size": [
+          1263,
+          1189
+        ]
+      },
+      "cropLTRB": [
+        1031,
+        987,
+        1152,
+        1155
+      ],
+      "operations": [
+        "crop",
+        "mask existing rounded card corners",
+        "resize 100x150"
+      ],
+      "historicalVariant": "Mariano portfolio published 2014; older interface variant",
+      "size": [
+        100,
+        150
+      ],
+      "mode": "RGBA",
+      "notes": [
+        "Optional historical promotion; includes original Papa dos Pudins text."
+      ]
+    },
+    {
+      "output": "game/public/assets/ui/social/banner-mobile.png",
+      "source": {
+        "path": "artes-referencia/cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/15414597/021.png",
+        "sha256": "2a062f29cf6e939c6b9e3056adea92ce89c86e8c1f82088af73549e9a821492f",
+        "size": [
+          830,
+          95
+        ]
+      },
+      "cropLTRB": null,
+      "operations": [
+        "byte-for-byte copy"
+      ],
+      "historicalVariant": "Mariano portfolio published 2014",
+      "size": [
+        830,
+        95
+      ],
+      "mode": "RGBA",
+      "notes": [
+        "Full original banner, not Image Gen."
+      ]
+    },
+    {
+      "output": "game/public/assets/ui/social/banner-taqueria.png",
+      "source": {
+        "path": "artes-referencia/cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/15414597/022.png",
+        "sha256": "a277fbd09f0778374e2475ca607066f41b4c273e581f5284fc7b1166a3f8497e",
+        "size": [
+          833,
+          95
+        ]
+      },
+      "cropLTRB": null,
+      "operations": [
+        "byte-for-byte copy"
+      ],
+      "historicalVariant": "Mariano portfolio published 2014",
+      "size": [
+        833,
+        95
+      ],
+      "mode": "RGBA",
+      "notes": [
+        "Full original banner, not Image Gen."
+      ]
+    },
+    {
+      "output": "game/public/assets/ui/social/banner-cash.png",
+      "source": {
+        "path": "artes-referencia/cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/15414597/023.png",
+        "sha256": "e380674de6d788cce1d71f28a4229268c0fb4eecd8330f131dc2c1666320d32f",
+        "size": [
+          831,
+          96
+        ]
+      },
+      "cropLTRB": null,
+      "operations": [
+        "byte-for-byte copy"
+      ],
+      "historicalVariant": "Mariano portfolio published 2014",
+      "size": [
+        831,
+        96
+      ],
+      "mode": "RGBA",
+      "notes": [
+        "Full original banner, not Image Gen."
+      ]
+    },
+    {
+      "output": "game/public/assets/ui/social/banner-beach-stoves.png",
+      "source": {
+        "path": "artes-referencia/cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/15414597/024.png",
+        "sha256": "858fb7da90520de255d2316ca0d032b7eb985b654c66bd63f2ad5b0f14fec470",
+        "size": [
+          832,
+          93
+        ]
+      },
+      "cropLTRB": null,
+      "operations": [
+        "byte-for-byte copy"
+      ],
+      "historicalVariant": "Mariano portfolio published 2014",
+      "size": [
+        832,
+        93
+      ],
+      "mode": "RGBA",
+      "notes": [
+        "Full original banner, not Image Gen."
+      ]
+    },
+    {
+      "output": "tools/social-bar/add-friend-reference.png",
+      "source": {
+        "path": "artes-referencia/cafe-mania-acervo-complementar-2/cafe-mania-acervo-2/artes/4059699/014.jpg",
+        "sha256": "86dbb2f5a20eb20c68b4b87b0778371d00f1147cb60325e45ee888221f97fb51",
+        "size": [
+          1754,
+          1377
+        ]
+      },
+      "cropLTRB": [
+        242,
+        1007,
+        393,
+        1140
+      ],
+      "operations": [
+        "crop without name or button label"
+      ],
+      "historicalVariant": "Guido 2012 portfolio / orange invitation illustration",
+      "size": [
+        151,
+        133
+      ],
+      "mode": "RGB",
+      "notes": [
+        "Reference for Image Gen; opaque screenshot background remains."
+      ]
+    },
+    {
+      "output": "tools/social-bar/carousel-mobile-reference.png",
+      "source": {
+        "path": "artes-referencia/cenario-praia/video/quadros/quadro-008.png",
+        "sha256": "049dfc1796e44e497acb4c95d5bcec95b71db79ca001280fc74ce7647588a2d1",
+        "size": [
+          1280,
+          720
+        ]
+      },
+      "cropLTRB": [
+        230,
+        551,
+        1053,
+        675
+      ],
+      "operations": [
+        "crop only"
+      ],
+      "historicalVariant": "runtime video, recording date unconfirmed",
+      "size": [
+        823,
+        124
+      ],
+      "mode": "RGB",
+      "notes": [
+        "Time 01:20.080. Reference includes baked text, paging and close button. Video clips the lowest edge; do not present as a complete recovered standalone banner."
+      ]
+    },
+    {
+      "output": "tools/social-bar/carousel-favorites-reference.png",
+      "source": {
+        "path": "artes-referencia/cenario-praia/video/quadros/quadro-009.png",
+        "sha256": "7470d5e05f7e674f055263e8981d8751de43eb505a6302c018e37875ab34b5fe",
+        "size": [
+          1280,
+          720
+        ]
+      },
+      "cropLTRB": [
+        230,
+        551,
+        1053,
+        675
+      ],
+      "operations": [
+        "crop only"
+      ],
+      "historicalVariant": "runtime video, recording date unconfirmed",
+      "size": [
+        823,
+        124
+      ],
+      "mode": "RGB",
+      "notes": [
+        "Time 01:30.090. Reference includes baked text, paging and close button. Video clips the lowest edge; do not present as a complete recovered standalone banner."
+      ]
+    },
+    {
+      "output": "tools/social-bar/carousel-cupcake-reference.png",
+      "source": {
+        "path": "artes-referencia/cenario-praia/video/quadros/quadro-011.png",
+        "sha256": "c8cb17a23f43d52486d66f8299070616a9aaf84784998ef7d25b9b0e722ea909",
+        "size": [
+          1280,
+          720
+        ]
+      },
+      "cropLTRB": [
+        230,
+        551,
+        1053,
+        675
+      ],
+      "operations": [
+        "crop only"
+      ],
+      "historicalVariant": "runtime video, recording date unconfirmed",
+      "size": [
+        823,
+        124
+      ],
+      "mode": "RGB",
+      "notes": [
+        "Time 01:50.110. Reference includes baked text, paging and close button. Video clips the lowest edge; do not present as a complete recovered standalone banner."
+      ]
+    }
+  ]
+}

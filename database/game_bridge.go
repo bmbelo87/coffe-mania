@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"crypto/subtle"
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -146,8 +147,8 @@ func persistenceOperation(app core.App, op gamewire.Operation) gamewire.Result {
 		}
 		body, err = snapshotJuices(app, op.Owner, types.NowDateTime())
 	case "dev":
-		if !devToolsEnabled() {
-			return fail(403, "Ferramentas de desenvolvimento desabilitadas no servidor.")
+		if !devToolsForUser(app, op.User) {
+			return fail(403, "Ferramentas de desenvolvimento desabilitadas para esta conta.")
 		}
 		command, decodeErr := decodeDevCommand(bytes.NewReader(op.Body))
 		if decodeErr != nil {
@@ -243,6 +244,11 @@ func persistenceOperation(app core.App, op gamewire.Operation) gamewire.Result {
 func saveDormantRoom(app core.App, owner string, state gamewire.Sleep) error {
 	if len(state.NPCs) > 32 || len(state.Waiters) > 16 {
 		return errors.New("too many NPCs")
+	}
+	// The account was deleted while its café was loaded: there is nothing left to keep, and
+	// failing here would make every later save (and the shutdown of an update) report errors.
+	if _, err := app.FindRecordById("users", owner); errors.Is(err, sql.ErrNoRows) {
+		return nil
 	}
 	return app.RunInTransaction(func(tx core.App) error {
 		room, err := tx.FindFirstRecordByData("player_rooms", "user", owner)
@@ -353,7 +359,7 @@ func registerGameBridge(e *core.ServeEvent) error {
 		if err != nil {
 			return err
 		}
-		ticket := gamewire.Ticket{Nonce: uuid.NewString(), Room: owner, User: user.Id, Name: sessionView(user).DisplayName, Appearance: state.GetString("appearance"), Expires: time.Now().Add(time.Minute).Unix()}
+		ticket := gamewire.Ticket{Nonce: uuid.NewString(), Room: owner, User: user.Id, Name: sessionView(user).DisplayName, Appearance: state.GetString("appearance"), Staff: isStaff(user), Expires: time.Now().Add(time.Minute).Unix()}
 		return r.JSON(200, map[string]any{"ticket": gamewire.SignTicket(secret, ticket), "roomId": owner, "canEdit": owner == user.Id})
 	}).Bind(apis.BodyLimit(1024)).BindFunc(func(r *core.RequestEvent) error {
 		if r.Request.Header.Get("Origin") == "" {
@@ -369,6 +375,8 @@ func registerGameBridge(e *core.ServeEvent) error {
 		r.Response.Header().Set("Cache-Control", "no-store")
 		return r.Next()
 	})
+	// The room service reads the mode when it starts; changes are pushed to it afterwards.
+	group.GET("/status", func(r *core.RequestEvent) error { return r.JSON(http.StatusOK, currentStatus(r.App)) })
 	group.GET("/{owner}/load", func(r *core.RequestEvent) error {
 		owner := r.Request.PathValue("owner")
 		if err := ensureRoom(r.App, owner); err != nil {

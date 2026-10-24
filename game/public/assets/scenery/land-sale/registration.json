@@ -14,5 +14,15 @@
     "y": 1194
   },
   "referenceBoardWidth": 758,
-  "displayBoardWidth": 156
+  "displayBoardWidth": 156,
+  "groundContact": {
+    "center": [
+      238,
+      582
+    ],
+    "radius": [
+      66,
+      33
+    ]
+  }
 }

@@ -22,10 +22,11 @@ database/pb_migrations/
 test-results/
 playwright-report/
 
-# Vídeos e capturas de referência soltos na raiz
+# Vídeos de referência do jogo original (soltos na raiz ou em videos-jogo/)
 /*.mp4
 /*.mov
 /*.webm
+/videos-jogo/
 
 # Arte-fonte das ferramentas de arte: masters, rascunhos, gerações e referências grandes.
 # Ficam com quem produz a arte; o repositório leva os scripts, prompts e source.json.

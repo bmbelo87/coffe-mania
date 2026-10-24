@@ -1,6 +1,6 @@
 {
-  "origin": "Reconstruções geradas com o ChatGPT (Image Gen) a pedido do responsável pelo projeto, em 23/10/2026, a partir do quadro 003 do vídeo de ~2013 e da captura \"Encomenda de Suprimentos\" (P125_09, 2014). Não são PNGs originais recuperados.",
-  "processing": "Folha de 2048x512 cortada em quatro células de 512x512, sem redimensionar. Na escala 1, o ladrilho cobre 2x2 tiles e a borda zebrada cobre um lado de 4 tiles, na diagonal de cima-direita (as bordas da outra diagonal usam o espelho).",
+  "origin": "Reconstruções geradas com o ChatGPT (Image Gen) a pedido do responsável pelo projeto, em 23/10/2026. A plataforma e a entrada seguem o café novo do vídeo \"Café Mania   Testando o Game\" (5:06, pasta videos-jogo/); a placa \"E\" e a barreira, o quadro 003 do vídeo de ~2013 e P125_09 (2014). Não são PNGs originais recuperados.",
+  "processing": "Sem redimensionar. Escalas no jogo: plataforma 0,5 (4x4 tiles), entrada 0,456 (2 tiles de largura), placa e barreira 0,5.",
   "cell": 512,
   "pieces": {
     "no-parking-sign": {
@@ -14,26 +14,86 @@
     "barrier": {
       "anchor": {
         "x": 255,
-        "y": 303,
+        "y": 353,
         "note": "meio entre os pés"
       },
-      "sha256": "8e90cf1c625fa5ab62ba53567480a575e717bb2044d04afdd28bfee2c5b334d6"
+      "sha256": "a8821c158f75ab5644a542c301dcd8346066b9719c0b03809165069608b8576f",
+      "size": [
+        512,
+        562
+      ],
+      "note": "Hastes alongadas 50 px a partir da geração original (sem mexer no trilho nem nos pés), para a altura bater com o vídeo \"Testando o Game\"."
     },
-    "slab": {
+    "platform": {
       "anchor": {
-        "x": 256,
-        "y": 256,
-        "note": "centro do losango de 2x2 tiles"
+        "x": 640,
+        "y": 2,
+        "note": "canto de cima do losango = canto de cima do tile (x0, y0)"
       },
-      "sha256": "84b338cd20f55b8cc9407951cdcb3be781469da9049671fcab79d2a80f847075"
+      "tiles": [
+        4,
+        4
+      ],
+      "slots": "2x2 vagas no canto de cima (tiles x0..x0+1, y0..y0+1)",
+      "sha256": "bb47b69224efcb86bd5f9e4589e91455550e65936a9dd1afa2420ab9aa580566",
+      "revision": "23/10/2026: separadores cinza e faixas zebradas regularizados com Image Gen, calibrados novamente para o losango 2:1 de 1280x640; apoio (640,2) preservado.",
+      "editSource": "exec-db8255da-fa44-4eff-a748-e46b373960ef.png",
+      "calibration": {
+        "sourceCorners": [
+          [
+            884,
+            1
+          ],
+          [
+            1757,
+            445
+          ],
+          [
+            885,
+            886
+          ],
+          [
+            9,
+            445
+          ]
+        ],
+        "targetCorners": [
+          [
+            640,
+            2
+          ],
+          [
+            1276,
+            320
+          ],
+          [
+            640,
+            638
+          ],
+          [
+            4,
+            320
+          ]
+        ]
+      },
+      "runtimeCalibration": {
+        "module": "game/src/screens/room/ParkingPlatform.ts",
+        "donor": "Ciclo raster da faixa traseira esquerda do próprio PNG",
+        "stripeWidth": 8.75,
+        "patchDepth": 24,
+        "blendFrom": 20,
+        "cyclesPerEdge": 13,
+        "preserves": "Alfa e pixels além de24px da borda preservados; apoio e cantos 2:1 inalterados. A textura corrigida fica em cache no runtime; PNG de origem preservado."
+      }
     },
-    "curb": {
+    "entry": {
       "anchor": {
-        "x": 256,
-        "y": 255,
-        "note": "meio do trecho, que cobre 4 tiles"
+        "x": 184.5,
+        "y": 444,
+        "note": "meio da borda do lado da plataforma"
       },
-      "sha256": "ce9fcea084556791ee32870885a4b4d598d919f72e8a0d60f5983c96003bdec3"
+      "sha256": "0b07776557899f84860911dac1a861d0c9a906d8cec558f01bd34cb1bf124b88",
+      "note": "Encurtada 0,58 tile no asfalto liso entre as setas e a barreira, para a barreira ficar 2,4 tiles além da plataforma, como no vídeo. A barreira zebrada foi aparada na largura do asfalto: na geração ela passava das bordas da pista."
     }
   }
 }

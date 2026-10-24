@@ -38,7 +38,7 @@ test('Terrain clipping stays local to its part instead of clipping neighboring s
 test('Published urban scene resolves every raster part and keeps camera coverage finite', async () => {
   const folder = path.resolve('game/public/assets/indoor');
   const scene = JSON.parse(await fs.readFile('game/public/assets/scenery/coast-city/scene.json', 'utf8'));
-  assert.equal(new Set(scene.tiles.map(part => part.file)).size, 25);
+  assert.equal(new Set(scene.tiles.map(part => part.file)).size, 27, 'two top-only curb textures');
   assert.equal(scene.horizontalCover.left, -4028);
   assert.equal(scene.horizontalCover.right, 4000);
   for (const part of scene.tiles) {
@@ -135,16 +135,21 @@ test('Grass edge has no riser, while sand and near street edges expose only bloc
   const walk=scene.tiles.find(p=>p.id==='coast-walkway');
   const coast=scene.tiles.find(p=>p.id==='coast-curb-top');
   assert.equal(coast.top+.5*coast.left,walk.top+.5*walk.left,'border is on the sand side');
-  for (const id of ['coast-curb-top','near-curb-top']) {
+  const tops={'coast-curb-top':'curb-top-beach.png','near-curb-top':'curb-top.png'};
+  for (const [id,file] of Object.entries(tops)) {
     const edge=scene.tiles.find(p=>p.id===id);
-    assert.equal(edge.height,24,'do not compress the whole face into the top');
-    assert.equal(Math.max(...edge.clip.filter((_,i)=>i%2===1)),5,'clip before the vertical shaded face');
+    assert.ok(edge.file.endsWith(file),'top-only texture: the riser rows never reach these edges');
+    const png=await fs.readFile(path.resolve('game/public/assets/indoor',edge.file));
+    assert.equal(png.readUInt32BE(20),edge.height*2,'2x texture, one band tall');
+    assert.equal(Math.max(...edge.clip.filter((_,i)=>i%2===1)),edge.height);
     const [a,b,c,d]=edge.matrix;
     assert.equal(Math.abs(b/a),.5);
     assert.equal(Math.abs(d/c),.5);
     assert.equal(Math.sign(b/a),-Math.sign(d/c),'block tops use both ground axes, not a vertical riser');
   }
-  assert.equal(scene.tiles.find(p=>p.id==='far-curb').height,24,'street-facing riser stays visible');
+  const far=scene.tiles.find(p=>p.id==='far-curb');
+  const farPng=await fs.readFile(path.resolve('game/public/assets/indoor',far.file));
+  assert.equal(farPng.readUInt32BE(20),far.height*2,'street-facing top, riser and foot line stay visible');
 });
 
 test('Street sidewalks have equal depth and meet the same road boundaries', async () => {
@@ -164,5 +169,5 @@ test('Both ends of every lane dash follow the transverse ground axis',async()=>{
   assert.equal(2*b-a,0,'dash length follows one floor axis');
   assert.equal(c+2*d,0,'both short ends follow the other floor axis');
   const png=await fs.readFile(path.resolve('game/public/assets/indoor',paint.file));
-  assert.deepEqual([png.readUInt32BE(16),png.readUInt32BE(20)],[256,16]);
+  assert.deepEqual([png.readUInt32BE(16),png.readUInt32BE(20)],[270,paint.height],'two dashes per tile, measured period');
 });

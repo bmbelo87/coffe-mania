@@ -26,8 +26,12 @@ func main() {
 	if addr == "" {
 		addr = "127.0.0.1:8091"
 	}
-	manager := gameruntime.New(&gameruntime.HTTPStorage{URL: backend, Secret: secret}, gameruntime.Options{})
+	storage := &gameruntime.HTTPStorage{URL: backend, Secret: secret}
+	manager := gameruntime.New(storage, gameruntime.Options{})
 	runtimeServer := gameruntime.NewServer(manager, secret)
+	statusCtx, stopStatus := context.WithCancel(context.Background())
+	defer stopStatus()
+	go runtimeServer.WatchStatus(statusCtx, storage.Status)
 	server := &http.Server{Addr: addr, Handler: runtimeServer.Handler(), ReadHeaderTimeout: 5 * time.Second, IdleTimeout: 60 * time.Second}
 	runtimeServer.Shutdown = func() {
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)

@@ -31,6 +31,7 @@ import {
 } from './game/asset-manifest';
 import { loadRoomItemArt, roomModelItems, RoomInventoryClient } from './game/room-inventory';
 import { loadLandSaleSignTexture } from './game/land-sale-sign';
+import { loadSocialArt } from './game/social-art';
 import { resolveSession } from './game/session';
 import { loadPlayerState } from './game/player-state';
 import { loadNpcAppearancePolicy } from './game/npc-appearance';
@@ -39,6 +40,7 @@ import { loadSpiceScreenTextures } from './game/spices';
 import { loadDevMode, saveDevMode } from './game/dev-tools';
 import { subscribePlayerState } from './game/player-state-realtime';
 import { RoomRealtime } from './game/room-realtime';
+import { SystemNotice } from './ui/SystemNotice';
 import { loadBitterMode, saveBitterMode } from './game/zoom-preferences';
 import { RoomModel } from './world/RoomModel';
 import { RoomScreen } from './screens/room/RoomScreen';
@@ -49,6 +51,15 @@ import { DEFAULT_LOADING_LAYOUT, TIMING } from './screens/loading/layout';
 import { FullscreenButton } from './ui/FullscreenButton';
 import { loadStoredLayout } from './ui/dev-settings';
 import { renderSessionError } from './auth/LoginPage';
+
+/** Liga os avisos do servidor (manutenção, outra janela, nova versão) antes da conexão. */
+function createRoomRealtime(roomId: string, staff: boolean): RoomRealtime {
+  const realtime = new RoomRealtime(roomId);
+  const notice = new SystemNotice(staff);
+  realtime.onNotice((status) => notice.status(status));
+  realtime.onFinal((reason) => notice.final(reason));
+  return realtime;
+}
 
 async function boot(): Promise<void> {
   const host = document.getElementById('app');
@@ -111,7 +122,7 @@ async function boot(): Promise<void> {
     const roomSnapshot = await roomClient.refresh();
 
     // Catálogo fornece comportamento e pegada; manifesto fornece geometria visual.
-    const [playerState, cookingSnapshot, art, actionBarTexture, actionBarButtons, actionBarIcons, npcEmotionTextures, topBarsTextures, cookTextures, wardrobeTextures, storeBarTexture, storeBarIcons, npcAppearancePolicy, placeholderAvatar, storeTopButtonTexture, storeToolbarTextures, spiceTextures, landSaleSignTexture] = await Promise.all([
+    const [playerState, cookingSnapshot, art, actionBarTexture, actionBarButtons, actionBarIcons, npcEmotionTextures, topBarsTextures, cookTextures, wardrobeTextures, storeBarTexture, storeBarIcons, npcAppearancePolicy, placeholderAvatar, storeTopButtonTexture, storeToolbarTextures, spiceTextures, landSaleSignTexture, socialArt] = await Promise.all([
       loadPlayerState(),
       cookingClient.refresh(),
       loadIndoorArt().catch((error) => {
@@ -166,6 +177,10 @@ async function boot(): Promise<void> {
       }),
       loadSpiceScreenTextures(),
       loadLandSaleSignTexture(),
+      loadSocialArt().catch((error: unknown) => {
+        console.warn('[social] arte indisponível', error);
+        return undefined;
+      }),
     ]);
 
     // Only the player is baked at boot. NPC looks are generated per spawn.
@@ -185,6 +200,13 @@ async function boot(): Promise<void> {
     const artProvider = await loadRoomItemArt(roomSnapshot, art ? { art, textureFor: indoorTexture } : undefined);
     const model = new RoomModel({ items: roomModelItems(roomSnapshot, artProvider.art), walls: false, tilesX: roomSnapshot.tilesX, tilesY: roomSnapshot.tilesY, patioX: roomSnapshot.patioX, patioY: roomSnapshot.patioY });
     const room = new RoomScreen({
+      ...(socialArt ? { socialArt } : {}),
+      inviteUrl: new URL('/play?room=' + encodeURIComponent(session.playerId), window.location.origin).href,
+      onVisitPlayer: (player) => {
+        const address = new URL('/play', window.location.origin);
+        address.searchParams.set('room', player.roomId ?? player.playerId);
+        window.location.assign(address);
+      },
       onRenameCafe: () => {
         const address = new URL(window.location.href);
         address.searchParams.set('renameCafe', '1');
@@ -198,7 +220,9 @@ async function boot(): Promise<void> {
       model,
       roomSnapshot,
       ...(roomSnapshot.canEdit !== false ? { roomClient } : {}),
-      realtime: new RoomRealtime(roomId),
+      realtime: createRoomRealtime(roomId, session.staff === true),
+      // Contadores de depuração (atores, zoom, fps, ping) só para a equipe de testes.
+      showHud: session.staff === true,
       npcCount: 0,
       artProvider,
       avatars,

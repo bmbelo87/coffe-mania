@@ -1,0 +1,180 @@
+{
+  "origin": "Reconstruções geradas com o ChatGPT (Image Gen) a pedido do responsável pelo projeto, em 24/10/2026, a partir dos vídeos \"Café Mania level 400\" e \"Nível 300\" (cones) e da captura P125_09 de 2014 (caixas). Não são PNGs originais recuperados. A caixa estragada não tem referência preservada: é reconstrução.",
+  "processing": "tools/supplies/cut-art.py: recorte pela caixa do alfa com 4 px de margem e divisão da folha de caixas em células de 512 px, sem redimensionar. Âncora = centro da pegada no chão; outline = silhueta convexa para o clique.",
+  "pieces": {
+    "cone": {
+      "anchor": {
+        "x": 240.5,
+        "y": 286.0
+      },
+      "outline": [
+        15,
+        288,
+        250,
+        6,
+        268,
+        12,
+        465,
+        265,
+        460,
+        301,
+        351,
+        386,
+        331,
+        386,
+        28,
+        321
+      ],
+      "size": [
+        488,
+        401
+      ],
+      "sha256": "3207611f5154266943c7cd52caccde41769eee8d632e9734b084541b491e0ca1"
+    },
+    "express": {
+      "anchor": {
+        "x": 121.0,
+        "y": 178.0
+      },
+      "outline": [
+        5,
+        66,
+        112,
+        10,
+        126,
+        5,
+        230,
+        57,
+        237,
+        62,
+        237,
+        175,
+        118,
+        237,
+        5,
+        179
+      ],
+      "size": [
+        243,
+        242
+      ],
+      "sha256": "76ebc498c2ac23e0125e4bfd7b1bbe2716c181ae77c5b2eb35c97a39c6cdf207"
+    },
+    "media": {
+      "anchor": {
+        "x": 141.5,
+        "y": 212.8
+      },
+      "outline": [
+        5,
+        75,
+        150,
+        4,
+        278,
+        69,
+        278,
+        209,
+        136,
+        281,
+        133,
+        281,
+        9,
+        218,
+        5,
+        214
+      ],
+      "size": [
+        284,
+        287
+      ],
+      "sha256": "67f99f7997d5f2856c11c96d12f8f5c81dac725864e49417cf34dcc9a29abec4"
+    },
+    "premium": {
+      "anchor": {
+        "x": 141.5,
+        "y": 214.2
+      },
+      "outline": [
+        4,
+        76,
+        148,
+        4,
+        279,
+        69,
+        279,
+        210,
+        274,
+        214,
+        136,
+        283,
+        121,
+        277,
+        5,
+        217
+      ],
+      "size": [
+        285,
+        288
+      ],
+      "sha256": "34f9044646d9cf7771cace6200a3b4a1582b0b3da4c48ba80e9b200271f783e2"
+    },
+    "jumbo": {
+      "anchor": {
+        "x": 161.5,
+        "y": 399.8
+      },
+      "outline": [
+        5,
+        234,
+        17,
+        77,
+        163,
+        4,
+        294,
+        69,
+        318,
+        229,
+        318,
+        397,
+        157,
+        478,
+        6,
+        403
+      ],
+      "size": [
+        323,
+        483
+      ],
+      "sha256": "59b4919251c39b2f32ba230560ce0ec206d688aa726626211e19bb1a6a2dbeeb"
+    },
+    "spoiled": {
+      "anchor": {
+        "x": 142.5,
+        "y": 310.8
+      },
+      "outline": [
+        4,
+        189,
+        67,
+        87,
+        166,
+        5,
+        248,
+        78,
+        281,
+        191,
+        279,
+        308,
+        144,
+        380,
+        4,
+        304
+      ],
+      "size": [
+        286,
+        386
+      ],
+      "sha256": "ffb8d091cd40c68591e6c24662c2b7c56d707247d5a35ac0a6ed7b412de98413"
+    }
+  }
+}
