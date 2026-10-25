@@ -146,6 +146,7 @@ func registerSessionRoutes(e *core.ServeEvent) {
 			return r.InternalServerError("Não foi possível iniciar a sessão.", err)
 		}
 		setSessionCookie(r, token, sessionLifetime)
+		trackEvent(r.App, record.Id, "login", "", nil)
 		return r.JSON(http.StatusOK, sessionView(record))
 	}).Bind(apis.BodyLimit(4096)).BindFunc(sameOrigin)
 	g.POST("/logout", func(r *core.RequestEvent) error {

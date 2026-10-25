@@ -67,6 +67,10 @@ func setExperience(record *core.Record, level int, total int64) {
 	record.Set("experience_max", ceiling)
 }
 
+// LevelRewardGoldKey accumulates, on the record but never in the database, the caféOuros
+// paid by level rewards, so the economy ledger can tell them apart from the action's own gold.
+const LevelRewardGoldKey = "@level_reward_gold"
+
 // GrantExperience adds XP and pays every level reached along the way. It returns how
 // many levels were gained so callers can tell the player.
 func GrantExperience(record *core.Record, amount int64) int {
@@ -81,6 +85,7 @@ func GrantExperience(record *core.Record, amount int64) int {
 		level++
 		gained++
 		record.Set("gold", record.GetInt64("gold")+levels[level-1].RewardGold)
+		record.Set(LevelRewardGoldKey, record.GetInt64(LevelRewardGoldKey)+levels[level-1].RewardGold)
 		notifications = append(notifications, RewardForLevel(level))
 	}
 	if gained > 0 {

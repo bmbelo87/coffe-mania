@@ -111,6 +111,9 @@ type Server struct {
 	// purpose: mobile carriers put many players behind one address.
 	ipOpen     map[string]int
 	ipAttempts map[string]*attemptBucket
+	// ReportTelemetry sends play session facts to the persistence service (telemetry.go).
+	ReportTelemetry func(context.Context, []gamewire.TelemetryEvent) error
+	telemetry       sessionTelemetry
 }
 
 type attemptBucket struct {
@@ -181,9 +184,17 @@ func (s *Server) releaseIP(ip string) {
 }
 
 type liveSession struct {
-	peer *Peer
-	conn *websocket.Conn
+	peer    *Peer
+	conn    *websocket.Conn
+	started time.Time
+	// Set once the café accepted the connection; only joined sessions are reported.
+	joined  atomic.Bool
+	endOnce sync.Once
+	// The first known reason the connection ended (replaced, maintenance, kicked…).
+	reason atomic.Pointer[string]
 }
+
+func (l *liveSession) setReason(reason string) { l.reason.CompareAndSwap(nil, &reason) }
 
 func NewServer(m *Manager, secret string) *Server {
 	return &Server{Manager: m, Secret: secret, tickets: map[string]int64{}, sessions: map[string]*liveSession{}, ipOpen: map[string]int{}, ipAttempts: map[string]*attemptBucket{}, status: gamewire.OperationStatus{Mode: gamewire.ModeOpen}}
@@ -191,6 +202,12 @@ func NewServer(m *Manager, secret string) *Server {
 
 // closeSession ends a connection with a final code; the client does not reconnect by itself.
 func closeSession(session *liveSession, code int, reason string) {
+	switch code {
+	case gamewire.CloseReplaced:
+		session.setReason("replaced")
+	case gamewire.CloseMaintenance:
+		session.setReason("maintenance")
+	}
 	session.peer.Closed.Store(true)
 	go func() { _ = session.conn.Close(websocket.StatusCode(code), reason) }()
 }
@@ -319,6 +336,11 @@ func (s *Server) Handler() http.Handler {
 			http.Error(w, "invalid", 400)
 			return
 		}
+		s.mu.Lock()
+		if session := s.sessions[body.User]; session != nil {
+			session.setReason("kicked")
+		}
+		s.mu.Unlock()
 		s.Manager.Kick(r.Context(), body.User)
 		writeJSON(w, 200, map[string]bool{"ok": true})
 	}))
@@ -336,9 +358,14 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("POST /internal/shutdown", s.internal(func(w http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 		defer cancel()
+		// Before the rooms close and drop their connections, which would read as "closed".
+		s.EndSessions("shutdown")
 		if err := s.Manager.Close(ctx); err != nil {
 			http.Error(w, "shutdown failed", 503)
 			return
+		}
+		if err := s.FlushTelemetry(ctx); err != nil {
+			log.Printf("final telemetry report failed: %v", err)
 		}
 		writeJSON(w, 200, map[string]bool{"ok": true})
 		if s.Shutdown != nil {
@@ -447,7 +474,7 @@ func (s *Server) socket(w http.ResponseWriter, r *http.Request) {
 	p := &Peer{ID: uuid.NewString(), Ticket: ticket, Out: make(chan []byte, 128)}
 	p.Kick = func() { p.Closed.Store(true); cancel(); _ = conn.CloseNow() }
 	defer p.Kick()
-	session := &liveSession{peer: p, conn: conn}
+	session := &liveSession{peer: p, conn: conn, started: time.Now()}
 	s.mu.Lock()
 	if old := s.sessions[ticket.User]; old != nil {
 		closeSession(old, gamewire.CloseReplaced, "Aberto em outra janela.")
@@ -465,6 +492,10 @@ func (s *Server) socket(w http.ResponseWriter, r *http.Request) {
 		_ = conn.Close(websocket.StatusTryAgainLater, "Quarto indisponível.")
 		return
 	}
+	session.joined.Store(true)
+	s.sessionStarted(session)
+	ended := "closed"
+	defer func() { s.sessionEnded(session, ended) }()
 	if status.Mode != gamewire.ModeOpen {
 		select {
 		case p.Out <- statusMessage(status):
@@ -529,18 +560,21 @@ func (s *Server) socket(w http.ResponseWriter, r *http.Request) {
 	for {
 		kind, data, err = conn.Read(ctx)
 		if err != nil {
+			ended = sessionEnd(err)
 			return
 		}
 		now := time.Now()
 		tokens = min(20, tokens+now.Sub(last).Seconds()*10)
 		last = now
 		if tokens < 1 {
+			session.setReason("flood")
 			_ = conn.Close(websocket.StatusPolicyViolation, "Muitos comandos.")
 			return
 		}
 		tokens--
 		var command gamewire.Command
 		if kind != websocket.MessageText || json.Unmarshal(data, &command) != nil || len(command.RequestID) > 80 {
+			session.setReason("invalid")
 			_ = conn.Close(websocket.StatusPolicyViolation, "Comando inválido.")
 			return
 		}

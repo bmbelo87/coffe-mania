@@ -118,9 +118,10 @@ func lockedPath(path string) bool {
 		return false
 	}
 	// Joining the waitlist, recovering a password or deleting an account also stays open;
-	// creating an account (signup) does not.
+	// creating an account (signup) does not. Telemetry stays open so the disconnect a
+	// maintenance causes still reaches the dashboard.
 	for _, open := range []string{"/api/coffe/session", "/api/coffe/status", "/api/coffe/admin", "/api/coffe/game-internal",
-		"/api/coffe/access", "/api/coffe/waitlist", "/api/coffe/invite", "/api/coffe/password", "/api/coffe/account"} {
+		"/api/coffe/access", "/api/coffe/waitlist", "/api/coffe/invite", "/api/coffe/password", "/api/coffe/account", "/api/coffe/telemetry"} {
 		if path == open || strings.HasPrefix(path, open+"/") {
 			return false
 		}

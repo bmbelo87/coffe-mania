@@ -3,6 +3,7 @@ import type { CookingSnapshot } from './cooking';
 import type { RoomUnit } from './room-inventory';
 import type { Tile } from '../world/iso';
 import type { JuiceStock } from './juices';
+import { trackDisconnect } from '../core/telemetry';
 import { GAME_VERSION } from '../core/version';
 
 /** Prato de um balcão; `counterId` é a unidade do balcão no inventário (vazio em pratos antigos). */
@@ -135,6 +136,7 @@ export class RoomRealtime {
       socket.onclose = (closed) => {
         clearTimeout(timeout);
         if (generation !== this.generation) return;
+        trackDisconnect(closed.code);
         const final = FINAL_CLOSES[closed.code];
         // Without the status listeners: "Reconectando…" would be false under the final notice.
         if (final) { this.connected = false; this.pingMs = null; this.rejectPending('Conexão encerrada.'); this.finish(final); return; }

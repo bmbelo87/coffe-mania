@@ -204,3 +204,15 @@ type Latency struct {
 	Type  string  `json:"type"`
 	RTTMs float64 `json:"rttMs"`
 }
+
+// TelemetryEvent is a play session fact the room service reports to the telemetry
+// (database/telemetry.go): "session_start" when a connection joins a café and "session_end"
+// with its duration in seconds and how it ended. Session is the connection's id; At is Unix ms.
+type TelemetryEvent struct {
+	Name    string  `json:"name"`
+	User    string  `json:"user"`
+	Session string  `json:"session"`
+	Label   string  `json:"label,omitempty"`
+	Seconds float64 `json:"seconds,omitempty"`
+	At      int64   `json:"at"`
+}

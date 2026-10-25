@@ -134,6 +134,7 @@ func persistenceOperation(app core.App, op gamewire.Operation) gamewire.Result {
 		if err = hireWaiter(app, op.Owner, command.CandidateID); err != nil {
 			return fail(409, err.Error())
 		}
+		trackEvent(app, op.Owner, "waiter_hired", "", nil)
 		body, err = snapshotWaiters(app, op.Owner)
 
 	case "juice_unlock", "juice_prepare", "juice_serve", "juice_recharge":
@@ -484,6 +485,7 @@ func registerGameBridge(e *core.ServeEvent) error {
 		if err != nil {
 			return err
 		}
+		trackEvent(r.App, owner, "customer_unhappy", "", nil)
 		business, err := ownerBusiness(r.App, owner)
 		if err != nil {
 			return err
@@ -547,6 +549,7 @@ func consumePortion(tx core.App, owner, foodID string) error {
 		state.Set("gold", state.GetInt64("gold")+recipe.ProfitGold)
 	}
 	playerstate.GrantExperience(state, experience)
+	tagLedger(state, "cliente", food.GetString("recipe_id"))
 	playerstate.AdjustPopularity(state, playerstate.SatisfiedCustomerTenths)
 	return tx.Save(state)
 }

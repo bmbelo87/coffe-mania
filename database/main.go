@@ -27,6 +27,7 @@ func main() {
 	app := pocketbase.New()
 	playerstate.RegisterValidation(app)
 	registerAccountHooks(app)
+	registerLedgerHooks(app)
 	migratecmd.MustRegister(app, app.RootCmd, migratecmd.Config{Automigrate: false})
 	app.OnServe().BindFunc(func(e *core.ServeEvent) error {
 		e.InstallerFunc = nil
@@ -42,6 +43,9 @@ func main() {
 		registerAppearanceRoutes(e)
 		registerNpcAppearanceRoutes(e)
 		if err := registerGameBridge(e); err != nil {
+			return err
+		}
+		if err := registerTelemetry(e); err != nil {
 			return err
 		}
 		startRoomActivityWatchdog(e.App)
@@ -118,7 +122,7 @@ func registerPageRoutes(e *core.ServeEvent, publicDir string) {
 	e.Router.GET("/play", play)
 	e.Router.GET("/play/{$}", play)
 	// Pages of the access flow; their secrets travel in the URL fragment, never to the server.
-	for _, path := range []string{"/convite", "/lista/confirmar", "/senha", "/conta", "/termos", "/privacidade", "/conduta"} {
+	for _, path := range []string{"/convite", "/lista/confirmar", "/senha", "/conta", "/termos", "/privacidade", "/conduta", "/admin/metricas"} {
 		e.Router.GET(path, page)
 	}
 	// Public art can be cached independently; only pages and game APIs carry user state.

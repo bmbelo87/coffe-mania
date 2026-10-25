@@ -29,9 +29,11 @@ func main() {
 	storage := &gameruntime.HTTPStorage{URL: backend, Secret: secret}
 	manager := gameruntime.New(storage, gameruntime.Options{})
 	runtimeServer := gameruntime.NewServer(manager, secret)
+	runtimeServer.ReportTelemetry = storage.Telemetry
 	statusCtx, stopStatus := context.WithCancel(context.Background())
 	defer stopStatus()
 	go runtimeServer.WatchStatus(statusCtx, storage.Status)
+	go runtimeServer.WatchTelemetry(statusCtx)
 	server := &http.Server{Addr: addr, Handler: runtimeServer.Handler(), ReadHeaderTimeout: 5 * time.Second, IdleTimeout: 60 * time.Second}
 	runtimeServer.Shutdown = func() {
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
@@ -44,8 +46,12 @@ func main() {
 		<-stopped
 		ctx, cancel := context.WithTimeout(context.Background(), 35*time.Second)
 		defer cancel()
+		runtimeServer.EndSessions("shutdown")
 		if err := manager.Close(ctx); err != nil {
 			log.Printf("Final room save failed: %v", err)
+		}
+		if err := runtimeServer.FlushTelemetry(ctx); err != nil {
+			log.Printf("Final telemetry report failed: %v", err)
 		}
 		_ = server.Shutdown(ctx)
 	}()

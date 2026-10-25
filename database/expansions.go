@@ -228,6 +228,7 @@ func buyRoomStep(app core.App, userID, action string, command roomCommand,
 		}
 		state.Set("cash", state.GetInt64("cash")-cash)
 		state.Set("gold", state.GetInt64("gold")-gold)
+		tagLedger(state, "expansao", command.Payment)
 		if err := tx.Save(state); err != nil {
 			return err
 		}

@@ -63,6 +63,11 @@ func registerPlayerStateRoutes(e *core.ServeEvent) {
 		if err != nil {
 			return r.InternalServerError("Não foi possível salvar o nome do café.", err)
 		}
+		label := "rename"
+		if command.Initial {
+			label = "first"
+		}
+		trackEvent(r.App, user.Id, "cafe_named", label, nil)
 		return r.JSON(http.StatusOK, snapshot)
 	}).Bind(apis.BodyLimit(2048)).BindFunc(sameOrigin)
 

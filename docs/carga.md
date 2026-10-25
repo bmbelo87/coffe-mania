@@ -59,6 +59,23 @@ Nenhum erro além das caminhadas recusadas: os robôs sorteiam destinos sobre me
 
 O que mais pesa é a subida rápida de logins (hash de senha), não o jogo em si.
 
+## Com a telemetria ligada (24/10/2026, versão 0.6.2)
+
+Mesma máquina, 300 robôs entrando em 60 s e mantidos por 120 s, com o painel de métricas e todos os eventos ligados. A diferença para a rodada anterior: o build do cliente não era servido, e os binários rodaram direto, sem o observador do modo dev, que reinicia os servidores quando um arquivo `.go` muda.
+
+| Medida | p50 | p95 | p99 | Máx |
+| --- | --- | --- | --- | --- |
+| Comando no quarto (9.853) | < 1 ms | < 1 ms | 1 ms | 3 ms |
+| Passo de simulação (222 mil) | 0,5 ms | 1 ms | 2 ms | 64 ms |
+| Entrada no quarto | 23 ms | 53 ms | 77 ms | 119 ms |
+| Estado do jogador (HTTP) | 1 ms | 1 ms | 2 ms | 5 ms |
+
+- Nenhum erro além das caminhadas recusadas.
+- Nenhum evento descartado.
+- A telemetria não aparece nos tempos: o passo de simulação e os comandos ficaram iguais aos da rodada sem ela.
+
+**Reinícios no meio do teste.** Uma primeira tentativa rodou com o observador de arquivos ligado. Os servidores reiniciaram três vezes durante o teste, e os robôs tiveram erros de conexão até reconectar. Desse episódio saiu uma correção: o servidor do jogo agora marca as sessões abertas como encerradas por atualização antes de fechar os quartos, e o PocketBase grava o lote de sessões antes de confirmar o recebimento. Assim a sessão não se perde mesmo quando o processo é derrubado à força logo depois, como faz o `taskkill /F` do launcher.
+
 ## Limites do teste
 
 - Os robôs não cozinham, não compram e não abrem a conexão SSE do estado do jogador. As rotas de economia foram medidas só pela consulta de estado e pelas operações internas dos NPCs.

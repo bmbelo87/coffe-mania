@@ -121,14 +121,19 @@ Ainda sem o painel de admin (fase A2), tudo isto se faz pelo dashboard (coleçã
 ## Backups
 
 - **PocketBase**: backup diário (`COFFE_BACKUP_CRON`), guardando os 7 últimos (`COFFE_BACKUP_KEEP`) em `pb_data/backups`. Ele protege contra erros de operação, não contra a perda da máquina.
-- **Litestream** (`deploy/litestream.yml`): copia `data.db` continuamente para um armazenamento S3 (R2 ou B2), com uma semana de histórico.
+- **Litestream** (`deploy/litestream.yml`): copia continuamente `data.db` (o jogo) e `auxiliary.db` (a telemetria e os logs) para um armazenamento S3 (R2 ou B2), com uma semana de histórico.
 - **Restauro** (teste antes do lançamento, e depois a cada mês):
   ```sh
   systemctl stop coffe-game coffe-database
   litestream restore -o /var/lib/coffe/pb_data/data.db s3://cafe-mania-backup/data.db
-  chown coffe:coffe /var/lib/coffe/pb_data/data.db
+  litestream restore -o /var/lib/coffe/pb_data/auxiliary.db s3://cafe-mania-backup/auxiliary.db
+  chown coffe:coffe /var/lib/coffe/pb_data/data.db /var/lib/coffe/pb_data/auxiliary.db
   systemctl start coffe-database coffe-game
   ```
+
+## Métricas e monitor
+
+O painel de métricas fica em `https://dominio/admin/metricas`, só para contas `admin`. Como funciona e o que é coletado: [telemetria.md](telemetria.md). Configure também um monitor externo de disponibilidade para `/api/health` e `/game/health`, com alerta por email.
 
 ## Administração pelo túnel SSH
 
@@ -150,6 +155,7 @@ Com o túnel aberto, o dashboard fica em http://127.0.0.1:8090/_/. Nunca abra a 
 - [ ] Manutenção programada: a faixa aparece, o jogador sai na hora marcada e a equipe continua.
 - [ ] Suspensão derruba a sessão aberta e mostra o motivo no login.
 - [ ] Atualização com jogadores conectados: reconectam, e veem "Nova versão" quando a versão muda.
-- [ ] O restauro do Litestream funciona.
+- [ ] O restauro do Litestream funciona, para os dois bancos.
+- [ ] `/admin/metricas` abre para a conta admin e recusa uma conta `player`; o monitor externo alerta quando o serviço cai.
 - [ ] `govulncheck ./database/... ./game-server/... ./shared/...` e `npm audit` limpos.
 - [ ] Teste de carga contra o servidor de teste (não o de produção) com o tamanho da próxima onda.

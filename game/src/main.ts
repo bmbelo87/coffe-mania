@@ -35,6 +35,9 @@ async function start(): Promise<void> {
       window.addEventListener('storage', (event) => {
         if (event.key === 'coffe-auth-change') void checkAccess();
       });
+    } else if (window.location.pathname.replace(/\/$/, '') === '/admin/metricas') {
+      const { renderMetricsPage } = await import('./admin/MetricsPage');
+      await renderMetricsPage(host, session);
     } else if (ACCESS_PATHS.includes(window.location.pathname.replace(/\/$/, ''))) {
       const { renderAccessPage } = await import('./auth/AccessPages');
       await renderAccessPage(host, window.location.pathname.replace(/\/$/, ''), session);

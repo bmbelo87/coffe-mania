@@ -174,6 +174,7 @@ func startCooking(app core.App, userID, stoveID, recipeID string, now types.Date
 			return errRoomGold
 		}
 		state.Set("gold", state.GetInt64("gold")-recipe.CostGold)
+		tagLedger(state, "cozinhar", recipe.ID)
 		// The recipe's XP goes with the dish to the counter and is paid as customers eat it.
 		if err := txApp.Save(state); err != nil {
 			return err

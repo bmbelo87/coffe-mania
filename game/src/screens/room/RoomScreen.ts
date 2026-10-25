@@ -35,6 +35,7 @@ import { roomModelItems, type RoomExpansionStep, type RoomSnapshot, type RoomInv
 import { RoomRealtime, type RoomEvent, type SharedActor, type SharedFood, type SharedWorld } from '../../game/room-realtime';
 import type { RecipeArt } from '../../game/recipes';
 import { WardrobeScreenModal, type WardrobeScreenTextures } from './WardrobeScreenModal';
+import { trackScreen } from '../../core/telemetry';
 import { SettingsModal, type SettingsModalOptions } from '../../ui/SettingsModal';
 import { DEFAULT_AUDIO_PREFERENCES, sanitizeAudioPreferences, type AudioPreferences } from '../../audio/preferences';
 import { findPath } from '../../world/PathFinder';
@@ -671,7 +672,7 @@ export class RoomScreen implements Screen {
           onAddFriend: () => {
             if (this.isModalOpen || this.storeBar?.isOpen) return;
             if (options.onAddFriend) options.onAddFriend();
-            else this.socialInviteModal?.open();
+            else { trackScreen('invite'); this.socialInviteModal?.open(); }
           },
         });
         this.socialBar.view.position.set(left, top);
@@ -2135,6 +2136,7 @@ export class RoomScreen implements Screen {
     }
     if (!this.cookingClient) {
       this.selectedStove = selected;
+      trackScreen('cook');
       this.cookModal?.open();
       return;
     }
@@ -2156,6 +2158,7 @@ export class RoomScreen implements Screen {
         return;
       }
       this.selectedStove = selected;
+      trackScreen('cook');
       this.cookModal?.open();
     }).catch((error: unknown) => console.warn('[cooking] fogão indisponível', error))
       .finally(() => { this.checkingCookScreen = false; });
@@ -2174,6 +2177,7 @@ export class RoomScreen implements Screen {
     this.spiceStove = stove;
     const job = this.roomSnapshot?.canEdit !== false && stove?.instanceId
       ? this.occupiedStoves.get(stove.instanceId) ?? null : null;
+    trackScreen('spices');
     this.spiceModal.open(job);
     this.updateCookingCallout();
   }
@@ -2183,6 +2187,7 @@ export class RoomScreen implements Screen {
     this.closeStoveActions();
     // Mount last so the shared popup/backdrop also covers the HUD and action bar.
     this.view.addChild(this.waiterModal.view);
+    trackScreen('waiters');
     void this.waiterModal.open();
   }
 
@@ -2194,6 +2199,7 @@ export class RoomScreen implements Screen {
     this.hovered = null;
     this.highlight.clear();
     this.floor.cursor = 'pointer';
+    trackScreen('wardrobe');
     this.wardrobeModal.open();
   }
 
@@ -2211,6 +2217,7 @@ export class RoomScreen implements Screen {
     this.highlight.clear();
     this.target.clear();
     this.floor.cursor = 'pointer';
+    trackScreen('store');
     this.storeBar.open();
   }
 
@@ -2372,6 +2379,7 @@ export class RoomScreen implements Screen {
   private async buyExpansionFromSign(): Promise<void> {
     const offer = this.roomSnapshot?.expansion, state = this.playerState ?? this.roomSnapshot?.playerState;
     if (!this.roomSnapshot || !offer || !state || !this.roomClient || !this.expansionModal || this.expanding || this.isModalOpen) return;
+    trackScreen('expansion');
     const payment = await this.expansionModal.ask(offer, state.level);
     if (!payment || this.destroyed || !this.roomSnapshot) return;
     this.expanding = true;
@@ -2465,6 +2473,7 @@ export class RoomScreen implements Screen {
       this.showNotice('O tamanho máximo de um pátio é o mesmo que o do Café. Expanda seu Café primeiro.');
       return;
     }
+    trackScreen('expansion');
     const payment = await this.expansionModal.ask(offer, state.level);
     if (!payment || this.destroyed || !this.roomSnapshot) return;
     this.expanding = true;
@@ -2488,7 +2497,7 @@ export class RoomScreen implements Screen {
     const size = `${step.floorX}x${step.floorY}`;
     if (!next) { this.roomStore?.showMessage(`Compre antes a expansão ${offer.floorX}x${offer.floorY}.`); return; }
     let payment: ExpansionPayment | null;
-    if (currency === 'gold' && state.level < step.level) payment = await this.expansionModal.ask(offer, state.level);
+    if (currency === 'gold' && state.level < step.level) { trackScreen('expansion'); payment = await this.expansionModal.ask(offer, state.level); }
     else {
       const price = currency === 'cash' ? `${step.priceCash} Granas` : `${step.priceGold.toLocaleString('pt-BR')} Ouros`;
       payment = await this.sellModal.ask(`Você quer mesmo expandir seu Café para ${size} por ${price}?`) ? currency : null;
@@ -2685,6 +2694,7 @@ export class RoomScreen implements Screen {
     if (this.cookCallout) this.cookCallout.view.visible = false;
     if (this.readyCallout) this.readyCallout.view.visible = false;
     if (this.spoiledCallout) this.spoiledCallout.view.visible = false;
+    trackScreen('settings');
     this.settingsModal?.open();
   }
 
@@ -2714,6 +2724,7 @@ export class RoomScreen implements Screen {
   /** A van da barra de ações abre a janela de encomendas com o estado mais recente do servidor. */
   private openSupplyOrders(): void {
     if (this.isModalOpen || this.storeBar?.isOpen || !this.supplyModal) return;
+    trackScreen('supplies');
     this.supplyModal.open(this.supplyPlatform?.snapshot);
     void this.supplyPlatform?.refresh();
   }
@@ -2796,7 +2807,7 @@ export class RoomScreen implements Screen {
     this.itemViews.set(item, views);
     if(item.kind==='juice_machine')for(const view of views){
       view.eventMode='static';view.cursor='pointer';
-      view.on('pointertap',(event:FederatedPointerEvent)=>{if(this.storeBar?.isOpen||this.dragCancelledTap||this.isModalOpen||this.roomSnapshot?.canEdit===false||!item.inventoryUnitId)return;event.stopPropagation();void this.juiceModal?.open(item.inventoryUnitId);});
+      view.on('pointertap',(event:FederatedPointerEvent)=>{if(this.storeBar?.isOpen||this.dragCancelledTap||this.isModalOpen||this.roomSnapshot?.canEdit===false||!item.inventoryUnitId)return;event.stopPropagation();trackScreen('juices');void this.juiceModal?.open(item.inventoryUnitId);});
       view.on('pointerover',()=>{
         if(this.isModalOpen||this.storeBar?.isOpen)return;const stock=this.sharedJuices.find(value=>value.machineId===item.inventoryUnitId);
         this.juiceTooltip?.destroy();this.juiceTooltip=undefined;if(!this.hoverBalloonTexture)return;

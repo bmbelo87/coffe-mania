@@ -211,6 +211,7 @@ func mutateSupplies(app core.App, owner, action string, body supplyCommand, now 
 				return errSupplyGold
 			}
 			state.Set("gold", state.GetInt64("gold")-kind.Gold)
+			tagLedger(state, "encomenda", kind.ID)
 			collection, err := tx.FindCollectionByNameOrId("supply_orders")
 			if err != nil {
 				return err
@@ -229,6 +230,7 @@ func mutateSupplies(app core.App, owner, action string, body supplyCommand, now 
 				return errSupplyGranas
 			}
 			state.Set("cash", state.GetInt64("cash")-kind.Rush)
+			tagLedger(state, "encomenda_pressa", kind.ID)
 			order.Set("arrives_at", now)
 		case "collect":
 			if at.Before(order.GetDateTime("arrives_at").Time()) {
@@ -269,6 +271,7 @@ func mutateSupplies(app core.App, owner, action string, body supplyCommand, now 
 				return errSupplyGranas
 			}
 			state.Set("cash", state.GetInt64("cash")-supplySaveGranas)
+			tagLedger(state, "encomenda_salvar", order.GetString("kind"))
 			// A saved box is as fresh as one that just arrived.
 			order.Set("arrives_at", now)
 		case "discard":

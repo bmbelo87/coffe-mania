@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"coffe-mania/database/playerstate"
@@ -417,6 +418,7 @@ func mutateRoom(app core.App, userID, action string, command roomCommand) (roomS
 				unit.Set("stove_id", stove.Id)
 			}
 			state.Set("gold", state.GetInt64("gold")-item.PriceGold)
+			tagLedger(state, "loja", strconv.Itoa(item.ID))
 			if err := tx.Save(state); err != nil {
 				return err
 			}
@@ -472,6 +474,7 @@ func mutateRoom(app core.App, userID, action string, command roomCommand) (roomS
 				return err
 			}
 			state.Set("gold", state.GetInt64("gold")+price)
+			tagLedger(state, "venda", strconv.Itoa(item.ID))
 			if err := tx.Save(state); err != nil {
 				return err
 			}

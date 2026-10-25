@@ -91,6 +91,7 @@ func purchaseSpice(app core.App, userID, spiceID, requestKey string) error {
 		}
 		stock[spiceID]++
 		state.Set("cash", state.GetInt64("cash")-chosen.Granas)
+		tagLedger(state, "tempero", spiceID)
 		state.Set("spice_inventory", stock)
 		if err := tx.Save(state); err != nil {
 			return err

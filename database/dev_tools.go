@@ -301,6 +301,7 @@ func mutateDevResource(app core.App, user string, command devCommand) error {
 	if err != nil {
 		return err
 	}
+	tagLedger(state, "dev", command.Resource)
 	if command.Command == "refill" {
 		state.Set("energy_current", state.GetInt64("energy_max"))
 		state.Set("crates_current", state.GetInt64("crates_max"))

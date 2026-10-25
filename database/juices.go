@@ -194,6 +194,7 @@ func mutateJuice(app core.App, owner, action string, body juiceCommand, now type
 				return errors.New("Você precisa de 20 caféGranas para contratar o chaveiro.")
 			}
 			state.Set("cash", state.GetInt64("cash")-20)
+			tagLedger(state, "suco_destravar", "")
 			row.Set("unlocked", true)
 		case "juice_recharge":
 			if state.GetInt64("energy_current") >= state.GetInt64("energy_max") {
@@ -203,6 +204,7 @@ func mutateJuice(app core.App, owner, action string, body juiceCommand, now type
 				return errors.New("Você precisa de 4 caféGranas para recarregar.")
 			}
 			state.Set("cash", state.GetInt64("cash")-4)
+			tagLedger(state, "recarga_energia", "suco")
 			state.Set("energy_current", state.GetInt64("energy_max"))
 			row.Set("energy_at", now)
 		case "juice_prepare":
@@ -239,6 +241,7 @@ func mutateJuice(app core.App, owner, action string, body juiceCommand, now type
 			mastery[recipe.ID]++
 			state.Set("gold", state.GetInt64("gold")+recipe.Gold)
 			playerstate.GrantExperience(state, recipe.XP)
+			tagLedger(state, "suco", recipe.ID)
 			playerstate.AdjustPopularity(state, recipe.PopularityTenths)
 		default:
 			return errJuiceConflict

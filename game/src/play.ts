@@ -53,6 +53,7 @@ import { DEFAULT_LOADING_LAYOUT, TIMING } from './screens/loading/layout';
 import { FullscreenButton } from './ui/FullscreenButton';
 import { loadStoredLayout } from './ui/dev-settings';
 import { renderSessionError } from './auth/LoginPage';
+import { startTelemetry, trackFrame, trackLoad } from './core/telemetry';
 
 /** Liga os avisos do servidor (manutenção, outra janela, nova versão) antes da conexão. */
 function createRoomRealtime(roomId: string, staff: boolean): RoomRealtime {
@@ -67,6 +68,7 @@ async function boot(): Promise<void> {
   const host = document.getElementById('app');
   if (!host) throw new Error('#app não encontrado no index.html');
 
+  startTelemetry();
   const flags = readBootFlags(window.location.search);
   const reducedMotion = prefersReducedMotion() || flags.forceReducedMotion;
 
@@ -260,6 +262,7 @@ async function boot(): Promise<void> {
     });
     room.bindWheelElement(app.canvas);
     screens.show(room);
+    trackLoad();
     const stopPlayerState = subscribePlayerState((state) => room.setPlayerState(state));
     room.view.once('destroyed', stopPlayerState);
     if (import.meta.hot) import.meta.hot.dispose(stopPlayerState);
@@ -327,6 +330,7 @@ async function boot(): Promise<void> {
   app.ticker.add((ticker) => {
     paced.advance(ticker.deltaMS);
     screens.update(ticker.deltaMS);
+    trackFrame(ticker.deltaMS);
     secondLoading?.update(ticker.deltaMS);
   });
 

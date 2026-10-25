@@ -16,6 +16,44 @@ Logo depois de um lote, as correções usam `0.5.01`, `0.5.02`… A ordem de lan
 
 Seções usadas: **Adicionado**, **Alterado**, **Corrigido**, **Removido** e **Observações** (limites conhecidos e o que ficou para depois).
 
+## [0.6.2] — Telemetria (2026-10-24)
+
+Fase A3 do alpha fechado: telemetria própria, extrato da economia e painel de métricas. Nada vai para serviços de terceiros.
+
+### Adicionado
+
+- **Painel `/admin/metricas`**, só para contas admin. Filtros de 7, 30 ou 90 dias, e cada gráfico tem tabela.
+  - **Agora:** jogadores e cafés online, tempo de simulação e jogadores online nas últimas 24 h.
+  - **Jogadores:** ativos no dia, em 7 e em 30 dias, contas novas e sessões por dia.
+  - **Retenção** em 1, 7 e 30 dias por onda de convite.
+  - **Funil:** convite → conta → nome do café → primeiro prato → primeiro cliente → nível 2 → nível 5.
+  - **Uso:** telas, receitas, itens, encomendas, sucos, temperos e expansões.
+  - **Economia:** de onde vêm e para onde vão os caféOuros e as caféGranas.
+  - **Saúde:** carregamento, FPS, erros de JavaScript, desconexões e como as sessões terminaram.
+  - **Lista de espera.**
+- **Extrato da economia.** Cada mudança de caféGranas, caféOuros, XP e nível fica registrada com o motivo e a referência (receita, item, encomenda…), venha de onde vier, inclusive do painel do PocketBase. O prêmio de nível aparece separado do ganho da ação. Uma mudança sem motivo aparece como "outro", e ganhos estranhos ficam visíveis.
+- **Eventos do servidor:**
+  - acesso: lista de espera, convite, cadastro, login e troca de senha;
+  - jogo: nome do café, garçom contratado, cliente insatisfeito e subida de nível;
+  - sessões de jogo, informadas pelo servidor do jogo: início, fim, duração e motivo da saída.
+- **Eventos do cliente**, numa lista fechada: tempo até o café aparecer, FPS médio por minuto, erros de JavaScript, códigos de desconexão e telas abertas.
+- A cada 5 minutos fica registrado quantos jogadores e cafés estão online.
+- `docs/telemetria.md`: o que é coletado, por quanto tempo, como auditar o extrato de uma conta e como instrumentar uma feature nova.
+- Testes Go do extrato, da lista fechada de eventos, dos resumos e da retenção, da exclusão de dados de uma conta e dos motivos de fim de sessão.
+
+### Alterado
+
+- **Onde ficam os dados:** a telemetria fica no `auxiliary.db` do PocketBase, separado do banco do jogo, e é gravada em lotes a cada 5 s.
+- **Por quanto tempo:** os eventos brutos ficam 90 dias; os resumos diários, os dias de atividade e os marcos do funil ficam guardados.
+- **Exportar e excluir a conta** (LGPD): a exportação passa a incluir a telemetria da conta, e a exclusão a apaga.
+- **Backup:** o Litestream também copia o `auxiliary.db`.
+
+### Observações
+
+- **Marcos sem histórico:** os marcos de cozinhar e servir só existem a partir desta versão; contas antigas não têm esse histórico.
+- **Monitor externo:** um monitor de disponibilidade (UptimeRobot, Better Stack) depende de uma conta do responsável; `docs/producao.md` diz o que configurar.
+- **Teste de carga com a telemetria ligada** (300 robôs): o passo de simulação e os comandos ficaram iguais aos da rodada sem ela (`docs/carga.md`).
+
 ## [0.6.1] — Segurança e carga (2026-10-24)
 
 Fase A4 do alpha fechado: proteção das rotas, limites de abuso e teste de carga com 300 jogadores.

@@ -58,6 +58,13 @@ func exportAccount(app core.App, user *core.Record) (map[string]any, error) {
 	if entry, err := app.FindFirstRecordByData("waitlist", "email", user.Email()); err == nil {
 		data["waitlist"] = entry.PublicExport()
 	}
+	telemetry, err := exportTelemetry(app, user.Id)
+	if err != nil {
+		return nil, err
+	}
+	if telemetry != nil {
+		data["telemetry"] = telemetry
+	}
 	return map[string]any{
 		"exportedAt": time.Now().UTC().Format(time.RFC3339),
 		"account": map[string]any{
@@ -71,7 +78,7 @@ func exportAccount(app core.App, user *core.Record) (map[string]any, error) {
 }
 
 // deleteAccount removes the account, everything that cascades from it (café, inventory,
-// progress…) and its waitlist entry.
+// progress…), its waitlist entry and its telemetry rows.
 func deleteAccount(app core.App, user *core.Record) error {
 	err := app.RunInTransaction(func(tx core.App) error {
 		if entry, err := tx.FindFirstRecordByData("waitlist", "email", user.Email()); err == nil {
@@ -83,6 +90,9 @@ func deleteAccount(app core.App, user *core.Record) error {
 	})
 	if err == nil {
 		kickUser(app, user.Id)
+		if err := forgetTelemetryUser(app, user.Id); err != nil {
+			app.Logger().Error("Não foi possível apagar a telemetria da conta excluída", "user", user.Id, "error", err)
+		}
 	}
 	return err
 }

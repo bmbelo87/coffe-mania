@@ -37,6 +37,8 @@ Legenda:
 | `POST /api/coffe/password/forgot`, `/password/reset` | — | sim | 4 KB | o link vale uma vez | 5/min |
 | `/api/coffe/account/*` (senha, exportar, excluir) | sim | sim | 4 KB / 1 KB | — | 10/min |
 | `POST /api/coffe/admin/*` | admin | sim | 2 KB | estado final | — |
+| `GET /api/coffe/admin/metrics` | admin | — | — | leitura | — |
+| `POST /api/coffe/telemetry` | sim | sim | 16 KB, até 60 eventos | lista fechada; o resto é descartado | — |
 | `GET /api/coffe/player-state`, `/room`, `/cooking`, `/juices`, `/supplies`, `/waiters`, `/npc-appearance` | sim | — | — | leitura | — |
 | `POST /api/coffe/room/*` (comprar, mover, guardar, vender, expandir) | sim, dono | sim | 2 KB | `requestId` | — |
 | `POST /api/coffe/cooking/*`, `/cooking/spices/purchase` | sim, dono | sim | 1 KB | `requestId` | — |
@@ -45,7 +47,7 @@ Legenda:
 | `POST /api/coffe/game-ticket` | sim | sim | 1 KB | ticket novo, de uso único | — |
 | `POST /api/realtime` (assinatura SSE) | sim | sim | — | — | — |
 | `/api/coffe/dev/*` | equipe e servidor com dev | sim | 2 KB | recibo por `requestId` | — |
-| `/api/coffe/game-internal/*` | chave secreta | — | 4–128 KB | `requestId` / estado | sem limite; bloqueada no Caddy |
+| `/api/coffe/game-internal/*` (inclui `/telemetry`, até 256 KB) | chave secreta | — | 4–256 KB | `requestId` / estado | sem limite; bloqueada no Caddy |
 
 O limite geral por sessão ou por IP vale para todas as rotas acima, menos as internas.
 

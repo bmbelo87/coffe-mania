@@ -241,6 +241,9 @@ func joinWaitlist(app core.App, request waitlistRequest, base string, now time.T
 		}
 		return apis.NewApiError(http.StatusServiceUnavailable, "Não foi possível enviar o email agora. Tente de novo em alguns minutos.", nil)
 	}
+	if created {
+		trackEvent(app, "", "waitlist_join", "", nil)
+	}
 	return nil
 }
 
@@ -259,6 +262,7 @@ func confirmWaitlist(app core.App, token string, now time.Time) (int, error) {
 	if err = app.Save(entry); err != nil {
 		return 0, err
 	}
+	trackEvent(app, "", "waitlist_confirm", "", nil)
 	var position int
 	err = app.DB().NewQuery("SELECT COUNT(*) FROM waitlist WHERE status = 'confirmed' AND confirmed_at <= {:at}").
 		Bind(dbx.Params{"at": entry.GetDateTime("confirmed_at").String()}).Row(&position)
@@ -295,6 +299,9 @@ func issueInvite(app core.App, email string, wave int, source, createdBy string,
 		}
 		return tx.Save(invite)
 	})
+	if err == nil {
+		trackEvent(app, "", "invite_sent", source, map[string]any{"wave": wave})
+	}
 	return code, invite, err
 }
 
@@ -394,6 +401,9 @@ func signup(app core.App, request signupRequest, now time.Time) (*core.Record, e
 		}
 		return nil
 	})
+	if err == nil {
+		trackEvent(app, user.Id, "signup", strconv.Itoa(user.GetInt("wave")), nil)
+	}
 	return user, err
 }
 
@@ -464,7 +474,11 @@ func resetPassword(app core.App, token, password, confirm string) error {
 	if err = checkPassword(password, confirm, user.Email()); err != nil {
 		return err
 	}
-	return setPassword(app, user, password)
+	if err = setPassword(app, user, password); err != nil {
+		return err
+	}
+	trackEvent(app, user.Id, "password_reset", "", nil)
+	return nil
 }
 
 // apiError keeps validation messages and hides internal failures.
