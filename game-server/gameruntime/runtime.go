@@ -10,6 +10,7 @@ import (
 	"log"
 	"math"
 	"math/rand/v2"
+	"slices"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -163,7 +164,7 @@ func (m *Manager) get(ctx context.Context, id string) (*room, error) {
 			delete(m.rooms, id)
 			m.wg.Done()
 		} else {
-			r := &room{manager: m, id: id, epoch: uuid.NewString(), world: seed.World, grid: newGrid(seed.World), actors: map[string]*entity{}, peers: map[string]*Peer{}, seats: map[string]string{}, looks: seed.Looks, business: seed.Business, tasks: make(chan task, 256), done: make(chan struct{}), stop: make(chan struct{}), idleAt: time.Now(), spawnAt: time.Now().Add(time.Second)}
+			r := &room{manager: m, id: id, epoch: uuid.NewString(), world: cloneWorld(seed.World), grid: newGrid(seed.World), actors: map[string]*entity{}, peers: map[string]*Peer{}, seats: map[string]string{}, looks: seed.Looks, business: seed.Business, tasks: make(chan task, 256), done: make(chan struct{}), stop: make(chan struct{}), idleAt: time.Now(), spawnAt: time.Now().Add(time.Second)}
 			r.occupancy = map[Tile]map[string]bool{}
 			r.actorTiles = map[string][]Tile{}
 			r.frozenAt = time.Now()
@@ -173,6 +174,7 @@ func (m *Manager) get(ctx context.Context, id string) (*room, error) {
 				}
 				a.Kind = "npc"
 				a.Move = nil
+				sanitizeBeverageRestore(&a)
 				if a.Action != nil {
 					action := *a.Action
 					action.StartedAt = r.frozenAt.UnixMilli() + a.ActionRemaining - action.Duration
@@ -294,6 +296,10 @@ func (m *Manager) Operate(ctx context.Context, op gamewire.Operation) (gamewire.
 			body, _ := json.Marshal(map[string]string{"message": message})
 			return gamewire.Result{Status: 409, Body: body}
 		}
+		if message := r.validateCoffeeOperation(&op); message != "" {
+			body, _ := json.Marshal(map[string]string{"message": message})
+			return gamewire.Result{Status: 409, Body: body}
+		}
 		var stoveBody struct {
 			StoveID string `json:"stoveId"`
 		}
@@ -321,6 +327,7 @@ func (m *Manager) Operate(ctx context.Context, op gamewire.Operation) (gamewire.
 				}
 			}
 			r.finishJuiceOperation(op, time.Now())
+			r.finishCoffeeOperation(op, time.Now())
 			if result.Business != nil {
 				r.business = *result.Business
 			}
@@ -554,6 +561,11 @@ func (r *room) sleep(now time.Time) error {
 	for _, a := range r.actors {
 		if !autonomous(a) {
 			continue
+		}
+		clearBeverageRequests(a)
+		if a.State == "thirsty" {
+			a.due = r.frozenAt
+			a.Action = nil
 		}
 		state := r.status(a, true)
 		state.Move = nil
@@ -809,7 +821,7 @@ func (r *room) releaseSeat(a *entity) {
 	a.ChairID = ""
 	a.TableID = ""
 	a.Food = nil
-	a.JuiceRequestID = ""
+	clearBeverageRequests(a)
 }
 func (r *room) route(a *entity, dest Tile, now time.Time) bool {
 	start := Tile{X: a.X, Y: a.Y}
@@ -905,7 +917,7 @@ func (r *room) command(p *Peer, c gamewire.Command) {
 			fail("Somente o dono pode decorar.")
 			return
 		}
-		if message := r.prepareTableEdit(a, c.UnitID); message != "" {
+		if message := r.claimTableEdit(a, c.UnitID); message != "" {
 			fail(message)
 			return
 		}
@@ -1024,6 +1036,7 @@ func (r *room) reserveChair(a *entity, id string, now time.Time) bool {
 		delete(r.seats, oldChair)
 	}
 	a.Action = nil
+	clearBeverageRequests(a)
 	a.State = "to_seat"
 	if a.Move == nil && len(a.path) == 0 {
 		r.sit(a, now)
@@ -1031,6 +1044,7 @@ func (r *room) reserveChair(a *entity, id string, now time.Time) bool {
 	return true
 }
 func (r *room) sit(a *entity, now time.Time) {
+	clearBeverageRequests(a)
 	a.State = "seated"
 	a.visits = 0
 	a.due = now.Add(customerFoodCheck)
@@ -1065,34 +1079,21 @@ func (r *room) validateOperation(op gamewire.Operation) string {
 				}
 			}
 		}
-		if r.seats[body.UnitID] != "" {
+		if occupant := r.actors[r.seats[body.UnitID]]; occupant != nil && !autonomous(occupant) {
 			return "Esta cadeira está ocupada ou reservada."
 		}
 		for _, a := range r.actors {
-			if body.UnitID != "" && a.TableID == body.UnitID {
+			if !autonomous(a) && body.UnitID != "" && a.TableID == body.UnitID {
 				return "Esta mesa está em uso."
-			}
-		}
-		if item.Kind == "door" {
-			var door Unit
-			for _, u := range r.world.Units {
-				if u.ID == body.UnitID {
-					door = u
-					break
-				}
-			}
-			for _, a := range r.actors {
-				nearDoor := door.ID != "" && abs(a.X-door.X)+abs(a.Y-door.Y) <= 2
-				if a.Kind == "npc" && nearDoor && (a.State == "entering" || a.State == "leaving") {
-					return "Aguarde o cliente atravessar a porta."
-				}
 			}
 		}
 		if op.Action != "store" && op.Action != "sell" && item.Type >= 2 && item.Kind != "wall" && item.Kind != "window" && item.Kind != "panel" && body.X != nil && body.Y != nil && body.Rotation != nil {
 			u := Unit{ItemID: item.ID, X: *body.X, Y: *body.Y, Rotation: *body.Rotation}
 			for _, t := range footprint(u) {
-				if r.occupied(t, "") {
-					return "Há um personagem nesta posição."
+				for id := range r.occupancy[t] {
+					if actor := r.actors[id]; actor != nil && !autonomous(actor) {
+						return "Há um jogador nesta posição."
+					}
 				}
 			}
 		}
@@ -1162,7 +1163,18 @@ func (r *room) finishDevActions(body json.RawMessage) {
 		r.broadcast(gamewire.Event{Type: "actors", Actors: []gamewire.Actor{r.status(actor, false)}}, "")
 	}
 }
+func cloneWorld(w gamewire.World) gamewire.World {
+	w.Units = slices.Clone(w.Units)
+	w.Foods = slices.Clone(w.Foods)
+	w.Juices = slices.Clone(w.Juices)
+	w.Coffees = slices.Clone(w.Coffees)
+	w.Employees = slices.Clone(w.Employees)
+	w.Cooking = slices.Clone(w.Cooking)
+	return w
+}
+
 func (r *room) updateWorld(w gamewire.World) {
+	r.prepareDecorationChanges(w, time.Now())
 	old := map[string]Unit{}
 	for _, u := range r.world.Units {
 		old[u.ID] = u
@@ -1187,8 +1199,9 @@ func (r *room) updateWorld(w gamewire.World) {
 	cookingChanged := string(w.Cooking) != string(r.world.Cooking)
 	foodsChanged := fmt.Sprint(w.Foods) != fmt.Sprint(r.world.Foods)
 	juicesChanged := fmt.Sprint(w.Juices) != fmt.Sprint(r.world.Juices)
+	coffeesChanged := !slices.Equal(w.Coffees, r.world.Coffees)
 	resized := w.TilesX != r.world.TilesX || w.TilesY != r.world.TilesY || w.PatioX != r.world.PatioX || w.PatioY != r.world.PatioY
-	r.world = w
+	r.world = cloneWorld(w)
 	r.syncWaiters(nil, time.Now())
 	if resized && w.TilesX >= 2 && w.TilesY >= 2 {
 		// Expansion only adds rows and columns at the far edges and the patio follows the café's
@@ -1197,6 +1210,9 @@ func (r *room) updateWorld(w gamewire.World) {
 	}
 	if juicesChanged {
 		r.broadcast(gamewire.Event{Type: "juices", Juices: w.Juices}, "")
+	}
+	if coffeesChanged {
+		r.broadcast(gamewire.Event{Type: "coffees", Coffees: w.Coffees}, "")
 	}
 	doorChanged := false
 	for _, u := range changes {
@@ -1441,6 +1457,9 @@ func (r *room) spawnNPC(now time.Time) {
 	r.broadcast(gamewire.Event{Type: "actors", Actors: []gamewire.Actor{r.status(a, true)}}, "")
 }
 func (r *room) advanceNPC(a *entity, now time.Time) bool {
+	if a.DecorationExit {
+		return r.advanceDecorationExit(a, now)
+	}
 	switch a.State {
 	case "entering":
 		a.Outside = false
@@ -1515,7 +1534,7 @@ func (r *room) advanceNPC(a *entity, now time.Time) bool {
 			r.standNPC(a, now)
 		}
 	case "eating":
-		if !r.requestJuice(a, now) {
+		if !r.requestBeverage(a, now) {
 			r.standNPC(a, now)
 		}
 	case "thirsty", "drinking":
@@ -1529,6 +1548,9 @@ func (r *room) advanceNPC(a *entity, now time.Time) bool {
 	return false
 }
 func (r *room) standNPC(a *entity, now time.Time) {
+	// Invalidate before looking for floor space: actor obstruction can postpone standing,
+	// but must never extend the lifetime of a payment nonce or reopen a drink request.
+	clearBeverageRequests(a)
 	dest, ok := r.freeNeighbour(Tile{X: a.X, Y: a.Y}, a, false)
 	if !ok {
 		_, actorsOnly := r.freeNeighbour(Tile{X: a.X, Y: a.Y}, a, true)
@@ -1553,6 +1575,7 @@ func (r *room) standNPC(a *entity, now time.Time) {
 	a.due = now.Add(time.Second)
 }
 func (r *room) exitNPC(a *entity, now time.Time) {
+	clearBeverageRequests(a)
 	door, ok := r.grid.door()
 	if !ok {
 		a.State = "wandering"

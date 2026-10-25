@@ -1,0 +1,170 @@
+[
+  {
+    "kind": "coffee_machine",
+    "stage": 1,
+    "controlBase": {
+      "left": {
+        "x": 0.08447488584474888,
+        "y": 190.566616175833
+      },
+      "front": {
+        "x": 66.25572877385852,
+        "y": 233.7087220083383
+      },
+      "right": {
+        "x": 158.68471337579618,
+        "y": 195.8427449077796
+      },
+      "rms": 0.054190760773708324
+    },
+    "afterDegrees": [
+      26.56505117707799,
+      26.56505117707799
+    ],
+    "method": "Lower support only; X and upper artwork unchanged. Rounded feet remain curves."
+  },
+  {
+    "kind": "coffee_machine",
+    "stage": 2,
+    "controlBase": {
+      "left": {
+        "x": 0.2529411764705882,
+        "y": 182.11067529816157
+      },
+      "front": {
+        "x": 83.67875541296317,
+        "y": 224.07719823860907
+      },
+      "right": {
+        "x": 168.66339869281046,
+        "y": 186.24070301668974
+      },
+      "rms": 2.036557990808519
+    },
+    "afterDegrees": [
+      26.56505117707799,
+      26.56505117707799
+    ],
+    "method": "Lower support only; X and upper artwork unchanged. Rounded feet remain curves."
+  },
+  {
+    "kind": "coffee_machine",
+    "stage": 3,
+    "controlBase": {
+      "left": {
+        "x": 0.2441860465116279,
+        "y": 200.13336658899607
+      },
+      "front": {
+        "x": 80.50321236586056,
+        "y": 256.146068136433
+      },
+      "right": {
+        "x": 170.71472392638037,
+        "y": 220.9120749816925
+      },
+      "rms": 1.0619594609882166
+    },
+    "afterDegrees": [
+      26.56505117707799,
+      26.56505117707799
+    ],
+    "method": "Lower support only; X and upper artwork unchanged. Rounded feet remain curves."
+  },
+  {
+    "kind": "juice_machine",
+    "stage": 1,
+    "controlBase": {
+      "left": {
+        "x": 0.2272727272727273,
+        "y": 204.44937094870028
+      },
+      "front": {
+        "x": 63.18509338079195,
+        "y": 238.71276187504435
+      },
+      "right": {
+        "x": 165.7601156069364,
+        "y": 188.6201687351611
+      },
+      "rms": 0.06288811351192174
+    },
+    "afterDegrees": [
+      26.56505117707799,
+      26.56505117707799
+    ],
+    "method": "Lower support only; X and upper artwork unchanged. Rounded feet remain curves."
+  },
+  {
+    "kind": "juice_machine",
+    "stage": 2,
+    "controlBase": {
+      "left": {
+        "x": 0.35906040268456374,
+        "y": 225.81697627383917
+      },
+      "front": {
+        "x": 79.9815954745958,
+        "y": 279.7687676900761
+      },
+      "right": {
+        "x": 170.74260355029585,
+        "y": 219.9495223293655
+      },
+      "rms": 0.18381942491978426
+    },
+    "afterDegrees": [
+      26.56505117707799,
+      26.56505117707799
+    ],
+    "method": "Lower support only; X and upper artwork unchanged. Rounded feet remain curves."
+  },
+  {
+    "kind": "juice_machine",
+    "stage": 3,
+    "controlBase": {
+      "left": {
+        "x": 0.35906040268456374,
+        "y": 207.09270177962665
+      },
+      "front": {
+        "x": 85.60079966091817,
+        "y": 266.33120040399785
+      },
+      "right": {
+        "x": 148.71472392638037,
+        "y": 226.70468267673957
+      },
+      "rms": 0.08114438377281752
+    },
+    "afterDegrees": [
+      26.56505117707799,
+      26.56505117707799
+    ],
+    "method": "Lower support only; X and upper artwork unchanged. Rounded feet remain curves."
+  },
+  {
+    "kind": "juice_machine",
+    "stage": 4,
+    "controlBase": {
+      "left": {
+        "x": 0.35333333333333333,
+        "y": 181.96987862677082
+      },
+      "front": {
+        "x": 76.59792267457667,
+        "y": 226.18372955817398
+      },
+      "right": {
+        "x": 161.6741935483871,
+        "y": 184.55118892870576
+      },
+      "rms": 1.1972388176159345
+    },
+    "afterDegrees": [
+      26.56505117707799,
+      26.56505117707799
+    ],
+    "method": "Lower support only; X and upper artwork unchanged. Rounded feet remain curves."
+  }
+]

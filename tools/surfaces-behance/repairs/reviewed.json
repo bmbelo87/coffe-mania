@@ -1,0 +1,328 @@
+{
+  "behance_floor_classic": {
+    "regions": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          0,
+          0,
+          1,
+          0.86
+        ]
+      ],
+      [
+        [
+          1,
+          7
+        ],
+        [
+          0,
+          0.86,
+          1,
+          1
+        ]
+      ]
+    ],
+    "tile": [
+      1.0,
+      1.0
+    ]
+  },
+  "behance_floor_egypt": {
+    "regions": [
+      [
+        [
+          3,
+          3
+        ],
+        [
+          0,
+          0,
+          1,
+          1
+        ]
+      ]
+    ],
+    "tile": [
+      1.0,
+      1.0
+    ]
+  },
+  "behance_floor_blue_tiles": {
+    "regions": [
+      [
+        [
+          4,
+          7
+        ],
+        [
+          0,
+          0,
+          1,
+          1
+        ]
+      ]
+    ],
+    "tile": [
+      1.0,
+      1.0
+    ],
+    "generatedPatch": {
+      "file": "repairs/blue-tiles-master.png",
+      "rects": [
+        [
+          241,
+          0,
+          256,
+          256
+        ],
+        [
+          0,
+          238,
+          256,
+          256
+        ]
+      ]
+    }
+  },
+  "behance_floor_games_checker": {
+    "regions": [
+      [
+        [
+          1,
+          5
+        ],
+        [
+          0,
+          0,
+          1,
+          0.5
+        ]
+      ],
+      [
+        [
+          1,
+          4
+        ],
+        [
+          0,
+          0.5,
+          1,
+          1
+        ]
+      ]
+    ],
+    "tile": [
+      1.0,
+      1.0
+    ]
+  },
+  "behance_floor_mexico_talavera": {
+    "regions": [
+      [
+        [
+          7,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          1
+        ]
+      ]
+    ],
+    "tile": [
+      1.0,
+      1.0
+    ]
+  },
+  "behance_floor_musketeer_star": {
+    "regions": [
+      [
+        [
+          3,
+          5
+        ],
+        [
+          0,
+          0,
+          1,
+          1
+        ]
+      ]
+    ],
+    "tile": [
+      1.0,
+      1.0
+    ],
+    "generatedPatch": {
+      "file": "repairs/musketeer-star-master.png",
+      "rects": [
+        [
+          205,
+          190,
+          256,
+          256
+        ]
+      ]
+    }
+  },
+  "behance_floor_paris_blue": {
+    "regions": [
+      [
+        [
+          9,
+          3
+        ],
+        [
+          0,
+          0,
+          1,
+          1
+        ]
+      ]
+    ],
+    "tile": [
+      1.0,
+      1.0
+    ],
+    "texturePhase": [
+      0.14,
+      -0.03125
+    ],
+    "generatedPatch": {
+      "file": "repairs/paris-blue-master.png",
+      "rects": [
+        [
+          208,
+          100,
+          231,
+          148
+        ]
+      ]
+    }
+  },
+  "behance_floor_oriental": {
+    "tile": [
+      1.0,
+      1.0
+    ],
+    "generatedPatch": {
+      "file": "repairs/oriental-master.png",
+      "rects": [
+        [
+          0,
+          0,
+          256,
+          16
+        ],
+        [
+          0,
+          111,
+          256,
+          145
+        ],
+        [
+          0,
+          232,
+          256,
+          256
+        ],
+        [
+          0,
+          0,
+          8,
+          256
+        ],
+        [
+          180,
+          128,
+          205,
+          216
+        ],
+        [
+          10,
+          20,
+          57,
+          90
+        ]
+      ]
+    }
+  },
+  "behance_wall_games_sky": {
+    "wallCells": [
+      6
+    ],
+    "tile": [
+      1.0
+    ],
+    "generatedPatch": {
+      "file": "repairs/games-sky-master.png",
+      "rects": [
+        [
+          0,
+          0,
+          256,
+          256
+        ]
+      ]
+    }
+  },
+  "behance_floor_party_lilac": {
+    "generatedPatch": {
+      "file": "repairs/party-lilac-master.png",
+      "rects": [
+        [
+          0,
+          0,
+          26,
+          80
+        ],
+        [
+          0,
+          0,
+          16,
+          256
+        ],
+        [
+          245,
+          0,
+          256,
+          256
+        ],
+        [
+          0,
+          245,
+          256,
+          256
+        ],
+        [
+          57,
+          90,
+          100,
+          132
+        ],
+        [
+          0,
+          115,
+          48,
+          141
+        ],
+        [
+          50,
+          90,
+          112,
+          141
+        ]
+      ]
+    },
+    "tile": [
+      1.0,
+      1.0
+    ]
+  }
+}

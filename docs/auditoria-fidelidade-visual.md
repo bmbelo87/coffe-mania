@@ -310,3 +310,48 @@ Verificação: sobreposição com o quadro de 1:58 (meio-fio, listras, curva e t
 - **Escala:** a altura no vídeo é de 62 px para o banhista e 82 px para o sorveteiro, com o guarda-sol. Com 1 px = 2,39 px do mundo, as escalas ficam em 0,31 e 0,32.
 - **Profundidade:** o cenário da orla continua na ordem fixa do `scene.json`. Cada figurante entra entre os objetos de pé pela linha do chão, e a sombra do píer, que é decalque, não conta.
 - **Limites:** só decoração, no cliente: não entram na navegação, no servidor nem no clique. Nossos objetos da praia (boia, cadeiras, guarda-sóis) estão maiores e mais espalhados que no original; isso fica registrado para uma revisão própria do cenário.
+
+## Revisão de apresentação — abas, balões e arte de sala (24/10/2026)
+
+Concluídos: abas altas por trás da frente bege; conteúdo maior nos balões com sobra apenas acima; aviso persistente da próxima encomenda; remoção do contorno grosso das três cafeteiras posicionadas e dos dois figurantes da praia; mesas xadrez com redução14% e registro(-3,-8); cadeiras correspondentes com redução7% e máscaras sincronizadas. O ponto do prato acompanha o tampo, sem mudar tiles, navegação ou ordem de camadas. Fontes, diferenças históricas, calibração e verificações offline estão em [ajustes de balões e contornos](ajustes-baloes-contornos.md). E02/E03 e a entrega de prêmios de domínio não são marcados como concluídos por esta revisão visual.
+
+## Revestimentos do acervo e apoio das cafeteiras — 25/10/2026
+
+- [x] Calibrar a carcaça inferior dos três estágios da cafeteira na projeção 2:1, preservando as regiões das xícaras e os controles.
+- [x] Importar 12 pisos e 12 papéis de parede das pranchas 008/009 de Manati P, com repetição unitária medida e preços identificados como provisórios.
+- [x] Sincronizar o catálogo e conferir transparência, registro, quatro orientações de piso e os três estágios junto à parede no renderizador offline.
+
+Fontes, limitações e verificações estão em [revestimentos do Behance e cafeteiras](revestimentos-behance-e-cafeteiras.md). A revisão não altera o estado de E02/E03.
+
+## Quatro rotações e reconstrução das cadeiras — 25/10/2026
+
+- [x] Café: quatro direções nos três estágios; suco: quatro direções nos quatro estágios, com vistas traseiras reconstruídas.
+- [x] Cadeira rosa nova e poltrona amarela/preta reconstruída, calibradas nas quatro direções.
+- [x] Apoio do quadril por quadro, máscaras de braços/encostos, fantasma de decoração e cursor com a direção correta.
+
+Identidades e preços preservados. Prévias, fontes e verificações estão em [rotações das máquinas e cadeiras](rotacoes-maquinas-e-cadeiras.md). E02/E03 não foram marcados como concluídos por este lote.
+
+## Limpeza dos pisos e paredes extraídos — 25/10/2026
+
+- [x] Revisar os 47 revestimentos ativos e corrigir resíduos em nove pisos e uma parede, preservando as outras 37 superfícies.
+- [x] Restringir a extração às células/faixas visualmente livres e registrar as reconstruções localizadas por ImageGen.
+- [x] Aplicar a arte integral aprovada de Céu e Morros, limpar o canto da Rosa dos Ventos e centralizar a lajota de Paris Azul.
+- [x] Preservar alfa, dimensões, registros, IDs e preços; conferir a repetição e sincronizar os catálogos.
+
+Fontes, regiões corrigidas, prompts e limites estão em [restauração dos revestimentos](restauracao-revestimentos.md). E02/E03 não foram marcados como concluídos por esta revisão de arte.
+
+## Rotação e apoio na poltrona amarela — 25/10/2026
+
+- [x] Corrigir a associação das vistas frontais R0/R1, com máscaras e contatos correspondentes.
+- [x] Recuar o quadril para o apoio junto ao encosto, preservando raiz, sombra e tile.
+- [x] Conferir dois visuais, quatro direções e todos os quadros de comer: 40 composições offline; acrescentar regressão da direção física da abertura e sincronizar os catálogos.
+
+Detalhes e evidências na seção final de [rotações das máquinas e cadeiras](rotacoes-maquinas-e-cadeiras.md). E02/E03 mantêm o andamento anterior.
+
+## Decoração sem bloqueio por NPCs — 25/10/2026
+
+- [x] Liberar seleção e colocação diante de clientes/garçons, inclusive móveis ocupados e trajetos em andamento.
+- [x] Após uma alteração persistida, liberar reservas e conservar refeição/bebida até o término no apoio original; então encaminhar o cliente à saída sem penalidade.
+- [x] Preservar cancelamento, operações recusadas, contabilidade da refeição, apoio na reconexão/dormência e a calibração do passo.
+
+Regras, verificações e limites em [decoração sem bloqueio por NPCs](decoracao-sem-bloqueio-npcs.md). E02/E03 não foram marcados como concluídos por esta alteração.

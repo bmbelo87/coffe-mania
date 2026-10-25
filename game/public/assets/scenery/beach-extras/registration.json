@@ -24,5 +24,60 @@
       ],
       "sha256": "cf70f7db8bc57ca2f717bc2ce0dfbffc767f97575466d6b37096a33227da583e"
     }
+  },
+  "flatFinishRevision": {
+    "method": "ImageGen removes exterior strokes; uniform registration to original canvas. Previous sources are retained.",
+    "exports": [
+      {
+        "file": "game/public/assets/scenery/beach-extras/bather-flat.png",
+        "size": [
+          253,
+          485
+        ],
+        "sourceBox": [
+          24,
+          21,
+          880,
+          1712
+        ],
+        "targetBox": [
+          4,
+          4,
+          249,
+          481
+        ],
+        "scale": 0.2820816085156712,
+        "offset": [
+          6,
+          4
+        ],
+        "sha256": "829e20989aaa97c15c1722baea5f2280aa9c033ec258c681b75cdbfd402a86e1"
+      },
+      {
+        "file": "game/public/assets/scenery/beach-extras/ice-cream-vendor-flat.png",
+        "size": [
+          588,
+          613
+        ],
+        "sourceBox": [
+          10,
+          12,
+          1211,
+          1273
+        ],
+        "targetBox": [
+          4,
+          4,
+          584,
+          609
+        ],
+        "scale": 0.47977795400475814,
+        "offset": [
+          6,
+          4
+        ],
+        "sha256": "fcc626e8161e7622aec5af082aef35135d58c48e5cfe06a6fc2bcb2871c748f5"
+      }
+    ]
   }
 }

@@ -1,0 +1,67 @@
+{
+  "id": 9100002,
+  "classname": "coffee_machine",
+  "name": "Máquina de Café",
+  "type": 3,
+  "kind": "coffee_machine",
+  "priceGold": 0,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 150,
+  "parts": [
+    {
+      "file": "rotation-0.png",
+      "width": 170,
+      "height": 234,
+      "left": -82,
+      "top": -150,
+      "rotation": 0
+    },
+    {
+      "file": "rotation-1.png",
+      "width": 170,
+      "height": 234,
+      "left": -88,
+      "top": -150,
+      "rotation": 1
+    },
+    {
+      "file": "rotation-2.png",
+      "width": 159,
+      "height": 234,
+      "left": -66,
+      "top": -153,
+      "rotation": 2
+    },
+    {
+      "file": "rotation-3.png",
+      "width": 159,
+      "height": 234,
+      "left": -93,
+      "top": -153,
+      "rotation": 3
+    }
+  ],
+  "source": {
+    "art": "Reconstrução ImageGen dos três modelos escolhidos pelo responsável; tools/coffee-machine/art-source.json.",
+    "calibration": "Carcaça inferior reprojetada em 2:1, com verticais e parte superior preservadas; tools/coffee-machine/room-projection.json. Export final em escala uniforme e apoio por estágio, sem alterar a pegada lógica 1×1.",
+    "provisionalRules": {
+      "priceGold": {
+        "value": 0,
+        "reason": "Preço de colocação provisório; ver shared/coffeecatalog/catalog.json."
+      }
+    },
+    "roomArt": {
+      "prompts": "tools/visual-polish/image-prompts.json",
+      "method": "ImageGen: edição de contorno somente para a versão posicionada; registro uniforme independente das prévias.",
+      "projection": "tools/coffee-machine/room-projection.json"
+    },
+    "rotations": {
+      "prompts": "tools/furniture-rotations/prompts.json",
+      "export": "tools/furniture-rotations/machines-export.json",
+      "method": "Frentes atuais preservadas; traseiras reconstruídas com ImageGen. Vistas complementares espelhadas e calibradas em escala uniforme.",
+      "limitation": "Painéis traseiros sem fonte original recuperada; detalhes ocultos são reconstruções simples, não uma confirmação histórica."
+    }
+  }
+}

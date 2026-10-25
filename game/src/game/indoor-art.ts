@@ -13,6 +13,12 @@ export interface IndoorArtFrame {
 }
 
 export interface IndoorArtEntry {
+  /** Hip contact in room pixels relative to the tile origin, one per authored chair pose. */
+  seatingAnchors?: { rotation: number; x: number; y: number }[];
+  /** Surface frames are repeat cells in row-major order, rather than furniture rotations. */
+  surfacePattern?: { columns: number; rows: number };
+  /** Visual center of a meal on the tabletop, relative to the tile origin. */
+  mealAnchor?: { x: number; y: number };
   /** Polygons in the assembled frame's pixel coordinates; clipping only, never room depth. */
   seatingBackrests?: { rotation: number; polygons: number[][] }[];
   characterId: number;

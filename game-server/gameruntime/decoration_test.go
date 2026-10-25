@@ -91,7 +91,7 @@ func TestDecorationTableCommandOwnerOnlyAndWorksWhileChefBusy(t *testing.T) {
 	r.command(p, gamewire.Command{Type: "edit_table", UnitID: "table"})
 	var event gamewire.Event
 	_ = json.Unmarshal(<-p.Out, &event)
-	if event.Type != "ack" || r.actors[c.ID] != nil {
+	if event.Type != "ack" || r.actors[c.ID] == nil || !r.tableBeingEdited("table") {
 		t.Fatal("busy chef could not decorate")
 	}
 	guest := addNPC(r, "human:guest", 2, 1, time.Now())

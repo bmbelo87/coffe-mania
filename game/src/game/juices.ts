@@ -1,6 +1,7 @@
 import { Assets, Rectangle, Texture } from 'pixi.js';
 import type { PlayerState } from './player-state';
 import { UI_PADLOCK_URL } from './asset-manifest';
+import { loadMachinePoses, type MachinePose, type MachinePoseSpec } from './machine-poses';
 export interface JuiceRecipe {
   id: string;
   name: string;
@@ -34,6 +35,7 @@ export interface JuiceSnapshot {
 }
 
 export interface JuiceMachineStage {
+  poses: MachinePose[];
   stage: number;
   preview: Texture;
   texture: Texture;
@@ -45,10 +47,10 @@ export function loadJuiceMachineArt(): Promise<JuiceMachineStage[]> {
     const base = new URL('assets/items/juice_machine/stages/', new URL(import.meta.env.BASE_URL, document.baseURI));
     const response = await fetch(new URL('catalog.json', base));
     if (!response.ok) throw Error('Não foi possível carregar as máquinas.');
-    const data = await response.json() as { stages: Array<{ stage: number; preview: string; frame: JuiceMachineStage['frame'] & { file: string } }> };
+    const data = await response.json() as { stages: Array<{ stage: number; preview: string; frame: JuiceMachineStage['frame'] & { file: string }; poses?: MachinePoseSpec[] }> };
     return Promise.all(data.stages.map(async item => {
       const [preview, texture] = await Promise.all([Assets.load<Texture>(new URL(item.preview, base).href), Assets.load<Texture>(new URL(item.frame.file, base).href)]);
-      return { stage: item.stage, preview, texture, frame: item.frame };
+      return { stage: item.stage, preview, texture, frame: item.frame, poses: await loadMachinePoses(base, item.frame, item.poses) };
     }));
   })().catch(error => { machineArtPromise = undefined; throw error; });
 }

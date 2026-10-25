@@ -1,11 +1,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { readPng, writePng } from './png.mjs';
 import '../tools/asset-positioner/fit-geometry.js';
 
 const root = path.resolve(import.meta.dirname, '..');
 const ui = path.join(root, 'game/public/assets/ui/juice-machine');
 const stages = path.join(root, 'game/public/assets/items/juice_machine/stages');
+const hasRoomRotations = fs.existsSync(path.join(stages,'catalog.json')) && JSON.parse(fs.readFileSync(path.join(stages,'catalog.json'))).stages.some(stage=>stage.poses);
 const F = globalThis.AssetFitGeometry;
 function trim(image, mainCard = false) {
   let box = F.alphaBox(image.data, image.width, image.height);
@@ -74,3 +76,4 @@ for (let stage = 1; stage <= 4; stage++) {
 }
 fs.writeFileSync(path.join(stages, 'catalog.json'), JSON.stringify({ stages: catalogue }, null, 2) + '\n');
 console.info('Título, painel e quatro estágios exportados com RGBA; bases dos sprites alinhadas ao tile 160×80.');
+if(hasRoomRotations){const result=spawnSync('python',['tools/furniture-rotations/export-machines.py'],{cwd:root,stdio:'inherit'});if(result.status!==0)throw Error('Não foi possível sincronizar as quatro rotações das máquinas.');}

@@ -16,6 +16,46 @@ Logo depois de um lote, as correções usam `0.5.01`, `0.5.02`… A ordem de lan
 
 Seções usadas: **Adicionado**, **Alterado**, **Corrigido**, **Removido** e **Observações** (limites conhecidos e o que ficou para depois).
 
+## [0.6.3] — Cafés, revestimentos e decoração livre (2026-10-25)
+
+### Adicionado
+
+- **Sistema de café:** máquina com os modelos prata, vermelho e preto/dourado, 16 sabores e abas Básico, Médio, Avançado e Expert. Seleção do sabor, pedidos dos clientes, energia, ouro, XP, satisfação, domínio e evolução ficam persistidos e validados no servidor, com recibos contra cobranças repetidas. Café não usa o estoque em lotes dos sucos.
+- **Interface modular do café**, reconstruída a partir da janela com HUD novo: painel, abas, cartões, botões e rótulos separados. As abas bloqueadas podem ser consultadas; selecionar um sabor continua respeitando o desbloqueio.
+- **Quatro rotações** em todos os estágios das máquinas de café e de suco, com a evolução atual no cursor e no fantasma de decoração.
+- **47 revestimentos do acervo Behance:** 28 pisos e 19 papéis de parede, com período medido, transparência e fonte registrados. Incluem conjuntos clássicos, festa, circo, Egito, México, videogames, Paris e outros temas.
+- Novas artes da cadeira rosa e da poltrona amarela/preta, com contato do quadril por direção e máscaras próprias de braços e encostos.
+- Ferramentas de extração por células livres, revisão de resíduos, registro das máquinas e cadeiras e prévias offline, acompanhadas de fontes, prompts e testes específicos.
+
+### Alterado
+
+- **Decoração livre diante de NPCs:** clientes e garçons não impedem mover, girar, guardar, vender ou colocar itens. Após uma alteração aceita, o cliente afetado termina a refeição/bebida no ponto original e sai sem penalidade, liberando a reserva imediatamente. Selecionar ou cancelar não o interrompe; alterações recusadas não afetam sua ação ou refeição.
+- Balões de bebidas com conteúdo maior e uma pequena sobra apenas acima da moldura; a mesma apresentação atende sucos e novos conteúdos.
+- Plataforma de encomendas com aviso automático do tempo restante da próxima entrega.
+- Mesas xadrez verde e vermelha com redução de 14% e deslocamento visual para cima/esquerda; cadeiras correspondentes com redução de 7%. O apoio dos pratos acompanha o tampo, preservando os tiles lógicos.
+- Contato sentado alinhado ao quadril animado, mantendo a raiz, a sombra e a calibração de movimento separadas da apresentação.
+
+### Corrigido
+
+- Direção frontal invertida da poltrona amarela e apoio do corpo longe do encosto. As quatro vistas agora acompanham a direção do ocupante.
+- Ângulo do apoio das cafeteiras junto à parede, preservando xícaras e controles sem achatar a máquina inteira.
+- Resíduos de móveis/personagens e detalhes apagados em nove pisos e uma parede. Paris Azul exibe uma lajota inteira centralizada; Céu e Morros usa a reconstrução limpa aprovada, incluindo as bordas.
+- Abas do café com altura e sobreposição sob o painel bege ajustadas à referência.
+- Pedidos de café e suco mutuamente exclusivos; pedidos expirados e nonces antigos deixam de permitir serviço, e uma repetição não reinicia a animação de beber.
+- Fixture dos testes de decoração no Node, que falhava por falta de `import.meta.env` e de uma URL-base do documento.
+
+### Removido
+
+- Contorno externo grosso das cafeteiras posicionadas e dos figurantes da praia, preservando as versões anteriores e as prévias da janela.
+
+### Observações
+
+- Artes reconstruídas por ImageGen e extrações do portfólio são identificadas como tais; não são anunciadas como PNGs originais recuperados. Detalhes traseiros das máquinas sem captura direta são reconstruções.
+- Continuam provisórios e sinalizados: preço dos revestimentos, colocação gratuita e limite de uma cafeteira, metas de domínio, associação das evoluções e valor de recarga. A entrega dos móveis de domínio (M06) permanece pendente.
+- Refeições já servidas terminam normalmente durante a decoração, sem novo débito ou devolução duplicada. O fluxo transacional anterior de devolução foi preservado separadamente.
+- E02/E03 e os demais lotes funcionais conservam o andamento registrado no plano. Prévias offline e testes de estado não equivalem a uma nova sessão multiplayer visual ao vivo.
+- Verificação do lote: 20 testes do cliente, seis de restauração de superfícies, testes Go específicos de café e decoração, validação dos catálogos e checagem de tipos passaram.
+
 ## [0.6.2] — Telemetria (2026-10-24)
 
 Fase A3 do alpha fechado: telemetria própria, extrato da economia e painel de métricas. Nada vai para serviços de terceiros.

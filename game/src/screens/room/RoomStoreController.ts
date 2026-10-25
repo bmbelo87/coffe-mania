@@ -1,7 +1,8 @@
-import { Container, Graphics, Sprite, type FederatedPointerEvent } from 'pixi.js';
-import type { ArtProvider } from '../../game/indoor-art';
+import { Container, Graphics, Sprite, type FederatedPointerEvent, type Texture } from 'pixi.js';
+import type { ArtProvider, IndoorArtFrame } from '../../game/indoor-art';
 import { rotatedArt } from '../../game/indoor-art';
-import { RoomInventoryClient, sellGold, type RoomCatalogItem, type RoomExpansionStep, type RoomSnapshot } from '../../game/room-inventory';
+import { surfacePatternFrame } from '../../game/surface-pattern';
+import { RoomInventoryClient, sellGold, type RoomCatalogItem, type RoomExpansionStep, type RoomSnapshot, type RoomUnit } from '../../game/room-inventory';
 import type { RoomModel, RoomItem } from '../../world/RoomModel';
 import { DEPTH_BIAS_WALLPAPER, FLOOR_DRAW_PRIORITY, facingTile, screenToTile, tileToScreen, wallDepth, type Tile } from '../../world/iso';
 import { wallGeometry } from '../../world/wallGeometry';
@@ -92,6 +93,7 @@ export class RoomStoreController {
   constructor(private readonly options: {
     snapshot: RoomSnapshot; client: RoomInventoryClient; model: RoomModel; world: Container; art: ArtProvider;
     apply(snapshot: RoomSnapshot): void; alpha(unitId: string, alpha: number): void;
+    previewArt?(item: RoomCatalogItem, rotation: number, unit?: RoomUnit): { frame: IndoorArtFrame; texture: Texture } | undefined;
     canPlace?(item: RoomCatalogItem, tile: Tile, rotation: number, unitId?: string): boolean;
     /** The server frees customers and claims a placed table before it can move. */
     prepareSelection?(item: RoomCatalogItem, unitId: string): Promise<void>;
@@ -136,7 +138,7 @@ export class RoomStoreController {
     if (category === 'expansion' && !this.inventory) { this.store?.setEntries([], false); this.store?.setExpansionCards(this.expansionCards()); return; }
     this.store?.setExpansionCards(undefined);
     const categoryFor = (item: RoomCatalogItem): string => item.type === 0 ? 'floor' : item.type === 1 ? 'wallpaper' : item.type === 2 ? 'door'
-      : ({ stove: 'stove', counter: 'counter', juice_machine: 'flower', table: 'table', chair: 'chair', window: 'flower-window', panel: 'flower-window', bush: 'flower', letterbox: 'flower', decor: 'flower', wall: 'wallpaper', door: 'door' } as const)[item.kind];
+      : ({ stove: 'stove', counter: 'counter', juice_machine: 'flower', coffee_machine: 'flower', table: 'table', chair: 'chair', window: 'flower-window', panel: 'flower-window', bush: 'flower', letterbox: 'flower', decor: 'flower', wall: 'wallpaper', door: 'door' } as const)[item.kind];
     const texture = (item: RoomCatalogItem) => {
       const frame = this.options.art.art.get(item.classname)?.frames[0]; return frame ? this.options.art.textureFor(frame.file) : undefined;
     };
@@ -178,7 +180,7 @@ export class RoomStoreController {
       this.selectionReady = this.options.prepareSelection(entry.item, entry.unit.unitId).then(() => true, (error: unknown) => {
         if (this.selection === entry) {
           this.cancel();
-          this.message(error instanceof Error ? error.message : 'Não foi possível liberar a mesa.');
+          this.message(error instanceof Error ? error.message : 'Não foi possível selecionar a mesa.');
         }
         return false;
       });
@@ -272,7 +274,12 @@ export class RoomStoreController {
     }
     const entry = this.options.art.art.get(item.classname);
     if (!entry) return;
-    const rotated = rotatedArt(entry, this.rotation), texture = this.options.art.textureFor(rotated.frame.file);
+    // Surface cells follow the room position, so the ghost shows the cell the placed unit will draw.
+    const previewArt = this.options.previewArt?.(item, this.rotation, unit);
+    const frame = previewArt?.frame ?? (item.type === 1 ? surfacePatternFrame(entry, this.rotation % 2 === 1 ? tile.tx : tile.ty)
+      : item.type === 0 && entry.surfacePattern ? surfacePatternFrame(entry, tile.tx, tile.ty, this.rotation)
+        : rotatedArt(entry, this.rotation).frame);
+    const texture = previewArt?.texture ?? this.options.art.textureFor(frame.file);
     if (!texture) return;
     const placement: RoomItem = {
       id: item.id, name: item.name, kind: item.kind, className: item.classname, ...tile, rotation: this.rotation,
@@ -282,17 +289,17 @@ export class RoomStoreController {
     };
     let ghost: Container;
     if (item.type === 0) {
-      const sprite = new Sprite(texture); sprite.position.set(origin.x + rotated.frame.left, origin.y + rotated.frame.top);
-      rotateFloorSprite(sprite, rotated.frame, this.rotation);
+      const sprite = new Sprite(texture); sprite.position.set(origin.x + frame.left, origin.y + frame.top);
+      rotateFloorSprite(sprite, frame, this.rotation);
       sprite.zIndex = FLOOR_DRAW_PRIORITY + 1.5; ghost = sprite;
     } else if (item.type === 1) {
-      ghost = createProceduralWallView(placement, { frame: entry.frames[0], texture, sourceRotation: entry.wallpaperRotation });
+      ghost = createProceduralWallView(placement, { frame, texture, sourceRotation: entry.wallpaperRotation });
       // Avoid a depth tie with the wall: stable sorting otherwise depends on drag direction.
       ghost.zIndex = wallDepth(tile.tx, tile.ty, DEPTH_BIAS_WALLPAPER);
       setItemRoomDepth(ghost, placement, ghost.zIndex);
     } else if (item.kind === 'door') {
-      this.previewDoor = new DoorView(placement, rotated.frame, texture, entry.door); ghost = this.previewDoor.view;
-    } else ghost = createArtView(placement, rotated.frame, texture);
+      this.previewDoor = new DoorView(placement, frame, texture, entry.door); ghost = this.previewDoor.view;
+    } else ghost = createArtView(placement, frame, texture);
     ghost.alpha = valid ? .6 : .5; ghost.eventMode = 'none'; ghost.label = 'store-placement-ghost';
     if (!valid && 'tint' in ghost) (ghost as Sprite).tint = 0xff8a80;
     this.preview.addChild(ghost);
@@ -303,8 +310,9 @@ export class RoomStoreController {
   private showCursorImage(): void {
     if (!this.selection || !this.pointer || !this.cursorView.parent) return;
     const entry = this.options.art.art.get(this.selection.item.classname);
-    const frame = entry ? rotatedArt(entry, this.rotation).frame : undefined;
-    const texture = this.selection.texture ?? (frame ? this.options.art.textureFor(frame.file) : undefined);
+    const previewArt = this.options.previewArt?.(this.selection.item, this.rotation, this.selection.unit);
+    const frame = previewArt?.frame ?? (entry ? rotatedArt(entry, this.rotation).frame : undefined);
+    const texture = previewArt?.texture ?? (frame ? this.options.art.textureFor(frame.file) : undefined) ?? this.selection.texture;
     if (!texture) return;
     if (!this.cursorImage) {
       this.cursorImage = new Sprite(texture); this.cursorImage.anchor.set(0.5);
@@ -403,7 +411,7 @@ export class RoomStoreController {
     const item = this.snapshot.catalog.find((item) => item.id === unit?.itemId);
     if (!unit || !item || item.type < 2 || item.kind === 'wall') return false;
     event.stopPropagation();
-    // Occupied chairs stay protected. Tables are released by the shared simulation.
+    // NPC use is resolved by the shared simulation only after a successful edit.
     if (!(item.kind === 'table' && this.options.prepareSelection) && !(this.options.canPlace?.(item, { tx: unit.tx, ty: unit.ty }, unit.rotation, unit.unitId) ?? true)) {
       this.message(`${item.name} está sendo usado por um cliente agora.`);
       return true;

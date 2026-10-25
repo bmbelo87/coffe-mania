@@ -1,0 +1,10 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-10-24",
+  "prompts": {
+    "dominado": "Use case: precise-object-edit / background-extraction. Target is the supplied ORIGINAL Cafe Mania UI word badge. Extract and faithfully enlarge ONLY the exact word \"Dominado\". Copy the original letter shapes, compact chunky rounded heavy lettering, saturated yellow fill, very thick dark chocolate/near-black outline and tiny lower-right native brown shadow. Do NOT typeset a different font and do not redesign it. Keep exact word aspect ratio and silhouette. Remove all pale peach background to real transparent alpha, including holes inside letters. Keep the entire existing outline and native tiny shadow. No plaque, rectangle, glow, frame, symbols, extra text, texture or 3D. One isolated word centered with tiny transparent margin. Faithful 2D Flash raster label.",
+    "servindo": "Use case: precise-object-edit / background-extraction. Target is the ORIGINAL Cafe Mania UI word \"Servindo\" shown in the supplied screenshot. Extract ONLY this exact word, faithfully enlarged. Preserve exact letter shapes, chunky round white letters, thick dark chocolate/near-black brown outline, and the original restrained lower-right brown shadow. Do NOT substitute a different font, modernize or add highlights. Match the exact aspect ratio of the supplied original word. Completely remove the orange background to actual transparent alpha, including counters inside letters. Keep full glyphs and outline, tiny clear margin. No backing rectangle, plaque, frame, glow, icons, numbers, other words, texture or 3D. One compact 2D Flash raster label on true transparency."
+  },
+  "reference": "tools/coffee-machine/references/ref-{dominado,servindo}.png",
+  "outputs": "game/public/assets/ui/coffee-machine/{dominado,servindo}.png"
+}

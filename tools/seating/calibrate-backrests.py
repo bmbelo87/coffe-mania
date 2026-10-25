@@ -37,20 +37,44 @@ previews = []
 for name, (polygons, reverse) in shapes.items():
     path = ITEMS / name / 'item.json'
     data = json.loads(path.read_text(encoding='utf-8'))
+    authored = data.get('source', {}).get('seatingCalibration', {}).get('foregroundMasks')
+    if authored is not None:
+        if args.check:
+            assert data.get('seatingBackrests') == authored, f'{name}: foreground masks differ from their authored calibration'
+        else:
+            data['seatingBackrests'] = authored
+            path.write_text(json.dumps(data, ensure_ascii=False, indent=2)+'\n',encoding='utf-8')
+        for layer in authored:
+            part = next(p for p in data['parts'] if p.get('rotation',0)==layer['rotation'])
+            assert all(0 <= value <= (part['height'] if i % 2 else part['width']) for polygon in layer['polygons'] for i,value in enumerate(polygon)), name
+            if args.preview:
+                from PIL import Image,ImageDraw,ImageChops
+                image=Image.open(path.parent/part['file']).convert('RGBA')
+                if part.get('flipX'):image=image.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+                mask=Image.new('L',image.size)
+                for polygon in layer['polygons']:ImageDraw.Draw(mask).polygon(list(zip(polygon[::2],polygon[1::2])),fill=255)
+                mask=ImageChops.multiply(mask,image.getchannel('A')).point(lambda v:round(v*.55));overlay=Image.new('RGBA',image.size,(255,0,100,0));overlay.putalpha(mask)
+                previews.append((name,layer['rotation'],Image.alpha_composite(image,overlay)))
+        continue
     layers = []
     for rotation in [2,3]:
         part = next(p for p in data['parts'] if p.get('rotation',0)==rotation)
         flip = (rotation==3) != reverse
-        width = part['width']
-        points = [[max(0, min(part['height'] if i % 2 else width,
+        reference = next((p for p in data.get('source', {}).get('runtimeVisualScale', {}).get('beforeParts', []) if p.get('rotation',0)==rotation), part)
+        width = reference['width']
+        reference_height = reference['height']
+        points = [[max(0, min(reference_height if i % 2 else width,
                              width-value if i % 2 == 0 and flip else value))
                    for i, value in enumerate(polygon)] for polygon in polygons]
+        if reference is not part:
+            points = [[round(value * (part['height'] / reference_height if i % 2 else part['width'] / width), 4) for i, value in enumerate(polygon)] for polygon in points]
         layers.append(dict(rotation=rotation, polygons=points))
-        assert all(0 <= value <= (part['height'] if i % 2 else width)
+        assert all(0 <= value <= (part['height'] if i % 2 else part['width'])
                    for polygon in points for i, value in enumerate(polygon)), name
         if args.preview:
             from PIL import Image, ImageDraw
             image = Image.open(path.parent / part['file']).convert('RGBA')
+            if part.get('flipX'): image = image.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
             mask = Image.new('L', image.size)
             draw = ImageDraw.Draw(mask)
             for polygon in points:
@@ -68,7 +92,7 @@ for name, (polygons, reverse) in shapes.items():
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2)+'\n',encoding='utf-8')
 if args.preview:
     from PIL import Image, ImageDraw
-    sheet = Image.new('RGB', (960, len(shapes) * 325), '#e5e0d4')
+    sheet = Image.new('RGB', (960, ((len(previews)+1)//2) * 325), '#e5e0d4')
     draw = ImageDraw.Draw(sheet)
     for i, (name, rotation, image) in enumerate(previews):
         x, y = (i % 2) * 480, (i // 2) * 325

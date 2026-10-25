@@ -243,7 +243,7 @@ func resetDevCafe(app core.App, user string) error {
 	revision := old.GetInt("revision")
 	for _, collection := range []string{
 		"stove_cooking", "room_food", "juice_state", "juice_operations", "spice_purchases", "room_operations",
-		"supply_orders", "supply_operations",
+		"supply_orders", "supply_operations", "coffee_state", "coffee_operations", "coffee_rewards",
 		"dev_commands", "player_inventory", "player_stoves", "player_rooms", playerstate.Collection,
 	} {
 		records, err := app.FindRecordsByFilter(collection, "user={:user}", "", 0, 0, dbx.Params{"user": user})

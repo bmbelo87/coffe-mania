@@ -12,6 +12,7 @@ import (
 
 	"coffe-mania/database/playerstate"
 	"coffe-mania/database/starterroom"
+	"coffe-mania/shared/coffeecatalog"
 	"coffe-mania/shared/roomcatalog"
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/apis"
@@ -271,6 +272,9 @@ func ensureStarterCounter(app core.App, userID string) error {
 // level 5 and +1 stove at level 6. Later steps are not documented yet. 0 means no limit.
 func kitchenLimit(kind string, level int) int {
 	switch kind {
+	case "coffee_machine":
+		// Provisional local ownership cap; it is not inferred from the number of supplied art stages.
+		return coffeecatalog.MaximumOwned
 	case "stove":
 		if level >= 6 {
 			return 4

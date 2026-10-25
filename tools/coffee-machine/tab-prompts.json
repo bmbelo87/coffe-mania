@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-24",
+  "tool": "built-in image_gen",
+  "reference": "tools/coffee-machine/references/ref-tabs-strip.png",
+  "prompts": {
+    "inactive": "Use case: precise-object-edit. Edit target: this ORIGINAL Cafe Mania newer coffee menu tab labeled Medio. Produce ONLY the identical EMPTY INACTIVE tab background, with the lettering removed. Preserve its exact compact 149:43 native aspect ratio, rounded upper shoulders, upright short vertical sides and FLAT STRAIGHT dark brown lower border. The lower-left corner is simple, not curved inward; there is NO diagonal hook or panel edge emerging from it. Keep original muted golden-beige face and the single restrained diagonal darker beige area in lower right, as in screenshot. Dark brown outline approximately 4px at native size. No white inner outline, shiny top stripe, plastic shine, inflated bevel, realism, 3D, texture or new ornaments. No text, icon, lock, button, numbers or full panel. Full isolated tab on actual transparent alpha outside its silhouette, minimal transparent margins. This is a faithful restoration of the exact original tab, not a new design. High resolution at same 149:43 aspect ratio for downsampling without distortion.",
+    "active": "Use case: precise-object-edit. Target is the ORIGINAL Cafe Mania newer coffee menu's selected Expert tab. Restore ONLY its identical EMPTY ACTIVE tab background, removing the word. Keep exact rounded upper shoulders and short vertical sides, compact 147:47 native aspect ratio. The face is warm light peach (#FFCC96 approximately), matching the peach body below the tab, with only the native extremely restrained shading. Preserve the original dark brown upper and side outline about 4px at native size. The BOTTOM MUST BE OPEN: absolutely no horizontal border, dark line, white line, bevel, shadow or rounded bottom corners along the bottom edge; it merges directly into the same peach body. No inward curve or diagonal hook at lower-left. No white inner outline, shine, glossy plastic, realism, 3D, texture, gradients or ornaments. Do not include any wooden header, other tab, full window, text, icon, lock or symbol. One tab only with true alpha outside the rounded top and sides, bottom peach fill reaching image edge with no outline. High resolution maintaining the screenshot's exact 147:47 proportions, tiny transparent margin."
+  },
+  "outputs": [
+    "game/public/assets/ui/coffee-machine/tab-inactive-v2.png",
+    "game/public/assets/ui/coffee-machine/tab-active-v2.png"
+  ]
+}

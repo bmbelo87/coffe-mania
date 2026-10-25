@@ -1,0 +1,368 @@
+{
+  "machines": [
+    {
+      "stage": 1,
+      "crop": [
+        189,
+        20,
+        1064,
+        1234
+      ],
+      "size": [
+        512,
+        704
+      ],
+      "padding": 8
+    },
+    {
+      "stage": 2,
+      "crop": [
+        225,
+        26,
+        1107,
+        1237
+      ],
+      "size": [
+        512,
+        697
+      ],
+      "padding": 8
+    },
+    {
+      "stage": 3,
+      "crop": [
+        286,
+        27,
+        1065,
+        1223
+      ],
+      "size": [
+        512,
+        778
+      ],
+      "padding": 8
+    }
+  ],
+  "drinks": [
+    {
+      "id": "espresso",
+      "group": "basic",
+      "atlasCell": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "crop": [
+        104,
+        107,
+        570,
+        539
+      ],
+      "size": [
+        256,
+        238
+      ]
+    },
+    {
+      "id": "descafeinado",
+      "group": "basic",
+      "atlasCell": [
+        627,
+        0,
+        1254,
+        627
+      ],
+      "crop": [
+        80,
+        95,
+        539,
+        563
+      ],
+      "size": [
+        251,
+        256
+      ]
+    },
+    {
+      "id": "cafe_com_leite",
+      "group": "basic",
+      "atlasCell": [
+        0,
+        627,
+        627,
+        1254
+      ],
+      "crop": [
+        91,
+        22,
+        566,
+        579
+      ],
+      "size": [
+        221,
+        256
+      ]
+    },
+    {
+      "id": "cafe_com_creme",
+      "group": "basic",
+      "atlasCell": [
+        627,
+        627,
+        1254,
+        1254
+      ],
+      "crop": [
+        77,
+        82,
+        543,
+        543
+      ],
+      "size": [
+        256,
+        253
+      ]
+    },
+    {
+      "id": "cortado",
+      "group": "medium",
+      "atlasCell": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "crop": [
+        108,
+        82,
+        554,
+        604
+      ],
+      "size": [
+        221,
+        256
+      ]
+    },
+    {
+      "id": "cafe_com_canela",
+      "group": "medium",
+      "atlasCell": [
+        627,
+        0,
+        1254,
+        627
+      ],
+      "crop": [
+        64,
+        128,
+        557,
+        568
+      ],
+      "size": [
+        256,
+        230
+      ]
+    },
+    {
+      "id": "cappuccino",
+      "group": "medium",
+      "atlasCell": [
+        0,
+        627,
+        627,
+        1254
+      ],
+      "crop": [
+        142,
+        45,
+        545,
+        593
+      ],
+      "size": [
+        192,
+        256
+      ]
+    },
+    {
+      "id": "macchiato",
+      "group": "medium",
+      "atlasCell": [
+        627,
+        627,
+        1254,
+        1254
+      ],
+      "crop": [
+        99,
+        20,
+        490,
+        589
+      ],
+      "size": [
+        181,
+        256
+      ]
+    },
+    {
+      "id": "mocaccino",
+      "group": "advanced",
+      "atlasCell": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "crop": [
+        146,
+        12,
+        533,
+        624
+      ],
+      "size": [
+        168,
+        256
+      ]
+    },
+    {
+      "id": "cafe_irlandes",
+      "group": "advanced",
+      "atlasCell": [
+        627,
+        0,
+        1254,
+        627
+      ],
+      "crop": [
+        120,
+        36,
+        497,
+        614
+      ],
+      "size": [
+        173,
+        256
+      ]
+    },
+    {
+      "id": "macchiato_caramelo",
+      "group": "advanced",
+      "atlasCell": [
+        0,
+        627,
+        627,
+        1254
+      ],
+      "crop": [
+        145,
+        9,
+        552,
+        615
+      ],
+      "size": [
+        177,
+        256
+      ]
+    },
+    {
+      "id": "submarino",
+      "group": "advanced",
+      "atlasCell": [
+        627,
+        627,
+        1254,
+        1254
+      ],
+      "crop": [
+        116,
+        31,
+        552,
+        599
+      ],
+      "size": [
+        200,
+        256
+      ]
+    },
+    {
+      "id": "frappe",
+      "group": "expert",
+      "atlasCell": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "crop": [
+        175,
+        72,
+        479,
+        586
+      ],
+      "size": [
+        158,
+        256
+      ]
+    },
+    {
+      "id": "chai_com_especiarias",
+      "group": "expert",
+      "atlasCell": [
+        627,
+        0,
+        1254,
+        627
+      ],
+      "crop": [
+        63,
+        182,
+        547,
+        546
+      ],
+      "size": [
+        256,
+        196
+      ]
+    },
+    {
+      "id": "iced_coffee_com_menta",
+      "group": "expert",
+      "atlasCell": [
+        0,
+        627,
+        627,
+        1254
+      ],
+      "crop": [
+        125,
+        39,
+        562,
+        543
+      ],
+      "size": [
+        224,
+        256
+      ]
+    },
+    {
+      "id": "capuccino_com_laranja",
+      "group": "expert",
+      "atlasCell": [
+        627,
+        627,
+        1254,
+        1254
+      ],
+      "crop": [
+        91,
+        55,
+        538,
+        556
+      ],
+      "size": [
+        230,
+        256
+      ]
+    }
+  ]
+}

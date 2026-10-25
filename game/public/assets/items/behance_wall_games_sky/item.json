@@ -1,0 +1,75 @@
+{
+  "id": 9160213,
+  "classname": "behance_wall_games_sky",
+  "name": "Parede Céu e Morros",
+  "type": 1,
+  "kind": "wall",
+  "priceGold": 10,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 208,
+  "parts": [
+    {
+      "file": "wall.png",
+      "width": 80,
+      "height": 248,
+      "left": -80,
+      "top": -168
+    }
+  ],
+  "source": {
+    "art": "artes/9287765/011.png",
+    "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+    "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/b24b049287765.560cbde5bea51.png",
+    "artist": "Walter Ávila e Andrés Guerrero",
+    "archiveSha256": "b0287d556f0f84aa6d6232e4c4a67f2d20594d4d5c4bc42ebe57fae0e126e1ec",
+    "room": "011 (Videogame, identificação visual)",
+    "method": "Reconstrução integral por ImageGen baseada na referência original; não é extração nem PNG original recuperado.",
+    "cells": [
+      [
+        "left",
+        6,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "calibration": "Master gerado retificado para a face isométrica existente, com o mesmo alfa, registro e tamanho.",
+    "measuredTile": [
+      1.0
+    ],
+    "seedCoverage": [
+      1.0
+    ],
+    "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+    "provisionalRules": {
+      "priceGold": {
+        "value": 10,
+        "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+      }
+    },
+    "restoration": {
+      "date": "2026-10-25",
+      "review": "tools/surfaces-behance/repairs/reviewed.json",
+      "method": "Arte gerada integral aprovada; projeção, registro e alfa geométrico preservados.",
+      "wallCells": [
+        6
+      ],
+      "generatedPatch": {
+        "file": "repairs/games-sky-master.png",
+        "rects": [
+          [
+            0,
+            0,
+            256,
+            256
+          ]
+        ]
+      },
+      "prompts": "tools/surfaces-behance/repairs/generations.json"
+    }
+  },
+  "wallpaperRotation": 1
+}

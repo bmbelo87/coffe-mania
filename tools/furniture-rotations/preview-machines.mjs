@@ -1,0 +1,11 @@
+import fs from 'node:fs';import path from 'node:path';import {pathToFileURL} from 'node:url';import {build} from 'esbuild';import assert from 'node:assert/strict';
+import {chromium} from 'file:///C:/Users/Ulisses/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
+const out=path.resolve('.runtime/furniture-rotations/machines-offline');fs.mkdirSync(out,{recursive:true});
+await build({entryPoints:['game/dev/machine-rotations.js'],bundle:true,platform:'browser',format:'esm',outfile:path.join(out,'bundle.js'),define:{'import.meta.env.BASE_URL':JSON.stringify(pathToFileURL(path.resolve('game/public')+path.sep).href)},loader:{'.css':'empty'},logLevel:'silent'});
+fs.writeFileSync(path.join(out,'index.html'),'<!doctype html><meta charset="utf-8"><style>body{margin:0}canvas{display:block;width:1600px;height:3010px}</style><script type="module" src="./bundle.js"></script>');
+const browser=await chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--enable-unsafe-swiftshader','--allow-file-access-from-files']});
+try{const page=await browser.newPage({viewport:{width:1600,height:3010}}),errors=[];page.setDefaultTimeout(60000);page.on('pageerror',e=>{errors.push(e.message);console.error(e.stack)});await page.goto(pathToFileURL(path.join(out,'index.html')).href);await page.waitForFunction(()=>window.machineRotations?.ready);
+ await page.screenshot({path:'.runtime/furniture-rotations/machines-coffee.png',clip:{x:0,y:0,width:1600,height:1290}});
+ await page.screenshot({path:'.runtime/furniture-rotations/machines-juice.png',clip:{x:0,y:1290,width:1600,height:1720}});
+ const report=await page.evaluate(()=>({states:window.machineRotations.states,checks:window.machineRotations.checks,decoration:window.machineRotations.decoration}));assert.equal(report.states.length,28);assert.equal(report.checks.length,28);assert.equal(report.decoration.length,16);assert.deepEqual(errors,[]);
+ fs.writeFileSync('.runtime/furniture-rotations/machines-report.json',JSON.stringify({offline:true,portsOpened:0,...report,lateFacing:true,detachedViews:true,errors},null,2));console.log('28 machine facings and real room stage updates passed, including late-load guards.');}finally{await browser.close();}

@@ -1,0 +1,127 @@
+[
+  {
+    "file": "game/public/assets/items/coffee_machine/stages/stage-1-room-source.png",
+    "size": [
+      512,
+      704
+    ],
+    "sourceBox": [
+      43,
+      39,
+      1021,
+      1437
+    ],
+    "targetBox": [
+      11,
+      10,
+      502,
+      694
+    ],
+    "scale": 0.4892703862660944,
+    "offset": [
+      17,
+      10
+    ],
+    "sha256": "7684ee59b9e6475a2377c8bccde8fcef1f992b70d683dcce92e66ba105e0f309"
+  },
+  {
+    "file": "game/public/assets/items/coffee_machine/stages/stage-2-room-source.png",
+    "size": [
+      512,
+      697
+    ],
+    "sourceBox": [
+      38,
+      24,
+      1045,
+      1432
+    ],
+    "targetBox": [
+      11,
+      10,
+      502,
+      687
+    ],
+    "scale": 0.48082386363636365,
+    "offset": [
+      14,
+      10
+    ],
+    "sha256": "1232004ecf3eaf2c7bca3545adb1737c4d3c1c590dec276466a26cbd43a0b8f3"
+  },
+  {
+    "file": "game/public/assets/items/coffee_machine/stages/stage-3-room-source.png",
+    "size": [
+      512,
+      778
+    ],
+    "sourceBox": [
+      35,
+      29,
+      989,
+      1518
+    ],
+    "targetBox": [
+      11,
+      11,
+      502,
+      766
+    ],
+    "scale": 0.5070517125587642,
+    "offset": [
+      14,
+      11
+    ],
+    "sha256": "bc396e44e337b5c0a1e7152c1abe6696e087eb7e8f5cbd55592a4286c1359d57"
+  },
+  {
+    "file": "game/public/assets/scenery/beach-extras/bather-flat.png",
+    "size": [
+      253,
+      485
+    ],
+    "sourceBox": [
+      24,
+      21,
+      880,
+      1712
+    ],
+    "targetBox": [
+      4,
+      4,
+      249,
+      481
+    ],
+    "scale": 0.2820816085156712,
+    "offset": [
+      6,
+      4
+    ],
+    "sha256": "829e20989aaa97c15c1722baea5f2280aa9c033ec258c681b75cdbfd402a86e1"
+  },
+  {
+    "file": "game/public/assets/scenery/beach-extras/ice-cream-vendor-flat.png",
+    "size": [
+      588,
+      613
+    ],
+    "sourceBox": [
+      10,
+      12,
+      1211,
+      1273
+    ],
+    "targetBox": [
+      4,
+      4,
+      584,
+      609
+    ],
+    "scale": 0.47977795400475814,
+    "offset": [
+      6,
+      4
+    ],
+    "sha256": "fcc626e8161e7622aec5af082aef35135d58c48e5cfe06a6fc2bcb2871c748f5"
+  }
+]

@@ -1,0 +1,112 @@
+{
+  "id": 9160204,
+  "classname": "behance_wall_oriental",
+  "name": "Parede Oriental",
+  "type": 1,
+  "kind": "wall",
+  "priceGold": 10,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 208,
+  "parts": [
+    {
+      "file": "wall.png",
+      "width": 80,
+      "height": 248,
+      "left": -80,
+      "top": -168
+    }
+  ],
+  "source": {
+    "art": "artes/9287765/008.png",
+    "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+    "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/ce64959287765.560cbd114c1c6.png",
+    "artist": "Walter Ávila e Andrés Guerrero",
+    "archiveSha256": "3a066b8bec6a43818c11841397b0845b36f658c5bb629d13aa4519c781e365af",
+    "room": "008 (Egito, identificação visual)",
+    "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+    "cells": [
+      [
+        "left",
+        0,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      [
+        "left",
+        1,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      [
+        "left",
+        2,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      [
+        "left",
+        3,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      [
+        "left",
+        4,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      [
+        "left",
+        5,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      [
+        "left",
+        6,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      [
+        "left",
+        7,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+    "measuredTile": [
+      1.0
+    ],
+    "seedCoverage": [
+      0.564
+    ],
+    "verticalRepeat": 0.1995,
+    "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+    "provisionalRules": {
+      "priceGold": {
+        "value": 10,
+        "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+      }
+    }
+  },
+  "wallpaperRotation": 1
+}

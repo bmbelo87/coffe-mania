@@ -1,0 +1,168 @@
+[
+  {
+    "classname": "pink_square_chair",
+    "views": {
+      "front": {
+        "source": "tools/furniture-rotations/generated/pink-front.png",
+        "sourceSize": [
+          543,
+          859
+        ],
+        "ground": [
+          272,
+          728
+        ],
+        "seat": [
+          245,
+          463
+        ],
+        "scale": 0.15469613259668508,
+        "frame": {
+          "left": -42,
+          "top": -73,
+          "width": 84,
+          "height": 133
+        },
+        "rotation": 1
+      },
+      "back": {
+        "source": "tools/furniture-rotations/generated/pink-back.png",
+        "sourceSize": [
+          561,
+          720
+        ],
+        "ground": [
+          280,
+          590
+        ],
+        "seat": [
+          309,
+          308
+        ],
+        "scale": 0.1497326203208556,
+        "frame": {
+          "left": -42,
+          "top": -48,
+          "width": 84,
+          "height": 108
+        },
+        "rotation": 3
+      }
+    },
+    "anchors": [
+      {
+        "rotation": 0,
+        "x": 4.0994,
+        "y": -1.3132
+      },
+      {
+        "rotation": 1,
+        "x": -4.0994,
+        "y": -1.3132
+      },
+      {
+        "rotation": 2,
+        "x": -4.2674,
+        "y": -1.8
+      },
+      {
+        "rotation": 3,
+        "x": 4.2674,
+        "y": -1.8
+      }
+    ]
+  },
+  {
+    "classname": "acervo_chair_yellow_black",
+    "views": {
+      "front": {
+        "source": "tools/furniture-rotations/generated/pacman-front.png",
+        "sourceSize": [
+          703,
+          642
+        ],
+        "ground": [
+          338.5,
+          512
+        ],
+        "seat": [
+          375,
+          360
+        ],
+        "scale": 0.15647226173541964,
+        "frame": {
+          "left": -53,
+          "top": -40,
+          "width": 110,
+          "height": 100
+        },
+        "rotation": 0,
+        "opening": [
+          [
+            335,
+            337
+          ],
+          [
+            495,
+            430
+          ]
+        ]
+      },
+      "back": {
+        "source": "tools/furniture-rotations/generated/pacman-back.png",
+        "sourceSize": [
+          711,
+          590
+        ],
+        "ground": [
+          388.5,
+          506.5
+        ],
+        "seat": [
+          388,
+          365
+        ],
+        "scale": 0.15471167369901548,
+        "frame": {
+          "left": -60,
+          "top": -38,
+          "width": 110,
+          "height": 91
+        },
+        "rotation": 2,
+        "opening": [
+          [
+            450,
+            405
+          ],
+          [
+            270,
+            310
+          ]
+        ]
+      }
+    },
+    "anchors": [
+      {
+        "rotation": 0,
+        "x": 5.6771,
+        "y": 16.0748
+      },
+      {
+        "rotation": 1,
+        "x": -5.6771,
+        "y": 16.0748
+      },
+      {
+        "rotation": 2,
+        "x": 0.0281,
+        "y": 18.2966
+      },
+      {
+        "rotation": 3,
+        "x": -0.0281,
+        "y": 18.2966
+      }
+    ]
+  }
+]

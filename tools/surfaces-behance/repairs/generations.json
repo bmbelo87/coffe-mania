@@ -1,0 +1,67 @@
+{
+  "tool": "ImageGen integrado",
+  "date": "2026-10-25",
+  "records": [
+    {
+      "id": "behance_floor_classic",
+      "fix": "Repair ONLY the foreign red/yellow fragments crossing the upper tan border and cream marble edge. Preserve the tan top strip, thin cream trim, huge cream marble rectangle and its subtle beige veins exactly. No new motif or raised bevel.",
+      "path": "C:\\Users\\Ulisses\\.codex\\generated_images\\01a156a6-a07d-71c3-8335-33b6b0e3dbb0\\exec-c69f7b10-4ac1-4492-8788-688b344ffc6d.png",
+      "selected": false,
+      "reason": "Descartada: células originais livres conservam melhor os traços."
+    },
+    {
+      "id": "behance_floor_oriental",
+      "fix": "Remove ONLY yellow/orange/red/gray foreign crumbs along the gold cross-shaped grout and left/top edges. Keep the exact four vertical teal/olive/green/blue painted slabs and their subtle original flat speckle shading.",
+      "path": "C:\\Users\\Ulisses\\.codex\\generated_images\\01a156a6-a07d-71c3-8335-33b6b0e3dbb0\\exec-d6c5cc6a-eb5e-40c1-8c55-c56ce8adff1a.png",
+      "selected": true,
+      "reason": "Apenas regiões delimitadas em reviewed.json; a geração integral não substitui a arte.",
+      "projectMaster": "oriental-master.png"
+    },
+    {
+      "id": "behance_floor_musketeer_star",
+      "fix": "Remove all the blue/gray/black leftover furniture fragments, streaks, and occlusion noise from the cream/yellow striped ground. Keep the exact centered eight-point compass star, red and golden facets, same stripe widths, red corner squares and border proportions. Reconstruct the clean original motif; do not change star shape.",
+      "path": "C:\\Users\\Ulisses\\.codex\\generated_images\\01a156a6-a07d-71c3-8335-33b6b0e3dbb0\\exec-a34f9623-02b2-460b-8c18-bc1d937ae4f2.png",
+      "selected": true,
+      "reason": "Apenas regiões delimitadas em reviewed.json; a geração integral não substitui a arte.",
+      "projectMaster": "musketeer-star-master.png"
+    },
+    {
+      "id": "behance_floor_egypt",
+      "fix": "Remove only the turquoise/teal fragments inside the brown grout at the middle right, along the left edge and near the lower middle. Continue the golden stone blocks and brown grout underneath. Keep every stone outline, staggered arrangement, mottled warm yellow shading, block size and exact palette.",
+      "path": "C:\\Users\\Ulisses\\.codex\\generated_images\\01a156a6-a07d-71c3-8335-33b6b0e3dbb0\\exec-74fdd6bd-cc3b-4162-9bb1-c168f55afda9.png",
+      "selected": false,
+      "reason": "Descartada: células originais livres conservam melhor os traços."
+    },
+    {
+      "id": "behance_floor_blue_tiles",
+      "fix": "Remove only the white/gray foreign specks and lines at the bottom and right edges. Continue the original blue tile ground and thin navy grout. Keep the four dark blue rounded flower emblems EXACTLY where they are, not simpler or bigger; same muted blue palette.",
+      "path": "C:\\Users\\Ulisses\\.codex\\generated_images\\01a156a6-a07d-71c3-8335-33b6b0e3dbb0\\exec-0b8bd9ca-54bd-4141-8993-34e669850226.png",
+      "selected": true,
+      "reason": "Apenas regiões delimitadas em reviewed.json; a geração integral não substitui a arte.",
+      "projectMaster": "blue-tiles-master.png"
+    },
+    {
+      "id": "behance_floor_party_lilac",
+      "fix": "Remove the yellow confetti fragment near the middle-left and all red/orange/yellow/green foreign fragments on the left, right and bottom edges. Keep the exact purple four-square tile grid and concentric arc motif inside every square, thin dark purple grout and original lilac shades.",
+      "path": "C:\\Users\\Ulisses\\.codex\\generated_images\\01a156a6-a07d-71c3-8335-33b6b0e3dbb0\\exec-1114d8f8-1d2b-4664-a53a-f367b80899b0.png",
+      "selected": true,
+      "reason": "Apenas regiões delimitadas em reviewed.json; a geração integral não substitui a arte.",
+      "projectMaster": "party-lilac-master.png"
+    },
+    {
+      "id": "behance_wall_games_sky",
+      "selected": true,
+      "projectMaster": "games-sky-master.png",
+      "prompt": "Use case: precise-object-edit. Edit target: first image, a rectified wallpaper texture from CafÃ© Mania original Flash game, currently 160x208. Restore ONLY the bottom yellow/orange curved soil band: remove all blue/black/gray character/furniture fragments and replace them by the continuous clean golden-yellow soil and orange wavy stripes that already exist to the left. Reference image 2 shows the original paper repeated behind objects, for faithful drawing. Preserve the exact composition, colors, flat shading, white clouds, blue horizontal sky bands, two green hills, green scalloped grass trim and golden-orange bottom layers. Output one flat rectangular wallpaper texture, same 160:208 aspect ratio, edge-to-edge, no perspective, no margin, no text, no people, no objects, no white background, no additional decoration. Exact 2D Flash art restoration. Make the bottom 10 percent entirely clean yellow/orange soil with its orange wavy stripes, no dark or blue specks.\n",
+      "reason": "Master integral aprovado pelo responsável; nenhuma região RGB anterior visível é reaproveitada."
+    },
+    {
+      "id": "behance_floor_paris_blue",
+      "selected": true,
+      "projectMaster": "paris-blue-master.png",
+      "prompt": "Use case: precise-object-edit. Restore the provided centered square CafÃ© Mania floor tile. Remove ONLY the small dark brown/black vertical foreign fragment in the beige area immediately to the RIGHT of the central blue medallion, near x=86 percent, y=48 percent. Fill that little slash with the same beige painted background and its very subtle original shading. Preserve the exact centered blue and olive floral medallion, olive curves, corner flourishes, gray grout border at all four edges, square layout, colors, line weight, and scale. This is original 2D Flash game tile restoration, NOT redesign or sharpening. Output the entire identical square texture edge to edge with that one small blemish removed. Opaque background, no text, furniture, people, new ornaments, perspective, 3D or extra shadows.\n",
+      "reason": "Somente resíduo escuro à direita; motivo centralizado por fase da textura original."
+    }
+  ],
+  "sharedPrompt": "Use case: precise-object-edit. Rectified original Café Mania floor texture. Output one orthographic top-down opaque square, edge to edge, preserving composition, colors and all clean regions; faithful 2D Flash game restoration. No perspective, shadows, furniture, people, text, added borders or new decoration. Each records fix gives the requested local repair. The musketeer-star repair also uses its source floor plane as visual reference."
+}

@@ -1,0 +1,14 @@
+import { Application } from 'pixi.js';
+import '@fontsource/fredoka/latin-700.css';
+import { CoffeeScreenModal } from '../src/screens/room/CoffeeScreenModal';
+import { emptyPlayerState } from '../src/game/player-state';
+await document.fonts.ready;
+const app = new Application();
+await app.init({width:1920,height:1080,background:'#91b1ad',antialias:true,resolution:1,preserveDrawingBuffer:true});
+document.body.append(app.canvas);
+const snapshot={selected:{preview:'espresso'},mastery:{},groups:['basic'],masteryThresholds:[20,50,100],evolutionStage:1,playerState:emptyPlayerState()};
+const actions=[];
+const client={refresh:async()=>structuredClone(snapshot),act:async(action,machineId,extra)=>{actions.push({action,machineId,extra}); if(action==='select')snapshot.selected.preview=extra.recipeId; return structuredClone(snapshot);}};
+const modal=new CoffeeScreenModal(client,()=>{});app.stage.addChild(modal.view);
+app.ticker.add(ticker=>modal.update(ticker.deltaMS));window.coffeePreview={app,modal,snapshot,actions};
+await modal.open('preview');

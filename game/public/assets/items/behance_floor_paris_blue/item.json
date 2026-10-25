@@ -1,0 +1,86 @@
+{
+  "id": 9150227,
+  "classname": "behance_floor_paris_blue",
+  "name": "Piso Medalhão Azul",
+  "type": 0,
+  "kind": "decor",
+  "priceGold": 10,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 0,
+  "parts": [
+    {
+      "file": "tile.png",
+      "width": 162,
+      "height": 82,
+      "left": -81,
+      "top": -1
+    }
+  ],
+  "source": {
+    "art": "artes/9287765/015.png",
+    "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+    "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/5bc42c9287765.560cbfd2a1f67.png",
+    "artist": "Walter Ávila e Andrés Guerrero",
+    "archiveSha256": "d3b7e3f87dd1b9e80d259c6eeeee70042f8597121b0d1271b5d2bf2aad004caf",
+    "room": "015 (Paris, identificação visual)",
+    "method": "Extração da sala original, com reconstrução localizada por ImageGen; não é PNG original recuperado. Fora das regiões corrigidas, conserva os pixels da extração.",
+    "cells": [
+      [
+        9,
+        3
+      ]
+    ],
+    "calibration": "Consenso original, seguido de reconstrução localizada indicada em restoration; projeção, período e alfa preservados. A afirmação de pixels originais não se aplica às regiões geradas.",
+    "measuredTile": [
+      1.0,
+      1.0
+    ],
+    "seedCoverage": [
+      1.0
+    ],
+    "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+    "provisionalRules": {
+      "priceGold": {
+        "value": 10,
+        "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+      }
+    },
+    "restoration": {
+      "date": "2026-10-25",
+      "review": "tools/surfaces-behance/repairs/reviewed.json",
+      "method": "ImageGen somente nos resíduos delimitados; demais pixels e alfa preservados.",
+      "regions": [
+        [
+          [
+            9,
+            3
+          ],
+          [
+            0,
+            0,
+            1,
+            1
+          ]
+        ]
+      ],
+      "texturePhase": [
+        0.14,
+        -0.03125
+      ],
+      "generatedPatch": {
+        "file": "repairs/paris-blue-master.png",
+        "rects": [
+          [
+            208,
+            100,
+            231,
+            148
+          ]
+        ]
+      },
+      "prompts": "tools/surfaces-behance/repairs/generations.json"
+    }
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "machines": [
+    {
+      "classname": "coffee_machine",
+      "stage": 1,
+      "frontSize": [
+        170,
+        234
+      ],
+      "frontRGBAsha256": "35951f3d913f7f841aa6d391288be358d850b6dfc281eb660194b65a381604cb",
+      "previewFile": "game/public/assets/items/coffee_machine/stages/stage-1.png",
+      "previewSha256": "9e881d9a0d6909bbbfa7825f4bf99189c20b5b00c5b3f9459583785ea84f26d0"
+    },
+    {
+      "classname": "coffee_machine",
+      "stage": 2,
+      "frontSize": [
+        170,
+        231
+      ],
+      "frontRGBAsha256": "44aaaa54434aa7f18a84eccb6a3dd2eb13b553993db6658ac33b49642965a4f7",
+      "previewFile": "game/public/assets/items/coffee_machine/stages/stage-2.png",
+      "previewSha256": "49a57b1a894280172c6b0d2d3001386649432459576a8c995f509678e7d86e61"
+    },
+    {
+      "classname": "coffee_machine",
+      "stage": 3,
+      "frontSize": [
+        170,
+        258
+      ],
+      "frontRGBAsha256": "b06fea6ae2f34dd3c4223fcf00cd69496cb3d6a9f1201521193f4913f7b7a86b",
+      "previewFile": "game/public/assets/items/coffee_machine/stages/stage-3.png",
+      "previewSha256": "aff729cb3f62db217288f946c61c089a99c9f3b0f715c0e593d16fe1e63b5b59"
+    },
+    {
+      "classname": "juice_machine",
+      "stage": 1,
+      "frontSize": [
+        162,
+        239
+      ],
+      "frontRGBAsha256": "b3e2f5cff1513c43f772358c09c05fc2209272d733a6da742519995de6f58aa7",
+      "previewFile": "game/public/assets/items/juice_machine/stages/stage-1.png",
+      "previewSha256": "08b8fc97a3c874f4ce5f8cbf781a61d5dfcc833a8e90cb8a1af30d71ee0f1249"
+    },
+    {
+      "classname": "juice_machine",
+      "stage": 2,
+      "frontSize": [
+        170,
+        278
+      ],
+      "frontRGBAsha256": "b36331415216be9f36b69945d2ef00c1d4b46e2b0c25c7d3d4d0f5b5a99042d5",
+      "previewFile": "game/public/assets/items/juice_machine/stages/stage-2.png",
+      "previewSha256": "fbba524bc3c70a8f6d41a5734b0135946b0f3f7027edc14307470a34852ac749"
+    },
+    {
+      "classname": "juice_machine",
+      "stage": 3,
+      "frontSize": [
+        163,
+        266
+      ],
+      "frontRGBAsha256": "7da1cd82cb66751575fe591bdd4664306b8cad3c47ddd912f9fa90b47892a516",
+      "previewFile": "game/public/assets/items/juice_machine/stages/stage-3.png",
+      "previewSha256": "8d4b24b510d4ab14c7280f0b55635de3976cfff36854f18259803caf3ed7f58c"
+    },
+    {
+      "classname": "juice_machine",
+      "stage": 4,
+      "frontSize": [
+        162,
+        231
+      ],
+      "frontRGBAsha256": "e1a0b6ccf4e1de3d750f9820d87a675301b7198ce04bbdf62c16537c30c6d128",
+      "previewFile": "game/public/assets/items/juice_machine/stages/stage-4.png",
+      "previewSha256": "58665b629967db6c0838010d072bf806b009259ddcb49dd2968e550aa9d4a6e8"
+    }
+  ],
+  "items": [
+    {
+      "classname": "coffee_machine",
+      "id": 9100002,
+      "priceGold": 0,
+      "sizeX": 1,
+      "sizeY": 1
+    },
+    {
+      "classname": "juice_machine",
+      "id": 9100001,
+      "priceGold": 500,
+      "sizeX": 1,
+      "sizeY": 1
+    },
+    {
+      "classname": "pink_square_chair",
+      "id": 9040001,
+      "priceGold": 200,
+      "sizeX": 1,
+      "sizeY": 1
+    },
+    {
+      "classname": "acervo_chair_yellow_black",
+      "id": 9040201,
+      "priceGold": 200,
+      "sizeX": 1,
+      "sizeY": 1
+    }
+  ]
+}

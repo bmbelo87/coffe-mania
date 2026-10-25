@@ -99,6 +99,10 @@ func publicWorld(app core.App, owner string) (gamewire.World, error) {
 	if err != nil {
 		return w, err
 	}
+	w.Coffees, err = publicCoffees(app, owner)
+	if err != nil {
+		return w, err
+	}
 	foods, err := app.FindRecordsByFilter("room_food", "user={:owner}", "created", 0, 0, dbx.Params{"owner": owner})
 	if err != nil {
 		return w, err
@@ -147,6 +151,16 @@ func persistenceOperation(app core.App, op gamewire.Operation) gamewire.Result {
 			return fail(409, err.Error())
 		}
 		body, err = snapshotJuices(app, op.Owner, types.NowDateTime())
+	case "coffee_select", "coffee_serve", "coffee_recharge":
+		var command coffeeCommand
+		if json.Unmarshal(op.Body, &command) != nil {
+			return fail(400, "Pedido inválido.")
+		}
+		err = mutateCoffee(app, op.Owner, op.Action, command, types.NowDateTime())
+		if err != nil {
+			return fail(409, err.Error())
+		}
+		body, err = snapshotCoffees(app, op.Owner, types.NowDateTime())
 	case "dev":
 		if !devToolsForUser(app, op.User) {
 			return fail(403, "Ferramentas de desenvolvimento desabilitadas para esta conta.")
@@ -235,7 +249,7 @@ func persistenceOperation(app core.App, op gamewire.Operation) gamewire.Result {
 	}
 	result := gamewire.Result{Status: status, Body: data, World: &w}
 	// Developer tools may change popularity or level; the room adopts them immediately.
-	if op.Action == "dev" || strings.HasPrefix(op.Action, "juice_") {
+	if op.Action == "dev" || strings.HasPrefix(op.Action, "juice_") || strings.HasPrefix(op.Action, "coffee_") {
 		if business, err := ownerBusiness(app, op.Owner); err == nil {
 			result.Business = &business
 		}

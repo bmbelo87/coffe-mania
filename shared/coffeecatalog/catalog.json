@@ -1,0 +1,312 @@
+{
+  "masteryThresholds": [
+    20,
+    50,
+    100
+  ],
+  "source": {
+    "economy": "videos-jogo/Café Mania level 400.mp4",
+    "sha256": "af43720fe03045ddeecd9fdd07a9a73b39550a9c72efcc877b8508ca475cf140",
+    "edition": "HUD novo observado; data de publicação não identificada neste levantamento",
+    "rewardNames": "Blog oficial Vostu 19/01/2011, post521; reprodução cafemaniablogdedicas.blogspot.com/2011/02/. Expert: nomes de prêmios não confirmados."
+  },
+  "provisionalRules": {
+    "masteryThresholds": {
+      "value": [
+        20,
+        50,
+        100
+      ],
+      "reason": "Metas cumulativas de calibração do projeto; o vídeo mostra contadores servidos, não limiares históricos."
+    },
+    "machineEvolution": {
+      "value": "stage2=basic dominated; stage3=basic+medium dominated; maximum3",
+      "reason": "Associação provisória das três aparências fornecidas aos grupos; sequência histórica de evolução não confirmada."
+    },
+    "machineOwnership": {
+      "value": {
+        "priceGold": 0,
+        "maximumOwned": 1
+      },
+      "reason": "Adaptação local provisória da máquina gratuita; limite histórico não confirmado."
+    },
+    "energyRecharge": {
+      "value": 4,
+      "reason": "Reutiliza a recarga compartilhada do projeto; custo específico de café na edição não confirmado."
+    }
+  },
+  "recipes": [
+    {
+      "id": "espresso",
+      "name": "Espresso",
+      "group": "basic",
+      "file": "espresso.png",
+      "energyCost": 5,
+      "gold": 23,
+      "xp": 2,
+      "popularityTenths": 6,
+      "masteryReward": "Poster de Café",
+      "source": {
+        "video": "videos-jogo/Café Mania level 400.mp4",
+        "seconds": 103,
+        "reference": ".runtime/coffee-research/local/coffee-level400/recortes/01-basic.png",
+        "balance": "observed-new-hud-video; publication date unknown"
+      }
+    },
+    {
+      "id": "descafeinado",
+      "name": "Descafeinado",
+      "group": "basic",
+      "file": "descafeinado.png",
+      "energyCost": 2,
+      "gold": 17,
+      "xp": 1,
+      "popularityTenths": 10,
+      "masteryReward": "Mesa com Cookies",
+      "source": {
+        "video": "videos-jogo/Café Mania level 400.mp4",
+        "seconds": 103,
+        "reference": ".runtime/coffee-research/local/coffee-level400/recortes/02-basic.png",
+        "balance": "observed-new-hud-video; publication date unknown"
+      }
+    },
+    {
+      "id": "cafe_com_leite",
+      "name": "Café com Leite",
+      "group": "basic",
+      "file": "cafe_com_leite.png",
+      "energyCost": 3,
+      "gold": 38,
+      "xp": 1,
+      "popularityTenths": 4,
+      "masteryReward": "Display com Taças",
+      "source": {
+        "video": "videos-jogo/Café Mania level 400.mp4",
+        "seconds": 103,
+        "reference": ".runtime/coffee-research/local/coffee-level400/recortes/03-basic.png",
+        "balance": "observed-new-hud-video; publication date unknown"
+      }
+    },
+    {
+      "id": "cafe_com_creme",
+      "name": "Café com Creme",
+      "group": "basic",
+      "file": "cafe_com_creme.png",
+      "energyCost": 3,
+      "gold": 25,
+      "xp": 2,
+      "popularityTenths": 7,
+      "masteryReward": "Cartaz Duplo",
+      "source": {
+        "video": "videos-jogo/Café Mania level 400.mp4",
+        "seconds": 103,
+        "reference": ".runtime/coffee-research/local/coffee-level400/recortes/04-basic.png",
+        "balance": "observed-new-hud-video; publication date unknown"
+      }
+    },
+    {
+      "id": "cortado",
+      "name": "Cortado",
+      "group": "medium",
+      "file": "cortado.png",
+      "energyCost": 6,
+      "gold": 45,
+      "xp": 8,
+      "popularityTenths": 8,
+      "masteryReward": "Relógio de Parede",
+      "source": {
+        "video": "videos-jogo/Café Mania level 400.mp4",
+        "seconds": 106,
+        "reference": ".runtime/coffee-research/local/coffee-level400/recortes/05-medium.png",
+        "balance": "observed-new-hud-video; publication date unknown"
+      }
+    },
+    {
+      "id": "cafe_com_canela",
+      "name": "Café com Canela",
+      "group": "medium",
+      "file": "cafe_com_canela.png",
+      "energyCost": 2,
+      "gold": 33,
+      "xp": 2,
+      "popularityTenths": 12,
+      "masteryReward": "Vitrine de Tortas",
+      "source": {
+        "video": "videos-jogo/Café Mania level 400.mp4",
+        "seconds": 106,
+        "reference": ".runtime/coffee-research/local/coffee-level400/recortes/06-medium.png",
+        "balance": "observed-new-hud-video; publication date unknown"
+      }
+    },
+    {
+      "id": "cappuccino",
+      "name": "Cappuccino",
+      "group": "medium",
+      "file": "cappuccino.png",
+      "energyCost": 3,
+      "gold": 75,
+      "xp": 2,
+      "popularityTenths": 6,
+      "masteryReward": "Mesa com Lâmpada",
+      "source": {
+        "video": "videos-jogo/Café Mania level 400.mp4",
+        "seconds": 106,
+        "reference": ".runtime/coffee-research/local/coffee-level400/recortes/07-medium.png",
+        "balance": "observed-new-hud-video; publication date unknown"
+      }
+    },
+    {
+      "id": "macchiato",
+      "name": "Macchiato",
+      "group": "medium",
+      "file": "macchiato.png",
+      "energyCost": 3,
+      "gold": 50,
+      "xp": 4,
+      "popularityTenths": 11,
+      "masteryReward": "Estante com Taças",
+      "source": {
+        "video": "videos-jogo/Café Mania level 400.mp4",
+        "seconds": 106,
+        "reference": ".runtime/coffee-research/local/coffee-level400/recortes/08-medium.png",
+        "balance": "observed-new-hud-video; publication date unknown"
+      }
+    },
+    {
+      "id": "mocaccino",
+      "name": "Mocaccino",
+      "group": "advanced",
+      "file": "mocaccino.png",
+      "energyCost": 4,
+      "gold": 60,
+      "xp": 14,
+      "popularityTenths": 11,
+      "masteryReward": "Mesa Dupla de Café",
+      "source": {
+        "video": "videos-jogo/Café Mania level 400.mp4",
+        "seconds": 110,
+        "reference": ".runtime/coffee-research/local/coffee-level400/recortes/09-advanced.png",
+        "balance": "observed-new-hud-video; publication date unknown"
+      }
+    },
+    {
+      "id": "cafe_irlandes",
+      "name": "Café Irlandês",
+      "group": "advanced",
+      "file": "cafe_irlandes.png",
+      "energyCost": 3,
+      "gold": 68,
+      "xp": 9,
+      "popularityTenths": 13,
+      "masteryReward": "Cafeteiro",
+      "source": {
+        "video": "videos-jogo/Café Mania level 400.mp4",
+        "seconds": 110,
+        "reference": ".runtime/coffee-research/local/coffee-level400/recortes/10-advanced.png",
+        "balance": "observed-new-hud-video; publication date unknown"
+      }
+    },
+    {
+      "id": "macchiato_caramelo",
+      "name": "Macchiato Caramelo",
+      "group": "advanced",
+      "file": "macchiato_caramelo.png",
+      "energyCost": 5,
+      "gold": 152,
+      "xp": 10,
+      "popularityTenths": 10,
+      "masteryReward": "Sofá Duplo",
+      "source": {
+        "video": "videos-jogo/Café Mania level 400.mp4",
+        "seconds": 110,
+        "reference": ".runtime/coffee-research/local/coffee-level400/recortes/11-advanced.png",
+        "balance": "observed-new-hud-video; publication date unknown"
+      }
+    },
+    {
+      "id": "submarino",
+      "name": "Submarino",
+      "group": "advanced",
+      "file": "submarino.png",
+      "energyCost": 5,
+      "gold": 190,
+      "xp": 9,
+      "popularityTenths": 12,
+      "masteryReward": "Barra de Café",
+      "source": {
+        "video": "videos-jogo/Café Mania level 400.mp4",
+        "seconds": 110,
+        "reference": ".runtime/coffee-research/local/coffee-level400/recortes/12-advanced.png",
+        "balance": "observed-new-hud-video; publication date unknown"
+      }
+    },
+    {
+      "id": "frappe",
+      "name": "Frappé",
+      "group": "expert",
+      "file": "frappe.png",
+      "energyCost": 5,
+      "gold": 150,
+      "xp": 9,
+      "popularityTenths": 12,
+      "masteryReward": "",
+      "source": {
+        "video": "videos-jogo/Café Mania level 400.mp4",
+        "seconds": 114,
+        "reference": ".runtime/coffee-research/local/coffee-level400/recortes/13-expert.png",
+        "balance": "observed-new-hud-video; publication date unknown"
+      }
+    },
+    {
+      "id": "chai_com_especiarias",
+      "name": "Chai com Especiarias",
+      "group": "expert",
+      "file": "chai_com_especiarias.png",
+      "energyCost": 3,
+      "gold": 80,
+      "xp": 9,
+      "popularityTenths": 15,
+      "masteryReward": "",
+      "source": {
+        "video": "videos-jogo/Café Mania level 400.mp4",
+        "seconds": 114,
+        "reference": ".runtime/coffee-research/local/coffee-level400/recortes/14-expert.png",
+        "balance": "observed-new-hud-video; publication date unknown"
+      }
+    },
+    {
+      "id": "iced_coffee_com_menta",
+      "name": "Iced Coffee com Menta",
+      "group": "expert",
+      "file": "iced_coffee_com_menta.png",
+      "energyCost": 6,
+      "gold": 220,
+      "xp": 12,
+      "popularityTenths": 10,
+      "masteryReward": "",
+      "source": {
+        "video": "videos-jogo/Café Mania level 400.mp4",
+        "seconds": 114,
+        "reference": ".runtime/coffee-research/local/coffee-level400/recortes/15-expert.png",
+        "balance": "observed-new-hud-video; publication date unknown"
+      }
+    },
+    {
+      "id": "capuccino_com_laranja",
+      "name": "Capuccino com Laranja",
+      "group": "expert",
+      "file": "capuccino_com_laranja.png",
+      "energyCost": 6,
+      "gold": 60,
+      "xp": 18,
+      "popularityTenths": 13,
+      "masteryReward": "",
+      "source": {
+        "video": "videos-jogo/Café Mania level 400.mp4",
+        "seconds": 114,
+        "reference": ".runtime/coffee-research/local/coffee-level400/recortes/16-expert.png",
+        "balance": "observed-new-hud-video; publication date unknown"
+      }
+    }
+  ]
+}

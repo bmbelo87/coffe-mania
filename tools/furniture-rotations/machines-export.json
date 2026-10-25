@@ -1,0 +1,366 @@
+[
+  {
+    "classname": "coffee_machine",
+    "stage": 1,
+    "backScale": 0.16726233023588277,
+    "backSize": [
+      159,
+      234
+    ],
+    "backRotation": 2,
+    "poses": [
+      {
+        "rotation": 0,
+        "frame": {
+          "file": "stage-1-rotation-0.png",
+          "width": 170,
+          "height": 234,
+          "left": -82,
+          "top": -150
+        }
+      },
+      {
+        "rotation": 1,
+        "frame": {
+          "file": "stage-1-rotation-1.png",
+          "width": 170,
+          "height": 234,
+          "left": -88,
+          "top": -150
+        }
+      },
+      {
+        "rotation": 2,
+        "frame": {
+          "file": "stage-1-rotation-2.png",
+          "width": 159,
+          "height": 234,
+          "left": -66,
+          "top": -153
+        }
+      },
+      {
+        "rotation": 3,
+        "frame": {
+          "file": "stage-1-rotation-3.png",
+          "width": 159,
+          "height": 234,
+          "left": -93,
+          "top": -153
+        }
+      }
+    ]
+  },
+  {
+    "classname": "coffee_machine",
+    "stage": 2,
+    "backScale": 0.16441281138790034,
+    "backSize": [
+      169,
+      231
+    ],
+    "backRotation": 2,
+    "poses": [
+      {
+        "rotation": 0,
+        "frame": {
+          "file": "stage-2-rotation-0.png",
+          "width": 170,
+          "height": 231,
+          "left": -71,
+          "top": -148
+        }
+      },
+      {
+        "rotation": 1,
+        "frame": {
+          "file": "stage-2-rotation-1.png",
+          "width": 170,
+          "height": 231,
+          "left": -99,
+          "top": -148
+        }
+      },
+      {
+        "rotation": 2,
+        "frame": {
+          "file": "stage-2-rotation-2.png",
+          "width": 169,
+          "height": 231,
+          "left": -80,
+          "top": -150
+        }
+      },
+      {
+        "rotation": 3,
+        "frame": {
+          "file": "stage-2-rotation-3.png",
+          "width": 169,
+          "height": 231,
+          "left": -89,
+          "top": -150
+        }
+      }
+    ]
+  },
+  {
+    "classname": "coffee_machine",
+    "stage": 3,
+    "backScale": 0.17780840799448655,
+    "backSize": [
+      171,
+      258
+    ],
+    "backRotation": 2,
+    "poses": [
+      {
+        "rotation": 0,
+        "frame": {
+          "file": "stage-3-rotation-0.png",
+          "width": 170,
+          "height": 258,
+          "left": -68,
+          "top": -174
+        }
+      },
+      {
+        "rotation": 1,
+        "frame": {
+          "file": "stage-3-rotation-1.png",
+          "width": 170,
+          "height": 258,
+          "left": -102,
+          "top": -174
+        }
+      },
+      {
+        "rotation": 2,
+        "frame": {
+          "file": "stage-3-rotation-2.png",
+          "width": 171,
+          "height": 258,
+          "left": -77,
+          "top": -177
+        }
+      },
+      {
+        "rotation": 3,
+        "frame": {
+          "file": "stage-3-rotation-3.png",
+          "width": 171,
+          "height": 258,
+          "left": -94,
+          "top": -177
+        }
+      }
+    ]
+  },
+  {
+    "classname": "juice_machine",
+    "stage": 1,
+    "backScale": 0.16643454038997216,
+    "backSize": [
+      166,
+      239
+    ],
+    "backRotation": 2,
+    "poses": [
+      {
+        "rotation": 0,
+        "frame": {
+          "file": "stage-1-rotation-0.png",
+          "width": 162,
+          "height": 239,
+          "left": -81,
+          "top": -158
+        }
+      },
+      {
+        "rotation": 1,
+        "frame": {
+          "file": "stage-1-rotation-1.png",
+          "width": 162,
+          "height": 239,
+          "left": -81,
+          "top": -158
+        }
+      },
+      {
+        "rotation": 2,
+        "frame": {
+          "file": "stage-1-rotation-2.png",
+          "width": 166,
+          "height": 239,
+          "left": -63,
+          "top": -158
+        }
+      },
+      {
+        "rotation": 3,
+        "frame": {
+          "file": "stage-1-rotation-3.png",
+          "width": 166,
+          "height": 239,
+          "left": -103,
+          "top": -158
+        }
+      }
+    ]
+  },
+  {
+    "classname": "juice_machine",
+    "stage": 2,
+    "backScale": 0.17900837089504185,
+    "backSize": [
+      171,
+      278
+    ],
+    "backRotation": 3,
+    "poses": [
+      {
+        "rotation": 0,
+        "frame": {
+          "file": "stage-2-rotation-0.png",
+          "width": 170,
+          "height": 278,
+          "left": -82,
+          "top": -194
+        }
+      },
+      {
+        "rotation": 1,
+        "frame": {
+          "file": "stage-2-rotation-1.png",
+          "width": 170,
+          "height": 278,
+          "left": -88,
+          "top": -194
+        }
+      },
+      {
+        "rotation": 2,
+        "frame": {
+          "file": "stage-2-rotation-2.png",
+          "width": 171,
+          "height": 278,
+          "left": -81,
+          "top": -197
+        }
+      },
+      {
+        "rotation": 3,
+        "frame": {
+          "file": "stage-2-rotation-3.png",
+          "width": 171,
+          "height": 278,
+          "left": -90,
+          "top": -197
+        }
+      }
+    ]
+  },
+  {
+    "classname": "juice_machine",
+    "stage": 3,
+    "backScale": 0.17768871075484302,
+    "backSize": [
+      149,
+      266
+    ],
+    "backRotation": 2,
+    "poses": [
+      {
+        "rotation": 0,
+        "frame": {
+          "file": "stage-3-rotation-0.png",
+          "width": 163,
+          "height": 266,
+          "left": -82,
+          "top": -183
+        }
+      },
+      {
+        "rotation": 1,
+        "frame": {
+          "file": "stage-3-rotation-1.png",
+          "width": 163,
+          "height": 266,
+          "left": -81,
+          "top": -183
+        }
+      },
+      {
+        "rotation": 2,
+        "frame": {
+          "file": "stage-3-rotation-2.png",
+          "width": 149,
+          "height": 266,
+          "left": -85,
+          "top": -185
+        }
+      },
+      {
+        "rotation": 3,
+        "frame": {
+          "file": "stage-3-rotation-3.png",
+          "width": 149,
+          "height": 266,
+          "left": -64,
+          "top": -185
+        }
+      }
+    ]
+  },
+  {
+    "classname": "juice_machine",
+    "stage": 4,
+    "backScale": 0.1711111111111111,
+    "backSize": [
+      162,
+      231
+    ],
+    "backRotation": 2,
+    "poses": [
+      {
+        "rotation": 0,
+        "frame": {
+          "file": "stage-4-rotation-0.png",
+          "width": 162,
+          "height": 231,
+          "left": -81,
+          "top": -149
+        }
+      },
+      {
+        "rotation": 1,
+        "frame": {
+          "file": "stage-4-rotation-1.png",
+          "width": 162,
+          "height": 231,
+          "left": -81,
+          "top": -149
+        }
+      },
+      {
+        "rotation": 2,
+        "frame": {
+          "file": "stage-4-rotation-2.png",
+          "width": 162,
+          "height": 231,
+          "left": -76,
+          "top": -150
+        }
+      },
+      {
+        "rotation": 3,
+        "frame": {
+          "file": "stage-4-rotation-3.png",
+          "width": 162,
+          "height": 231,
+          "left": -86,
+          "top": -150
+        }
+      }
+    ]
+  }
+]

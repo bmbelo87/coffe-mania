@@ -1,0 +1,70 @@
+{
+  "id": 9150223,
+  "classname": "behance_floor_mexico_talavera",
+  "name": "Piso Talavera",
+  "type": 0,
+  "kind": "decor",
+  "priceGold": 10,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 0,
+  "parts": [
+    {
+      "file": "tile.png",
+      "width": 162,
+      "height": 82,
+      "left": -81,
+      "top": -1
+    }
+  ],
+  "source": {
+    "art": "artes/9287765/013.png",
+    "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+    "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/c0541e9287765.560cbd33ab95b.png",
+    "artist": "Walter Ávila e Andrés Guerrero",
+    "archiveSha256": "c6fdd40fd2d175193244dd723257fd2f3295c74a376567e6b1bf0b5800d9cf10",
+    "room": "013 (México, identificação visual)",
+    "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+    "cells": [
+      [
+        7,
+        0
+      ]
+    ],
+    "calibration": "Amostras originais selecionadas por revisão visual, sem mistura de cores; as regiões cobertas foram excluídas antes do consenso. Projeção, período e registro preservados.",
+    "measuredTile": [
+      1.0,
+      1.0
+    ],
+    "seedCoverage": [
+      1.0
+    ],
+    "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+    "provisionalRules": {
+      "priceGold": {
+        "value": 10,
+        "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+      }
+    },
+    "restoration": {
+      "date": "2026-10-25",
+      "review": "tools/surfaces-behance/repairs/reviewed.json",
+      "method": "Células/faixas originais visualmente livres; geometria medida preservada.",
+      "regions": [
+        [
+          [
+            7,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            1
+          ]
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,148 @@
+{
+  "id": 9150213,
+  "classname": "behance_floor_party_lilac",
+  "name": "Piso Lilás Quadriculado",
+  "type": 0,
+  "kind": "decor",
+  "priceGold": 10,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 0,
+  "parts": [
+    {
+      "file": "tile.png",
+      "width": 162,
+      "height": 82,
+      "left": -81,
+      "top": -1
+    }
+  ],
+  "source": {
+    "art": "artes/9287765/005.png",
+    "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+    "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/af3c819287765.560cbd330ee40.png",
+    "artist": "Walter Ávila e Andrés Guerrero",
+    "archiveSha256": "5b5ece1fc6e1f0a12da61674d325afb19394bf8c4a4d4145025d57a74a1269cd",
+    "room": "005 (Aniversário, identificação visual)",
+    "method": "Extração da sala original, com reconstrução localizada por ImageGen; não é PNG original recuperado. Fora das regiões corrigidas, conserva os pixels da extração.",
+    "cells": [
+      [
+        0,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        2,
+        6
+      ]
+    ],
+    "calibration": "Consenso original, seguido de reconstrução localizada indicada em restoration; projeção, período e alfa preservados. A afirmação de pixels originais não se aplica às regiões geradas.",
+    "measuredTile": [
+      1.0,
+      1.0
+    ],
+    "seedCoverage": [
+      0.858
+    ],
+    "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+    "provisionalRules": {
+      "priceGold": {
+        "value": 10,
+        "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+      }
+    },
+    "restoration": {
+      "date": "2026-10-25",
+      "review": "tools/surfaces-behance/repairs/reviewed.json",
+      "method": "ImageGen somente nos resíduos delimitados; demais pixels e alfa preservados.",
+      "generatedPatch": {
+        "file": "repairs/party-lilac-master.png",
+        "rects": [
+          [
+            0,
+            0,
+            26,
+            80
+          ],
+          [
+            0,
+            0,
+            16,
+            256
+          ],
+          [
+            245,
+            0,
+            256,
+            256
+          ],
+          [
+            0,
+            245,
+            256,
+            256
+          ],
+          [
+            57,
+            90,
+            100,
+            132
+          ],
+          [
+            0,
+            115,
+            48,
+            141
+          ],
+          [
+            50,
+            90,
+            112,
+            141
+          ]
+        ]
+      },
+      "prompts": "tools/surfaces-behance/repairs/generations.json"
+    }
+  }
+}

@@ -1,0 +1,284 @@
+[
+  {
+    "classname": "behance_wall_egypt",
+    "name": "Parede Egípcia",
+    "sheet": "artes/43063757/008.jpg",
+    "part": {
+      "file": "wall.png",
+      "width": 80,
+      "height": 248,
+      "left": -80,
+      "top": -168
+    },
+    "measuredPeriod": {
+      "x": 80.72,
+      "correlation": [
+        0.595
+      ]
+    }
+  },
+  {
+    "classname": "behance_wall_classic",
+    "name": "Parede Clássica",
+    "sheet": "artes/43063757/008.jpg",
+    "part": {
+      "file": "wall.png",
+      "width": 80,
+      "height": 248,
+      "left": -80,
+      "top": -168
+    },
+    "measuredPeriod": {
+      "x": 79.45,
+      "correlation": [
+        0.991
+      ]
+    }
+  },
+  {
+    "classname": "behance_wall_cards",
+    "name": "Parede Cartas",
+    "sheet": "artes/43063757/008.jpg",
+    "part": {
+      "file": "wall.png",
+      "width": 80,
+      "height": 248,
+      "left": -80,
+      "top": -168
+    },
+    "measuredPeriod": {
+      "x": 79.87,
+      "correlation": [
+        0.827
+      ]
+    }
+  },
+  {
+    "classname": "behance_floor_balloons",
+    "name": "Piso Balões",
+    "sheet": "artes/43063757/008.jpg",
+    "part": {
+      "file": "tile.png",
+      "width": 162,
+      "height": 82,
+      "left": -81,
+      "top": -1
+    },
+    "measuredPeriod": {
+      "u": 157.85,
+      "v": 157.82,
+      "correlation": [
+        0.962,
+        0.961
+      ]
+    }
+  },
+  {
+    "classname": "behance_floor_confetti",
+    "name": "Piso Confetes",
+    "sheet": "artes/43063757/008.jpg",
+    "part": {
+      "file": "tile.png",
+      "width": 162,
+      "height": 82,
+      "left": -81,
+      "top": -1
+    },
+    "measuredPeriod": {
+      "u": 158.02,
+      "v": 158.62,
+      "correlation": [
+        0.925,
+        0.923
+      ]
+    }
+  },
+  {
+    "classname": "behance_floor_june_festival",
+    "name": "Piso Festa Junina",
+    "sheet": "artes/43063757/009.jpg",
+    "part": {
+      "file": "tile.png",
+      "width": 162,
+      "height": 82,
+      "left": -81,
+      "top": -1
+    },
+    "measuredPeriod": {
+      "u": 159.54,
+      "v": 158.45,
+      "correlation": [
+        0.951,
+        0.879
+      ]
+    }
+  },
+  {
+    "classname": "behance_wall_june_festival",
+    "name": "Parede Festa Junina",
+    "sheet": "artes/43063757/009.jpg",
+    "part": {
+      "file": "wall.png",
+      "width": 80,
+      "height": 248,
+      "left": -80,
+      "top": -168
+    },
+    "measuredPeriod": {
+      "x": 79.68,
+      "correlation": [
+        0.959
+      ]
+    }
+  },
+  {
+    "classname": "behance_floor_circus",
+    "name": "Piso Estrelas de Circo",
+    "sheet": "artes/43063757/009.jpg",
+    "part": {
+      "file": "tile.png",
+      "width": 162,
+      "height": 82,
+      "left": -81,
+      "top": -1
+    },
+    "measuredPeriod": {
+      "u": 158.75,
+      "v": 157.81,
+      "correlation": [
+        0.99,
+        0.962
+      ]
+    }
+  },
+  {
+    "classname": "behance_wall_circus",
+    "name": "Parede Listras de Circo",
+    "sheet": "artes/43063757/009.jpg",
+    "part": {
+      "file": "wall.png",
+      "width": 80,
+      "height": 248,
+      "left": -80,
+      "top": -168
+    },
+    "measuredPeriod": {
+      "x": 80.11,
+      "correlation": [
+        0.981
+      ]
+    }
+  },
+  {
+    "classname": "behance_floor_circus_deluxe",
+    "name": "Piso Madeira de Circo",
+    "sheet": "artes/43063757/009.jpg",
+    "part": {
+      "file": "tile.png",
+      "width": 162,
+      "height": 82,
+      "left": -81,
+      "top": -1
+    },
+    "measuredPeriod": {
+      "u": 159.53,
+      "v": 158.5,
+      "correlation": [
+        0.973,
+        0.922
+      ]
+    }
+  },
+  {
+    "classname": "behance_wall_circus_deluxe",
+    "name": "Parede Circo Decorado",
+    "sheet": "artes/43063757/009.jpg",
+    "part": {
+      "file": "wall.png",
+      "width": 80,
+      "height": 248,
+      "left": -80,
+      "top": -168
+    },
+    "measuredPeriod": {
+      "x": 80.31,
+      "correlation": [
+        0.953
+      ]
+    }
+  },
+  {
+    "classname": "behance_floor_night",
+    "name": "Piso Verde Noturno",
+    "sheet": "artes/43063757/009.jpg",
+    "part": {
+      "file": "tile.png",
+      "width": 162,
+      "height": 82,
+      "left": -81,
+      "top": -1
+    },
+    "measuredPeriod": {
+      "u": 157.77,
+      "v": 158.68,
+      "correlation": [
+        0.968,
+        0.97
+      ]
+    }
+  },
+  {
+    "classname": "behance_wall_night",
+    "name": "Parede Céu Noturno",
+    "sheet": "artes/43063757/009.jpg",
+    "part": {
+      "file": "wall.png",
+      "width": 80,
+      "height": 248,
+      "left": -80,
+      "top": -168
+    },
+    "measuredPeriod": {
+      "x": 79.17,
+      "correlation": [
+        0.963
+      ]
+    }
+  },
+  {
+    "classname": "behance_wall_blue_tiles",
+    "name": "Parede Azulejos Azuis",
+    "sheet": "artes/43063757/009.jpg",
+    "part": {
+      "file": "wall.png",
+      "width": 80,
+      "height": 248,
+      "left": -80,
+      "top": -168
+    },
+    "measuredPeriod": {
+      "x": 79.64,
+      "correlation": [
+        0.727
+      ]
+    }
+  },
+  {
+    "classname": "behance_wall_parquet",
+    "name": "Parede Geométrica",
+    "sheet": "artes/43063757/009.jpg",
+    "part": {
+      "file": "wall.png",
+      "width": 80,
+      "height": 248,
+      "left": -80,
+      "top": -168
+    },
+    "measuredPeriod": {
+      "x": 79.01,
+      "correlation": [
+        0.866
+      ]
+    }
+  }
+]

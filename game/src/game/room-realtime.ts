@@ -3,6 +3,7 @@ import type { CookingSnapshot } from './cooking';
 import type { RoomUnit } from './room-inventory';
 import type { Tile } from '../world/iso';
 import type { JuiceStock } from './juices';
+import type { CoffeeMachine } from './coffees';
 import { trackDisconnect } from '../core/telemetry';
 import { GAME_VERSION } from '../core/version';
 
@@ -15,22 +16,26 @@ export interface SharedActor {
   tx: number; ty: number; direction: number; outside: boolean; state: string;
   move?: { from: Tile; to: Tile; startedAt: number; duration: number };
   chairId?: string; tableId?: string; food?: SharedFood; actionRemaining?: number;
+  decorationExit?: boolean; detachedChair?: RoomUnit; detachedTable?: RoomUnit;
   action?: SharedAction; emotion?: SharedEmotion;
   juiceRequestId?: string;
+  coffeeRequestId?: string;
 }
 export interface SharedWorld {
   roomId: string; revision: number; tilesX: number; tilesY: number; patioX?: number; patioY?: number;
   units: RoomUnit[]; foods: SharedFood[]; cooking?: CookingSnapshot;
   juices?: JuiceStock[];
+  coffees?: CoffeeMachine[];
   employees?: Employee[] | null;
 }
 export interface RoomEvent {
-  type: 'welcome' | 'actors' | 'world' | 'food' | 'juices' | 'ack' | 'error'; epoch: string; seq: number; serverNow: number;
+  type: 'welcome' | 'actors' | 'world' | 'food' | 'juices' | 'coffees' | 'ack' | 'error'; epoch: string; seq: number; serverNow: number;
   selfId?: string; world?: SharedWorld; actors?: SharedActor[]; removed?: string[];
   units?: RoomUnit[]; revision?: number; foods?: SharedFood[]; cooking?: CookingSnapshot;
   /** Present on a "world" event when the café or its patio changed size (patio omitted when 0). */
   tilesX?: number; tilesY?: number; patioX?: number; patioY?: number;
   juices?: JuiceStock[];
+  coffees?: CoffeeMachine[];
   requestId?: string; message?: string;
 }
 
@@ -123,7 +128,8 @@ export class RoomRealtime {
           this.serverAnchor = event.serverNow; this.localAnchor = performance.now();
           for (const state of event.actors ?? []) {
             const old = this.actors.get(state.id);
-            this.actors.set(state.id, { ...old, ...state, move: state.move, chairId: state.chairId, tableId: state.tableId, food: state.food, action: state.action, emotion: state.emotion, juiceRequestId: state.juiceRequestId });
+            this.actors.set(state.id, { ...old, ...state, move: state.move, chairId: state.chairId, tableId: state.tableId, food: state.food, action: state.action, emotion: state.emotion, juiceRequestId: state.juiceRequestId, coffeeRequestId: state.coffeeRequestId,
+              decorationExit: state.decorationExit, detachedChair: state.detachedChair, detachedTable: state.detachedTable });
           }
           for (const id of event.removed ?? []) this.actors.delete(id);
           if (event.requestId) {

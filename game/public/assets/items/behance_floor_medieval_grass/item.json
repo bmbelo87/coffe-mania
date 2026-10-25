@@ -1,0 +1,175 @@
+{
+  "id": 9150220,
+  "classname": "behance_floor_medieval_grass",
+  "name": "Piso Grama Florida",
+  "type": 0,
+  "kind": "decor",
+  "priceGold": 10,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 0,
+  "parts": [
+    {
+      "file": "tile.png",
+      "width": 162,
+      "height": 82,
+      "left": -81,
+      "top": -1
+    }
+  ],
+  "source": {
+    "art": "artes/9287765/010.png",
+    "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+    "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/00e60a9287765.560cbd3365548.png",
+    "artist": "Walter Ávila e Andrés Guerrero",
+    "archiveSha256": "8e4ecce4cf18e9fe109e472ec05cfeab51bdb109e41d9993f7e6a2e7e7153f5d",
+    "room": "010 (Medieval, identificação visual)",
+    "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+    "cells": [
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        7
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        1,
+        7
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        3,
+        6
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        4,
+        7
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        5,
+        7
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        5
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        7,
+        6
+      ],
+      [
+        7,
+        7
+      ]
+    ],
+    "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+    "measuredTile": [
+      1.0,
+      1.0
+    ],
+    "seedCoverage": [
+      0.847
+    ],
+    "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+    "provisionalRules": {
+      "priceGold": {
+        "value": 10,
+        "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+      }
+    }
+  }
+}

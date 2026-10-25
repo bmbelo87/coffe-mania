@@ -1,8 +1,11 @@
-import { test } from 'node:test';
+import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { build } from 'esbuild';
 
-const source = await build({ stdin: { contents: `export { DoorView } from './game/src/screens/room/DoorView'; export { RoomStoreController } from './game/src/screens/room/RoomStoreController'; export { Container, Texture, TextureSource } from 'pixi.js'; export {RoomModel} from './game/src/world/RoomModel';`, resolveDir: process.cwd(), loader: 'ts' }, bundle: true, format: 'esm', platform: 'node', write: false, loader:{'.css':'empty'} });
+const previousDocument=globalThis.document;
+globalThis.document ??= {baseURI:'http://fixture.invalid/'};
+after(()=>{if(previousDocument===undefined)delete globalThis.document;else globalThis.document=previousDocument;});
+const source = await build({ stdin: { contents: `export { DoorView } from './game/src/screens/room/DoorView'; export { RoomStoreController } from './game/src/screens/room/RoomStoreController'; export { Container, Texture, TextureSource } from 'pixi.js'; export {RoomModel} from './game/src/world/RoomModel';`, resolveDir: process.cwd(), loader: 'ts' }, bundle: true, format: 'esm', platform: 'node', write: false, loader:{'.css':'empty'},define:{'import.meta.env.BASE_URL':'"/"'} });
 const M = await import('data:text/javascript;base64,' + Buffer.from(source.outputFiles[0].text).toString('base64'));
 
 test('Decoration snaps an open door closed and keeps it closed while customers cross', () => {
@@ -34,7 +37,7 @@ function fixture(prepareSelection) {
   return {controller,store,entry:{item,unit},mutations:()=>mutations,released:()=>released};
 }
 
-test('Table placement waits for the shared refund and cannot commit twice', async () => {
+test('Table placement waits for the shared selection claim and cannot commit twice', async () => {
   let confirm;
   const f=fixture(()=>new Promise(resolve=>{confirm=resolve;}));
   f.controller.select(f.entry);
@@ -47,7 +50,7 @@ test('Table placement waits for the shared refund and cannot commit twice', asyn
   f.controller.destroy();
 });
 
-test('Cancelling or closing before refund acknowledgement prevents placement',async()=>{
+test('Cancelling or closing before selection acknowledgement prevents placement',async()=>{
   for(const close of [false,true]) {
     let confirm;
     const f=fixture(()=>new Promise(resolve=>{confirm=resolve;}));
@@ -61,7 +64,7 @@ test('Cancelling or closing before refund acknowledgement prevents placement',as
   }
 });
 
-test('A failed refund restores the selected table without a room mutation',async()=>{
+test('A failed selection claim restores the selected table without a room mutation',async()=>{
   const f=fixture(()=>Promise.reject(new Error('Offline')));
   f.controller.select(f.entry);
   await f.controller.commit(true);

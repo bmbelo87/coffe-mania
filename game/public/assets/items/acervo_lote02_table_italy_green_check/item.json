@@ -8,22 +8,22 @@
   "purchasable": true,
   "sizeX": 1,
   "sizeY": 1,
-  "itemHeight": 49.2,
+  "itemHeight": 42.312,
   "parts": [
     {
       "file": "rotation-0.png",
-      "width": 146,
-      "height": 131,
-      "left": -73,
-      "top": -48,
+      "width": 126,
+      "height": 113,
+      "left": -66,
+      "top": -44,
       "rotation": 0
     },
     {
       "file": "rotation-1.png",
-      "width": 146,
-      "height": 131,
-      "left": -73,
-      "top": -48,
+      "width": 126,
+      "height": 113,
+      "left": -66,
+      "top": -44,
       "rotation": 1
     }
   ],
@@ -68,6 +68,41 @@
           "height": 49.2
         }
       }
+    },
+    "runtimeVisualScale": {
+      "factor": 0.86,
+      "center": [
+        0,
+        40
+      ],
+      "beforeParts": [
+        {
+          "file": "rotation-0.png",
+          "width": 146,
+          "height": 131,
+          "left": -73,
+          "top": -48,
+          "rotation": 0
+        },
+        {
+          "file": "rotation-1.png",
+          "width": 146,
+          "height": 131,
+          "left": -73,
+          "top": -48,
+          "rotation": 1
+        }
+      ],
+      "reason": "Escala uniforme intermediária de 0,86 sobre o centro do apoio. Mantém proporções e reduz a ocupação da toalha; não representa inscrição completa no losango. Pegada lógica e navegação preservadas."
+    },
+    "runtimeArtOffset": {
+      "x": -3,
+      "y": -8,
+      "reason": "Registro visual da mesa; a origem lógica e a pegada permanecem iguais."
     }
+  },
+  "mealAnchor": {
+    "x": -3,
+    "y": -10.14
   }
 }

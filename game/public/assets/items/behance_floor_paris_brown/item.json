@@ -1,0 +1,359 @@
+{
+  "id": 9150228,
+  "classname": "behance_floor_paris_brown",
+  "name": "Piso Medalhão Marrom",
+  "type": 0,
+  "kind": "decor",
+  "priceGold": 10,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 0,
+  "parts": [
+    {
+      "file": "tile.png",
+      "width": 162,
+      "height": 82,
+      "left": -81,
+      "top": -1
+    }
+  ],
+  "source": {
+    "art": "artes/9287765/015.png",
+    "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+    "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/5bc42c9287765.560cbfd2a1f67.png",
+    "artist": "Walter Ávila e Andrés Guerrero",
+    "archiveSha256": "d3b7e3f87dd1b9e80d259c6eeeee70042f8597121b0d1271b5d2bf2aad004caf",
+    "room": "015 (Paris, identificação visual)",
+    "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+    "cells": [
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        7
+      ],
+      [
+        0,
+        8
+      ],
+      [
+        0,
+        9
+      ],
+      [
+        0,
+        10
+      ],
+      [
+        0,
+        11
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        1,
+        7
+      ],
+      [
+        1,
+        8
+      ],
+      [
+        1,
+        9
+      ],
+      [
+        1,
+        10
+      ],
+      [
+        1,
+        11
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        9
+      ],
+      [
+        2,
+        10
+      ],
+      [
+        2,
+        11
+      ],
+      [
+        3,
+        6
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        3,
+        8
+      ],
+      [
+        3,
+        9
+      ],
+      [
+        3,
+        10
+      ],
+      [
+        3,
+        11
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        4,
+        7
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        4,
+        9
+      ],
+      [
+        4,
+        10
+      ],
+      [
+        4,
+        11
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        5,
+        7
+      ],
+      [
+        5,
+        8
+      ],
+      [
+        5,
+        9
+      ],
+      [
+        5,
+        10
+      ],
+      [
+        5,
+        11
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        6,
+        9
+      ],
+      [
+        6,
+        10
+      ],
+      [
+        6,
+        11
+      ],
+      [
+        7,
+        6
+      ],
+      [
+        7,
+        7
+      ],
+      [
+        7,
+        8
+      ],
+      [
+        7,
+        9
+      ],
+      [
+        7,
+        10
+      ],
+      [
+        7,
+        11
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        7
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        9
+      ],
+      [
+        8,
+        10
+      ],
+      [
+        8,
+        11
+      ],
+      [
+        9,
+        6
+      ],
+      [
+        9,
+        7
+      ],
+      [
+        9,
+        8
+      ],
+      [
+        9,
+        9
+      ],
+      [
+        9,
+        10
+      ],
+      [
+        9,
+        11
+      ],
+      [
+        10,
+        6
+      ],
+      [
+        10,
+        7
+      ],
+      [
+        10,
+        8
+      ],
+      [
+        10,
+        9
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        10,
+        11
+      ],
+      [
+        11,
+        6
+      ],
+      [
+        11,
+        7
+      ],
+      [
+        11,
+        8
+      ],
+      [
+        11,
+        9
+      ],
+      [
+        11,
+        10
+      ],
+      [
+        11,
+        11
+      ],
+      [
+        12,
+        6
+      ],
+      [
+        12,
+        7
+      ],
+      [
+        12,
+        8
+      ],
+      [
+        12,
+        9
+      ],
+      [
+        12,
+        10
+      ],
+      [
+        12,
+        11
+      ]
+    ],
+    "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+    "measuredTile": [
+      1.0,
+      1.0
+    ],
+    "seedCoverage": [
+      0.853
+    ],
+    "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+    "provisionalRules": {
+      "priceGold": {
+        "value": 10,
+        "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+      }
+    }
+  }
+}

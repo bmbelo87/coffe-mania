@@ -15,7 +15,32 @@
       "width": 162,
       "height": 239,
       "left": -81,
-      "top": -158
+      "top": -158,
+      "rotation": 0
+    },
+    {
+      "file": "rotation-1.png",
+      "width": 162,
+      "height": 239,
+      "left": -81,
+      "top": -158,
+      "rotation": 1
+    },
+    {
+      "file": "rotation-2.png",
+      "width": 166,
+      "height": 239,
+      "left": -63,
+      "top": -158,
+      "rotation": 2
+    },
+    {
+      "file": "rotation-3.png",
+      "width": 166,
+      "height": 239,
+      "left": -103,
+      "top": -158,
+      "rotation": 3
     }
   ],
   "source": {
@@ -47,6 +72,12 @@
         "y": -157.3598747906415
       }
     },
-    "priceGold": "Preço de colocação definido pelo projeto; destravamento original de 20 caféGranas implementado separadamente."
+    "priceGold": "Preço de colocação definido pelo projeto; destravamento original de 20 caféGranas implementado separadamente.",
+    "rotations": {
+      "prompts": "tools/furniture-rotations/prompts.json",
+      "export": "tools/furniture-rotations/machines-export.json",
+      "method": "Frentes atuais preservadas; traseiras reconstruídas com ImageGen. Vistas complementares espelhadas e calibradas em escala uniforme.",
+      "limitation": "Painéis traseiros sem fonte original recuperada; detalhes ocultos são reconstruções simples, não uma confirmação histórica."
+    }
   }
 }

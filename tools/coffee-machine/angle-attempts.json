@@ -1,0 +1,18 @@
+{
+  "tool": "built-in ImageGen",
+  "attempts": [
+    {
+      "prompt": "Use case: precise-object-edit. Edit target image 1: silver coffee machine sprite. Image 2 is ONLY an orthographic projection/style reference (juice machine in same game); do NOT include it. Correct the silver machine drawing's camera to exact game isometric 2:1: vertical edges stay perfectly vertical, horizontal ground-plane edge families have slopes +0.5 and -0.5 (26.565 degrees to horizontal), both sides equally foreshortened, zero perspective convergence. Current left ground edge is too steep (31 degrees). Rebuild its housing geometry accurately to sit parallel to the juice machine and game wall. Do not squash or stretch the whole sprite, do not tilt verticals. Preserve recognizable design, tall overall proportions, silver/gray/white flat colors, one dark and three colored buttons, chrome brew group, black handle pointing right, grille, brown espresso in cream-edged brown cup, two front cupboard doors. Cup, buttons and circular brew head remain naturally circular/elliptical under correct projection, no warping. Flat 2D Flash Café Mania illustration with crisp simple cel shading, NO added dark outline, realism, texture, glow or drop shadow. One isolated complete machine centered with generous transparent margin, actual alpha transparency, no white edge debris. No ground, no grid, no text, no labels, no extra items.",
+      "output": "exec-804deb77-4d61-47ae-838e-5c1198e40ec3.png",
+      "status": "rejected",
+      "reason": "Generated base retained the steep left edge."
+    },
+    {
+      "prompt": "Use case: precise-object-edit / sprite projection repair. Input 1 is the machine design to preserve. Input 2 is the EXACT required geometric silhouette and camera; treat it as a strict construction drawing. Repaint the silver Café Mania coffee machine to follow EVERY housing corner and edge in input 2, especially the LOWER BOX BASE: its left and right floor edges MUST each rise/run 1:2 (26.565 degrees), instead of the excessively steep left edge in input 1. Do not merely reproduce input 1 unchanged. Match the guide vertices and vertical lines accurately; keep all verticals vertical. Keep the original one brown coffee cup, steam group, handle, grille, three colored buttons and one dark button, and two front doors; add them at the corresponding positions of the guide. Brown cup must retain its natural round shape, not warped. SAME simple flat 2D Flash illustration, same silver-gray-white palette, no heavy outlines, no new texture, no realism or extra shine. The guide is only construction: do NOT draw blue lines or a wireframe in the output. Transparent alpha background and generous empty border. No shadows, ground, text, labels or other objects. Full isolated machine.",
+      "output": "exec-d551c073-122d-422d-bd55-1c6c842f0212.png",
+      "status": "rejected",
+      "reason": "Construction reference did not reliably constrain the base projection."
+    }
+  ],
+  "finalMethod": "No new generated image was deployed. Existing approved room artwork was calibrated with the Asset Studio sampler; see room-projection.json."
+}

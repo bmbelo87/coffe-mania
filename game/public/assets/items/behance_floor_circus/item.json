@@ -1,0 +1,63 @@
+{
+  "id": 9150208,
+  "classname": "behance_floor_circus",
+  "name": "Piso Estrelas de Circo",
+  "type": 0,
+  "kind": "decor",
+  "priceGold": 10,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 0,
+  "parts": [
+    {
+      "file": "tile.png",
+      "width": 162,
+      "height": 82,
+      "left": -81,
+      "top": -1
+    }
+  ],
+  "source": {
+    "art": "artes/43063757/009.jpg",
+    "page": "https://www.behance.net/gallery/43063757/Vostu-Games",
+    "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/b988ab43063757.57e20692228b7.jpg",
+    "artist": "Manati P",
+    "archiveSha256": "3940809255a970fed19fb860ac9be211a7c32d317f6e2686dc2293b2dd33f533",
+    "method": "Recorte e retificação de imagem JPEG do portfólio; não é PNG original recuperado nem geração.",
+    "sourceCorners": [
+      [
+        410,
+        180
+      ],
+      [
+        518,
+        235
+      ],
+      [
+        410,
+        289
+      ],
+      [
+        303,
+        235
+      ]
+    ],
+    "calibration": "A amostra mostra um quarto de 2×2 tiles com padrão repetido a cada tile. O período medido no plano retificado (em px do quarto, nominal 160 no piso e 80 na parede) é reamostrado num único tile, com janela interna sem rodapé nem sombra. Projeção 2:1, tile lógico inalterado.",
+    "measuredPeriod": {
+      "u": 158.75,
+      "v": 157.81,
+      "correlation": [
+        0.99,
+        0.962
+      ]
+    },
+    "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+    "provisionalRules": {
+      "priceGold": {
+        "value": 10,
+        "reason": "Preço provisório de projeto; a prancha não informa valores."
+      }
+    }
+  }
+}

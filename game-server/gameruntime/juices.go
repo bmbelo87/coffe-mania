@@ -3,8 +3,6 @@ package gameruntime
 import (
 	"coffe-mania/shared/gamewire"
 	"encoding/json"
-	"github.com/google/uuid"
-	"math/rand/v2"
 	"time"
 )
 
@@ -15,21 +13,6 @@ func (r *room) readyJuice() bool {
 		}
 	}
 	return false
-}
-func (r *room) requestJuice(a *entity, now time.Time) bool {
-	if !r.readyJuice() {
-		return false
-	}
-	// Service chance and waiting window are project tuning; request state belongs to the room queue.
-	if rand.Float64() >= .5 {
-		return false
-	}
-	a.State = "thirsty"
-	a.JuiceRequestID = uuid.NewString()
-	a.Food = nil
-	a.Action = nil
-	a.due = now.Add(15 * time.Second)
-	return true
 }
 func (r *room) validateJuiceOperation(op *gamewire.Operation) string {
 	if op.Action != "juice_serve" {
@@ -45,10 +28,10 @@ func (r *room) validateJuiceOperation(op *gamewire.Operation) string {
 		return "Pedido de suco inválido."
 	}
 	actor := r.actors[body.ActorID]
-	if actor == nil || actor.Kind != "npc" || actor.JuiceRequestID == "" || (actor.State != "thirsty" && actor.State != "drinking") {
+	if actor == nil || actor.Kind != "npc" || actor.JuiceRequestID == "" || actor.CoffeeRequestID != "" || (actor.State != "thirsty" && actor.State != "drinking") {
 		return "Este cliente não está pedindo suco."
 	}
-	if actor.State == "thirsty" && time.Now().After(actor.due) {
+	if !time.Now().Before(actor.due) {
 		return "O cliente já terminou de esperar."
 	}
 	if body.JuiceRequestID != actor.JuiceRequestID {
@@ -66,9 +49,9 @@ func (r *room) finishJuiceOperation(op gamewire.Operation, now time.Time) {
 		ActorID string `json:"actorId"`
 	}
 	_ = json.Unmarshal(op.Body, &body)
-	if a := r.actors[body.ActorID]; a != nil && a.State == "thirsty" {
+	if a := r.actors[body.ActorID]; a != nil && a.State == "thirsty" && a.JuiceRequestID != "" && a.CoffeeRequestID == "" {
 		a.State = "drinking"
-		a.due = now.Add(3 * time.Second)
+		a.due = now.Add(beverageDrinkingTime)
 		a.Action = nil
 		r.startEmotion(a, "satisfied", now)
 		r.broadcast(gamewire.Event{Type: "actors", Actors: []gamewire.Actor{r.status(a, false)}}, "")

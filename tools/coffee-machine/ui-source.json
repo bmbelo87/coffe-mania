@@ -1,0 +1,207 @@
+{
+  "kind": "ImageGen reconstruction, modular raster crops; not recovered original PNGs",
+  "reference": "tools/coffee-machine/references/expert-dialogo-inteiro.png",
+  "panelMasters": [
+    "generated/panel-v1.png",
+    "generated/panel-v2.png"
+  ],
+  "headerMaster": "generated/header-master.png",
+  "modules": [
+    "panel.png",
+    "header.png",
+    "help.png",
+    "close.png",
+    "tab.png",
+    "tab-active.png",
+    "card.png",
+    "card-reference.png",
+    "card-serving-reference.png",
+    "interface-reference.png",
+    "machine-window.png",
+    "evolution-window.png",
+    "select-button.png",
+    "dominado.png",
+    "servindo.png"
+  ],
+  "processing": "Native alpha-preserving crop; title/help/close remain separate. Dynamic type and hit regions rendered by client.",
+  "reproductionSpec": "Reconstruct the newer Cafe Mania wooden coffee window from the reference. Match silhouette, peach rows and four tabs. Leave variable text, recipe cups, machines, resource icons and selection controls separate. Use flat 2D Flash artwork, true alpha, no realistic material, extra ornaments or invented iconography. Generate title/pitcher/help/close in a separate transparent sheet. Native module crops retain generated pixels.",
+  "promptNote": "Original UI generation prompts were not preserved; reproductionSpec records the intended reusable specification. Exact machine/drink prompts are preserved in art-source.json.",
+  "revision": "2026-10-24: cartões por recortes limpos da captura, rótulos e botão específicos; base sem slots, composição modular.",
+  "promptFiles": [
+    "ui-revision-prompts.json",
+    "ui-label-prompts.json"
+  ],
+  "finalFiles": [
+    {
+      "file": "game/public/assets/ui/coffee-machine/card-reference.png",
+      "size": [
+        391,
+        89
+      ],
+      "mode": "RGB",
+      "sha256": "94cd3ae0005ddf7ea5fc5238952e0a4d54d27ff49a49669c1671d63975cdd435"
+    },
+    {
+      "file": "game/public/assets/ui/coffee-machine/card-serving-reference.png",
+      "size": [
+        663,
+        153
+      ],
+      "mode": "RGB",
+      "sha256": "165ff214edfdecb63247157ab52ea8c7a83dc4872226136cc281b8bbc5b1494b"
+    },
+    {
+      "file": "game/public/assets/ui/coffee-machine/card-serving.png",
+      "size": [
+        782,
+        178
+      ],
+      "mode": "RGBA",
+      "sha256": "d6399b3eec923977fa315fe0f88ef2f5d3af161c2573c0a3f77230f0ae17c67f"
+    },
+    {
+      "file": "game/public/assets/ui/coffee-machine/card.png",
+      "size": [
+        782,
+        178
+      ],
+      "mode": "RGBA",
+      "sha256": "2105b804a71542cedc23d960ffc34a290212389600e0bf7ce69a61bba378f02f"
+    },
+    {
+      "file": "game/public/assets/ui/coffee-machine/close.png",
+      "size": [
+        151,
+        151
+      ],
+      "mode": "RGBA",
+      "sha256": "a4076118d68f3cbc56a04a417995b34f199e927f689feecd82e68d6105048619"
+    },
+    {
+      "file": "game/public/assets/ui/coffee-machine/dominado.png",
+      "size": [
+        432,
+        87
+      ],
+      "mode": "RGBA",
+      "sha256": "c804be2456386762c6e3f20166de98b5f0418fe5ff0b8f07d772512926468d2e"
+    },
+    {
+      "file": "game/public/assets/ui/coffee-machine/evolution-window.png",
+      "size": [
+        315,
+        223
+      ],
+      "mode": "RGBA",
+      "sha256": "9fe27d4851f00d95f88fcf1c121b061f1727a9110db4d207c8dbeddcf80036bc"
+    },
+    {
+      "file": "game/public/assets/ui/coffee-machine/header.png",
+      "size": [
+        1585,
+        393
+      ],
+      "mode": "RGBA",
+      "sha256": "f6892d8699e91e067177cb419ab016633f5600b00e392f3bee5e62e41f5fd9e5"
+    },
+    {
+      "file": "game/public/assets/ui/coffee-machine/help.png",
+      "size": [
+        151,
+        151
+      ],
+      "mode": "RGBA",
+      "sha256": "d67a515a15bc094be88225adc4d7bb9481bf7eca53d398e8d96b86e363a0de86"
+    },
+    {
+      "file": "game/public/assets/ui/coffee-machine/interface-reference.png",
+      "size": [
+        648,
+        586
+      ],
+      "mode": "RGB",
+      "sha256": "a4b462daf67175b6615ce45b7033b51c9eacd39feba7f18e34285740c9bd0773"
+    },
+    {
+      "file": "game/public/assets/ui/coffee-machine/machine-window.png",
+      "size": [
+        324,
+        354
+      ],
+      "mode": "RGBA",
+      "sha256": "79e7ddc2bbd27d2cf43ba564404c99f01fb601be40d556ac8bf3b2b4984020e0"
+    },
+    {
+      "file": "game/public/assets/ui/coffee-machine/panel.png",
+      "size": [
+        1296,
+        1172
+      ],
+      "mode": "RGBA",
+      "sha256": "c30bd4672a485c6482b559f714d820f6d1d61d961dacd6558008e07b1f076ea6"
+    },
+    {
+      "file": "game/public/assets/ui/coffee-machine/select-button.png",
+      "size": [
+        218,
+        50
+      ],
+      "mode": "RGBA",
+      "sha256": "42d07f4c1e8720622729d0cb9e8093bcd23b17a309b51e084e87c6421424ed8c"
+    },
+    {
+      "file": "game/public/assets/ui/coffee-machine/servindo.png",
+      "size": [
+        432,
+        90
+      ],
+      "mode": "RGBA",
+      "sha256": "ee46612eef05df9ceccf7888463829fa1e052789d668580d321e6b37b316f1a0"
+    },
+    {
+      "file": "game/public/assets/ui/coffee-machine/tab-active.png",
+      "size": [
+        293,
+        90
+      ],
+      "mode": "RGBA",
+      "sha256": "4e849a36f79a4943e0059e7ba8118c5c13e4e3786f4536333597f3dd4557a006"
+    },
+    {
+      "file": "game/public/assets/ui/coffee-machine/tab.png",
+      "size": [
+        293,
+        90
+      ],
+      "mode": "RGBA",
+      "sha256": "273cab79c46024148918185cd960ed1d4aef2f630a7caa72400c3be2e145d205"
+    },
+    {
+      "file": "game/public/assets/ui/coffee-machine/tab-inactive-v2.png",
+      "size": [
+        596,
+        172
+      ],
+      "mode": "RGBA",
+      "sha256": "355ff09c8668dc7e2ca5ecc4607502efe1f4da86544307d5a5e777d19920baef"
+    },
+    {
+      "file": "game/public/assets/ui/coffee-machine/tab-active-v2.png",
+      "size": [
+        588,
+        188
+      ],
+      "mode": "RGBA",
+      "sha256": "a67284d00aac1919455400792238697496c622ea2d74a24fd89ec5e0b9c499f7"
+    }
+  ],
+  "tabRevision": {
+    "prompts": "tools/coffee-machine/tab-prompts.json",
+    "reference": "tools/coffee-machine/references/ref-tabs-strip.png",
+    "outputs": [
+      "tab-inactive-v2.png",
+      "tab-active-v2.png"
+    ],
+    "verification": "offline Chromium/WebGL, no server opened"
+  }
+}

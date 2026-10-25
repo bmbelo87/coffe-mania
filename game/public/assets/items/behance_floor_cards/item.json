@@ -1,0 +1,155 @@
+{
+  "id": 9150203,
+  "classname": "behance_floor_cards",
+  "name": "Piso Cartas",
+  "type": 0,
+  "kind": "decor",
+  "priceGold": 10,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 0,
+  "parts": [
+    {
+      "file": "tile.png",
+      "width": 162,
+      "height": 82,
+      "left": -81,
+      "top": -1
+    }
+  ],
+  "source": {
+    "art": "artes/9287765/006.png",
+    "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+    "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/a153b69287765.560cbd2f77c49.png",
+    "artist": "Walter Ávila e Andrés Guerrero",
+    "archiveSha256": "6a2b7acf09abc5cd5ccc37fff3147f6b5bbf74eb64d7a158f5e93f1fbb0b2a1a",
+    "room": "006 (Las Vegas, identificação visual)",
+    "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+    "cells": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        7,
+        3
+      ],
+      [
+        7,
+        4
+      ]
+    ],
+    "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+    "measuredTile": [
+      1.0,
+      1.0
+    ],
+    "seedCoverage": [
+      0.878
+    ],
+    "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+    "provisionalRules": {
+      "priceGold": {
+        "value": 10,
+        "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+      }
+    }
+  }
+}

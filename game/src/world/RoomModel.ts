@@ -13,6 +13,7 @@ export type RoomItemKind =
   | 'stove'
   | 'counter'
   | 'juice_machine'
+  | 'coffee_machine'
   | 'bush'
   | 'panel'
   | 'letterbox'
@@ -90,6 +91,7 @@ export const ITEM_STYLES: Record<RoomItemKind, RoomItemStyle> = {
   letterbox: { height: 52 * ROOM_ASSET_SCALE, topColor: 0xc9503f, leftColor: 0xa93f31, rightColor: 0x8c3326, blocks: true, inset: 0.5 },
   decor: { height: 44 * ROOM_ASSET_SCALE, topColor: 0xd9c9a8, leftColor: 0xbaa985, rightColor: 0xa2916f, blocks: true, inset: 0.72 },
   juice_machine: { height: 160, topColor: 0xffb539, leftColor: 0xe9e9e9, rightColor: 0xbac6ce, blocks: true, inset: 1 },
+  coffee_machine: { height: 160, topColor: 0xe6dfd0, leftColor: 0xc2c4c1, rightColor: 0x797d7b, blocks: true, inset: 1 },
 };
 
 /** Colocações iniciais da sala. */

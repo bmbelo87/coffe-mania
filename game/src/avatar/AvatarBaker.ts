@@ -20,6 +20,8 @@ export interface BakedCell {
   carryingHand?: { x: number; y: number };
   /** Mão oposta usada quando um clipe simétrico, como colocar, é espelhado. */
   carryingLeftHand?: { x: number; y: number };
+  /** Midpoint of the two thigh roots, used to seat the body on an authored furniture contact. */
+  seatingHip?: { x: number; y: number };
 }
 
 /** Sprite data can come from a saved atlas, without a renderer or canvas. */
@@ -143,6 +145,11 @@ function* bakeAvatarSteps(renderer: AvatarRenderer, options: BakeOptions): Gener
       context.drawImage(renderer.canvas, 0, 0, renderer.canvas.width, renderer.canvas.height, x, y, cell, cell);
 
       const celula: BakedCell = { ...pedido, x, y };
+      if (pedido.clip === CLIP.SIT || pedido.clip === CLIP.EAT) {
+        const hips = renderer.projectBones(['Bone4', 'Bone8'], pedido.frame);
+        const left = hips.Bone4, right = hips.Bone8;
+        if (left && right) celula.seatingHip = { x: (1 + (left[0] + right[0]) / 2) * cell / 2, y: (1 - (left[1] + right[1]) / 2) * cell / 2 };
+      }
       if (pedido.clip === CLIP.WAITOR_WALK || pedido.clip === CLIP.COOKING) {
         const hands = renderer.projectBones([RIGHT_HAND_BONE, LEFT_HAND_BONE], pedido.frame);
         const hand = hands[RIGHT_HAND_BONE];

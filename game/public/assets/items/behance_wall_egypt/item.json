@@ -1,0 +1,62 @@
+{
+  "id": 9160201,
+  "classname": "behance_wall_egypt",
+  "name": "Parede Egípcia",
+  "type": 1,
+  "kind": "wall",
+  "priceGold": 10,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 208,
+  "parts": [
+    {
+      "file": "wall.png",
+      "width": 80,
+      "height": 248,
+      "left": -80,
+      "top": -168
+    }
+  ],
+  "source": {
+    "art": "artes/43063757/008.jpg",
+    "page": "https://www.behance.net/gallery/43063757/Vostu-Games",
+    "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/5b376543063757.57e2069221f4f.jpg",
+    "artist": "Manati P",
+    "archiveSha256": "134e9b2b7965235aa2b21a6399093cae11bb3d77ee4640dfd1bd065a63fc16b9",
+    "method": "Recorte e retificação de imagem JPEG do portfólio; não é PNG original recuperado nem geração.",
+    "sourceCorners": [
+      [
+        154,
+        43
+      ],
+      [
+        263,
+        99
+      ],
+      [
+        263,
+        241
+      ],
+      [
+        154,
+        185
+      ]
+    ],
+    "calibration": "A amostra mostra um quarto de 2×2 tiles com padrão repetido a cada tile. O período medido no plano retificado (em px do quarto, nominal 160 no piso e 80 na parede) é reamostrado num único tile, com janela interna sem rodapé nem sombra. Projeção 2:1, tile lógico inalterado.",
+    "measuredPeriod": {
+      "x": 80.72,
+      "correlation": [
+        0.595
+      ]
+    },
+    "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+    "provisionalRules": {
+      "priceGold": {
+        "value": 10,
+        "reason": "Preço provisório de projeto; a prancha não informa valores."
+      }
+    }
+  },
+  "wallpaperRotation": 1
+}

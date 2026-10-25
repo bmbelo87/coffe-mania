@@ -68,3 +68,17 @@ Para impedir a repetição do erro:
 - Compare a composição real sobre o mesmo look e nos mesmos quadros. Uma camisa com cor contrastante ajuda a enxergar o vazamento que uma pose genérica pode esconder.
 
 Na reprodução específica, o `RoomScreen` montou um cliente de cabelo castanho, camisa azul e calça castanha, nas rotações 2/3, sentado no frame 35 e comendo no frame 38 (160 ms). As capturas antes/depois preservam look, tile, posição, direção, clipe, frame e profundidades. A composição final também foi conferida nos zooms 0,55, 1 e 2,4. Os sete modelos foram exibidos em quatro rotações após igualar o arredondamento da máscara. Evidências locais: `.runtime/chair-second-audit/before.png`, `after.png`, `after-zoom-*.png` e respectivos metadados JSON. Essa fixture verifica a composição do jogo sem depender de dados de uma conta ou da simulação multiplayer.
+
+## Reamostragem das cadeiras italianas (24/10/2026)
+
+As duas cores foram reduzidas7% com o centro do assento preservado em(0,8). A largura/altura efetivas do novo PNG determinam os fatores de cada eixo da máscara, evitando erros de arredondamento de um pixel. As coordenadas autorais continuam na resolução anterior registrada em `source.runtimeVisualScale.beforeParts`; `calibrate-backrests.py` converte essas coordenadas antes de conferir/exportar. O registro de uma vista espelhada satisfaz `leftEspelho = -leftOriginal - larguraNova`. A prévia do calibrador espelha também a imagem, exibindo a mesma pose montada que o cliente usa.
+
+As máscaras e a ordem base → ocupante → encosto foram verificadas; o tile lógico e a pose do avatar não foram deslocados. A prancha desta revisão é `.runtime/visual-polish/chair-masks.png`.
+
+## Contato animado e braços de poltrona (25/10/2026)
+
+A rosa e a poltrona amarela/preta foram reconstruídas com ImageGen. O contato do assento é autoral por pose (`seatingAnchors`) e se alinha ao quadril realmente projetado de cada quadro SIT/EAT (`seatingHip`), em vez de deslocar a raiz pelos pés de outro clipe. A sombra continua no chão; levantar remove o ajuste. Os braços próximos da poltrona usam máscaras nas vistas 0/1, e os encostos nas vistas 2/3. Os demais modelos mantêm seus contratos anteriores. Fontes, técnica e 16 quadros comparados estão em [rotações das máquinas e cadeiras](rotacoes-maquinas-e-cadeiras.md).
+
+### Direção da abertura da poltrona amarela
+
+Corrigida em 25/10/2026 a associação frontal invertida: o PNG frontal sem espelhamento corresponde a R0, e seu espelho a R1. As máscaras e os contatos foram reassociados juntos; o quadril foi recuado até a região traseira da almofada. A conferência precisa validar tanto a posição quanto a direção física da abertura: um quadril alinhado a um ponto autoral errado ainda passa numa igualdade numérica. Foram comparados dois visuais e todos os quatro quadros de comer nas quatro direções; relatório e fontes estão na seção final de [rotações das máquinas e cadeiras](rotacoes-maquinas-e-cadeiras.md).

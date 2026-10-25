@@ -51,6 +51,7 @@ func main() {
 		startRoomActivityWatchdog(e.App)
 		registerCookingRoutes(e)
 		registerJuiceRoutes(e)
+		registerCoffeeRoutes(e)
 		registerSupplyRoutes(e)
 		registerWaiterRoutes(e)
 		registerDevRoutes(e)

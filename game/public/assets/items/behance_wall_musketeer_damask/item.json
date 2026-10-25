@@ -1,0 +1,110 @@
+{
+  "id": 9160217,
+  "classname": "behance_wall_musketeer_damask",
+  "name": "Parede Damasco Verde",
+  "type": 1,
+  "kind": "wall",
+  "priceGold": 10,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 208,
+  "parts": [
+    {
+      "file": "phase-0.png",
+      "width": 80,
+      "height": 248,
+      "left": -80,
+      "top": -168,
+      "rotation": 0
+    },
+    {
+      "file": "phase-1.png",
+      "width": 80,
+      "height": 248,
+      "left": -80,
+      "top": -168,
+      "rotation": 1
+    }
+  ],
+  "source": {
+    "art": "artes/9287765/016.png",
+    "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+    "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/4756a99287765.560cbfd2c24cf.png",
+    "artist": "Walter Ávila e Andrés Guerrero",
+    "archiveSha256": "240b4b8ec633bb80d03607ceb126133639d404ef151610561f4198a2472cc6f7",
+    "room": "016 (Mosqueteiros, identificação visual)",
+    "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+    "cells": [
+      [
+        "left",
+        0,
+        0,
+        0.55,
+        0.0,
+        1.0
+      ],
+      [
+        "left",
+        2,
+        0,
+        0.5,
+        0.0,
+        1.0
+      ],
+      [
+        "left",
+        4,
+        0,
+        0.13,
+        0.0,
+        1.0
+      ],
+      [
+        "left",
+        4,
+        0.72,
+        0.9,
+        0.0,
+        1.0
+      ],
+      [
+        "left",
+        6,
+        0,
+        0.18,
+        0.0,
+        1.0
+      ],
+      [
+        "left",
+        6,
+        0.72,
+        0.9,
+        0.0,
+        1.0
+      ]
+    ],
+    "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+    "measuredTile": [
+      1.0
+    ],
+    "seedCoverage": [
+      0.391,
+      0.381
+    ],
+    "verticalRepeat": 0.44,
+    "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+    "provisionalRules": {
+      "priceGold": {
+        "value": 10,
+        "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+      }
+    }
+  },
+  "surfacePattern": {
+    "columns": 2,
+    "rows": 1
+  },
+  "wallpaperRotation": 1
+}

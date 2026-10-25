@@ -46,8 +46,14 @@ import {
   type CookScreenTextures,
 } from './CookScreenModal';
 import { CookProgressBar } from './CookProgressBar';
+import { CoffeeScreenModal } from './CoffeeScreenModal';
+import { CoffeeClient, loadCoffeeArt, loadCoffeeMachineArt, type CoffeeMachine, type CoffeeStage } from '../../game/coffees';
 import {JuiceScreenModal} from './JuiceScreenModal';
-import {JuiceClient,loadJuiceArt,loadJuiceMachineArt,type JuiceStock} from '../../game/juices';
+import {JuiceClient,loadJuiceArt,loadJuiceMachineArt,type JuiceStock,type JuiceMachineStage} from '../../game/juices';
+import { machinePoseFor } from '../../game/machine-poses';
+import { seatingAnchorFor } from '../../game/seating-anchor';
+import { actorsAllowDecoration, detachedDecorationItem } from '../../game/decoration';
+import { applyMachineRoomPose } from './MachineRoomPose';
 import { CookProgressCallout } from './CookProgressCallout';
 import { IdleStoveCallout, loadIdleStoveArt } from './IdleStoveCallout';
 import { loadDialogExtras } from './dialog-art';
@@ -78,6 +84,7 @@ import { releaseNpcAvatar, type NpcAvatarSource } from '../../avatar/NpcAvatarSo
 import { loadAvatarAssets } from '../../game/asset-manifest';
 import { saveAppearance } from '../../game/appearance';
 import { rotatedArt, type ArtProvider } from '../../game/indoor-art';
+import { surfacePatternFrame } from '../../game/surface-pattern';
 import { ActorView } from './ActorView';
 import { AvatarActorView } from './AvatarActorView';
 import { NpcEmotion } from './NpcEmotion';
@@ -220,6 +227,8 @@ interface ActorRenderer {
   update?(deltaMs: number): void;
   setActionClip?(clip: number | null, elapsedMs?: number): void;
   setCarrying?(carrying: boolean): void;
+  setSeatingOffset?(offset: { x: number; y: number }): void;
+  setSeatingAnchor?(anchor?: { x: number; y: number }): void;
   getCarriedDishHand?(): { x: number; y: number } | undefined;
   destroy(): void;
 }
@@ -377,6 +386,11 @@ export class RoomScreen implements Screen {
   /** Balão branco de dica do original, compartilhado pelos avisos sobre fogão, balcão e máquina. */
   private readonly hoverBalloonTexture?: Texture;
   private sharedFoods: SharedFood[] = [];
+  private sharedCoffees: CoffeeMachine[] = [];
+  private readonly coffeeClient = new CoffeeClient();
+  private coffeeModal?: CoffeeScreenModal;
+  private readonly coffeeRequests = new Map<string, { bubble: ThoughtBubble; nonce: string; recipeId?: string }>();
+  private readonly servingCoffee = new Set<string>();
   private sharedJuices: JuiceStock[] = [];
   private readonly juiceClient = new JuiceClient();
   private readonly supplyClient = new SupplyClient();
@@ -428,6 +442,8 @@ export class RoomScreen implements Screen {
   private readonly outsideNpcManager?: OutsideNpcManager;
   private readonly actionBarMood?: ActionBarMood;
   private readonly chairBackrests = new Map<RoomItem, Sprite>();
+  private coffeeRoomArt?: CoffeeStage[];
+  private juiceRoomArt?: JuiceMachineStage[];
   private readonly actionBarLayer = new Container();
   private socialBar?: SocialBar;
   private socialNews?: SocialNews;
@@ -824,6 +840,13 @@ export class RoomScreen implements Screen {
       if (options.roomClient && options.roomSnapshot && this.artProvider) {
         this.roomStore = new RoomStoreController({ snapshot: options.roomSnapshot, client: options.roomClient,
           model: this.model, world: this.world, art: this.artProvider,
+          previewArt: (item, rotation, unit) => {
+            const stock = item.kind === 'coffee_machine' ? this.sharedCoffees : this.sharedJuices;
+            const stages = item.kind === 'coffee_machine' ? this.coffeeRoomArt : item.kind === 'juice_machine' ? this.juiceRoomArt : undefined;
+            const stage = stock.find(value => value.machineId === unit?.unitId)?.stage ?? stock[0]?.stage ?? 1;
+            const art = stages?.find(value => value.stage === stage);
+            return art ? machinePoseFor(art, rotation) : undefined;
+          },
           apply: (snapshot) => this.applyRoomSnapshot(snapshot),
           alpha: (id, alpha) => this.setUnitAlpha(id, alpha),
           prepareSelection: (_item, id) => this.realtime?.command('edit_table', { unitId: id }) ?? Promise.resolve(),
@@ -844,10 +867,7 @@ export class RoomScreen implements Screen {
           canPlace: (item, tile, rotation, id) => {
             if (!this.realtime) return true;
             if (!this.realtime.connected) return false;
-            for (const state of this.realtime.actors.values()) if (id && (state.chairId === id || state.tableId === id)) return false;
-            if (item.type < 2 || item.kind === 'window' || item.kind === 'panel') return true;
-            const sx = rotation % 2 ? item.sizeY : item.sizeX, sy = rotation % 2 ? item.sizeX : item.sizeY;
-            return ![...this.realtime.actors.values()].some((state) => [state, ...(state.move ? [state.move.from, state.move.to] : [])].some((position) => position.tx >= tile.tx && position.ty >= tile.ty && position.tx < tile.tx + sx && position.ty < tile.ty + sy));
+            return actorsAllowDecoration(item, tile, rotation, id, this.realtime.actors.values());
           },
         });
       }
@@ -909,10 +929,13 @@ export class RoomScreen implements Screen {
       const frame=this.artProvider?.art.get('juice_machine')?.frames[0];
       this.juiceModal=new JuiceScreenModal(this.juiceClient,frame?this.artProvider?.textureFor(frame.file):undefined,state=>{if(!this.destroyed)this.setPlayerState(state);});
       this.view.addChild(this.juiceModal.view);
+      this.coffeeModal = new CoffeeScreenModal(this.coffeeClient, state => { if (!this.destroyed) this.setPlayerState(state); });
+      this.view.addChild(this.coffeeModal.view);
       void loadThoughtBubbleArt().then(art => {
         if (this.destroyed) return;
         this.thoughtBubbleArt = art;
         this.updateJuiceRequests();
+        this.updateCoffeeRequests();
       }).catch(error => { if (!this.destroyed) console.warn('[thought-bubble] arte indisponível', error); });
     }
     if (options.spiceTextures) {
@@ -1101,6 +1124,8 @@ export class RoomScreen implements Screen {
     // Uma lista vazia é omitida no evento; num evento "food" ela significa balcões vazios.
     if (event.type === 'food') this.sharedFoods = event.foods ?? [];
     else if (event.foods) this.sharedFoods = event.foods;
+    if (event.type === 'coffees') { this.sharedCoffees = event.coffees ?? []; this.updateCoffeeMachineViews(); void this.coffeeModal?.refresh(); }
+    else if (event.coffees) { this.sharedCoffees = event.coffees; this.updateCoffeeMachineViews(); }
     if(event.type==='juices'){this.sharedJuices=event.juices??[];this.updateJuiceMachineViews();void this.juiceModal?.refresh();}
     else if(event.juices){this.sharedJuices=event.juices;this.updateJuiceMachineViews();}
     if (event.type === 'error') {
@@ -1122,6 +1147,8 @@ export class RoomScreen implements Screen {
     this.applyRoomSnapshot({ ...this.roomSnapshot, revision: world.revision, inventory: [...units.values()].filter((unit) => this.roomSnapshot!.canEdit !== false || unit.placed) }, false);
     if (world.cooking) this.acceptSharedCooking(world.cooking);
     this.sharedFoods = world.foods ?? [];
+    this.sharedCoffees = world.coffees ?? [];
+    this.updateCoffeeMachineViews();
     this.sharedJuices = world.juices ?? [];
     this.updateJuiceMachineViews();
   }
@@ -1130,18 +1157,35 @@ export class RoomScreen implements Screen {
     for (const [item, views] of this.itemViews) {
       if (item.kind !== 'juice_machine') continue;
       const stage = this.sharedJuices.find(stock => stock.machineId === item.inventoryUnitId)?.stage ?? 1;
-      if (stage === 1 && views.every(view => view.label !== 'juice-machine-evolved')) continue;
+      if (views.every(view => view.label === `juice-machine-stage-${stage}-rotation-${item.rotation}`)) continue;
       void loadJuiceMachineArt().then(art => {
-        if (this.destroyed) return;
+        if (this.destroyed || this.itemViews.get(item) !== views) return;
+        this.juiceRoomArt = art;
         const currentStage = this.sharedJuices.find(stock => stock.machineId === item.inventoryUnitId)?.stage ?? 1;
         const variant = art.find(value => value.stage === currentStage);
         if (!variant) return;
         for (const view of views) {
           if (view.destroyed || !(view instanceof Sprite)) continue;
-          view.texture = variant.texture; view.width = variant.frame.width; view.height = variant.frame.height;
-          view.position.set(tileToScreenX(item.tx, item.ty) + variant.frame.left, tileToScreenY(item.tx, item.ty) + variant.frame.top);
-          view.hitArea = alphaHitArea(variant.texture);
-          view.label = currentStage > 1 ? 'juice-machine-evolved' : 'juice-machine-original';
+          applyMachineRoomPose(view, item, machinePoseFor(variant, item.rotation), `juice-machine-stage-${currentStage}-rotation-${item.rotation}`);
+        }
+      }).catch(() => { /* The original sprite remains available when a variant cannot be loaded. */ });
+    }
+  }
+
+  private updateCoffeeMachineViews(): void {
+    for (const [item, views] of this.itemViews) {
+      if (item.kind !== 'coffee_machine') continue;
+      const stage = this.sharedCoffees.find(stock => stock.machineId === item.inventoryUnitId)?.stage ?? 1;
+      if (views.every(view => view.label === `coffee-machine-stage-${stage}-rotation-${item.rotation}`)) continue;
+      void loadCoffeeMachineArt().then(art => {
+        if (this.destroyed || this.itemViews.get(item) !== views) return;
+        this.coffeeRoomArt = art;
+        const currentStage = this.sharedCoffees.find(stock => stock.machineId === item.inventoryUnitId)?.stage ?? 1;
+        const variant = art.find(value => value.stage === currentStage);
+        if (!variant) return;
+        for (const view of views) {
+          if (view.destroyed || !(view instanceof Sprite)) continue;
+          applyMachineRoomPose(view, item, machinePoseFor(variant, item.rotation), `coffee-machine-stage-${currentStage}-rotation-${item.rotation}`);
         }
       }).catch(() => { /* The original sprite remains available when a variant cannot be loaded. */ });
     }
@@ -1248,12 +1292,15 @@ export class RoomScreen implements Screen {
       entry.view.setActionClip?.(action, state.action ? now - state.action.startedAt : undefined);
       entry.view.setCarrying?.(isCarrying(state));
       this.advanceActorView(entry.view, deltaMs);
-      const seatedChair = !state.move && ['seated','eating','thirsty','drinking'].includes(state.state) && state.chairId
-        ? this.model.items.find(item => item.kind === 'chair' && item.inventoryUnitId === state.chairId) : undefined;
+      const seatedChair = !state.move && ['seated','eating','thirsty','drinking'].includes(state.state)
+        ? detachedDecorationItem(state.detachedChair, this.roomSnapshot?.catalog ?? [])
+          ?? this.model.items.find(item => item.kind === 'chair' && item.inventoryUnitId === state.chairId) : undefined;
+      entry.view.setSeatingAnchor?.(seatedChair ? seatingAnchorFor(this.artProvider?.art.get(seatedChair.className), seatedChair.rotation) : undefined);
       setSeatedActorRoomDepth(entry.view.view, entry.actor, seatedChair);
       if (seatedChair) occupiedChairs.add(seatedChair);
       this.updateLiveEmotion(id, state, entry.view.view, now);
-      const table = state.tableId && this.model.items.find((item) => item.inventoryUnitId === state.tableId);
+      const table = detachedDecorationItem(state.detachedTable, this.roomSnapshot?.catalog ?? [])
+        ?? (state.tableId && this.model.items.find((item) => item.inventoryUnitId === state.tableId));
       const mealTexture = state.food ? this.recipeArt(state.food.recipeId)?.stage2 : undefined;
       if (state.food && table && mealTexture) {
         let meal = this.mealViews.get(id);
@@ -1261,7 +1308,9 @@ export class RoomScreen implements Screen {
         if (!meal) { meal = new Sprite(mealTexture); meal.label = 'meal:' + state.food.id; this.mealViews.set(id, meal); this.world.addChild(meal); }
         meal.texture = mealTexture;
         fitDish(meal);
-        meal.position.set(tileToScreenX(table.tx, table.ty), tileToScreenY(table.tx, table.ty) + TABLE_MEAL_Y);
+        const mealAnchor = this.artProvider?.art.get(table.className ?? '')?.mealAnchor;
+        meal.position.set(tileToScreenX(table.tx, table.ty) + (mealAnchor?.x ?? 0),
+          tileToScreenY(table.tx, table.ty) + (mealAnchor?.y ?? TABLE_MEAL_Y));
         meal.zIndex = itemDepth(table.tx, table.ty) + 1; meal.renderable = !this.storeBar?.isOpen;
         setItemOverlayDepth(meal, table);
       } else { this.mealViews.get(id)?.destroy(); this.mealViews.delete(id); }
@@ -1274,6 +1323,7 @@ export class RoomScreen implements Screen {
     this.updateSharedStoves(now);
     this.updateCounterDishes();
     this.updateJuiceRequests();
+    this.updateCoffeeRequests();
   }
 
   private updateJuiceRequests(): void {
@@ -1339,6 +1389,72 @@ export class RoomScreen implements Screen {
     }
     finally {
       this.servingJuice.delete(actorId);
+    }
+  }
+
+  private updateCoffeeRequests(): void {
+    if (!this.thoughtBubbleArt) return;
+    const shown = new Set<string>();
+    for (const [id, entry] of this.liveActors) {
+      const state = entry.state;
+      if (state.state !== 'thirsty' || !state.coffeeRequestId)
+        continue;
+      shown.add(id);
+      let request = this.coffeeRequests.get(id);
+      if (request && request.nonce !== state.coffeeRequestId) {
+        request.bubble.destroy();
+        this.coffeeRequests.delete(id);
+        request = undefined;
+      }
+      if (!request) {
+        const bubble = new ThoughtBubble(this.thoughtBubbleArt, () => { void this.serveCustomerCoffee(id); });
+        const view = bubble.view;
+        view.label = 'coffee-request:' + id;
+        view.zIndex = POPUP_DRAW_PRIORITY + 5;
+        this.world.addChild(view);
+        request = { bubble, nonce: state.coffeeRequestId };
+        this.coffeeRequests.set(id, request);
+      }
+      const recipeId = this.sharedCoffees[0]?.recipeId ?? 'espresso';
+      if (request.recipeId !== recipeId) {
+        request.recipeId = recipeId;
+        const activeRequest = request;
+        void loadCoffeeArt().then(art => {
+          if (this.destroyed || this.coffeeRequests.get(id) !== activeRequest || activeRequest.recipeId !== recipeId) return;
+          activeRequest.bubble.setIcon(art.textures.get(recipeId));
+        }).catch(() => { });
+      }
+      request.bubble.view.position.set(entry.actor.x, entry.actor.y - 155);
+      request.bubble.view.renderable = !this.storeBar?.isOpen && !this.isModalOpen;
+    }
+    for (const [id, request] of this.coffeeRequests)
+      if (!shown.has(id)) {
+        request.bubble.destroy();
+        this.coffeeRequests.delete(id);
+      }
+  }
+  private async serveCustomerCoffee(actorId: string): Promise<void> {
+    if (this.isModalOpen || this.storeBar?.isOpen || this.roomSnapshot?.canEdit === false || this.servingCoffee.has(actorId))
+      return;
+    const state = this.liveActors.get(actorId)?.state, stock = this.sharedCoffees[0];
+    if (!state?.coffeeRequestId || state.state !== 'thirsty')
+      return;
+    if (!stock) {
+      this.showNotice('Coloque uma máquina de café para atender este cliente.');
+      return;
+    }
+    this.servingCoffee.add(actorId);
+    try {
+      const snapshot = await this.coffeeClient.act('serve', stock.machineId, { actorId, coffeeRequestId: state.coffeeRequestId });
+      if (!this.destroyed)
+        this.setPlayerState(snapshot.playerState);
+    }
+    catch (error) {
+      if (!this.destroyed)
+        this.showNotice(error instanceof Error ? error.message : 'Não foi possível servir o café.');
+    }
+    finally {
+      this.servingCoffee.delete(actorId);
     }
   }
 
@@ -2730,7 +2846,7 @@ export class RoomScreen implements Screen {
   }
 
   private get isModalOpen(): boolean {
-    return Boolean(this.socialInviteModal?.isOpen || this.waiterModal?.isOpen || this.levelUpModal?.isOpen || this.juiceModal?.isOpen || this.cookModal?.isOpen || this.spiceModal?.isOpen || this.supplyModal?.isOpen || this.wardrobeModal?.isOpen || this.settingsModal?.isOpen || this.devModal?.isOpen || this.sellModal?.isOpen || this.expansionModal?.isOpen);
+    return Boolean(this.socialInviteModal?.isOpen || this.waiterModal?.isOpen || this.levelUpModal?.isOpen || this.juiceModal?.isOpen || this.coffeeModal?.isOpen || this.cookModal?.isOpen || this.spiceModal?.isOpen || this.supplyModal?.isOpen || this.wardrobeModal?.isOpen || this.settingsModal?.isOpen || this.devModal?.isOpen || this.sellModal?.isOpen || this.expansionModal?.isOpen);
   }
 
   /** Public profile cards are supplied by the social service, independently of room actors. */
@@ -2805,6 +2921,13 @@ export class RoomScreen implements Screen {
     this.paintItem(item);
     const views = this.world.children.filter((view) => !previous.has(view));
     this.itemViews.set(item, views);
+    if (item.kind === 'coffee_machine') for (const view of views) {
+      view.eventMode = 'static'; view.cursor = 'pointer';
+      view.on('pointertap', (event: FederatedPointerEvent) => {
+        if (this.storeBar?.isOpen || this.dragCancelledTap || this.isModalOpen || this.roomSnapshot?.canEdit === false || !item.inventoryUnitId) return;
+        event.stopPropagation(); void this.coffeeModal?.open(item.inventoryUnitId);
+      });
+    }
     if(item.kind==='juice_machine')for(const view of views){
       view.eventMode='static';view.cursor='pointer';
       view.on('pointertap',(event:FederatedPointerEvent)=>{if(this.storeBar?.isOpen||this.dragCancelledTap||this.isModalOpen||this.roomSnapshot?.canEdit===false||!item.inventoryUnitId)return;event.stopPropagation();trackScreen('juices');void this.juiceModal?.open(item.inventoryUnitId);});
@@ -2822,6 +2945,7 @@ export class RoomScreen implements Screen {
       event.stopPropagation(); void this.realtime!.command('sit', { chairId: item.inventoryUnitId }).catch((error: unknown) => console.info('[room]', error));
     });
     if (item.kind === 'juice_machine') this.updateJuiceMachineViews();
+    if (item.kind === 'coffee_machine') this.updateCoffeeMachineViews();
   }
 
   private paintItem(item: RoomItem): void {
@@ -2830,7 +2954,7 @@ export class RoomScreen implements Screen {
       let wallpaper: WallWallpaper | undefined;
       if (paper) {
         // One canonical face for both walls: mirror the sprite, not the PNG asset.
-        const frame = paper.frames[0];
+        const frame = surfacePatternFrame(paper, item.rotation % 2 === 1 ? item.tx : item.ty);
         const texture = this.artProvider?.textureFor(frame.file);
         if (texture) wallpaper = { frame, texture, sourceRotation: paper.wallpaperRotation ?? 0 };
       }
@@ -2961,7 +3085,8 @@ export class RoomScreen implements Screen {
       for (const unit of this.roomSnapshot.inventory) {
         const item = this.roomSnapshot.catalog.find((item) => item.id === unit.itemId);
         if (!unit.placed || item?.type !== 0) continue;
-        const frame = this.artProvider?.art.get(item.classname)?.frames[0];
+        const entry = this.artProvider?.art.get(item.classname);
+        const frame = entry ? surfacePatternFrame(entry, unit.tx, unit.ty, unit.rotation) : undefined;
         const texture = frame ? this.artProvider?.textureFor(frame.file) : undefined;
         if (!frame || !texture) continue;
         const sprite = new Sprite(texture);
@@ -3578,6 +3703,7 @@ export class RoomScreen implements Screen {
     this.settingsModal?.update(deltaMs);
     this.settingsMenu?.update(deltaMs);
     this.juiceModal?.update(deltaMs);
+    this.coffeeModal?.update(deltaMs);
     this.waiterModal?.update(deltaMs);
     this.levelUpModal?.update(deltaMs);
     this.updateAnimatedItems(deltaMs);
@@ -3741,6 +3867,8 @@ export class RoomScreen implements Screen {
     this.clearCookingProcess();
     this.cookModal?.destroy();
     this.juiceModal?.destroy();
+    this.coffeeModal?.destroy();
+    this.coffeeRequests.forEach(request => request.bubble.destroy()); this.coffeeRequests.clear();
     this.waiterModal?.destroy();
     this.juiceRequests.forEach(request=>request.bubble.destroy());this.juiceRequests.clear();
     this.spiceModal?.destroy();

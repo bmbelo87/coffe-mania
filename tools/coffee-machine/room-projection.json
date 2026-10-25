@@ -1,0 +1,174 @@
+[
+  {
+    "stage": 1,
+    "file": "stage-1-room-aligned.png",
+    "method": "Lower housing plane rectification with the Asset Studio premultiplied-alpha sampler. X is unchanged; vertical edges remain vertical; upper illustration is copied unchanged.",
+    "beforeDegrees": [
+      31.382749662178533,
+      25.880840772179706
+    ],
+    "afterDegrees": [
+      26.56505117707799,
+      26.56505117707799
+    ],
+    "controls": {
+      "stage": 1,
+      "left": {
+        "x": 17.024590163934427,
+        "y": 554.5759839218161
+      },
+      "front": {
+        "x": 245.5413505730836,
+        "y": 693.9687922785674
+      },
+      "right": {
+        "x": 495.93859649122805,
+        "y": 572.4858785677528
+      },
+      "shelfFront": 548,
+      "protectedCup": {
+        "x": 220,
+        "y": 345,
+        "width": 170,
+        "height": 128
+      }
+    },
+    "sourceSize": [
+      512,
+      704
+    ],
+    "resultSize": [
+      512,
+      704
+    ],
+    "targetCorners": [
+      {
+        "x": 17.024590163934427,
+        "y": 579.7104120739929
+      },
+      {
+        "x": 245.5413505730836,
+        "y": 693.9687922785674
+      },
+      {
+        "x": 495.93859649122805,
+        "y": 568.7701693194952
+      }
+    ]
+  },
+  {
+    "stage": 2,
+    "file": "stage-2-room-aligned.png",
+    "method": "Lower housing plane rectification with the Asset Studio premultiplied-alpha sampler. X is unchanged; vertical edges remain vertical; upper illustration is copied unchanged.",
+    "beforeDegrees": [
+      29.076414444241074,
+      25.49149101319188
+    ],
+    "afterDegrees": [
+      26.56505117707799,
+      26.56505117707799
+    ],
+    "controls": {
+      "stage": 2,
+      "left": {
+        "x": 14,
+        "y": 544
+      },
+      "front": {
+        "x": 237,
+        "y": 668
+      },
+      "right": {
+        "x": 474,
+        "y": 555
+      },
+      "shelfFront": 523,
+      "protectedCup": {
+        "x": 120,
+        "y": 315,
+        "width": 265,
+        "height": 115
+      }
+    },
+    "sourceSize": [
+      512,
+      697
+    ],
+    "resultSize": [
+      512,
+      697
+    ],
+    "targetCorners": [
+      {
+        "x": 14,
+        "y": 556.5
+      },
+      {
+        "x": 237,
+        "y": 668
+      },
+      {
+        "x": 474,
+        "y": 549.5
+      }
+    ]
+  },
+  {
+    "stage": 3,
+    "file": "stage-3-room-aligned.png",
+    "method": "Lower housing plane rectification with the Asset Studio premultiplied-alpha sampler. X is unchanged; vertical edges remain vertical; upper illustration is copied unchanged.",
+    "beforeDegrees": [
+      21.916734036850137,
+      19.099114968814334
+    ],
+    "afterDegrees": [
+      26.56505117707799,
+      26.56505117707799
+    ],
+    "controls": {
+      "stage": 3,
+      "left": {
+        "x": 14.016129032258064,
+        "y": 685.3323045687504
+      },
+      "front": {
+        "x": 212.34404344196273,
+        "y": 765.1269080304035
+      },
+      "right": {
+        "x": 497.856783919598,
+        "y": 666.264196269553
+      },
+      "shelfFront": 710,
+      "protectedCup": {
+        "x": 225,
+        "y": 475,
+        "width": 120,
+        "height": 130
+      },
+      "roundedSupport": true
+    },
+    "sourceSize": [
+      512,
+      778
+    ],
+    "resultSize": [
+      512,
+      778
+    ],
+    "targetCorners": [
+      {
+        "x": 14.016129032258064,
+        "y": 665.9629508255512
+      },
+      {
+        "x": 212.34404344196273,
+        "y": 765.1269080304035
+      },
+      {
+        "x": 497.856783919598,
+        "y": 622.3705377915858
+      }
+    ]
+  }
+]

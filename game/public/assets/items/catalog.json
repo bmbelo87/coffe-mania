@@ -254,6 +254,246 @@
       "id": 9100001,
       "classname": "juice_machine",
       "manifest": "juice_machine/item.json"
+    },
+    {
+      "id": 9100002,
+      "classname": "coffee_machine",
+      "manifest": "coffee_machine/item.json"
+    },
+    {
+      "id": 9150201,
+      "classname": "behance_floor_egypt",
+      "manifest": "behance_floor_egypt/item.json"
+    },
+    {
+      "id": 9150202,
+      "classname": "behance_floor_classic",
+      "manifest": "behance_floor_classic/item.json"
+    },
+    {
+      "id": 9150203,
+      "classname": "behance_floor_cards",
+      "manifest": "behance_floor_cards/item.json"
+    },
+    {
+      "id": 9150204,
+      "classname": "behance_floor_oriental",
+      "manifest": "behance_floor_oriental/item.json"
+    },
+    {
+      "id": 9150205,
+      "classname": "behance_floor_balloons",
+      "manifest": "behance_floor_balloons/item.json"
+    },
+    {
+      "id": 9150206,
+      "classname": "behance_floor_confetti",
+      "manifest": "behance_floor_confetti/item.json"
+    },
+    {
+      "id": 9150207,
+      "classname": "behance_floor_june_festival",
+      "manifest": "behance_floor_june_festival/item.json"
+    },
+    {
+      "id": 9150208,
+      "classname": "behance_floor_circus",
+      "manifest": "behance_floor_circus/item.json"
+    },
+    {
+      "id": 9150209,
+      "classname": "behance_floor_circus_deluxe",
+      "manifest": "behance_floor_circus_deluxe/item.json"
+    },
+    {
+      "id": 9150210,
+      "classname": "behance_floor_night",
+      "manifest": "behance_floor_night/item.json"
+    },
+    {
+      "id": 9150211,
+      "classname": "behance_floor_blue_tiles",
+      "manifest": "behance_floor_blue_tiles/item.json"
+    },
+    {
+      "id": 9150212,
+      "classname": "behance_floor_parquet",
+      "manifest": "behance_floor_parquet/item.json"
+    },
+    {
+      "id": 9150213,
+      "classname": "behance_floor_party_lilac",
+      "manifest": "behance_floor_party_lilac/item.json"
+    },
+    {
+      "id": 9150214,
+      "classname": "behance_floor_party_teal",
+      "manifest": "behance_floor_party_teal/item.json"
+    },
+    {
+      "id": 9150219,
+      "classname": "behance_floor_medieval_stone",
+      "manifest": "behance_floor_medieval_stone/item.json"
+    },
+    {
+      "id": 9150220,
+      "classname": "behance_floor_medieval_grass",
+      "manifest": "behance_floor_medieval_grass/item.json"
+    },
+    {
+      "id": 9150221,
+      "classname": "behance_floor_games_grid",
+      "manifest": "behance_floor_games_grid/item.json"
+    },
+    {
+      "id": 9150222,
+      "classname": "behance_floor_games_checker",
+      "manifest": "behance_floor_games_checker/item.json"
+    },
+    {
+      "id": 9150223,
+      "classname": "behance_floor_mexico_talavera",
+      "manifest": "behance_floor_mexico_talavera/item.json"
+    },
+    {
+      "id": 9150224,
+      "classname": "behance_floor_mexico_terracotta",
+      "manifest": "behance_floor_mexico_terracotta/item.json"
+    },
+    {
+      "id": 9150225,
+      "classname": "behance_floor_christmas",
+      "manifest": "behance_floor_christmas/item.json"
+    },
+    {
+      "id": 9150226,
+      "classname": "behance_floor_paris_star",
+      "manifest": "behance_floor_paris_star/item.json"
+    },
+    {
+      "id": 9150227,
+      "classname": "behance_floor_paris_blue",
+      "manifest": "behance_floor_paris_blue/item.json"
+    },
+    {
+      "id": 9150228,
+      "classname": "behance_floor_paris_brown",
+      "manifest": "behance_floor_paris_brown/item.json"
+    },
+    {
+      "id": 9150229,
+      "classname": "behance_floor_musketeer_star",
+      "manifest": "behance_floor_musketeer_star/item.json"
+    },
+    {
+      "id": 9150230,
+      "classname": "behance_floor_musketeer_brown",
+      "manifest": "behance_floor_musketeer_brown/item.json"
+    },
+    {
+      "id": 9150231,
+      "classname": "behance_floor_easter_grass",
+      "manifest": "behance_floor_easter_grass/item.json"
+    },
+    {
+      "id": 9150232,
+      "classname": "behance_floor_easter_star",
+      "manifest": "behance_floor_easter_star/item.json"
+    },
+    {
+      "id": 9160201,
+      "classname": "behance_wall_egypt",
+      "manifest": "behance_wall_egypt/item.json"
+    },
+    {
+      "id": 9160202,
+      "classname": "behance_wall_classic",
+      "manifest": "behance_wall_classic/item.json"
+    },
+    {
+      "id": 9160203,
+      "classname": "behance_wall_cards",
+      "manifest": "behance_wall_cards/item.json"
+    },
+    {
+      "id": 9160204,
+      "classname": "behance_wall_oriental",
+      "manifest": "behance_wall_oriental/item.json"
+    },
+    {
+      "id": 9160205,
+      "classname": "behance_wall_balloons",
+      "manifest": "behance_wall_balloons/item.json"
+    },
+    {
+      "id": 9160206,
+      "classname": "behance_wall_confetti",
+      "manifest": "behance_wall_confetti/item.json"
+    },
+    {
+      "id": 9160207,
+      "classname": "behance_wall_june_festival",
+      "manifest": "behance_wall_june_festival/item.json"
+    },
+    {
+      "id": 9160208,
+      "classname": "behance_wall_circus",
+      "manifest": "behance_wall_circus/item.json"
+    },
+    {
+      "id": 9160209,
+      "classname": "behance_wall_circus_deluxe",
+      "manifest": "behance_wall_circus_deluxe/item.json"
+    },
+    {
+      "id": 9160210,
+      "classname": "behance_wall_night",
+      "manifest": "behance_wall_night/item.json"
+    },
+    {
+      "id": 9160211,
+      "classname": "behance_wall_blue_tiles",
+      "manifest": "behance_wall_blue_tiles/item.json"
+    },
+    {
+      "id": 9160212,
+      "classname": "behance_wall_parquet",
+      "manifest": "behance_wall_parquet/item.json"
+    },
+    {
+      "id": 9160213,
+      "classname": "behance_wall_games_sky",
+      "manifest": "behance_wall_games_sky/item.json"
+    },
+    {
+      "id": 9160214,
+      "classname": "behance_wall_games_neon",
+      "manifest": "behance_wall_games_neon/item.json"
+    },
+    {
+      "id": 9160215,
+      "classname": "behance_wall_italy_cantina",
+      "manifest": "behance_wall_italy_cantina/item.json"
+    },
+    {
+      "id": 9160216,
+      "classname": "behance_wall_mexico_arches",
+      "manifest": "behance_wall_mexico_arches/item.json"
+    },
+    {
+      "id": 9160217,
+      "classname": "behance_wall_musketeer_damask",
+      "manifest": "behance_wall_musketeer_damask/item.json"
+    },
+    {
+      "id": 9160218,
+      "classname": "behance_wall_musketeer_stone",
+      "manifest": "behance_wall_musketeer_stone/item.json"
+    },
+    {
+      "id": 9160219,
+      "classname": "behance_wall_easter_patchwork",
+      "manifest": "behance_wall_easter_patchwork/item.json"
     }
   ]
 }

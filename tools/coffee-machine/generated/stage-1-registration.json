@@ -1,0 +1,14 @@
+{
+  "left": -82,
+  "top": -150,
+  "source": {
+    "mode": "uniform",
+    "image": "stage-1-room-aligned.png",
+    "scale": 0.33203125,
+    "contact": {
+      "x": 245.5,
+      "y": 693
+    },
+    "reason": "PNG proportions remain independent of the logical footprint. Rounded bodies and feet are not reliable diamond corners."
+  }
+}

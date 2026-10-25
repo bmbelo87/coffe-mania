@@ -23,7 +23,7 @@ const items = readdirSync(directory, { withFileTypes: true }).filter((entry) => 
   if (item.classname !== entry.name || !/^[a-z][a-z0-9_]*$/.test(item.classname) ||
     !Number.isSafeInteger(item.id) || item.id <= 0 || typeof item.name !== 'string' ||
     ![0, 1, 2, 3].includes(item.type) || !Number.isSafeInteger(item.priceGold) || item.priceGold < 0 || typeof item.purchasable !== 'boolean' ||
-    !['wall', 'window', 'door', 'table', 'chair', 'stove', 'counter', 'juice_machine', 'bush', 'panel', 'letterbox', 'decor'].includes(item.kind) ||
+    !['wall', 'window', 'door', 'table', 'chair', 'stove', 'counter', 'juice_machine', 'coffee_machine', 'bush', 'panel', 'letterbox', 'decor'].includes(item.kind) ||
     ![item.sizeX, item.sizeY].every((n) => Number.isInteger(n) && n >= 1 && n <= 8) ||
     !Array.isArray(item.parts) || item.parts.length === 0 || !Number.isFinite(item.itemHeight) || item.itemHeight < 0 ||
     (item.type === 2 && item.kind !== 'door') ||
@@ -38,15 +38,34 @@ const items = readdirSync(directory, { withFileTypes: true }).filter((entry) => 
     const png = readFileSync(resolve(directory, entry.name, part.file));
     if (png.readUInt32BE(16) !== part.width || png.readUInt32BE(20) !== part.height) throw new Error(`Dimensões incorretas: ${entry.name}/${part.file}`);
   }
+  if (item.mealAnchor !== undefined && (item.kind !== 'table' || ![item.mealAnchor.x, item.mealAnchor.y].every(n => Number.isFinite(n) && Math.abs(n) <= 320))) throw new Error(`Âncora de prato inválida: ${entry.name}`);
   if (item.seatingBackrests !== undefined) {
     const rotations = new Set();
     if (item.kind !== 'chair' || !Array.isArray(item.seatingBackrests)) throw new Error(`Encosto inválido: ${entry.name}`);
     for (const layer of item.seatingBackrests) {
-      if (![2, 3].includes(layer.rotation) || rotations.has(layer.rotation) || !Array.isArray(layer.polygons) || !layer.polygons.length ||
+      if (![0, 1, 2, 3].includes(layer.rotation) || rotations.has(layer.rotation) || !Array.isArray(layer.polygons) || !layer.polygons.length ||
         layer.polygons.some(polygon => !Array.isArray(polygon) || polygon.length < 6 || polygon.length % 2 || !polygon.every(Number.isFinite))) {
         throw new Error(`Máscara de encosto inválida: ${entry.name}`);
       }
       rotations.add(layer.rotation);
+    }
+  }
+  if (item.seatingAnchors !== undefined) {
+    const rotations = new Set();
+    if (item.kind !== 'chair' || !Array.isArray(item.seatingAnchors)) throw new Error(`Apoio de assento inválido: ${entry.name}`);
+    for (const anchor of item.seatingAnchors) {
+      if (![0, 1, 2, 3].includes(anchor.rotation) || rotations.has(anchor.rotation) ||
+        ![anchor.x, anchor.y].every(value => Number.isFinite(value) && Math.abs(value) <= 160)) throw new Error(`Apoio de assento inválido: ${entry.name}`);
+      rotations.add(anchor.rotation);
+    }
+  }
+  if (item.surfacePattern !== undefined) {
+    const { columns, rows } = item.surfacePattern;
+    const phases = new Set(item.parts.map(part => part.rotation ?? 0));
+    if (![0, 1].includes(item.type) || ![columns, rows].every(n => Number.isInteger(n) && n >= 1 && n <= 4) ||
+      columns * rows > 4 || phases.size !== columns * rows ||
+      Array.from({ length: columns * rows }, (_, i) => i).some(i => !phases.has(i))) {
+      throw new Error(`Padrão de superfície inválido: ${entry.name}`);
     }
   }
   // Animação: folha de sprites em grade, quadros iguais à primeira parte, com margem transparente.
@@ -104,3 +123,17 @@ const recipes = readdirSync(foodsDirectory, { withFileTypes: true }).filter((ent
 writeFileSync(resolve(foodsDirectory, 'catalog.json'), JSON.stringify({ recipes }, null, 2) + '\n');
 writeFileSync(resolve(root, 'shared/recipecatalog/catalog.json'), JSON.stringify({ recipes }, null, 2) + '\n');
 console.log(`Catálogo de receitas sincronizado com ${recipes.length} receitas.`);
+
+// The shared coffee catalog owns economy; the client receives a validated copy.
+const coffees = JSON.parse(readFileSync(resolve(root, 'shared/coffeecatalog/catalog.json'), 'utf8'));
+const coffeeDirectory = resolve(root, 'game/public/assets/coffees');
+const coffeeIds = new Set();
+for (const recipe of coffees.recipes) {
+  if (!/^[a-z][a-z0-9_]*$/.test(recipe.id) || coffeeIds.has(recipe.id) || recipe.file !== recipe.id + '.png' ||
+      !['basic', 'medium', 'advanced', 'expert'].includes(recipe.group) ||
+      ![recipe.energyCost, recipe.gold, recipe.xp, recipe.popularityTenths].every(n => Number.isSafeInteger(n) && n >= 0)) throw new Error('Café inválido: ' + recipe.id);
+  coffeeIds.add(recipe.id);
+  imageSize(readFileSync(resolve(coffeeDirectory, recipe.file)));
+}
+writeFileSync(resolve(coffeeDirectory, 'catalog.json'), JSON.stringify(coffees, null, 2) + '\n');
+console.log(`Catálogo de cafés sincronizado com ${coffeeIds.size} sabores.`);

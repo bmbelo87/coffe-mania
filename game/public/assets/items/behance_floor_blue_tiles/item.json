@@ -1,0 +1,88 @@
+{
+  "id": 9150211,
+  "classname": "behance_floor_blue_tiles",
+  "name": "Piso Azulejos Azuis",
+  "type": 0,
+  "kind": "decor",
+  "priceGold": 10,
+  "purchasable": true,
+  "sizeX": 1,
+  "sizeY": 1,
+  "itemHeight": 0,
+  "parts": [
+    {
+      "file": "tile.png",
+      "width": 162,
+      "height": 82,
+      "left": -81,
+      "top": -1
+    }
+  ],
+  "source": {
+    "art": "artes/9287765/009.png",
+    "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+    "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/2977d89287765.560cbd1143d9f.png",
+    "artist": "Walter Ávila e Andrés Guerrero",
+    "archiveSha256": "837a65dffb335bcd82f5f6acd91af28ed560cc5574bfd58e267407e110bc9f3d",
+    "room": "009 (Espanha, identificação visual)",
+    "method": "Extração da sala original, com reconstrução localizada por ImageGen; não é PNG original recuperado. Fora das regiões corrigidas, conserva os pixels da extração.",
+    "cells": [
+      [
+        4,
+        7
+      ]
+    ],
+    "calibration": "Consenso original, seguido de reconstrução localizada indicada em restoration; projeção, período e alfa preservados. A afirmação de pixels originais não se aplica às regiões geradas.",
+    "measuredTile": [
+      1.0,
+      1.0
+    ],
+    "seedCoverage": [
+      1.0
+    ],
+    "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+    "provisionalRules": {
+      "priceGold": {
+        "value": 10,
+        "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+      }
+    },
+    "restoration": {
+      "date": "2026-10-25",
+      "review": "tools/surfaces-behance/repairs/reviewed.json",
+      "method": "ImageGen somente nos resíduos delimitados; demais pixels e alfa preservados.",
+      "regions": [
+        [
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            0,
+            1,
+            1
+          ]
+        ]
+      ],
+      "generatedPatch": {
+        "file": "repairs/blue-tiles-master.png",
+        "rects": [
+          [
+            241,
+            0,
+            256,
+            256
+          ],
+          [
+            0,
+            238,
+            256,
+            256
+          ]
+        ]
+      },
+      "prompts": "tools/surfaces-behance/repairs/generations.json"
+    }
+  }
+}

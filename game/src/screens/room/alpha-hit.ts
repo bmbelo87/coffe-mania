@@ -1,4 +1,4 @@
-import type { Texture, TextureSource } from 'pixi.js';
+import { Rectangle, Texture, type TextureSource } from 'pixi.js';
 
 /**
  * Área de clique pelo desenho, não pelo retângulo da imagem: as partes transparentes de um móvel
@@ -81,4 +81,25 @@ export function alphaHitArea(texture: Texture): { contains(x: number, y: number)
       return mask.cells[Math.floor(y / CELL) * mask.columns + Math.floor(x / CELL)] === 1;
     },
   };
+}
+
+const contentTextures = new WeakMap<Texture, Texture>();
+
+/** Presentation-only crop: transparent PNG padding must not change a thought icon's visible size.
+ * The floor picking mask and its dilation remain independent of this unrotated icon crop. */
+export function contentTexture(texture: Texture): Texture {
+  const cached = contentTextures.get(texture);
+  if (cached) return cached;
+  const pixels = readPixels(texture);
+  if (!pixels || texture.rotate) { contentTextures.set(texture, texture); return texture; }
+  let left = pixels.width, top = pixels.height, right = -1, bottom = -1;
+  for (let y = 0; y < pixels.height; y++) for (let x = 0; x < pixels.width; x++) {
+    if (pixels.data[(y * pixels.width + x) * 4 + 3] < ALPHA_THRESHOLD) continue;
+    left = Math.min(left, x); right = Math.max(right, x); top = Math.min(top, y); bottom = Math.max(bottom, y);
+  }
+  if (right < left) { contentTextures.set(texture, texture); return texture; }
+  const scale = pixels.width / texture.frame.width;
+  const crop = new Texture({ source: texture.source, frame: new Rectangle(texture.frame.x + left / scale,
+    texture.frame.y + top / scale, (right - left + 1) / scale, (bottom - top + 1) / scale) });
+  contentTextures.set(texture, crop); return crop;
 }

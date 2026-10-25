@@ -1,0 +1,240 @@
+{
+  "tool": "built-in image_gen",
+  "provenance": "Reconstruções geradas a partir de referências do Café Mania; não são PNGs originais recuperados.",
+  "generationDate": "2026-10-24",
+  "assets": [
+    {
+      "key": "machine1",
+      "prompt": "Use case: background-extraction / precise-object-edit. Create a faithful enlarged game-ready raster cutout of ONLY the silver and white coffee machine in the supplied tiny Café Mania reference. Treat the reference as an exact silhouette, proportion, color and camera target, NOT as inspiration. Keep the same 2D flat Flash-game drawing: isometric 2:1 with vertical sides upright, top and base edges at approximately 26.565 degrees, dark gray/brown painted outlines, a few flat shaded faces. Preserve the silver rectangular top, the tiny red/green control buttons, open dispensing area, existing dark filled coffee cup on the tray, portafilter and handle to the right, silver plinth and dark brown trim exactly as visible. Remove the yellow-and-white radial burst background and the thick white exterior sticker outline completely. Preserve actual white painted machine parts. Do not add any floor, shadow, cast shadow, halo, steam, label, text, numbers, decoration, realism, 3D render appearance, reflective chrome, plastic shine, gradients or invented mechanical detail. Entire one machine centered with transparent margins, no clipping. True transparent alpha background, no painted checkerboard. Draw at high enough resolution for a clean 512-pixel-wide asset; no visible source pixels.",
+      "generatedPath": "C:\\Users\\Ulisses\\.codex\\generated_images\\01a16e80-f5a1-7e03-9942-83cc693ff548\\exec-f24a5f9e-bca3-414a-a696-f6f054544d60.png",
+      "references": [
+        "artes-referencia/cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/15414597/018.png"
+      ],
+      "master": "tools/coffee-machine/generated/stage-1-master.png",
+      "output": "game/public/assets/items/coffee_machine/stages/stage-1.png",
+      "sourceArtist": "Mariano Martin Garnero",
+      "sourceProject": "https://www.behance.net/gallery/15414597/Cafemania-Vostu"
+    },
+    {
+      "key": "machine2",
+      "prompt": "Use case: precise-object-edit. Enlarge and clean ONLY the RED espresso machine with rounded black-and-cream top, red rectangular body, black front, two dispensing outlets, existing dark coffee cup and saucer on the tray, dark portafilter handle projecting right, silver grille, and lower front gauges. Match this red machine, not a generic modern cafe appliance. Input image is the exact Café Mania game art target for silhouette, camera, proportions and colors, not inspiration. Reproduce a clean 2D flat Flash-game sprite with flat painted color regions and restrained native shading, smooth outlined edges, isometric 2:1 view, vertical sides upright. Remove ONLY the yellow-and-white radial burst backdrop and exterior white sticker border. Keep all actual white/silver parts of the machine. Entire one machine, all feet/base visible, generous truly transparent margins. NO shadow under the machine or projected shadow, no floor, no backdrop, no painted checkerboard, no steam. No invented text, numbers, labels, logo, details or extra accessories. No photorealism, no glossy plastic or chrome reflections, no 3D render, no complex lighting, no heavy gradients. This must look like an enlarged copy of the supplied small original Flash drawing. Aim for at least 512px clean asset width.",
+      "generatedPath": "C:\\Users\\Ulisses\\.codex\\generated_images\\01a16e80-f5a1-7e03-9942-83cc693ff548\\exec-7e2edd8f-119b-49f0-949d-5c8e2e196b78.png",
+      "references": [
+        "artes-referencia/cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/15414597/019.png"
+      ],
+      "master": "tools/coffee-machine/generated/stage-2-master.png",
+      "output": "game/public/assets/items/coffee_machine/stages/stage-2.png",
+      "sourceArtist": "Mariano Martin Garnero",
+      "sourceProject": "https://www.behance.net/gallery/15414597/Cafemania-Vostu"
+    },
+    {
+      "key": "machine3",
+      "prompt": "Use case: precise-object-edit. Enlarge and clean ONLY the GOLD capsule-shaped coffee machine with gray rounded slanted top lid, thin gold trim, tall silver and gold curved body, small round control dials, a gold portafilter handle projecting right, existing dark coffee cup on its lower silver tray and gray base. Match the capsule-shaped gold machine in this exact reference; do NOT draw the unrelated orange cylindrical CM machine from other versions. Input image is the exact Café Mania game art target for silhouette, camera, proportions and colors, not inspiration. Reproduce a clean 2D flat Flash-game sprite with flat painted color regions and restrained native shading, smooth outlined edges, isometric 2:1 view, vertical sides upright. Remove ONLY the yellow-and-white radial burst backdrop and exterior white sticker border. Keep all actual white/silver parts of the machine. Entire one machine, all feet/base visible, generous truly transparent margins. NO shadow under the machine or projected shadow, no floor, no backdrop, no painted checkerboard, no steam. No invented text, numbers, labels, logo, details or extra accessories. No photorealism, no glossy plastic or chrome reflections, no 3D render, no complex lighting, no heavy gradients. This must look like an enlarged copy of the supplied small original Flash drawing. Aim for at least 512px clean asset width.",
+      "generatedPath": "C:\\Users\\Ulisses\\.codex\\generated_images\\01a16e80-f5a1-7e03-9942-83cc693ff548\\exec-77fd0524-4271-4888-90ce-1d9e6a5663e4.png",
+      "references": [
+        "artes-referencia/cafe-mania-behance-alta-qualidade-documentado/cafe-mania-behance/artes/15414597/020.png"
+      ],
+      "master": "tools/coffee-machine/generated/stage-3-master.png",
+      "output": "game/public/assets/items/coffee_machine/stages/stage-3.png",
+      "sourceArtist": "Mariano Martin Garnero",
+      "sourceProject": "https://www.behance.net/gallery/15414597/Cafemania-Vostu"
+    },
+    {
+      "key": "cups_basic",
+      "prompt": "Use case: precise-object-edit. Asset: a 1024x1024 transparent sprite atlas with exactly FOUR Café Mania original Flash-game drink illustrations, arranged as a clean equally sized 2-by-2 grid. Input images 1,2,3,4 define the objects respectively TOP LEFT, TOP RIGHT, BOTTOM LEFT, BOTTOM RIGHT. Copy only the drink vessel, drink, saucer/napkin and the few ingredients already visible. Remove every peach/beige panel, row border, UI decoration, text, watermark and drop shadow. Every quadrant has independent true transparent background and generous clear margin; the four objects never overlap and never touch a quadrant border. Draw each object centered in its own 512x512 quadrant at similar visual size, about 300-370px tall. Ordering is mandatory. Exact objects: TOP LEFT Espresso: small low ivory coffee cup on ivory saucer, filled with very dark black coffee, two brown coffee beans resting on the saucer at the front. TOP RIGHT Descafeinado: low pale blue coffee cup with left handle, blue saucer, brown coffee and the single small beige cookie visible on the saucer. BOTTOM LEFT Café com Leite: tall transparent straight blue-edged glass with tan milky coffee and a small white creamy swirl; square white napkin with thin red outline, small light cookie as in reference. BOTTOM RIGHT Café com Creme: short pale blush-pink porcelain cup and saucer, tan coffee with one white cream dollop, two brown beans on front of saucer. Style: faithful Café Mania 2010-2014 flat painted 2D Flash sprites, simple soft pastel blue/cream colors, restrained native flat shading, hand-drawn thin colored outlines, view slightly from above exactly like references. Do not modernize the art, make a product photo, use glossy plastic or 3D rendering, add extra ornate outlines, bright highlights, gradients, ingredients or projected shadows. NO text, labels, numbers, names, frames, separators, backdrop, checkerboard pattern or white sticker outline. Alpha background must be truly transparent. Food/liquid/cream stay solid and preserve the source colors.",
+      "references": [
+        ".runtime/coffee-research/local/coffee-level400/recortes/01-basic.png",
+        ".runtime/coffee-research/local/coffee-level400/recortes/02-basic.png",
+        ".runtime/coffee-research/local/coffee-level400/recortes/03-basic.png",
+        ".runtime/coffee-research/local/coffee-level400/recortes/04-basic.png"
+      ],
+      "generatedPath": "C:\\Users\\Ulisses\\.codex\\generated_images\\01a16e80-f5a1-7e03-9942-83cc693ff548\\exec-f7c668c2-9b14-4067-9e1e-af5dce09a0c4.png",
+      "master": "tools/coffee-machine/generated/basic-atlas.png"
+    },
+    {
+      "key": "cups_medium",
+      "prompt": "Use case: precise-object-edit. Asset: a 1024x1024 transparent sprite atlas with exactly FOUR Café Mania original Flash-game drink illustrations, arranged as a clean equally sized 2-by-2 grid. Input images 1,2,3,4 define the objects respectively TOP LEFT, TOP RIGHT, BOTTOM LEFT, BOTTOM RIGHT. Copy only the drink vessel, drink, saucer/napkin and the few ingredients already visible. Remove every peach/beige panel, row border, UI decoration, text, watermark and drop shadow. Every quadrant has independent true transparent background and generous clear margin; the four objects never overlap and never touch a quadrant border. Draw each object centered in its own 512x512 quadrant at similar visual size, about 300-370px tall. Ordering is mandatory. Exact objects: TOP LEFT Cortado: tall straight transparent blue-edged glass, tan coffee with pale beige foam swirl, square white napkin outlined thin red and small beige cookie. TOP RIGHT Café com Canela: low pale ivory-lilac cup and saucer, black coffee with white cream dollop; one cinnamon stick leaning in cup toward upper right, another cinnamon stick lying on front of saucer. BOTTOM LEFT Cappuccino: short footed transparent glass mug with bright blue rim, foot and left handle, tan coffee topped with white foam dotted sparsely brown, on white square napkin with thin red border, small brown beans as reference. BOTTOM RIGHT Macchiato: tall flared clear footed blue-edged glass mug with left handle, layered pale beige/coffee liquid, tall white whipped-cream peak, on square napkin with thin red border and two small brown beans. Style: faithful Café Mania 2010-2014 flat painted 2D Flash sprites, simple soft pastel blue/cream colors, restrained native flat shading, hand-drawn thin colored outlines, view slightly from above exactly like references. Do not modernize the art, make a product photo, use glossy plastic or 3D rendering, add extra ornate outlines, bright highlights, gradients, ingredients or projected shadows. NO text, labels, numbers, names, frames, separators, backdrop, checkerboard pattern or white sticker outline. Alpha background must be truly transparent. Food/liquid/cream stay solid and preserve the source colors.",
+      "references": [
+        ".runtime/coffee-research/local/coffee-level400/recortes/05-medium.png",
+        ".runtime/coffee-research/local/coffee-level400/recortes/06-medium.png",
+        ".runtime/coffee-research/local/coffee-level400/recortes/07-medium.png",
+        ".runtime/coffee-research/local/coffee-level400/recortes/08-medium.png"
+      ],
+      "generatedPath": "C:\\Users\\Ulisses\\.codex\\generated_images\\01a16e80-f5a1-7e03-9942-83cc693ff548\\exec-e2ec8f38-fbdf-4de0-8bc4-8aaed48f2569.png",
+      "master": "tools/coffee-machine/generated/medium-atlas.png"
+    },
+    {
+      "key": "cups_advanced",
+      "prompt": "Use case: precise-object-edit. Asset: a 1024x1024 transparent sprite atlas with exactly FOUR Café Mania original Flash-game drink illustrations, arranged as a clean equally sized 2-by-2 grid. Input images 1,2,3,4 define the objects respectively TOP LEFT, TOP RIGHT, BOTTOM LEFT, BOTTOM RIGHT. Copy only the drink vessel, drink, saucer/napkin and the few ingredients already visible. Remove every peach/beige panel, row border, UI decoration, text, watermark and drop shadow. Every quadrant has independent true transparent background and generous clear margin; the four objects never overlap and never touch a quadrant border. Draw each object centered in its own 512x512 quadrant at similar visual size, about 300-370px tall. Ordering is mandatory. Exact objects: TOP LEFT Mocaccino: clear blue-edged footed handled glass, stacked dark brown/white/coffee layers, tall white whipped cream peak with the thin brown chocolate spiral shown, white square napkin with red outline. TOP RIGHT Café Irlandês: tall flared blue-edged footed glass with left handle, very dark coffee, white cream peak with small green leaf motif on upper left, tiny brown cookie at base as shown. BOTTOM LEFT Macchiato Caramelo: pale tan/golden coffee in clear flared blue-edged footed handled glass, small white cream swirl with caramel brown spiral, square white red-outline napkin and two small beans. BOTTOM RIGHT Submarino: light-colored cocoa in a clear straight blue-edged handled footed mug, white frothy top with a single dark chocolate rectangle inserted at upper right, small chocolate fragments visible toward bottom of drink, dark chocolate rectangle resting across front of saucer, no invented garnish. Style: faithful Café Mania 2010-2014 flat painted 2D Flash sprites, simple soft pastel blue/cream colors, restrained native flat shading, hand-drawn thin colored outlines, view slightly from above exactly like references. Do not modernize the art, make a product photo, use glossy plastic or 3D rendering, add extra ornate outlines, bright highlights, gradients, ingredients or projected shadows. NO text, labels, numbers, names, frames, separators, backdrop, checkerboard pattern or white sticker outline. Alpha background must be truly transparent. Food/liquid/cream stay solid and preserve the source colors.",
+      "references": [
+        ".runtime/coffee-research/local/coffee-level400/recortes/09-advanced.png",
+        ".runtime/coffee-research/local/coffee-level400/recortes/10-advanced.png",
+        ".runtime/coffee-research/local/coffee-level400/recortes/11-advanced.png",
+        ".runtime/coffee-research/local/coffee-level400/recortes/12-advanced.png"
+      ],
+      "generatedPath": "C:\\Users\\Ulisses\\.codex\\generated_images\\01a16e80-f5a1-7e03-9942-83cc693ff548\\exec-c4168a0e-411a-4899-8a04-6c3839942228.png",
+      "master": "tools/coffee-machine/generated/advanced-atlas.png"
+    },
+    {
+      "key": "cups_expert",
+      "prompt": "Use case: precise-object-edit. Asset: a 1024x1024 transparent sprite atlas with exactly FOUR Café Mania original Flash-game drink illustrations, arranged as a clean equally sized 2-by-2 grid. Input images 1,2,3,4 define the objects respectively TOP LEFT, TOP RIGHT, BOTTOM LEFT, BOTTOM RIGHT. Copy only the drink vessel, drink, saucer/napkin and the few ingredients already visible. Remove every peach/beige panel, row border, UI decoration, text, watermark and drop shadow. Every quadrant has independent true transparent background and generous clear margin; the four objects never overlap and never touch a quadrant border. Draw each object centered in its own 512x512 quadrant at similar visual size, about 300-370px tall. Ordering is mandatory. Exact objects: TOP LEFT Frappé: tall narrow simple transparent blue-edged tumbler filled with brown iced coffee and a white whipped-cream peak with a few brown speckles; no handle and no saucer. TOP RIGHT Chai com Especiarias: low broad muted sage-green ceramic cup with left handle and matching dark green saucer, plain tan tea top; no invented cinnamon, flowers or garnish. BOTTOM LEFT Iced Coffee com Menta: squat transparent blue-rimmed glass filled with brown iced coffee, small pale ice shapes, two green mint leaves on upper left, one red straw angled toward upper right. BOTTOM RIGHT Capuccino com Laranja: short clear blue-edged handled footed mug of orange-brown coffee with pale frothy top sprinkled brown, pale blue saucer, exactly the two orange wedges visible at front-left of saucer. Style: faithful Café Mania 2010-2014 flat painted 2D Flash sprites, simple soft pastel blue/cream colors, restrained native flat shading, hand-drawn thin colored outlines, view slightly from above exactly like references. Do not modernize the art, make a product photo, use glossy plastic or 3D rendering, add extra ornate outlines, bright highlights, gradients, ingredients or projected shadows. NO text, labels, numbers, names, frames, separators, backdrop, checkerboard pattern or white sticker outline. Alpha background must be truly transparent. Food/liquid/cream stay solid and preserve the source colors.",
+      "references": [
+        ".runtime/coffee-research/local/coffee-level400/recortes/13-expert.png",
+        ".runtime/coffee-research/local/coffee-level400/recortes/14-expert.png",
+        ".runtime/coffee-research/local/coffee-level400/recortes/15-expert.png",
+        ".runtime/coffee-research/local/coffee-level400/recortes/16-expert.png"
+      ],
+      "generatedPath": "C:\\Users\\Ulisses\\.codex\\generated_images\\01a16e80-f5a1-7e03-9942-83cc693ff548\\exec-f104a262-ef17-409a-b43c-07857276a754.png",
+      "master": "tools/coffee-machine/generated/expert-atlas.png"
+    }
+  ],
+  "export": {
+    "script": "tools/coffee-machine/export-art.py",
+    "alphaCropThreshold": 8,
+    "sourcePadding": 3,
+    "outputPadding": 8,
+    "machineWidth": 512,
+    "drinkMaxDimension": 256,
+    "order": [
+      "top-left",
+      "top-right",
+      "bottom-left",
+      "bottom-right"
+    ]
+  },
+  "outputs": [
+    {
+      "file": "game/public/assets/items/coffee_machine/stages/stage-1.png",
+      "width": 512,
+      "height": 704,
+      "alpha": "RGBA, transparent border verified",
+      "sha256": "9e881d9a0d6909bbbfa7825f4bf99189c20b5b00c5b3f9459583785ea84f26d0"
+    },
+    {
+      "file": "game/public/assets/items/coffee_machine/stages/stage-2.png",
+      "width": 512,
+      "height": 697,
+      "alpha": "RGBA, transparent border verified",
+      "sha256": "49a57b1a894280172c6b0d2d3001386649432459576a8c995f509678e7d86e61"
+    },
+    {
+      "file": "game/public/assets/items/coffee_machine/stages/stage-3.png",
+      "width": 512,
+      "height": 778,
+      "alpha": "RGBA, transparent border verified",
+      "sha256": "aff729cb3f62db217288f946c61c089a99c9f3b0f715c0e593d16fe1e63b5b59"
+    },
+    {
+      "file": "game/public/assets/coffees/cafe_com_canela.png",
+      "width": 256,
+      "height": 230,
+      "alpha": "RGBA, transparent border verified",
+      "sha256": "0fb74de1ccf321a265f95d5d2740af3a55953da82df0ccbd0db47c44546a77b9"
+    },
+    {
+      "file": "game/public/assets/coffees/cafe_com_creme.png",
+      "width": 256,
+      "height": 253,
+      "alpha": "RGBA, transparent border verified",
+      "sha256": "9c3279fe83f7b1de503843e7af39c131bbd1e8f8993117463aea8dc401c458d0"
+    },
+    {
+      "file": "game/public/assets/coffees/cafe_com_leite.png",
+      "width": 221,
+      "height": 256,
+      "alpha": "RGBA, transparent border verified",
+      "sha256": "b3b679ecacc2dbda03db0fd19ef8f7c1f317c5563cccdd19d97283411f1dc200"
+    },
+    {
+      "file": "game/public/assets/coffees/cafe_irlandes.png",
+      "width": 173,
+      "height": 256,
+      "alpha": "RGBA, transparent border verified",
+      "sha256": "7f918e132cc53f9321dd565dad921f31d435054b22211de7e955b446a3a27ccc"
+    },
+    {
+      "file": "game/public/assets/coffees/cappuccino.png",
+      "width": 192,
+      "height": 256,
+      "alpha": "RGBA, transparent border verified",
+      "sha256": "ad56ddc0a03fb16a575cb93e104d3c517c5ec3423636739a14c19a8390a02108"
+    },
+    {
+      "file": "game/public/assets/coffees/capuccino_com_laranja.png",
+      "width": 230,
+      "height": 256,
+      "alpha": "RGBA, transparent border verified",
+      "sha256": "7c9efe389ee429810d6f659a65562e7d80c08cd56f604e2968f6fb7f97a0a3fb"
+    },
+    {
+      "file": "game/public/assets/coffees/chai_com_especiarias.png",
+      "width": 256,
+      "height": 196,
+      "alpha": "RGBA, transparent border verified",
+      "sha256": "2d68bae61e6b8ff771f28b959a19245c47b57d79a26642124b087448805dc1ab"
+    },
+    {
+      "file": "game/public/assets/coffees/cortado.png",
+      "width": 221,
+      "height": 256,
+      "alpha": "RGBA, transparent border verified",
+      "sha256": "af83a7b66d552a87dbb2b2535ad992bfbd4db8781f295710cc2aaf96b4b9f14b"
+    },
+    {
+      "file": "game/public/assets/coffees/descafeinado.png",
+      "width": 251,
+      "height": 256,
+      "alpha": "RGBA, transparent border verified",
+      "sha256": "fb1d96e34687380c11b40a282ec09c00d93ad3a70a64688fdf461fa985e0167c"
+    },
+    {
+      "file": "game/public/assets/coffees/espresso.png",
+      "width": 256,
+      "height": 238,
+      "alpha": "RGBA, transparent border verified",
+      "sha256": "4b5e82560ae804466658441b033761f93f6810e28379ea2086a773c0281c78f1"
+    },
+    {
+      "file": "game/public/assets/coffees/frappe.png",
+      "width": 158,
+      "height": 256,
+      "alpha": "RGBA, transparent border verified",
+      "sha256": "58c0a913f003a54f128f607c9d00a053632fe30e6bf4957d048acf657e4fd1e1"
+    },
+    {
+      "file": "game/public/assets/coffees/iced_coffee_com_menta.png",
+      "width": 224,
+      "height": 256,
+      "alpha": "RGBA, transparent border verified",
+      "sha256": "e1c9dbbe8290f5a440712238e99e562b6a2752e8c4eb60f688352cd80d768ca6"
+    },
+    {
+      "file": "game/public/assets/coffees/macchiato.png",
+      "width": 181,
+      "height": 256,
+      "alpha": "RGBA, transparent border verified",
+      "sha256": "d688a0f603bad943278a95cbc845230aaba2c664b1fc78f226dfd409db196b14"
+    },
+    {
+      "file": "game/public/assets/coffees/macchiato_caramelo.png",
+      "width": 177,
+      "height": 256,
+      "alpha": "RGBA, transparent border verified",
+      "sha256": "b09e80b06e8d4278e468b8964c4b43ba1f771b0529a196b219eb92c6d8c00e25"
+    },
+    {
+      "file": "game/public/assets/coffees/mocaccino.png",
+      "width": 168,
+      "height": 256,
+      "alpha": "RGBA, transparent border verified",
+      "sha256": "a04b86fd30f71e8b4400f4cd01018cb9346010e19f451b94f837a02a8da4ed8c"
+    },
+    {
+      "file": "game/public/assets/coffees/submarino.png",
+      "width": 200,
+      "height": 256,
+      "alpha": "RGBA, transparent border verified",
+      "sha256": "457845fef759c2c794774f4195b0cd8ac88a00d19bc50b3c63f73493ae37c51f"
+    }
+  ]
+}

@@ -1,0 +1,190 @@
+{
+  "stages": [
+    {
+      "stage": 1,
+      "frame": {
+        "file": "room-stage-1.png",
+        "width": 170,
+        "height": 234,
+        "left": -82,
+        "top": -150
+      },
+      "source": {
+        "mode": "uniform",
+        "image": "stage-1-room-aligned.png",
+        "scale": 0.33203125,
+        "contact": {
+          "x": 245.5,
+          "y": 693
+        },
+        "reason": "PNG proportions remain independent of the logical footprint. Rounded bodies and feet are not reliable diamond corners."
+      },
+      "poses": [
+        {
+          "rotation": 0,
+          "frame": {
+            "file": "stage-1-rotation-0.png",
+            "width": 170,
+            "height": 234,
+            "left": -82,
+            "top": -150
+          }
+        },
+        {
+          "rotation": 1,
+          "frame": {
+            "file": "stage-1-rotation-1.png",
+            "width": 170,
+            "height": 234,
+            "left": -88,
+            "top": -150
+          }
+        },
+        {
+          "rotation": 2,
+          "frame": {
+            "file": "stage-1-rotation-2.png",
+            "width": 159,
+            "height": 234,
+            "left": -66,
+            "top": -153
+          }
+        },
+        {
+          "rotation": 3,
+          "frame": {
+            "file": "stage-1-rotation-3.png",
+            "width": 159,
+            "height": 234,
+            "left": -93,
+            "top": -153
+          }
+        }
+      ]
+    },
+    {
+      "stage": 2,
+      "frame": {
+        "file": "room-stage-2.png",
+        "width": 170,
+        "height": 231,
+        "left": -71,
+        "top": -148
+      },
+      "source": {
+        "mode": "uniform",
+        "image": "stage-2-room-aligned.png",
+        "scale": 0.33203125,
+        "contact": {
+          "x": 212.5,
+          "y": 688
+        },
+        "reason": "PNG proportions remain independent of the logical footprint. Rounded bodies and feet are not reliable diamond corners."
+      },
+      "poses": [
+        {
+          "rotation": 0,
+          "frame": {
+            "file": "stage-2-rotation-0.png",
+            "width": 170,
+            "height": 231,
+            "left": -71,
+            "top": -148
+          }
+        },
+        {
+          "rotation": 1,
+          "frame": {
+            "file": "stage-2-rotation-1.png",
+            "width": 170,
+            "height": 231,
+            "left": -99,
+            "top": -148
+          }
+        },
+        {
+          "rotation": 2,
+          "frame": {
+            "file": "stage-2-rotation-2.png",
+            "width": 169,
+            "height": 231,
+            "left": -80,
+            "top": -150
+          }
+        },
+        {
+          "rotation": 3,
+          "frame": {
+            "file": "stage-2-rotation-3.png",
+            "width": 169,
+            "height": 231,
+            "left": -89,
+            "top": -150
+          }
+        }
+      ]
+    },
+    {
+      "stage": 3,
+      "frame": {
+        "file": "room-stage-3.png",
+        "width": 170,
+        "height": 258,
+        "left": -68,
+        "top": -174
+      },
+      "source": {
+        "mode": "uniform",
+        "image": "stage-3-room-aligned.png",
+        "scale": 0.33203125,
+        "contact": {
+          "x": 205.5,
+          "y": 764
+        },
+        "reason": "PNG proportions remain independent of the logical footprint. Rounded bodies and feet are not reliable diamond corners."
+      },
+      "poses": [
+        {
+          "rotation": 0,
+          "frame": {
+            "file": "stage-3-rotation-0.png",
+            "width": 170,
+            "height": 258,
+            "left": -68,
+            "top": -174
+          }
+        },
+        {
+          "rotation": 1,
+          "frame": {
+            "file": "stage-3-rotation-1.png",
+            "width": 170,
+            "height": 258,
+            "left": -102,
+            "top": -174
+          }
+        },
+        {
+          "rotation": 2,
+          "frame": {
+            "file": "stage-3-rotation-2.png",
+            "width": 171,
+            "height": 258,
+            "left": -77,
+            "top": -177
+          }
+        },
+        {
+          "rotation": 3,
+          "frame": {
+            "file": "stage-3-rotation-3.png",
+            "width": 171,
+            "height": 258,
+            "left": -94,
+            "top": -177
+          }
+        }
+      ]
+    }
+  ]
+}

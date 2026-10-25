@@ -42,6 +42,7 @@ export class SupplyPlatform {
   private readonly slots: SlotView[] = [];
   private balloon?: HoverBalloon;
   private hovered?: SlotView;
+  private balloonKey = '';
   private busy = false;
   private destroyed = false;
 
@@ -70,7 +71,16 @@ export class SupplyPlatform {
     if (!this.snapshot) return;
     const now = this.options.client.serverNowMs();
     if (this.slots.some((slot) => supplyStatus(slot.order, now) !== slot.status)) this.rebuild();
-    if (this.hovered) this.showBalloon(this.hovered);
+    this.updateBalloon();
+  }
+
+  private updateBalloon(): void {
+    if (!this.options.canInteract()) { if (this.balloon) this.balloon.view.visible = false; return; }
+    // One persistent countdown avoids four overlapping callouts; hover always identifies its own slot.
+    const next = this.slots.filter(slot => slot.status === 'onTheWay')
+      .sort((a, b) => a.order.arrivesAt - b.order.arrivesAt || a.order.slot - b.order.slot)[0];
+    const target = this.hovered ?? next;
+    if (target) this.showBalloon(target); else this.hideBalloon();
   }
 
   async act(action: SupplyAction, body: { kind?: SupplyKindId; orderId?: string }): Promise<void> {
@@ -109,7 +119,7 @@ export class SupplyPlatform {
       view.eventMode = 'static'; view.cursor = 'pointer';
       const slot: SlotView = { order, view, sprite, status };
       view.on('pointerover', () => { if (this.options.canInteract()) { this.hovered = slot; this.showBalloon(slot); } });
-      view.on('pointerout', () => { if (this.hovered === slot) { this.hovered = undefined; this.hideBalloon(); } });
+      view.on('pointerout', () => { if (this.hovered === slot) { this.hovered = undefined; this.updateBalloon(); } });
       view.on('pointertap', (event: FederatedPointerEvent) => {
         if (!this.options.canInteract()) return;
         event.stopPropagation();
@@ -119,6 +129,7 @@ export class SupplyPlatform {
       this.slots.push(slot);
       if (order.slot === hoveredSlot) this.hovered = slot;
     }
+    this.updateBalloon();
   }
 
   private kindName(order: SupplyOrder): string {
@@ -157,7 +168,7 @@ export class SupplyPlatform {
     const { order } = slot;
     const name = this.kindName(order);
     const status = supplyStatus(order, now);
-    // Texts of the original callout: "Premium / Chega em HH:MM:SS / Clique para Entrega Imediata".
+    // Keep the existing supply copy; the countdown uses the authoritative server clock.
     const content = status === 'onTheWay'
       ? { title: `${name}: chega em ${formatSupplyCountdown(order.arrivesAt - now)}`, hint: 'Clique para Entrega Imediata' }
       : status === 'arrived'
@@ -168,7 +179,8 @@ export class SupplyPlatform {
       this.balloon.view.zIndex = POPUP_DRAW_PRIORITY + 6;
       this.world.addChild(this.balloon.view);
     }
-    this.balloon.set({ ...content, titleColor: BALLOON_COLOR });
+    const key = JSON.stringify([order.id, content]);
+    if (key !== this.balloonKey) { this.balloon.set({ ...content, titleColor: BALLOON_COLOR }); this.balloonKey = key; }
     const top = slot.sprite.getBounds();
     const local = this.world.toLocal({ x: top.x + top.width / 2, y: top.y });
     this.balloon.view.position.set(local.x, local.y - 6);
@@ -177,7 +189,7 @@ export class SupplyPlatform {
 
   private hideBalloon(): void {
     this.balloon?.destroy();
-    this.balloon = undefined;
+    this.balloon = undefined; this.balloonKey = '';
   }
 
   destroy(): void {

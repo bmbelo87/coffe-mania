@@ -39,6 +39,13 @@ type JuiceStock struct {
 	Unlocked  bool   `json:"unlocked"`
 	Stage     int    `json:"stage"`
 }
+
+// CoffeeMachine carries the selected flavor and visual stage; coffee has no batch stock.
+type CoffeeMachine struct {
+	MachineID string `json:"machineId"`
+	RecipeID  string `json:"recipeId"`
+	Stage     int    `json:"stage"`
+}
 type Employee struct {
 	ID         string `json:"id"`
 	Name       string `json:"name"`
@@ -56,6 +63,7 @@ type World struct {
 	Foods   []Food          `json:"foods"`
 	Cooking json.RawMessage `json:"cooking,omitempty"`
 	Juices  []JuiceStock    `json:"juices"`
+	Coffees []CoffeeMachine `json:"coffees"`
 	// nil denotes a legacy room without waiter simulation; an empty list requires hiring.
 	Employees []Employee `json:"employees"`
 }
@@ -78,18 +86,23 @@ type Emotion struct {
 	Duration  int64  `json:"duration"`
 }
 type Actor struct {
-	ID              string       `json:"id"`
-	Kind            string       `json:"kind,omitempty"`
-	Name            string       `json:"name,omitempty"`
-	Appearance      string       `json:"appearance,omitempty"`
-	X               int          `json:"tx"`
-	Y               int          `json:"ty"`
-	Direction       int          `json:"direction"`
-	Outside         bool         `json:"outside"`
-	State           string       `json:"state"`
-	Move            *Movement    `json:"move,omitempty"`
-	ChairID         string       `json:"chairId,omitempty"`
-	TableID         string       `json:"tableId,omitempty"`
+	ID         string    `json:"id"`
+	Kind       string    `json:"kind,omitempty"`
+	Name       string    `json:"name,omitempty"`
+	Appearance string    `json:"appearance,omitempty"`
+	X          int       `json:"tx"`
+	Y          int       `json:"ty"`
+	Direction  int       `json:"direction"`
+	Outside    bool      `json:"outside"`
+	State      string    `json:"state"`
+	Move       *Movement `json:"move,omitempty"`
+	ChairID    string    `json:"chairId,omitempty"`
+	TableID    string    `json:"tableId,omitempty"`
+	// A decoration edit releases reservations immediately. The snapshots keep an ongoing
+	// seated action at its original support until its timer finishes, including reconnects.
+	DecorationExit  bool         `json:"decorationExit,omitempty"`
+	DetachedChair   *Unit        `json:"detachedChair,omitempty"`
+	DetachedTable   *Unit        `json:"detachedTable,omitempty"`
 	Food            *Food        `json:"food,omitempty"`
 	ActionRemaining int64        `json:"actionRemaining,omitempty"`
 	Action          *ActorAction `json:"action,omitempty"`
@@ -102,6 +115,7 @@ type Actor struct {
 	Ate              bool   `json:"ate,omitempty"`
 	Judged           bool   `json:"judged,omitempty"`
 	JuiceRequestID   string `json:"juiceRequestId,omitempty"`
+	CoffeeRequestID  string `json:"coffeeRequestId,omitempty"`
 	WaiterCustomerID string `json:"waiterCustomerId,omitempty"`
 	WaiterFoodID     string `json:"waiterFoodId,omitempty"`
 }
@@ -155,12 +169,13 @@ type Event struct {
 	Cooking   json.RawMessage `json:"cooking,omitempty"`
 	Foods     []Food          `json:"foods,omitempty"`
 	Juices    []JuiceStock    `json:"juices,omitempty"`
+	Coffees   []CoffeeMachine `json:"coffees,omitempty"`
 	RequestID string          `json:"requestId,omitempty"`
 	Message   string          `json:"message,omitempty"`
 }
 type Command struct {
-	Type      string `json:"type"`
-	Ticket    string `json:"ticket,omitempty"`
+	Type   string `json:"type"`
+	Ticket string `json:"ticket,omitempty"`
 	// Version is the client build (game/src/core/version.ts), sent with "join".
 	Version   string `json:"version,omitempty"`
 	RequestID string `json:"requestId,omitempty"`

@@ -13,8 +13,8 @@ import { Assets, Container, Sprite, type Texture } from 'pixi.js';
  * altura deles no vídeo (62 e 82 px, com 1 px = 2,39 px do mundo).
  */
 const EXTRAS = {
-  vendor: { file: 'ice-cream-vendor.png', anchor: { x: 311.5, y: 600 }, scale: 0.32, at: { x: -730, y: 190 } },
-  bather: { file: 'bather.png', anchor: { x: 125.5, y: 472 }, scale: 0.31, at: { x: -1000, y: 250 } },
+  vendor: { file: 'ice-cream-vendor-flat.png', anchor: { x: 311.5, y: 600 }, scale: 0.32, at: { x: -730, y: 190 } },
+  bather: { file: 'bather-flat.png', anchor: { x: 125.5, y: 472 }, scale: 0.31, at: { x: -1000, y: 250 } },
 } as const;
 
 export interface BeachProp {

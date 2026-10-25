@@ -1206,22 +1206,22 @@
       "purchasable": true,
       "sizeX": 1,
       "sizeY": 1,
-      "itemHeight": 49.2,
+      "itemHeight": 42.312,
       "parts": [
         {
           "file": "rotation-0.png",
-          "width": 148,
-          "height": 131,
-          "left": -74,
-          "top": -48,
+          "width": 127,
+          "height": 113,
+          "left": -67,
+          "top": -44,
           "rotation": 0
         },
         {
           "file": "rotation-1.png",
-          "width": 148,
-          "height": 131,
-          "left": -74,
-          "top": -48,
+          "width": 127,
+          "height": 113,
+          "left": -67,
+          "top": -44,
           "rotation": 1
         }
       ],
@@ -1266,7 +1266,42 @@
               "height": 49.2
             }
           }
+        },
+        "runtimeVisualScale": {
+          "factor": 0.86,
+          "center": [
+            0,
+            40
+          ],
+          "beforeParts": [
+            {
+              "file": "rotation-0.png",
+              "width": 148,
+              "height": 131,
+              "left": -74,
+              "top": -48,
+              "rotation": 0
+            },
+            {
+              "file": "rotation-1.png",
+              "width": 148,
+              "height": 131,
+              "left": -74,
+              "top": -48,
+              "rotation": 1
+            }
+          ],
+          "reason": "Escala uniforme intermediária de 0,86 sobre o centro do apoio. Mantém proporções e reduz a ocupação da toalha; não representa inscrição completa no losango. Pegada lógica e navegação preservadas."
+        },
+        "runtimeArtOffset": {
+          "x": -3,
+          "y": -8,
+          "reason": "Registro visual da mesa; a origem lógica e a pegada permanecem iguais."
         }
+      },
+      "mealAnchor": {
+        "x": -3,
+        "y": -10.14
       }
     },
     {
@@ -1279,22 +1314,22 @@
       "purchasable": true,
       "sizeX": 1,
       "sizeY": 1,
-      "itemHeight": 49.2,
+      "itemHeight": 42.312,
       "parts": [
         {
           "file": "rotation-0.png",
-          "width": 146,
-          "height": 131,
-          "left": -73,
-          "top": -48,
+          "width": 126,
+          "height": 113,
+          "left": -66,
+          "top": -44,
           "rotation": 0
         },
         {
           "file": "rotation-1.png",
-          "width": 146,
-          "height": 131,
-          "left": -73,
-          "top": -48,
+          "width": 126,
+          "height": 113,
+          "left": -66,
+          "top": -44,
           "rotation": 1
         }
       ],
@@ -1339,7 +1374,42 @@
               "height": 49.2
             }
           }
+        },
+        "runtimeVisualScale": {
+          "factor": 0.86,
+          "center": [
+            0,
+            40
+          ],
+          "beforeParts": [
+            {
+              "file": "rotation-0.png",
+              "width": 146,
+              "height": 131,
+              "left": -73,
+              "top": -48,
+              "rotation": 0
+            },
+            {
+              "file": "rotation-1.png",
+              "width": 146,
+              "height": 131,
+              "left": -73,
+              "top": -48,
+              "rotation": 1
+            }
+          ],
+          "reason": "Escala uniforme intermediária de 0,86 sobre o centro do apoio. Mantém proporções e reduz a ocupação da toalha; não representa inscrição completa no losango. Pegada lógica e navegação preservadas."
+        },
+        "runtimeArtOffset": {
+          "x": -3,
+          "y": -8,
+          "reason": "Registro visual da mesa; a origem lógica e a pegada permanecem iguais."
         }
+      },
+      "mealAnchor": {
+        "x": -3,
+        "y": -10.14
       }
     },
     {
@@ -1484,81 +1554,204 @@
       "purchasable": true,
       "sizeX": 1,
       "sizeY": 1,
-      "itemHeight": 97.4,
+      "itemHeight": 113,
       "parts": [
         {
-          "left": -41,
-          "top": -79,
-          "width": 82,
-          "height": 139,
-          "file": "rotation-0.png",
-          "rotation": 0
+          "file": "front-v2.png",
+          "width": 84,
+          "height": 133,
+          "left": -42,
+          "top": -73,
+          "rotation": 0,
+          "flipX": true
         },
         {
-          "left": -41,
-          "top": -79,
-          "width": 82,
-          "height": 139,
-          "file": "rotation-1.png",
+          "file": "front-v2.png",
+          "width": 84,
+          "height": 133,
+          "left": -42,
+          "top": -73,
           "rotation": 1
         },
         {
-          "left": -41,
-          "top": -62,
-          "width": 82,
-          "height": 122,
-          "file": "rotation-2.png",
-          "rotation": 2
+          "file": "back-v2.png",
+          "width": 84,
+          "height": 108,
+          "left": -42,
+          "top": -48,
+          "rotation": 2,
+          "flipX": true
         },
         {
-          "left": -41,
-          "top": -62,
-          "width": 82,
-          "height": 122,
-          "file": "rotation-3.png",
+          "file": "back-v2.png",
+          "width": 84,
+          "height": 108,
+          "left": -42,
+          "top": -48,
           "rotation": 3
         }
       ],
       "source": {
-        "art": "Reconstrução geométrica inspirada nas capturas do Café Mania fornecidas pelo responsável.",
+        "art": "Reconstrução nova com ImageGen integrado; tools/furniture-rotations/prompts.json. Não é PNG original recuperado.",
         "calibration": "Tile 160×80, origem traseira. Alturas referenciadas em white_cloth_table e classic_chair.",
-        "priceGold": "Valor escolhido para o projeto; não confirmado na configuração histórica."
+        "priceGold": "Valor escolhido para o projeto; não confirmado na configuração histórica.",
+        "seatingCalibration": {
+          "method": "Escala uniforme, apoio no chão e contato do quadril por vista; ajuste visual do corpo separado do tile e da sombra.",
+          "views": {
+            "front": {
+              "source": "tools/furniture-rotations/generated/pink-front.png",
+              "sourceSize": [
+                543,
+                859
+              ],
+              "ground": [
+                272,
+                728
+              ],
+              "seat": [
+                245,
+                463
+              ],
+              "scale": 0.15469613259668508,
+              "frame": {
+                "left": -42,
+                "top": -73,
+                "width": 84,
+                "height": 133
+              },
+              "rotation": 1
+            },
+            "back": {
+              "source": "tools/furniture-rotations/generated/pink-back.png",
+              "sourceSize": [
+                561,
+                720
+              ],
+              "ground": [
+                280,
+                590
+              ],
+              "seat": [
+                309,
+                308
+              ],
+              "scale": 0.1497326203208556,
+              "frame": {
+                "left": -42,
+                "top": -48,
+                "width": 84,
+                "height": 108
+              },
+              "rotation": 3
+            }
+          },
+          "foregroundMasks": [
+            {
+              "rotation": 2,
+              "polygons": [
+                [
+                  78.6096,
+                  0.6,
+                  43.8717,
+                  18,
+                  44.0214,
+                  62.85,
+                  78.1604,
+                  46.2
+                ],
+                [
+                  84,
+                  0,
+                  77.262,
+                  0,
+                  77.262,
+                  87.9,
+                  82.2032,
+                  87.9
+                ],
+                [
+                  44.0214,
+                  19.2,
+                  36.6845,
+                  19.2,
+                  35.9358,
+                  107.55,
+                  44.4706,
+                  107.55
+                ]
+              ]
+            },
+            {
+              "rotation": 3,
+              "polygons": [
+                [
+                  5.3904,
+                  0.6,
+                  40.1283,
+                  18,
+                  39.9786,
+                  62.85,
+                  5.8396,
+                  46.2
+                ],
+                [
+                  0,
+                  0,
+                  6.738,
+                  0,
+                  6.738,
+                  87.9,
+                  1.7968,
+                  87.9
+                ],
+                [
+                  39.9786,
+                  19.2,
+                  47.3155,
+                  19.2,
+                  48.0642,
+                  107.55,
+                  39.5294,
+                  107.55
+                ]
+              ]
+            }
+          ]
+        }
       },
       "seatingBackrests": [
         {
           "rotation": 2,
           "polygons": [
             [
-              35,
-              0,
-              82,
-              0,
-              82,
-              56,
-              43,
-              76,
-              35,
-              70
+              78.6096,
+              0.6,
+              43.8717,
+              18,
+              44.0214,
+              62.85,
+              78.1604,
+              46.2
             ],
             [
-              35,
-              18,
-              45,
-              18,
-              45,
-              121,
-              37,
-              122
+              84,
+              0,
+              77.262,
+              0,
+              77.262,
+              87.9,
+              82.2032,
+              87.9
             ],
             [
-              73,
-              0,
-              82,
-              0,
-              82,
-              104,
-              73,
-              104
+              44.0214,
+              19.2,
+              36.6845,
+              19.2,
+              35.9358,
+              107.55,
+              44.4706,
+              107.55
             ]
           ]
         },
@@ -1566,38 +1759,58 @@
           "rotation": 3,
           "polygons": [
             [
-              47,
-              0,
-              0,
-              0,
-              0,
-              56,
-              39,
-              76,
-              47,
-              70
+              5.3904,
+              0.6,
+              40.1283,
+              18,
+              39.9786,
+              62.85,
+              5.8396,
+              46.2
             ],
             [
-              47,
-              18,
-              37,
-              18,
-              37,
-              121,
-              45,
-              122
+              0,
+              0,
+              6.738,
+              0,
+              6.738,
+              87.9,
+              1.7968,
+              87.9
             ],
             [
-              9,
-              0,
-              0,
-              0,
-              0,
-              104,
-              9,
-              104
+              39.9786,
+              19.2,
+              47.3155,
+              19.2,
+              48.0642,
+              107.55,
+              39.5294,
+              107.55
             ]
           ]
+        }
+      ],
+      "seatingAnchors": [
+        {
+          "rotation": 0,
+          "x": 4.0994,
+          "y": -1.3132
+        },
+        {
+          "rotation": 1,
+          "x": -4.0994,
+          "y": -1.3132
+        },
+        {
+          "rotation": 2,
+          "x": -4.2674,
+          "y": -1.8
+        },
+        {
+          "rotation": 3,
+          "x": 4.2674,
+          "y": -1.8
         }
       ]
     },
@@ -1700,39 +1913,39 @@
       "purchasable": true,
       "sizeX": 1,
       "sizeY": 1,
-      "itemHeight": 97.4,
+      "itemHeight": 80,
       "parts": [
         {
-          "file": "front.png",
-          "width": 94,
-          "height": 89,
-          "left": -36,
-          "top": -48,
-          "rotation": 0,
+          "file": "front-v2.png",
+          "width": 110,
+          "height": 100,
+          "left": -53,
+          "top": -40,
+          "rotation": 0
+        },
+        {
+          "file": "front-v2.png",
+          "width": 110,
+          "height": 100,
+          "left": -57,
+          "top": -40,
+          "rotation": 1,
           "flipX": true
         },
         {
-          "file": "front.png",
-          "width": 94,
-          "height": 89,
-          "left": -58,
-          "top": -48,
-          "rotation": 1
-        },
-        {
-          "file": "back.png",
-          "width": 92,
-          "height": 84,
-          "left": -47,
-          "top": -48,
+          "file": "back-v2.png",
+          "width": 110,
+          "height": 91,
+          "left": -60,
+          "top": -38,
           "rotation": 2
         },
         {
-          "file": "back.png",
-          "width": 92,
-          "height": 84,
-          "left": -45,
-          "top": -48,
+          "file": "back-v2.png",
+          "width": 110,
+          "height": 91,
+          "left": -50,
+          "top": -38,
           "rotation": 3,
           "flipX": true
         }
@@ -1802,23 +2015,415 @@
               "height": 32
             }
           }
+        },
+        "art": "Reconstrução nova com ImageGen integrado; tools/furniture-rotations/prompts.json. Não é PNG original recuperado.",
+        "seatingCalibration": {
+          "method": "Escala uniforme, apoio no chão e contato do quadril por vista; ajuste visual do corpo separado do tile e da sombra.",
+          "views": {
+            "front": {
+              "source": "tools/furniture-rotations/generated/pacman-front.png",
+              "sourceSize": [
+                703,
+                642
+              ],
+              "ground": [
+                338.5,
+                512
+              ],
+              "seat": [
+                375,
+                360
+              ],
+              "scale": 0.15647226173541964,
+              "frame": {
+                "left": -53,
+                "top": -40,
+                "width": 110,
+                "height": 100
+              },
+              "rotation": 0,
+              "opening": [
+                [
+                  335,
+                  337
+                ],
+                [
+                  495,
+                  430
+                ]
+              ]
+            },
+            "back": {
+              "source": "tools/furniture-rotations/generated/pacman-back.png",
+              "sourceSize": [
+                711,
+                590
+              ],
+              "ground": [
+                388.5,
+                506.5
+              ],
+              "seat": [
+                388,
+                365
+              ],
+              "scale": 0.15471167369901548,
+              "frame": {
+                "left": -60,
+                "top": -38,
+                "width": 110,
+                "height": 91
+              },
+              "rotation": 2,
+              "opening": [
+                [
+                  450,
+                  405
+                ],
+                [
+                  270,
+                  310
+                ]
+              ]
+            }
+          },
+          "foregroundMasks": [
+            {
+              "rotation": 0,
+              "polygons": [
+                [
+                  0,
+                  51.4019,
+                  6.2589,
+                  33.4891,
+                  20.0284,
+                  24.9221,
+                  35.8321,
+                  32.866,
+                  35.5192,
+                  61.838,
+                  59.6159,
+                  76.0125,
+                  58.8336,
+                  89.5639,
+                  48.3499,
+                  97.6636,
+                  30.9815,
+                  95.6386,
+                  12.2048,
+                  88.785,
+                  2.5036,
+                  74.2991
+                ]
+              ]
+            },
+            {
+              "rotation": 1,
+              "polygons": [
+                [
+                  110,
+                  51.4019,
+                  103.7411,
+                  33.4891,
+                  89.9716,
+                  24.9221,
+                  74.1679,
+                  32.866,
+                  74.4808,
+                  61.838,
+                  50.3841,
+                  76.0125,
+                  51.1664,
+                  89.5639,
+                  61.6501,
+                  97.6636,
+                  79.0185,
+                  95.6386,
+                  97.7952,
+                  88.785,
+                  107.4964,
+                  74.2991
+                ]
+              ]
+            },
+            {
+              "rotation": 2,
+              "polygons": [
+                [
+                  39.9156,
+                  33.3153,
+                  79.5218,
+                  9.7169,
+                  99.1702,
+                  17.4288,
+                  107.9887,
+                  50.7441,
+                  104.7398,
+                  67.4017,
+                  52.602,
+                  85.2932,
+                  42.391,
+                  77.8898
+                ],
+                [
+                  0,
+                  45.3458,
+                  6.1885,
+                  34.8576,
+                  24.9086,
+                  47.3508,
+                  23.8256,
+                  25.2949,
+                  31.097,
+                  21.2847,
+                  40.3797,
+                  29.3051,
+                  52.602,
+                  55.0627,
+                  53.2208,
+                  81.2831,
+                  46.7229,
+                  88.378,
+                  27.8481,
+                  91,
+                  8.9733,
+                  84.3678,
+                  2.4754,
+                  68.9441
+                ],
+                [
+                  73.9522,
+                  3.8559,
+                  81.9972,
+                  0,
+                  90.9705,
+                  5.0898,
+                  100.4079,
+                  16.9661,
+                  108.6076,
+                  34.0864,
+                  109.8453,
+                  56.2966,
+                  103.8115,
+                  66.7847,
+                  101.6456,
+                  55.5254,
+                  98.8608,
+                  39.3305,
+                  89.5781,
+                  24.061,
+                  82.7707,
+                  19.2797,
+                  74.1069,
+                  22.0559
+                ]
+              ]
+            },
+            {
+              "rotation": 3,
+              "polygons": [
+                [
+                  70.0844,
+                  33.3153,
+                  30.4782,
+                  9.7169,
+                  10.8298,
+                  17.4288,
+                  2.0113,
+                  50.7441,
+                  5.2602,
+                  67.4017,
+                  57.398,
+                  85.2932,
+                  67.609,
+                  77.8898
+                ],
+                [
+                  110,
+                  45.3458,
+                  103.8115,
+                  34.8576,
+                  85.0914,
+                  47.3508,
+                  86.1744,
+                  25.2949,
+                  78.903,
+                  21.2847,
+                  69.6203,
+                  29.3051,
+                  57.398,
+                  55.0627,
+                  56.7792,
+                  81.2831,
+                  63.2771,
+                  88.378,
+                  82.1519,
+                  91,
+                  101.0267,
+                  84.3678,
+                  107.5246,
+                  68.9441
+                ],
+                [
+                  36.0478,
+                  3.8559,
+                  28.0028,
+                  0,
+                  19.0295,
+                  5.0898,
+                  9.5921,
+                  16.9661,
+                  1.3924,
+                  34.0864,
+                  0.1547,
+                  56.2966,
+                  6.1885,
+                  66.7847,
+                  8.3544,
+                  55.5254,
+                  11.1392,
+                  39.3305,
+                  20.4219,
+                  24.061,
+                  27.2293,
+                  19.2797,
+                  35.8931,
+                  22.0559
+                ]
+              ]
+            }
+          ]
         }
       },
       "seatingBackrests": [
         {
+          "rotation": 0,
+          "polygons": [
+            [
+              0,
+              51.4019,
+              6.2589,
+              33.4891,
+              20.0284,
+              24.9221,
+              35.8321,
+              32.866,
+              35.5192,
+              61.838,
+              59.6159,
+              76.0125,
+              58.8336,
+              89.5639,
+              48.3499,
+              97.6636,
+              30.9815,
+              95.6386,
+              12.2048,
+              88.785,
+              2.5036,
+              74.2991
+            ]
+          ]
+        },
+        {
+          "rotation": 1,
+          "polygons": [
+            [
+              110,
+              51.4019,
+              103.7411,
+              33.4891,
+              89.9716,
+              24.9221,
+              74.1679,
+              32.866,
+              74.4808,
+              61.838,
+              50.3841,
+              76.0125,
+              51.1664,
+              89.5639,
+              61.6501,
+              97.6636,
+              79.0185,
+              95.6386,
+              97.7952,
+              88.785,
+              107.4964,
+              74.2991
+            ]
+          ]
+        },
+        {
           "rotation": 2,
           "polygons": [
             [
-              18,
+              39.9156,
+              33.3153,
+              79.5218,
+              9.7169,
+              99.1702,
+              17.4288,
+              107.9887,
+              50.7441,
+              104.7398,
+              67.4017,
+              52.602,
+              85.2932,
+              42.391,
+              77.8898
+            ],
+            [
               0,
-              92,
+              45.3458,
+              6.1885,
+              34.8576,
+              24.9086,
+              47.3508,
+              23.8256,
+              25.2949,
+              31.097,
+              21.2847,
+              40.3797,
+              29.3051,
+              52.602,
+              55.0627,
+              53.2208,
+              81.2831,
+              46.7229,
+              88.378,
+              27.8481,
+              91,
+              8.9733,
+              84.3678,
+              2.4754,
+              68.9441
+            ],
+            [
+              73.9522,
+              3.8559,
+              81.9972,
               0,
-              92,
-              53,
-              48,
-              80,
-              20,
-              64
+              90.9705,
+              5.0898,
+              100.4079,
+              16.9661,
+              108.6076,
+              34.0864,
+              109.8453,
+              56.2966,
+              103.8115,
+              66.7847,
+              101.6456,
+              55.5254,
+              98.8608,
+              39.3305,
+              89.5781,
+              24.061,
+              82.7707,
+              19.2797,
+              74.1069,
+              22.0559
             ]
           ]
         },
@@ -1826,18 +2431,96 @@
           "rotation": 3,
           "polygons": [
             [
-              74,
+              70.0844,
+              33.3153,
+              30.4782,
+              9.7169,
+              10.8298,
+              17.4288,
+              2.0113,
+              50.7441,
+              5.2602,
+              67.4017,
+              57.398,
+              85.2932,
+              67.609,
+              77.8898
+            ],
+            [
+              110,
+              45.3458,
+              103.8115,
+              34.8576,
+              85.0914,
+              47.3508,
+              86.1744,
+              25.2949,
+              78.903,
+              21.2847,
+              69.6203,
+              29.3051,
+              57.398,
+              55.0627,
+              56.7792,
+              81.2831,
+              63.2771,
+              88.378,
+              82.1519,
+              91,
+              101.0267,
+              84.3678,
+              107.5246,
+              68.9441
+            ],
+            [
+              36.0478,
+              3.8559,
+              28.0028,
               0,
-              0,
-              0,
-              0,
-              53,
-              44,
-              80,
-              72,
-              64
+              19.0295,
+              5.0898,
+              9.5921,
+              16.9661,
+              1.3924,
+              34.0864,
+              0.1547,
+              56.2966,
+              6.1885,
+              66.7847,
+              8.3544,
+              55.5254,
+              11.1392,
+              39.3305,
+              20.4219,
+              24.061,
+              27.2293,
+              19.2797,
+              35.8931,
+              22.0559
             ]
           ]
+        }
+      ],
+      "seatingAnchors": [
+        {
+          "rotation": 0,
+          "x": 5.6771,
+          "y": 16.0748
+        },
+        {
+          "rotation": 1,
+          "x": -5.6771,
+          "y": 16.0748
+        },
+        {
+          "rotation": 2,
+          "x": 0.0281,
+          "y": 18.2966
+        },
+        {
+          "rotation": 3,
+          "x": -0.0281,
+          "y": 18.2966
         }
       ]
     },
@@ -2079,39 +2762,39 @@
       "purchasable": true,
       "sizeX": 1,
       "sizeY": 1,
-      "itemHeight": 97.4,
+      "itemHeight": 90.582,
       "parts": [
         {
           "file": "front.png",
-          "width": 93,
-          "height": 146,
-          "left": -54,
-          "top": -86,
+          "width": 86,
+          "height": 136,
+          "left": -50,
+          "top": -79,
           "rotation": 0
         },
         {
           "file": "front.png",
-          "width": 93,
-          "height": 146,
-          "left": -39,
-          "top": -86,
+          "width": 86,
+          "height": 136,
+          "left": -36,
+          "top": -79,
           "rotation": 1,
           "flipX": true
         },
         {
           "file": "back.png",
-          "width": 92,
-          "height": 120,
-          "left": -41,
-          "top": -58,
+          "width": 86,
+          "height": 112,
+          "left": -38,
+          "top": -53,
           "rotation": 2
         },
         {
           "file": "back.png",
-          "width": 92,
-          "height": 120,
-          "left": -51,
-          "top": -58,
+          "width": 86,
+          "height": 112,
+          "left": -48,
+          "top": -53,
           "rotation": 3,
           "flipX": true
         }
@@ -2221,6 +2904,50 @@
               "y": -60.05896718185873
             }
           }
+        },
+        "runtimeVisualScale": {
+          "factor": 0.93,
+          "center": [
+            0,
+            8
+          ],
+          "beforeParts": [
+            {
+              "file": "front.png",
+              "width": 93,
+              "height": 146,
+              "left": -54,
+              "top": -86,
+              "rotation": 0
+            },
+            {
+              "file": "front.png",
+              "width": 93,
+              "height": 146,
+              "left": -39,
+              "top": -86,
+              "rotation": 1,
+              "flipX": true
+            },
+            {
+              "file": "back.png",
+              "width": 92,
+              "height": 120,
+              "left": -41,
+              "top": -58,
+              "rotation": 2
+            },
+            {
+              "file": "back.png",
+              "width": 92,
+              "height": 120,
+              "left": -51,
+              "top": -58,
+              "rotation": 3,
+              "flipX": true
+            }
+          ],
+          "reason": "Escala uniforme preservando o centro do assento usado pela pose do ocupante; máscaras acompanham a reamostragem."
         }
       },
       "seatingBackrests": [
@@ -2230,66 +2957,66 @@
             [
               0,
               0,
-              92,
-              0,
-              92,
-              43,
-              0,
-              43
-            ],
-            [
-              35,
-              40,
-              47,
-              40,
-              48,
-              117,
-              39,
-              120,
-              35,
-              115
-            ],
-            [
-              70,
-              29,
-              83,
-              29,
-              84,
-              99,
-              73,
-              101,
-              69,
-              82
-            ],
-            [
-              46,
-              52,
-              72,
-              40,
-              73,
-              45,
-              46,
-              58
-            ],
-            [
-              46,
-              69,
-              72,
-              57,
-              73,
-              62,
-              46,
-              75
-            ],
-            [
-              46,
-              93,
-              73,
-              79,
-              74,
               86,
-              46,
-              100
+              0,
+              86,
+              40.1333,
+              0,
+              40.1333
+            ],
+            [
+              32.7174,
+              37.3333,
+              43.9348,
+              37.3333,
+              44.8696,
+              109.2,
+              36.4565,
+              112,
+              32.7174,
+              107.3333
+            ],
+            [
+              65.4348,
+              27.0667,
+              77.587,
+              27.0667,
+              78.5217,
+              92.4,
+              68.2391,
+              94.2667,
+              64.5,
+              76.5333
+            ],
+            [
+              43,
+              48.5333,
+              67.3043,
+              37.3333,
+              68.2391,
+              42,
+              43,
+              54.1333
+            ],
+            [
+              43,
+              64.4,
+              67.3043,
+              53.2,
+              68.2391,
+              57.8667,
+              43,
+              70
+            ],
+            [
+              43,
+              86.8,
+              68.2391,
+              73.7333,
+              69.1739,
+              80.2667,
+              43,
+              93.3333
             ]
           ]
         },
@@ -2297,68 +3024,68 @@
           "rotation": 3,
           "polygons": [
             [
-              92,
-              0,
-              0,
-              0,
-              0,
-              43,
-              92,
-              43
-            ],
-            [
-              57,
-              40,
-              45,
-              40,
-              44,
-              117,
-              53,
-              120,
-              57,
-              115
-            ],
-            [
-              22,
-              29,
-              9,
-              29,
-              8,
-              99,
-              19,
-              101,
-              23,
-              82
-            ],
-            [
-              46,
-              52,
-              20,
-              40,
-              19,
-              45,
-              46,
-              58
-            ],
-            [
-              46,
-              69,
-              20,
-              57,
-              19,
-              62,
-              46,
-              75
-            ],
-            [
-              46,
-              93,
-              19,
-              79,
-              18,
               86,
-              46,
-              100
+              0,
+              0,
+              0,
+              0,
+              40.1333,
+              86,
+              40.1333
+            ],
+            [
+              53.2826,
+              37.3333,
+              42.0652,
+              37.3333,
+              41.1304,
+              109.2,
+              49.5435,
+              112,
+              53.2826,
+              107.3333
+            ],
+            [
+              20.5652,
+              27.0667,
+              8.413,
+              27.0667,
+              7.4783,
+              92.4,
+              17.7609,
+              94.2667,
+              21.5,
+              76.5333
+            ],
+            [
+              43,
+              48.5333,
+              18.6957,
+              37.3333,
+              17.7609,
+              42,
+              43,
+              54.1333
+            ],
+            [
+              43,
+              64.4,
+              18.6957,
+              53.2,
+              17.7609,
+              57.8667,
+              43,
+              70
+            ],
+            [
+              43,
+              86.8,
+              17.7609,
+              73.7333,
+              16.8261,
+              80.2667,
+              43,
+              93.3333
             ]
           ]
         }
@@ -2374,39 +3101,39 @@
       "purchasable": true,
       "sizeX": 1,
       "sizeY": 1,
-      "itemHeight": 97.4,
+      "itemHeight": 90.582,
       "parts": [
         {
           "file": "front.png",
-          "width": 93,
-          "height": 146,
-          "left": -54,
-          "top": -86,
+          "width": 86,
+          "height": 136,
+          "left": -50,
+          "top": -79,
           "rotation": 0
         },
         {
           "file": "front.png",
-          "width": 93,
-          "height": 146,
-          "left": -39,
-          "top": -86,
+          "width": 86,
+          "height": 136,
+          "left": -36,
+          "top": -79,
           "rotation": 1,
           "flipX": true
         },
         {
           "file": "back.png",
-          "width": 92,
-          "height": 121,
-          "left": -41,
-          "top": -59,
+          "width": 86,
+          "height": 113,
+          "left": -38,
+          "top": -54,
           "rotation": 2
         },
         {
           "file": "back.png",
-          "width": 92,
-          "height": 121,
-          "left": -51,
-          "top": -59,
+          "width": 86,
+          "height": 113,
+          "left": -48,
+          "top": -54,
           "rotation": 3,
           "flipX": true
         }
@@ -2516,6 +3243,50 @@
               "y": -60.4487931524076
             }
           }
+        },
+        "runtimeVisualScale": {
+          "factor": 0.93,
+          "center": [
+            0,
+            8
+          ],
+          "beforeParts": [
+            {
+              "file": "front.png",
+              "width": 93,
+              "height": 146,
+              "left": -54,
+              "top": -86,
+              "rotation": 0
+            },
+            {
+              "file": "front.png",
+              "width": 93,
+              "height": 146,
+              "left": -39,
+              "top": -86,
+              "rotation": 1,
+              "flipX": true
+            },
+            {
+              "file": "back.png",
+              "width": 92,
+              "height": 121,
+              "left": -41,
+              "top": -59,
+              "rotation": 2
+            },
+            {
+              "file": "back.png",
+              "width": 92,
+              "height": 121,
+              "left": -51,
+              "top": -59,
+              "rotation": 3,
+              "flipX": true
+            }
+          ],
+          "reason": "Escala uniforme preservando o centro do assento usado pela pose do ocupante; máscaras acompanham a reamostragem."
         }
       },
       "seatingBackrests": [
@@ -2525,66 +3296,66 @@
             [
               0,
               0,
-              92,
-              0,
-              92,
-              43,
-              0,
-              43
-            ],
-            [
-              35,
-              40,
-              47,
-              40,
-              48,
-              117,
-              39,
-              121,
-              35,
-              115
-            ],
-            [
-              70,
-              29,
-              83,
-              29,
-              84,
-              99,
-              73,
-              101,
-              69,
-              82
-            ],
-            [
-              46,
-              52,
-              72,
-              40,
-              73,
-              45,
-              46,
-              58
-            ],
-            [
-              46,
-              69,
-              72,
-              57,
-              73,
-              62,
-              46,
-              75
-            ],
-            [
-              46,
-              93,
-              73,
-              79,
-              74,
               86,
-              46,
-              100
+              0,
+              86,
+              40.157,
+              0,
+              40.157
+            ],
+            [
+              32.7174,
+              37.3554,
+              43.9348,
+              37.3554,
+              44.8696,
+              109.2645,
+              36.4565,
+              113,
+              32.7174,
+              107.3967
+            ],
+            [
+              65.4348,
+              27.0826,
+              77.587,
+              27.0826,
+              78.5217,
+              92.4545,
+              68.2391,
+              94.3223,
+              64.5,
+              76.5785
+            ],
+            [
+              43,
+              48.562,
+              67.3043,
+              37.3554,
+              68.2391,
+              42.0248,
+              43,
+              54.1653
+            ],
+            [
+              43,
+              64.438,
+              67.3043,
+              53.2314,
+              68.2391,
+              57.9008,
+              43,
+              70.0413
+            ],
+            [
+              43,
+              86.8512,
+              68.2391,
+              73.7769,
+              69.1739,
+              80.314,
+              43,
+              93.3884
             ]
           ]
         },
@@ -2592,68 +3363,68 @@
           "rotation": 3,
           "polygons": [
             [
-              92,
-              0,
-              0,
-              0,
-              0,
-              43,
-              92,
-              43
-            ],
-            [
-              57,
-              40,
-              45,
-              40,
-              44,
-              117,
-              53,
-              121,
-              57,
-              115
-            ],
-            [
-              22,
-              29,
-              9,
-              29,
-              8,
-              99,
-              19,
-              101,
-              23,
-              82
-            ],
-            [
-              46,
-              52,
-              20,
-              40,
-              19,
-              45,
-              46,
-              58
-            ],
-            [
-              46,
-              69,
-              20,
-              57,
-              19,
-              62,
-              46,
-              75
-            ],
-            [
-              46,
-              93,
-              19,
-              79,
-              18,
               86,
-              46,
-              100
+              0,
+              0,
+              0,
+              0,
+              40.157,
+              86,
+              40.157
+            ],
+            [
+              53.2826,
+              37.3554,
+              42.0652,
+              37.3554,
+              41.1304,
+              109.2645,
+              49.5435,
+              113,
+              53.2826,
+              107.3967
+            ],
+            [
+              20.5652,
+              27.0826,
+              8.413,
+              27.0826,
+              7.4783,
+              92.4545,
+              17.7609,
+              94.3223,
+              21.5,
+              76.5785
+            ],
+            [
+              43,
+              48.562,
+              18.6957,
+              37.3554,
+              17.7609,
+              42.0248,
+              43,
+              54.1653
+            ],
+            [
+              43,
+              64.438,
+              18.6957,
+              53.2314,
+              17.7609,
+              57.9008,
+              43,
+              70.0413
+            ],
+            [
+              43,
+              86.8512,
+              17.7609,
+              73.7769,
+              16.8261,
+              80.314,
+              43,
+              93.3884
             ]
           ]
         }
@@ -3712,7 +4483,32 @@
           "width": 162,
           "height": 239,
           "left": -81,
-          "top": -158
+          "top": -158,
+          "rotation": 0
+        },
+        {
+          "file": "rotation-1.png",
+          "width": 162,
+          "height": 239,
+          "left": -81,
+          "top": -158,
+          "rotation": 1
+        },
+        {
+          "file": "rotation-2.png",
+          "width": 166,
+          "height": 239,
+          "left": -63,
+          "top": -158,
+          "rotation": 2
+        },
+        {
+          "file": "rotation-3.png",
+          "width": 166,
+          "height": 239,
+          "left": -103,
+          "top": -158,
+          "rotation": 3
         }
       ],
       "source": {
@@ -3744,8 +4540,5305 @@
             "y": -157.3598747906415
           }
         },
-        "priceGold": "Preço de colocação definido pelo projeto; destravamento original de 20 caféGranas implementado separadamente."
+        "priceGold": "Preço de colocação definido pelo projeto; destravamento original de 20 caféGranas implementado separadamente.",
+        "rotations": {
+          "prompts": "tools/furniture-rotations/prompts.json",
+          "export": "tools/furniture-rotations/machines-export.json",
+          "method": "Frentes atuais preservadas; traseiras reconstruídas com ImageGen. Vistas complementares espelhadas e calibradas em escala uniforme.",
+          "limitation": "Painéis traseiros sem fonte original recuperada; detalhes ocultos são reconstruções simples, não uma confirmação histórica."
+        }
       }
+    },
+    {
+      "id": 9100002,
+      "classname": "coffee_machine",
+      "name": "Máquina de Café",
+      "type": 3,
+      "kind": "coffee_machine",
+      "priceGold": 0,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 150,
+      "parts": [
+        {
+          "file": "rotation-0.png",
+          "width": 170,
+          "height": 234,
+          "left": -82,
+          "top": -150,
+          "rotation": 0
+        },
+        {
+          "file": "rotation-1.png",
+          "width": 170,
+          "height": 234,
+          "left": -88,
+          "top": -150,
+          "rotation": 1
+        },
+        {
+          "file": "rotation-2.png",
+          "width": 159,
+          "height": 234,
+          "left": -66,
+          "top": -153,
+          "rotation": 2
+        },
+        {
+          "file": "rotation-3.png",
+          "width": 159,
+          "height": 234,
+          "left": -93,
+          "top": -153,
+          "rotation": 3
+        }
+      ],
+      "source": {
+        "art": "Reconstrução ImageGen dos três modelos escolhidos pelo responsável; tools/coffee-machine/art-source.json.",
+        "calibration": "Carcaça inferior reprojetada em 2:1, com verticais e parte superior preservadas; tools/coffee-machine/room-projection.json. Export final em escala uniforme e apoio por estágio, sem alterar a pegada lógica 1×1.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 0,
+            "reason": "Preço de colocação provisório; ver shared/coffeecatalog/catalog.json."
+          }
+        },
+        "roomArt": {
+          "prompts": "tools/visual-polish/image-prompts.json",
+          "method": "ImageGen: edição de contorno somente para a versão posicionada; registro uniforme independente das prévias.",
+          "projection": "tools/coffee-machine/room-projection.json"
+        },
+        "rotations": {
+          "prompts": "tools/furniture-rotations/prompts.json",
+          "export": "tools/furniture-rotations/machines-export.json",
+          "method": "Frentes atuais preservadas; traseiras reconstruídas com ImageGen. Vistas complementares espelhadas e calibradas em escala uniforme.",
+          "limitation": "Painéis traseiros sem fonte original recuperada; detalhes ocultos são reconstruções simples, não uma confirmação histórica."
+        }
+      }
+    },
+    {
+      "id": 9150201,
+      "classname": "behance_floor_egypt",
+      "name": "Piso Egípcio",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/008.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/ce64959287765.560cbd114c1c6.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "3a066b8bec6a43818c11841397b0845b36f658c5bb629d13aa4519c781e365af",
+        "room": "008 (Egito, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            3,
+            3
+          ]
+        ],
+        "calibration": "Amostras originais selecionadas por revisão visual, sem mistura de cores; as regiões cobertas foram excluídas antes do consenso. Projeção, período e registro preservados.",
+        "measuredTile": [
+          1,
+          1
+        ],
+        "seedCoverage": [
+          1
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        },
+        "restoration": {
+          "date": "2026-10-25",
+          "review": "tools/surfaces-behance/repairs/reviewed.json",
+          "method": "Células/faixas originais visualmente livres; geometria medida preservada.",
+          "regions": [
+            [
+              [
+                3,
+                3
+              ],
+              [
+                0,
+                0,
+                1,
+                1
+              ]
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": 9150202,
+      "classname": "behance_floor_classic",
+      "name": "Piso Clássico",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/006.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/a153b69287765.560cbd2f77c49.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "6a2b7acf09abc5cd5ccc37fff3147f6b5bbf74eb64d7a158f5e93f1fbb0b2a1a",
+        "room": "006 (Las Vegas, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            2,
+            4
+          ],
+          [
+            1,
+            7
+          ]
+        ],
+        "calibration": "Amostras originais selecionadas por revisão visual, sem mistura de cores; as regiões cobertas foram excluídas antes do consenso. Projeção, período e registro preservados.",
+        "measuredTile": [
+          1,
+          1
+        ],
+        "seedCoverage": [
+          0.86
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        },
+        "restoration": {
+          "date": "2026-10-25",
+          "review": "tools/surfaces-behance/repairs/reviewed.json",
+          "method": "Células/faixas originais visualmente livres; geometria medida preservada.",
+          "regions": [
+            [
+              [
+                2,
+                4
+              ],
+              [
+                0,
+                0,
+                1,
+                0.86
+              ]
+            ],
+            [
+              [
+                1,
+                7
+              ],
+              [
+                0,
+                0.86,
+                1,
+                1
+              ]
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": 9150203,
+      "classname": "behance_floor_cards",
+      "name": "Piso Cartas",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/006.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/a153b69287765.560cbd2f77c49.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "6a2b7acf09abc5cd5ccc37fff3147f6b5bbf74eb64d7a158f5e93f1fbb0b2a1a",
+        "room": "006 (Las Vegas, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            6,
+            1
+          ],
+          [
+            6,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            7,
+            4
+          ]
+        ],
+        "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+        "measuredTile": [
+          1,
+          1
+        ],
+        "seedCoverage": [
+          0.878
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        }
+      }
+    },
+    {
+      "id": 9150204,
+      "classname": "behance_floor_oriental",
+      "name": "Piso Oriental",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/008.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/ce64959287765.560cbd114c1c6.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "3a066b8bec6a43818c11841397b0845b36f658c5bb629d13aa4519c781e365af",
+        "room": "008 (Egito, identificação visual)",
+        "method": "Extração da sala original, com reconstrução localizada por ImageGen; não é PNG original recuperado. Fora das regiões corrigidas, conserva os pixels da extração.",
+        "cells": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            7
+          ]
+        ],
+        "calibration": "Consenso original, seguido de reconstrução localizada indicada em restoration; projeção, período e alfa preservados. A afirmação de pixels originais não se aplica às regiões geradas.",
+        "measuredTile": [
+          1,
+          1
+        ],
+        "seedCoverage": [
+          0.761
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        },
+        "restoration": {
+          "date": "2026-10-25",
+          "review": "tools/surfaces-behance/repairs/reviewed.json",
+          "method": "ImageGen somente nos resíduos delimitados; demais pixels e alfa preservados.",
+          "generatedPatch": {
+            "file": "repairs/oriental-master.png",
+            "rects": [
+              [
+                0,
+                0,
+                256,
+                16
+              ],
+              [
+                0,
+                111,
+                256,
+                145
+              ],
+              [
+                0,
+                232,
+                256,
+                256
+              ],
+              [
+                0,
+                0,
+                8,
+                256
+              ],
+              [
+                180,
+                128,
+                205,
+                216
+              ],
+              [
+                10,
+                20,
+                57,
+                90
+              ]
+            ]
+          },
+          "prompts": "tools/surfaces-behance/repairs/generations.json"
+        }
+      }
+    },
+    {
+      "id": 9150205,
+      "classname": "behance_floor_balloons",
+      "name": "Piso Balões",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/43063757/008.jpg",
+        "page": "https://www.behance.net/gallery/43063757/Vostu-Games",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/5b376543063757.57e2069221f4f.jpg",
+        "artist": "Manati P",
+        "archiveSha256": "134e9b2b7965235aa2b21a6399093cae11bb3d77ee4640dfd1bd065a63fc16b9",
+        "method": "Recorte e retificação de imagem JPEG do portfólio; não é PNG original recuperado nem geração.",
+        "sourceCorners": [
+          [
+            420,
+            476
+          ],
+          [
+            526,
+            530
+          ],
+          [
+            420,
+            583
+          ],
+          [
+            314,
+            530
+          ]
+        ],
+        "calibration": "A amostra mostra um quarto de 2×2 tiles com padrão repetido a cada tile. O período medido no plano retificado (em px do quarto, nominal 160 no piso e 80 na parede) é reamostrado num único tile, com janela interna sem rodapé nem sombra. Projeção 2:1, tile lógico inalterado.",
+        "measuredPeriod": {
+          "u": 157.85,
+          "v": 157.82,
+          "correlation": [
+            0.962,
+            0.961
+          ]
+        },
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a prancha não informa valores."
+          }
+        }
+      }
+    },
+    {
+      "id": 9150206,
+      "classname": "behance_floor_confetti",
+      "name": "Piso Confetes",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/43063757/008.jpg",
+        "page": "https://www.behance.net/gallery/43063757/Vostu-Games",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/5b376543063757.57e2069221f4f.jpg",
+        "artist": "Manati P",
+        "archiveSha256": "134e9b2b7965235aa2b21a6399093cae11bb3d77ee4640dfd1bd065a63fc16b9",
+        "method": "Recorte e retificação de imagem JPEG do portfólio; não é PNG original recuperado nem geração.",
+        "sourceCorners": [
+          [
+            659,
+            476
+          ],
+          [
+            766,
+            530
+          ],
+          [
+            659,
+            583
+          ],
+          [
+            554,
+            530
+          ]
+        ],
+        "calibration": "A amostra mostra um quarto de 2×2 tiles com padrão repetido a cada tile. O período medido no plano retificado (em px do quarto, nominal 160 no piso e 80 na parede) é reamostrado num único tile, com janela interna sem rodapé nem sombra. Projeção 2:1, tile lógico inalterado.",
+        "measuredPeriod": {
+          "u": 158.02,
+          "v": 158.62,
+          "correlation": [
+            0.925,
+            0.923
+          ]
+        },
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a prancha não informa valores."
+          }
+        }
+      }
+    },
+    {
+      "id": 9150207,
+      "classname": "behance_floor_june_festival",
+      "name": "Piso Festa Junina",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/43063757/009.jpg",
+        "page": "https://www.behance.net/gallery/43063757/Vostu-Games",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/b988ab43063757.57e20692228b7.jpg",
+        "artist": "Manati P",
+        "archiveSha256": "3940809255a970fed19fb860ac9be211a7c32d317f6e2686dc2293b2dd33f533",
+        "method": "Recorte e retificação de imagem JPEG do portfólio; não é PNG original recuperado nem geração.",
+        "sourceCorners": [
+          [
+            155,
+            181
+          ],
+          [
+            262,
+            235
+          ],
+          [
+            155,
+            289
+          ],
+          [
+            48,
+            235
+          ]
+        ],
+        "calibration": "A amostra mostra um quarto de 2×2 tiles com padrão repetido a cada tile. O período medido no plano retificado (em px do quarto, nominal 160 no piso e 80 na parede) é reamostrado num único tile, com janela interna sem rodapé nem sombra. Projeção 2:1, tile lógico inalterado.",
+        "measuredPeriod": {
+          "u": 159.54,
+          "v": 158.45,
+          "correlation": [
+            0.951,
+            0.879
+          ]
+        },
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a prancha não informa valores."
+          }
+        }
+      }
+    },
+    {
+      "id": 9150208,
+      "classname": "behance_floor_circus",
+      "name": "Piso Estrelas de Circo",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/43063757/009.jpg",
+        "page": "https://www.behance.net/gallery/43063757/Vostu-Games",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/b988ab43063757.57e20692228b7.jpg",
+        "artist": "Manati P",
+        "archiveSha256": "3940809255a970fed19fb860ac9be211a7c32d317f6e2686dc2293b2dd33f533",
+        "method": "Recorte e retificação de imagem JPEG do portfólio; não é PNG original recuperado nem geração.",
+        "sourceCorners": [
+          [
+            410,
+            180
+          ],
+          [
+            518,
+            235
+          ],
+          [
+            410,
+            289
+          ],
+          [
+            303,
+            235
+          ]
+        ],
+        "calibration": "A amostra mostra um quarto de 2×2 tiles com padrão repetido a cada tile. O período medido no plano retificado (em px do quarto, nominal 160 no piso e 80 na parede) é reamostrado num único tile, com janela interna sem rodapé nem sombra. Projeção 2:1, tile lógico inalterado.",
+        "measuredPeriod": {
+          "u": 158.75,
+          "v": 157.81,
+          "correlation": [
+            0.99,
+            0.962
+          ]
+        },
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a prancha não informa valores."
+          }
+        }
+      }
+    },
+    {
+      "id": 9150209,
+      "classname": "behance_floor_circus_deluxe",
+      "name": "Piso Madeira de Circo",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/43063757/009.jpg",
+        "page": "https://www.behance.net/gallery/43063757/Vostu-Games",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/b988ab43063757.57e20692228b7.jpg",
+        "artist": "Manati P",
+        "archiveSha256": "3940809255a970fed19fb860ac9be211a7c32d317f6e2686dc2293b2dd33f533",
+        "method": "Recorte e retificação de imagem JPEG do portfólio; não é PNG original recuperado nem geração.",
+        "sourceCorners": [
+          [
+            667,
+            179
+          ],
+          [
+            776,
+            234
+          ],
+          [
+            667,
+            289
+          ],
+          [
+            558,
+            234
+          ]
+        ],
+        "calibration": "A amostra mostra um quarto de 2×2 tiles com padrão repetido a cada tile. O período medido no plano retificado (em px do quarto, nominal 160 no piso e 80 na parede) é reamostrado num único tile, com janela interna sem rodapé nem sombra. Projeção 2:1, tile lógico inalterado.",
+        "measuredPeriod": {
+          "u": 159.53,
+          "v": 158.5,
+          "correlation": [
+            0.973,
+            0.922
+          ]
+        },
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a prancha não informa valores."
+          }
+        }
+      }
+    },
+    {
+      "id": 9150210,
+      "classname": "behance_floor_night",
+      "name": "Piso Verde Noturno",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/43063757/009.jpg",
+        "page": "https://www.behance.net/gallery/43063757/Vostu-Games",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/b988ab43063757.57e20692228b7.jpg",
+        "artist": "Manati P",
+        "archiveSha256": "3940809255a970fed19fb860ac9be211a7c32d317f6e2686dc2293b2dd33f533",
+        "method": "Recorte e retificação de imagem JPEG do portfólio; não é PNG original recuperado nem geração.",
+        "sourceCorners": [
+          [
+            155,
+            475
+          ],
+          [
+            263,
+            530
+          ],
+          [
+            155,
+            583
+          ],
+          [
+            48,
+            530
+          ]
+        ],
+        "calibration": "A amostra mostra um quarto de 2×2 tiles com padrão repetido a cada tile. O período medido no plano retificado (em px do quarto, nominal 160 no piso e 80 na parede) é reamostrado num único tile, com janela interna sem rodapé nem sombra. Projeção 2:1, tile lógico inalterado.",
+        "measuredPeriod": {
+          "u": 157.77,
+          "v": 158.68,
+          "correlation": [
+            0.968,
+            0.97
+          ]
+        },
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a prancha não informa valores."
+          }
+        }
+      }
+    },
+    {
+      "id": 9150211,
+      "classname": "behance_floor_blue_tiles",
+      "name": "Piso Azulejos Azuis",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/009.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/2977d89287765.560cbd1143d9f.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "837a65dffb335bcd82f5f6acd91af28ed560cc5574bfd58e267407e110bc9f3d",
+        "room": "009 (Espanha, identificação visual)",
+        "method": "Extração da sala original, com reconstrução localizada por ImageGen; não é PNG original recuperado. Fora das regiões corrigidas, conserva os pixels da extração.",
+        "cells": [
+          [
+            4,
+            7
+          ]
+        ],
+        "calibration": "Consenso original, seguido de reconstrução localizada indicada em restoration; projeção, período e alfa preservados. A afirmação de pixels originais não se aplica às regiões geradas.",
+        "measuredTile": [
+          1,
+          1
+        ],
+        "seedCoverage": [
+          1
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        },
+        "restoration": {
+          "date": "2026-10-25",
+          "review": "tools/surfaces-behance/repairs/reviewed.json",
+          "method": "ImageGen somente nos resíduos delimitados; demais pixels e alfa preservados.",
+          "regions": [
+            [
+              [
+                4,
+                7
+              ],
+              [
+                0,
+                0,
+                1,
+                1
+              ]
+            ]
+          ],
+          "generatedPatch": {
+            "file": "repairs/blue-tiles-master.png",
+            "rects": [
+              [
+                241,
+                0,
+                256,
+                256
+              ],
+              [
+                0,
+                238,
+                256,
+                256
+              ]
+            ]
+          },
+          "prompts": "tools/surfaces-behance/repairs/generations.json"
+        }
+      }
+    },
+    {
+      "id": 9150212,
+      "classname": "behance_floor_parquet",
+      "name": "Piso Parquet",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/009.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/2977d89287765.560cbd1143d9f.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "837a65dffb335bcd82f5f6acd91af28ed560cc5574bfd58e267407e110bc9f3d",
+        "room": "009 (Espanha, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            6,
+            1
+          ],
+          [
+            6,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            6,
+            5
+          ]
+        ],
+        "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+        "measuredTile": [
+          1,
+          1
+        ],
+        "seedCoverage": [
+          0.939
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        }
+      }
+    },
+    {
+      "id": 9150213,
+      "classname": "behance_floor_party_lilac",
+      "name": "Piso Lilás Quadriculado",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/005.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/af3c819287765.560cbd330ee40.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "5b5ece1fc6e1f0a12da61674d325afb19394bf8c4a4d4145025d57a74a1269cd",
+        "room": "005 (Aniversário, identificação visual)",
+        "method": "Extração da sala original, com reconstrução localizada por ImageGen; não é PNG original recuperado. Fora das regiões corrigidas, conserva os pixels da extração.",
+        "cells": [
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ]
+        ],
+        "calibration": "Consenso original, seguido de reconstrução localizada indicada em restoration; projeção, período e alfa preservados. A afirmação de pixels originais não se aplica às regiões geradas.",
+        "measuredTile": [
+          1,
+          1
+        ],
+        "seedCoverage": [
+          0.858
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        },
+        "restoration": {
+          "date": "2026-10-25",
+          "review": "tools/surfaces-behance/repairs/reviewed.json",
+          "method": "ImageGen somente nos resíduos delimitados; demais pixels e alfa preservados.",
+          "generatedPatch": {
+            "file": "repairs/party-lilac-master.png",
+            "rects": [
+              [
+                0,
+                0,
+                26,
+                80
+              ],
+              [
+                0,
+                0,
+                16,
+                256
+              ],
+              [
+                245,
+                0,
+                256,
+                256
+              ],
+              [
+                0,
+                245,
+                256,
+                256
+              ],
+              [
+                57,
+                90,
+                100,
+                132
+              ],
+              [
+                0,
+                115,
+                48,
+                141
+              ],
+              [
+                50,
+                90,
+                112,
+                141
+              ]
+            ]
+          },
+          "prompts": "tools/surfaces-behance/repairs/generations.json"
+        }
+      }
+    },
+    {
+      "id": 9150214,
+      "classname": "behance_floor_party_teal",
+      "name": "Piso Azul-Petróleo",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/005.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/af3c819287765.560cbd330ee40.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "5b5ece1fc6e1f0a12da61674d325afb19394bf8c4a4d4145025d57a74a1269cd",
+        "room": "005 (Aniversário, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            6,
+            1
+          ],
+          [
+            6,
+            2
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            7,
+            2
+          ],
+          [
+            7,
+            3
+          ]
+        ],
+        "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+        "measuredTile": [
+          1,
+          1
+        ],
+        "seedCoverage": [
+          0.98
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        }
+      }
+    },
+    {
+      "id": 9150219,
+      "classname": "behance_floor_medieval_stone",
+      "name": "Piso Pedras com Flores",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/010.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/00e60a9287765.560cbd3365548.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "8e4ecce4cf18e9fe109e472ec05cfeab51bdb109e41d9993f7e6a2e7e7153f5d",
+        "room": "010 (Medieval, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            6,
+            1
+          ],
+          [
+            6,
+            2
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            7,
+            2
+          ],
+          [
+            7,
+            3
+          ]
+        ],
+        "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+        "measuredTile": [
+          1,
+          1
+        ],
+        "seedCoverage": [
+          0.75
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        }
+      }
+    },
+    {
+      "id": 9150220,
+      "classname": "behance_floor_medieval_grass",
+      "name": "Piso Grama Florida",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/010.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/00e60a9287765.560cbd3365548.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "8e4ecce4cf18e9fe109e472ec05cfeab51bdb109e41d9993f7e6a2e7e7153f5d",
+        "room": "010 (Medieval, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            6,
+            5
+          ],
+          [
+            6,
+            6
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            7,
+            5
+          ],
+          [
+            7,
+            6
+          ],
+          [
+            7,
+            7
+          ]
+        ],
+        "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+        "measuredTile": [
+          1,
+          1
+        ],
+        "seedCoverage": [
+          0.847
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        }
+      }
+    },
+    {
+      "id": 9150221,
+      "classname": "behance_floor_games_grid",
+      "name": "Piso Grade Neon",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/011.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/b24b049287765.560cbde5bea51.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "b0287d556f0f84aa6d6232e4c4a67f2d20594d4d5c4bc42ebe57fae0e126e1ec",
+        "room": "011 (Videogame, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            6,
+            1
+          ],
+          [
+            6,
+            2
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            7,
+            2
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ]
+        ],
+        "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+        "measuredTile": [
+          1,
+          1
+        ],
+        "seedCoverage": [
+          0.932
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        }
+      }
+    },
+    {
+      "id": 9150222,
+      "classname": "behance_floor_games_checker",
+      "name": "Piso Xadrez Verde",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/011.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/b24b049287765.560cbde5bea51.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "b0287d556f0f84aa6d6232e4c4a67f2d20594d4d5c4bc42ebe57fae0e126e1ec",
+        "room": "011 (Videogame, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            4
+          ]
+        ],
+        "calibration": "Amostras originais selecionadas por revisão visual, sem mistura de cores; as regiões cobertas foram excluídas antes do consenso. Projeção, período e registro preservados.",
+        "measuredTile": [
+          1,
+          1
+        ],
+        "seedCoverage": [
+          0.5
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        },
+        "restoration": {
+          "date": "2026-10-25",
+          "review": "tools/surfaces-behance/repairs/reviewed.json",
+          "method": "Células/faixas originais visualmente livres; geometria medida preservada.",
+          "regions": [
+            [
+              [
+                1,
+                5
+              ],
+              [
+                0,
+                0,
+                1,
+                0.5
+              ]
+            ],
+            [
+              [
+                1,
+                4
+              ],
+              [
+                0,
+                0.5,
+                1,
+                1
+              ]
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": 9150223,
+      "classname": "behance_floor_mexico_talavera",
+      "name": "Piso Talavera",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/013.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/c0541e9287765.560cbd33ab95b.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "c6fdd40fd2d175193244dd723257fd2f3295c74a376567e6b1bf0b5800d9cf10",
+        "room": "013 (México, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            7,
+            0
+          ]
+        ],
+        "calibration": "Amostras originais selecionadas por revisão visual, sem mistura de cores; as regiões cobertas foram excluídas antes do consenso. Projeção, período e registro preservados.",
+        "measuredTile": [
+          1,
+          1
+        ],
+        "seedCoverage": [
+          1
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        },
+        "restoration": {
+          "date": "2026-10-25",
+          "review": "tools/surfaces-behance/repairs/reviewed.json",
+          "method": "Células/faixas originais visualmente livres; geometria medida preservada.",
+          "regions": [
+            [
+              [
+                7,
+                0
+              ],
+              [
+                0,
+                0,
+                1,
+                1
+              ]
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": 9150224,
+      "classname": "behance_floor_mexico_terracotta",
+      "name": "Piso Terracota",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/013.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/c0541e9287765.560cbd33ab95b.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "c6fdd40fd2d175193244dd723257fd2f3295c74a376567e6b1bf0b5800d9cf10",
+        "room": "013 (México, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            6,
+            7
+          ]
+        ],
+        "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+        "measuredTile": [
+          1,
+          1
+        ],
+        "seedCoverage": [
+          0.928
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        }
+      }
+    },
+    {
+      "id": 9150225,
+      "classname": "behance_floor_christmas",
+      "name": "Piso Flocos de Neve",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/014.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/88430a9287765.560cbd107285c.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "016fae825db35796cb6735a0306738b4f9cd1fcb88f5963e199c847226b32668",
+        "room": "014 (Natal (release 73), identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+        "measuredTile": [
+          1,
+          1
+        ],
+        "seedCoverage": [
+          0.9
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        }
+      }
+    },
+    {
+      "id": 9150226,
+      "classname": "behance_floor_paris_star",
+      "name": "Piso Estrela Cinza",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/015.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/5bc42c9287765.560cbfd2a1f67.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "d3b7e3f87dd1b9e80d259c6eeeee70042f8597121b0d1271b5d2bf2aad004caf",
+        "room": "015 (Paris, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+        "measuredTile": [
+          1,
+          1.0052
+        ],
+        "seedCoverage": [
+          0.867
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        }
+      }
+    },
+    {
+      "id": 9150227,
+      "classname": "behance_floor_paris_blue",
+      "name": "Piso Medalhão Azul",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/015.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/5bc42c9287765.560cbfd2a1f67.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "d3b7e3f87dd1b9e80d259c6eeeee70042f8597121b0d1271b5d2bf2aad004caf",
+        "room": "015 (Paris, identificação visual)",
+        "method": "Extração da sala original, com reconstrução localizada por ImageGen; não é PNG original recuperado. Fora das regiões corrigidas, conserva os pixels da extração.",
+        "cells": [
+          [
+            9,
+            3
+          ]
+        ],
+        "calibration": "Consenso original, seguido de reconstrução localizada indicada em restoration; projeção, período e alfa preservados. A afirmação de pixels originais não se aplica às regiões geradas.",
+        "measuredTile": [
+          1,
+          1
+        ],
+        "seedCoverage": [
+          1
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        },
+        "restoration": {
+          "date": "2026-10-25",
+          "review": "tools/surfaces-behance/repairs/reviewed.json",
+          "method": "ImageGen somente nos resíduos delimitados; demais pixels e alfa preservados.",
+          "regions": [
+            [
+              [
+                9,
+                3
+              ],
+              [
+                0,
+                0,
+                1,
+                1
+              ]
+            ]
+          ],
+          "texturePhase": [
+            0.14,
+            -0.03125
+          ],
+          "generatedPatch": {
+            "file": "repairs/paris-blue-master.png",
+            "rects": [
+              [
+                208,
+                100,
+                231,
+                148
+              ]
+            ]
+          },
+          "prompts": "tools/surfaces-behance/repairs/generations.json"
+        }
+      }
+    },
+    {
+      "id": 9150228,
+      "classname": "behance_floor_paris_brown",
+      "name": "Piso Medalhão Marrom",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/015.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/5bc42c9287765.560cbfd2a1f67.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "d3b7e3f87dd1b9e80d259c6eeeee70042f8597121b0d1271b5d2bf2aad004caf",
+        "room": "015 (Paris, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            0,
+            6
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            0,
+            8
+          ],
+          [
+            0,
+            9
+          ],
+          [
+            0,
+            10
+          ],
+          [
+            0,
+            11
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            1,
+            8
+          ],
+          [
+            1,
+            9
+          ],
+          [
+            1,
+            10
+          ],
+          [
+            1,
+            11
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            2,
+            8
+          ],
+          [
+            2,
+            9
+          ],
+          [
+            2,
+            10
+          ],
+          [
+            2,
+            11
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            3,
+            8
+          ],
+          [
+            3,
+            9
+          ],
+          [
+            3,
+            10
+          ],
+          [
+            3,
+            11
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            4,
+            8
+          ],
+          [
+            4,
+            9
+          ],
+          [
+            4,
+            10
+          ],
+          [
+            4,
+            11
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            5,
+            8
+          ],
+          [
+            5,
+            9
+          ],
+          [
+            5,
+            10
+          ],
+          [
+            5,
+            11
+          ],
+          [
+            6,
+            6
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            6,
+            8
+          ],
+          [
+            6,
+            9
+          ],
+          [
+            6,
+            10
+          ],
+          [
+            6,
+            11
+          ],
+          [
+            7,
+            6
+          ],
+          [
+            7,
+            7
+          ],
+          [
+            7,
+            8
+          ],
+          [
+            7,
+            9
+          ],
+          [
+            7,
+            10
+          ],
+          [
+            7,
+            11
+          ],
+          [
+            8,
+            6
+          ],
+          [
+            8,
+            7
+          ],
+          [
+            8,
+            8
+          ],
+          [
+            8,
+            9
+          ],
+          [
+            8,
+            10
+          ],
+          [
+            8,
+            11
+          ],
+          [
+            9,
+            6
+          ],
+          [
+            9,
+            7
+          ],
+          [
+            9,
+            8
+          ],
+          [
+            9,
+            9
+          ],
+          [
+            9,
+            10
+          ],
+          [
+            9,
+            11
+          ],
+          [
+            10,
+            6
+          ],
+          [
+            10,
+            7
+          ],
+          [
+            10,
+            8
+          ],
+          [
+            10,
+            9
+          ],
+          [
+            10,
+            10
+          ],
+          [
+            10,
+            11
+          ],
+          [
+            11,
+            6
+          ],
+          [
+            11,
+            7
+          ],
+          [
+            11,
+            8
+          ],
+          [
+            11,
+            9
+          ],
+          [
+            11,
+            10
+          ],
+          [
+            11,
+            11
+          ],
+          [
+            12,
+            6
+          ],
+          [
+            12,
+            7
+          ],
+          [
+            12,
+            8
+          ],
+          [
+            12,
+            9
+          ],
+          [
+            12,
+            10
+          ],
+          [
+            12,
+            11
+          ]
+        ],
+        "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+        "measuredTile": [
+          1,
+          1
+        ],
+        "seedCoverage": [
+          0.853
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        }
+      }
+    },
+    {
+      "id": 9150229,
+      "classname": "behance_floor_musketeer_star",
+      "name": "Piso Rosa dos Ventos",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/016.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/4756a99287765.560cbfd2c24cf.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "240b4b8ec633bb80d03607ceb126133639d404ef151610561f4198a2472cc6f7",
+        "room": "016 (Mosqueteiros, identificação visual)",
+        "method": "Extração da sala original, com reconstrução localizada por ImageGen; não é PNG original recuperado. Fora das regiões corrigidas, conserva os pixels da extração.",
+        "cells": [
+          [
+            3,
+            5
+          ]
+        ],
+        "calibration": "Consenso original, seguido de reconstrução localizada indicada em restoration; projeção, período e alfa preservados. A afirmação de pixels originais não se aplica às regiões geradas.",
+        "measuredTile": [
+          1,
+          1
+        ],
+        "seedCoverage": [
+          1
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        },
+        "restoration": {
+          "date": "2026-10-25",
+          "review": "tools/surfaces-behance/repairs/reviewed.json",
+          "method": "ImageGen somente nos resíduos delimitados; demais pixels e alfa preservados.",
+          "regions": [
+            [
+              [
+                3,
+                5
+              ],
+              [
+                0,
+                0,
+                1,
+                1
+              ]
+            ]
+          ],
+          "generatedPatch": {
+            "file": "repairs/musketeer-star-master.png",
+            "rects": [
+              [
+                205,
+                190,
+                256,
+                256
+              ]
+            ]
+          },
+          "prompts": "tools/surfaces-behance/repairs/generations.json"
+        }
+      }
+    },
+    {
+      "id": 9150230,
+      "classname": "behance_floor_musketeer_brown",
+      "name": "Piso Ladrilho Marrom",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/016.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/4756a99287765.560cbfd2c24cf.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "240b4b8ec633bb80d03607ceb126133639d404ef151610561f4198a2472cc6f7",
+        "room": "016 (Mosqueteiros, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            6,
+            1
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            6,
+            2
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            6,
+            5
+          ],
+          [
+            6,
+            6
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            7,
+            2
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            7,
+            5
+          ],
+          [
+            7,
+            6
+          ],
+          [
+            7,
+            7
+          ]
+        ],
+        "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+        "measuredTile": [
+          1,
+          1
+        ],
+        "seedCoverage": [
+          0.784
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        }
+      }
+    },
+    {
+      "id": 9150231,
+      "classname": "behance_floor_easter_grass",
+      "name": "Piso Gramado",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/017.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/a530719287765.560cbd3d37b90.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "da9552f6c11fa15e21ddf0c8f663eb141319430222ebb441e5ffc605a517b8af",
+        "room": "017 (Páscoa, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            6,
+            1
+          ],
+          [
+            6,
+            2
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            7,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            6,
+            5
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            7,
+            5
+          ]
+        ],
+        "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+        "measuredTile": [
+          1,
+          1
+        ],
+        "seedCoverage": [
+          0.942
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        }
+      }
+    },
+    {
+      "id": 9150232,
+      "classname": "behance_floor_easter_star",
+      "name": "Piso Estrela Azul",
+      "type": 0,
+      "kind": "decor",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 0,
+      "parts": [
+        {
+          "file": "tile.png",
+          "width": 162,
+          "height": 82,
+          "left": -81,
+          "top": -1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/017.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/a530719287765.560cbd3d37b90.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "da9552f6c11fa15e21ddf0c8f663eb141319430222ebb441e5ffc605a517b8af",
+        "room": "017 (Páscoa, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+        "measuredTile": [
+          1,
+          1
+        ],
+        "seedCoverage": [
+          0.949
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        }
+      }
+    },
+    {
+      "id": 9160201,
+      "classname": "behance_wall_egypt",
+      "name": "Parede Egípcia",
+      "type": 1,
+      "kind": "wall",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 208,
+      "parts": [
+        {
+          "file": "wall.png",
+          "width": 80,
+          "height": 248,
+          "left": -80,
+          "top": -168
+        }
+      ],
+      "source": {
+        "art": "artes/43063757/008.jpg",
+        "page": "https://www.behance.net/gallery/43063757/Vostu-Games",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/5b376543063757.57e2069221f4f.jpg",
+        "artist": "Manati P",
+        "archiveSha256": "134e9b2b7965235aa2b21a6399093cae11bb3d77ee4640dfd1bd065a63fc16b9",
+        "method": "Recorte e retificação de imagem JPEG do portfólio; não é PNG original recuperado nem geração.",
+        "sourceCorners": [
+          [
+            154,
+            43
+          ],
+          [
+            263,
+            99
+          ],
+          [
+            263,
+            241
+          ],
+          [
+            154,
+            185
+          ]
+        ],
+        "calibration": "A amostra mostra um quarto de 2×2 tiles com padrão repetido a cada tile. O período medido no plano retificado (em px do quarto, nominal 160 no piso e 80 na parede) é reamostrado num único tile, com janela interna sem rodapé nem sombra. Projeção 2:1, tile lógico inalterado.",
+        "measuredPeriod": {
+          "x": 80.72,
+          "correlation": [
+            0.595
+          ]
+        },
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a prancha não informa valores."
+          }
+        }
+      },
+      "wallpaperRotation": 1
+    },
+    {
+      "id": 9160202,
+      "classname": "behance_wall_classic",
+      "name": "Parede Clássica",
+      "type": 1,
+      "kind": "wall",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 208,
+      "parts": [
+        {
+          "file": "wall.png",
+          "width": 80,
+          "height": 248,
+          "left": -80,
+          "top": -168
+        }
+      ],
+      "source": {
+        "art": "artes/43063757/008.jpg",
+        "page": "https://www.behance.net/gallery/43063757/Vostu-Games",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/5b376543063757.57e2069221f4f.jpg",
+        "artist": "Manati P",
+        "archiveSha256": "134e9b2b7965235aa2b21a6399093cae11bb3d77ee4640dfd1bd065a63fc16b9",
+        "method": "Recorte e retificação de imagem JPEG do portfólio; não é PNG original recuperado nem geração.",
+        "sourceCorners": [
+          [
+            408,
+            36
+          ],
+          [
+            518,
+            91
+          ],
+          [
+            518,
+            234
+          ],
+          [
+            408,
+            180
+          ]
+        ],
+        "calibration": "A amostra mostra um quarto de 2×2 tiles com padrão repetido a cada tile. O período medido no plano retificado (em px do quarto, nominal 160 no piso e 80 na parede) é reamostrado num único tile, com janela interna sem rodapé nem sombra. Projeção 2:1, tile lógico inalterado.",
+        "measuredPeriod": {
+          "x": 79.45,
+          "correlation": [
+            0.991
+          ]
+        },
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a prancha não informa valores."
+          }
+        }
+      },
+      "wallpaperRotation": 1
+    },
+    {
+      "id": 9160203,
+      "classname": "behance_wall_cards",
+      "name": "Parede Cartas",
+      "type": 1,
+      "kind": "wall",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 208,
+      "parts": [
+        {
+          "file": "wall.png",
+          "width": 80,
+          "height": 248,
+          "left": -80,
+          "top": -168
+        }
+      ],
+      "source": {
+        "art": "artes/43063757/008.jpg",
+        "page": "https://www.behance.net/gallery/43063757/Vostu-Games",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/5b376543063757.57e2069221f4f.jpg",
+        "artist": "Manati P",
+        "archiveSha256": "134e9b2b7965235aa2b21a6399093cae11bb3d77ee4640dfd1bd065a63fc16b9",
+        "method": "Recorte e retificação de imagem JPEG do portfólio; não é PNG original recuperado nem geração.",
+        "sourceCorners": [
+          [
+            666,
+            40
+          ],
+          [
+            776,
+            95
+          ],
+          [
+            776,
+            230
+          ],
+          [
+            666,
+            174
+          ]
+        ],
+        "calibration": "A amostra mostra um quarto de 2×2 tiles com padrão repetido a cada tile. O período medido no plano retificado (em px do quarto, nominal 160 no piso e 80 na parede) é reamostrado num único tile, com janela interna sem rodapé nem sombra. Projeção 2:1, tile lógico inalterado.",
+        "measuredPeriod": {
+          "x": 79.87,
+          "correlation": [
+            0.827
+          ]
+        },
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a prancha não informa valores."
+          }
+        }
+      },
+      "wallpaperRotation": 1
+    },
+    {
+      "id": 9160204,
+      "classname": "behance_wall_oriental",
+      "name": "Parede Oriental",
+      "type": 1,
+      "kind": "wall",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 208,
+      "parts": [
+        {
+          "file": "wall.png",
+          "width": 80,
+          "height": 248,
+          "left": -80,
+          "top": -168
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/008.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/ce64959287765.560cbd114c1c6.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "3a066b8bec6a43818c11841397b0845b36f658c5bb629d13aa4519c781e365af",
+        "room": "008 (Egito, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            "left",
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            1,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            2,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            3,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            4,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            5,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            6,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            7,
+            0,
+            1,
+            0,
+            1
+          ]
+        ],
+        "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+        "measuredTile": [
+          1
+        ],
+        "seedCoverage": [
+          0.564
+        ],
+        "verticalRepeat": 0.1995,
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        }
+      },
+      "wallpaperRotation": 1
+    },
+    {
+      "id": 9160205,
+      "classname": "behance_wall_balloons",
+      "name": "Parede Balões",
+      "type": 1,
+      "kind": "wall",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 208,
+      "parts": [
+        {
+          "file": "wall.png",
+          "width": 80,
+          "height": 248,
+          "left": -80,
+          "top": -168
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/005.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/af3c819287765.560cbd330ee40.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "5b5ece1fc6e1f0a12da61674d325afb19394bf8c4a4d4145025d57a74a1269cd",
+        "room": "005 (Aniversário, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            "left",
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            1,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            2,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            3,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            4,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            5,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            6,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            7,
+            0,
+            1,
+            0,
+            1
+          ]
+        ],
+        "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+        "measuredTile": [
+          0.9978
+        ],
+        "seedCoverage": [
+          0.791
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        }
+      },
+      "wallpaperRotation": 1
+    },
+    {
+      "id": 9160206,
+      "classname": "behance_wall_confetti",
+      "name": "Parede Confetes",
+      "type": 1,
+      "kind": "wall",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 208,
+      "parts": [
+        {
+          "file": "wall.png",
+          "width": 80,
+          "height": 248,
+          "left": -80,
+          "top": -168
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/005.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/af3c819287765.560cbd330ee40.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "5b5ece1fc6e1f0a12da61674d325afb19394bf8c4a4d4145025d57a74a1269cd",
+        "room": "005 (Aniversário, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            "right",
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "right",
+            1,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "right",
+            2,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "right",
+            3,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "right",
+            4,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "right",
+            5,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "right",
+            6,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "right",
+            7,
+            0,
+            1,
+            0,
+            1
+          ]
+        ],
+        "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+        "measuredTile": [
+          0.998
+        ],
+        "seedCoverage": [
+          0.881
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        }
+      },
+      "wallpaperRotation": 1
+    },
+    {
+      "id": 9160207,
+      "classname": "behance_wall_june_festival",
+      "name": "Parede Festa Junina",
+      "type": 1,
+      "kind": "wall",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 208,
+      "parts": [
+        {
+          "file": "wall.png",
+          "width": 80,
+          "height": 248,
+          "left": -80,
+          "top": -168
+        }
+      ],
+      "source": {
+        "art": "artes/43063757/009.jpg",
+        "page": "https://www.behance.net/gallery/43063757/Vostu-Games",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/b988ab43063757.57e20692228b7.jpg",
+        "artist": "Manati P",
+        "archiveSha256": "3940809255a970fed19fb860ac9be211a7c32d317f6e2686dc2293b2dd33f533",
+        "method": "Recorte e retificação de imagem JPEG do portfólio; não é PNG original recuperado nem geração.",
+        "sourceCorners": [
+          [
+            155,
+            43
+          ],
+          [
+            262,
+            97
+          ],
+          [
+            262,
+            235
+          ],
+          [
+            155,
+            181
+          ]
+        ],
+        "calibration": "A amostra mostra um quarto de 2×2 tiles com padrão repetido a cada tile. O período medido no plano retificado (em px do quarto, nominal 160 no piso e 80 na parede) é reamostrado num único tile, com janela interna sem rodapé nem sombra. Projeção 2:1, tile lógico inalterado.",
+        "measuredPeriod": {
+          "x": 79.68,
+          "correlation": [
+            0.959
+          ]
+        },
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a prancha não informa valores."
+          }
+        }
+      },
+      "wallpaperRotation": 1
+    },
+    {
+      "id": 9160208,
+      "classname": "behance_wall_circus",
+      "name": "Parede Listras de Circo",
+      "type": 1,
+      "kind": "wall",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 208,
+      "parts": [
+        {
+          "file": "wall.png",
+          "width": 80,
+          "height": 248,
+          "left": -80,
+          "top": -168
+        }
+      ],
+      "source": {
+        "art": "artes/43063757/009.jpg",
+        "page": "https://www.behance.net/gallery/43063757/Vostu-Games",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/b988ab43063757.57e20692228b7.jpg",
+        "artist": "Manati P",
+        "archiveSha256": "3940809255a970fed19fb860ac9be211a7c32d317f6e2686dc2293b2dd33f533",
+        "method": "Recorte e retificação de imagem JPEG do portfólio; não é PNG original recuperado nem geração.",
+        "sourceCorners": [
+          [
+            410,
+            42
+          ],
+          [
+            518,
+            96
+          ],
+          [
+            518,
+            235
+          ],
+          [
+            410,
+            180
+          ]
+        ],
+        "calibration": "A amostra mostra um quarto de 2×2 tiles com padrão repetido a cada tile. O período medido no plano retificado (em px do quarto, nominal 160 no piso e 80 na parede) é reamostrado num único tile, com janela interna sem rodapé nem sombra. Projeção 2:1, tile lógico inalterado.",
+        "measuredPeriod": {
+          "x": 80.11,
+          "correlation": [
+            0.981
+          ]
+        },
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a prancha não informa valores."
+          }
+        }
+      },
+      "wallpaperRotation": 1
+    },
+    {
+      "id": 9160209,
+      "classname": "behance_wall_circus_deluxe",
+      "name": "Parede Circo Decorado",
+      "type": 1,
+      "kind": "wall",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 208,
+      "parts": [
+        {
+          "file": "wall.png",
+          "width": 80,
+          "height": 248,
+          "left": -80,
+          "top": -168
+        }
+      ],
+      "source": {
+        "art": "artes/43063757/009.jpg",
+        "page": "https://www.behance.net/gallery/43063757/Vostu-Games",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/b988ab43063757.57e20692228b7.jpg",
+        "artist": "Manati P",
+        "archiveSha256": "3940809255a970fed19fb860ac9be211a7c32d317f6e2686dc2293b2dd33f533",
+        "method": "Recorte e retificação de imagem JPEG do portfólio; não é PNG original recuperado nem geração.",
+        "sourceCorners": [
+          [
+            667,
+            39
+          ],
+          [
+            776,
+            94
+          ],
+          [
+            776,
+            234
+          ],
+          [
+            667,
+            179
+          ]
+        ],
+        "calibration": "A amostra mostra um quarto de 2×2 tiles com padrão repetido a cada tile. O período medido no plano retificado (em px do quarto, nominal 160 no piso e 80 na parede) é reamostrado num único tile, com janela interna sem rodapé nem sombra. Projeção 2:1, tile lógico inalterado.",
+        "measuredPeriod": {
+          "x": 80.31,
+          "correlation": [
+            0.953
+          ]
+        },
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a prancha não informa valores."
+          }
+        }
+      },
+      "wallpaperRotation": 1
+    },
+    {
+      "id": 9160210,
+      "classname": "behance_wall_night",
+      "name": "Parede Céu Noturno",
+      "type": 1,
+      "kind": "wall",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 208,
+      "parts": [
+        {
+          "file": "wall.png",
+          "width": 80,
+          "height": 248,
+          "left": -80,
+          "top": -168
+        }
+      ],
+      "source": {
+        "art": "artes/43063757/009.jpg",
+        "page": "https://www.behance.net/gallery/43063757/Vostu-Games",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/b988ab43063757.57e20692228b7.jpg",
+        "artist": "Manati P",
+        "archiveSha256": "3940809255a970fed19fb860ac9be211a7c32d317f6e2686dc2293b2dd33f533",
+        "method": "Recorte e retificação de imagem JPEG do portfólio; não é PNG original recuperado nem geração.",
+        "sourceCorners": [
+          [
+            155,
+            337
+          ],
+          [
+            263,
+            390
+          ],
+          [
+            263,
+            530
+          ],
+          [
+            155,
+            475
+          ]
+        ],
+        "calibration": "A amostra mostra um quarto de 2×2 tiles com padrão repetido a cada tile. O período medido no plano retificado (em px do quarto, nominal 160 no piso e 80 na parede) é reamostrado num único tile, com janela interna sem rodapé nem sombra. Projeção 2:1, tile lógico inalterado.",
+        "measuredPeriod": {
+          "x": 79.17,
+          "correlation": [
+            0.963
+          ]
+        },
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a prancha não informa valores."
+          }
+        }
+      },
+      "wallpaperRotation": 1
+    },
+    {
+      "id": 9160211,
+      "classname": "behance_wall_blue_tiles",
+      "name": "Parede Azulejos Azuis",
+      "type": 1,
+      "kind": "wall",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 208,
+      "parts": [
+        {
+          "file": "wall.png",
+          "width": 80,
+          "height": 248,
+          "left": -80,
+          "top": -168
+        }
+      ],
+      "source": {
+        "art": "artes/43063757/009.jpg",
+        "page": "https://www.behance.net/gallery/43063757/Vostu-Games",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/b988ab43063757.57e20692228b7.jpg",
+        "artist": "Manati P",
+        "archiveSha256": "3940809255a970fed19fb860ac9be211a7c32d317f6e2686dc2293b2dd33f533",
+        "method": "Recorte e retificação de imagem JPEG do portfólio; não é PNG original recuperado nem geração.",
+        "sourceCorners": [
+          [
+            420,
+            340
+          ],
+          [
+            525,
+            391
+          ],
+          [
+            525,
+            530
+          ],
+          [
+            420,
+            477
+          ]
+        ],
+        "calibration": "A amostra mostra um quarto de 2×2 tiles com padrão repetido a cada tile. O período medido no plano retificado (em px do quarto, nominal 160 no piso e 80 na parede) é reamostrado num único tile, com janela interna sem rodapé nem sombra. Projeção 2:1, tile lógico inalterado.",
+        "measuredPeriod": {
+          "x": 79.64,
+          "correlation": [
+            0.727
+          ]
+        },
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a prancha não informa valores."
+          }
+        }
+      },
+      "wallpaperRotation": 1
+    },
+    {
+      "id": 9160212,
+      "classname": "behance_wall_parquet",
+      "name": "Parede Geométrica",
+      "type": 1,
+      "kind": "wall",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 208,
+      "parts": [
+        {
+          "file": "wall.png",
+          "width": 80,
+          "height": 248,
+          "left": -80,
+          "top": -168
+        }
+      ],
+      "source": {
+        "art": "artes/43063757/009.jpg",
+        "page": "https://www.behance.net/gallery/43063757/Vostu-Games",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/b988ab43063757.57e20692228b7.jpg",
+        "artist": "Manati P",
+        "archiveSha256": "3940809255a970fed19fb860ac9be211a7c32d317f6e2686dc2293b2dd33f533",
+        "method": "Recorte e retificação de imagem JPEG do portfólio; não é PNG original recuperado nem geração.",
+        "sourceCorners": [
+          [
+            657,
+            340
+          ],
+          [
+            762,
+            393
+          ],
+          [
+            762,
+            530
+          ],
+          [
+            657,
+            477
+          ]
+        ],
+        "calibration": "A amostra mostra um quarto de 2×2 tiles com padrão repetido a cada tile. O período medido no plano retificado (em px do quarto, nominal 160 no piso e 80 na parede) é reamostrado num único tile, com janela interna sem rodapé nem sombra. Projeção 2:1, tile lógico inalterado.",
+        "measuredPeriod": {
+          "x": 79.01,
+          "correlation": [
+            0.866
+          ]
+        },
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a prancha não informa valores."
+          }
+        }
+      },
+      "wallpaperRotation": 1
+    },
+    {
+      "id": 9160213,
+      "classname": "behance_wall_games_sky",
+      "name": "Parede Céu e Morros",
+      "type": 1,
+      "kind": "wall",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 208,
+      "parts": [
+        {
+          "file": "wall.png",
+          "width": 80,
+          "height": 248,
+          "left": -80,
+          "top": -168
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/011.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/b24b049287765.560cbde5bea51.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "b0287d556f0f84aa6d6232e4c4a67f2d20594d4d5c4bc42ebe57fae0e126e1ec",
+        "room": "011 (Videogame, identificação visual)",
+        "method": "Reconstrução integral por ImageGen baseada na referência original; não é extração nem PNG original recuperado.",
+        "cells": [
+          [
+            "left",
+            6,
+            0,
+            1,
+            0,
+            1
+          ]
+        ],
+        "calibration": "Master gerado retificado para a face isométrica existente, com o mesmo alfa, registro e tamanho.",
+        "measuredTile": [
+          1
+        ],
+        "seedCoverage": [
+          1
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        },
+        "restoration": {
+          "date": "2026-10-25",
+          "review": "tools/surfaces-behance/repairs/reviewed.json",
+          "method": "Arte gerada integral aprovada; projeção, registro e alfa geométrico preservados.",
+          "wallCells": [
+            6
+          ],
+          "generatedPatch": {
+            "file": "repairs/games-sky-master.png",
+            "rects": [
+              [
+                0,
+                0,
+                256,
+                256
+              ]
+            ]
+          },
+          "prompts": "tools/surfaces-behance/repairs/generations.json"
+        }
+      },
+      "wallpaperRotation": 1
+    },
+    {
+      "id": 9160214,
+      "classname": "behance_wall_games_neon",
+      "name": "Parede Neon",
+      "type": 1,
+      "kind": "wall",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 208,
+      "parts": [
+        {
+          "file": "wall.png",
+          "width": 80,
+          "height": 248,
+          "left": -80,
+          "top": -168
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/011.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/b24b049287765.560cbde5bea51.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "b0287d556f0f84aa6d6232e4c4a67f2d20594d4d5c4bc42ebe57fae0e126e1ec",
+        "room": "011 (Videogame, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            "right",
+            7,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "right",
+            2,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "right",
+            3,
+            0,
+            0.35,
+            0,
+            1
+          ],
+          [
+            "right",
+            4,
+            0,
+            0.35,
+            0,
+            1
+          ],
+          [
+            "right",
+            5,
+            0,
+            0.3,
+            0,
+            1
+          ],
+          [
+            "right",
+            0,
+            0,
+            0.3,
+            0,
+            1
+          ],
+          [
+            "right",
+            1,
+            0,
+            0.2,
+            0,
+            1
+          ]
+        ],
+        "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+        "measuredTile": [
+          1
+        ],
+        "seedCoverage": [
+          0.97
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        }
+      },
+      "wallpaperRotation": 1
+    },
+    {
+      "id": 9160215,
+      "classname": "behance_wall_italy_cantina",
+      "name": "Parede Cantina",
+      "type": 1,
+      "kind": "wall",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 208,
+      "parts": [
+        {
+          "file": "wall.png",
+          "width": 80,
+          "height": 248,
+          "left": -80,
+          "top": -168
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/012.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/3b04509287765.560cbde55a737.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "4ad19aef7b2e8f85b67edb35e02aa4174ae2e2d87dded7a73cbd2a7258706711",
+        "room": "012 (Itália, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            "left",
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            1,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            3,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            2,
+            0,
+            0.2,
+            0,
+            1
+          ],
+          [
+            "left",
+            2,
+            0.68,
+            1,
+            0,
+            1
+          ]
+        ],
+        "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+        "measuredTile": [
+          1
+        ],
+        "seedCoverage": [
+          0.999
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        }
+      },
+      "wallpaperRotation": 1
+    },
+    {
+      "id": 9160216,
+      "classname": "behance_wall_mexico_arches",
+      "name": "Parede Arcos",
+      "type": 1,
+      "kind": "wall",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 208,
+      "parts": [
+        {
+          "file": "wall.png",
+          "width": 80,
+          "height": 248,
+          "left": -80,
+          "top": -168
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/013.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/c0541e9287765.560cbd33ab95b.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "c6fdd40fd2d175193244dd723257fd2f3295c74a376567e6b1bf0b5800d9cf10",
+        "room": "013 (México, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            "right",
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "right",
+            1,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "right",
+            2,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "right",
+            3,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "right",
+            5,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "right",
+            6,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "right",
+            7,
+            0,
+            1,
+            0,
+            1
+          ]
+        ],
+        "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+        "measuredTile": [
+          0.9973
+        ],
+        "seedCoverage": [
+          0.883
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        }
+      },
+      "wallpaperRotation": 1
+    },
+    {
+      "id": 9160217,
+      "classname": "behance_wall_musketeer_damask",
+      "name": "Parede Damasco Verde",
+      "type": 1,
+      "kind": "wall",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 208,
+      "parts": [
+        {
+          "file": "phase-0.png",
+          "width": 80,
+          "height": 248,
+          "left": -80,
+          "top": -168,
+          "rotation": 0
+        },
+        {
+          "file": "phase-1.png",
+          "width": 80,
+          "height": 248,
+          "left": -80,
+          "top": -168,
+          "rotation": 1
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/016.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/4756a99287765.560cbfd2c24cf.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "240b4b8ec633bb80d03607ceb126133639d404ef151610561f4198a2472cc6f7",
+        "room": "016 (Mosqueteiros, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            "left",
+            0,
+            0,
+            0.55,
+            0,
+            1
+          ],
+          [
+            "left",
+            2,
+            0,
+            0.5,
+            0,
+            1
+          ],
+          [
+            "left",
+            4,
+            0,
+            0.13,
+            0,
+            1
+          ],
+          [
+            "left",
+            4,
+            0.72,
+            0.9,
+            0,
+            1
+          ],
+          [
+            "left",
+            6,
+            0,
+            0.18,
+            0,
+            1
+          ],
+          [
+            "left",
+            6,
+            0.72,
+            0.9,
+            0,
+            1
+          ]
+        ],
+        "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+        "measuredTile": [
+          1
+        ],
+        "seedCoverage": [
+          0.391,
+          0.381
+        ],
+        "verticalRepeat": 0.44,
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        }
+      },
+      "surfacePattern": {
+        "columns": 2,
+        "rows": 1
+      },
+      "wallpaperRotation": 1
+    },
+    {
+      "id": 9160218,
+      "classname": "behance_wall_musketeer_stone",
+      "name": "Parede Pedra e Lambri",
+      "type": 1,
+      "kind": "wall",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 208,
+      "parts": [
+        {
+          "file": "wall.png",
+          "width": 80,
+          "height": 248,
+          "left": -80,
+          "top": -168
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/016.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/4756a99287765.560cbfd2c24cf.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "240b4b8ec633bb80d03607ceb126133639d404ef151610561f4198a2472cc6f7",
+        "room": "016 (Mosqueteiros, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            "right",
+            6,
+            0,
+            0.86,
+            0,
+            1
+          ],
+          [
+            "right",
+            0,
+            0,
+            0.4,
+            0,
+            1
+          ],
+          [
+            "right",
+            1,
+            0,
+            0.4,
+            0,
+            1
+          ],
+          [
+            "right",
+            2,
+            0,
+            0.2,
+            0,
+            1
+          ],
+          [
+            "right",
+            2,
+            0.62,
+            0.85,
+            0,
+            1
+          ],
+          [
+            "right",
+            3,
+            0,
+            0.2,
+            0,
+            1
+          ],
+          [
+            "right",
+            3,
+            0.62,
+            0.85,
+            0,
+            1
+          ],
+          [
+            "right",
+            4,
+            0,
+            0.1,
+            0,
+            1
+          ],
+          [
+            "right",
+            5,
+            0,
+            0.2,
+            0,
+            1
+          ],
+          [
+            "right",
+            7,
+            0,
+            0.85,
+            0,
+            1
+          ]
+        ],
+        "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+        "measuredTile": [
+          0.9978
+        ],
+        "seedCoverage": [
+          0.765
+        ],
+        "verticalRepeat": 0.0337,
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        }
+      },
+      "wallpaperRotation": 1
+    },
+    {
+      "id": 9160219,
+      "classname": "behance_wall_easter_patchwork",
+      "name": "Parede Retalhos",
+      "type": 1,
+      "kind": "wall",
+      "priceGold": 10,
+      "purchasable": true,
+      "sizeX": 1,
+      "sizeY": 1,
+      "itemHeight": 208,
+      "parts": [
+        {
+          "file": "wall.png",
+          "width": 80,
+          "height": 248,
+          "left": -80,
+          "top": -168
+        }
+      ],
+      "source": {
+        "art": "artes/9287765/017.png",
+        "page": "https://www.behance.net/gallery/9287765/CAFEMANIA",
+        "imageURL": "https://mir-s3-cdn-cf.behance.net/project_modules/source/a530719287765.560cbd3d37b90.png",
+        "artist": "Walter Ávila e Andrés Guerrero",
+        "archiveSha256": "da9552f6c11fa15e21ddf0c8f663eb141319430222ebb441e5ffc605a517b8af",
+        "room": "017 (Páscoa, identificação visual)",
+        "method": "Retificação de PNG de divulgação em alta resolução (tile ≈ 3,2× o do jogo) e redução; não é PNG original recuperado nem geração.",
+        "cells": [
+          [
+            "left",
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            1,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            2,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            3,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            4,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            5,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            6,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            "left",
+            7,
+            0,
+            1,
+            0,
+            1
+          ]
+        ],
+        "calibration": "A semente é a célula mais limpa; os pixels cobertos por móveis ou personagens vêm de outras células onde o mesmo ponto está livre (consenso por pixel, sem mistura). Projeção 2:1, tile lógico inalterado.",
+        "measuredTile": [
+          1
+        ],
+        "seedCoverage": [
+          0.878
+        ],
+        "names": "Nomes descritivos do projeto, sem confirmação do nome comercial histórico.",
+        "provisionalRules": {
+          "priceGold": {
+            "value": 10,
+            "reason": "Preço provisório de projeto; a sala de divulgação não informa valores."
+          }
+        }
+      },
+      "wallpaperRotation": 1
     }
   ]
 }

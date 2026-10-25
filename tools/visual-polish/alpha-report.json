@@ -1,0 +1,77 @@
+[
+  {
+    "name": "machine-1",
+    "size": [
+      1069,
+      1471
+    ],
+    "mainBox": [
+      43,
+      39,
+      1021,
+      1437
+    ],
+    "otherOpaquePixels": 0,
+    "otherFraction": 0.0
+  },
+  {
+    "name": "machine-2",
+    "size": [
+      1075,
+      1463
+    ],
+    "mainBox": [
+      38,
+      24,
+      1045,
+      1432
+    ],
+    "otherOpaquePixels": 0,
+    "otherFraction": 0.0
+  },
+  {
+    "name": "machine-3",
+    "size": [
+      1017,
+      1546
+    ],
+    "mainBox": [
+      35,
+      29,
+      989,
+      1518
+    ],
+    "otherOpaquePixels": 0,
+    "otherFraction": 0.0
+  },
+  {
+    "name": "bather",
+    "size": [
+      906,
+      1736
+    ],
+    "mainBox": [
+      24,
+      21,
+      880,
+      1712
+    ],
+    "otherOpaquePixels": 0,
+    "otherFraction": 0.0
+  },
+  {
+    "name": "vendor",
+    "size": [
+      1228,
+      1281
+    ],
+    "mainBox": [
+      10,
+      12,
+      1211,
+      1273
+    ],
+    "otherOpaquePixels": 0,
+    "otherFraction": 0.0
+  }
+]

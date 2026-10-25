@@ -8,81 +8,204 @@
   "purchasable": true,
   "sizeX": 1,
   "sizeY": 1,
-  "itemHeight": 97.4,
+  "itemHeight": 113,
   "parts": [
     {
-      "left": -41,
-      "top": -79,
-      "width": 82,
-      "height": 139,
-      "file": "rotation-0.png",
-      "rotation": 0
+      "file": "front-v2.png",
+      "width": 84,
+      "height": 133,
+      "left": -42,
+      "top": -73,
+      "rotation": 0,
+      "flipX": true
     },
     {
-      "left": -41,
-      "top": -79,
-      "width": 82,
-      "height": 139,
-      "file": "rotation-1.png",
+      "file": "front-v2.png",
+      "width": 84,
+      "height": 133,
+      "left": -42,
+      "top": -73,
       "rotation": 1
     },
     {
-      "left": -41,
-      "top": -62,
-      "width": 82,
-      "height": 122,
-      "file": "rotation-2.png",
-      "rotation": 2
+      "file": "back-v2.png",
+      "width": 84,
+      "height": 108,
+      "left": -42,
+      "top": -48,
+      "rotation": 2,
+      "flipX": true
     },
     {
-      "left": -41,
-      "top": -62,
-      "width": 82,
-      "height": 122,
-      "file": "rotation-3.png",
+      "file": "back-v2.png",
+      "width": 84,
+      "height": 108,
+      "left": -42,
+      "top": -48,
       "rotation": 3
     }
   ],
   "source": {
-    "art": "Reconstrução geométrica inspirada nas capturas do Café Mania fornecidas pelo responsável.",
+    "art": "Reconstrução nova com ImageGen integrado; tools/furniture-rotations/prompts.json. Não é PNG original recuperado.",
     "calibration": "Tile 160×80, origem traseira. Alturas referenciadas em white_cloth_table e classic_chair.",
-    "priceGold": "Valor escolhido para o projeto; não confirmado na configuração histórica."
+    "priceGold": "Valor escolhido para o projeto; não confirmado na configuração histórica.",
+    "seatingCalibration": {
+      "method": "Escala uniforme, apoio no chão e contato do quadril por vista; ajuste visual do corpo separado do tile e da sombra.",
+      "views": {
+        "front": {
+          "source": "tools/furniture-rotations/generated/pink-front.png",
+          "sourceSize": [
+            543,
+            859
+          ],
+          "ground": [
+            272,
+            728
+          ],
+          "seat": [
+            245,
+            463
+          ],
+          "scale": 0.15469613259668508,
+          "frame": {
+            "left": -42,
+            "top": -73,
+            "width": 84,
+            "height": 133
+          },
+          "rotation": 1
+        },
+        "back": {
+          "source": "tools/furniture-rotations/generated/pink-back.png",
+          "sourceSize": [
+            561,
+            720
+          ],
+          "ground": [
+            280,
+            590
+          ],
+          "seat": [
+            309,
+            308
+          ],
+          "scale": 0.1497326203208556,
+          "frame": {
+            "left": -42,
+            "top": -48,
+            "width": 84,
+            "height": 108
+          },
+          "rotation": 3
+        }
+      },
+      "foregroundMasks": [
+        {
+          "rotation": 2,
+          "polygons": [
+            [
+              78.6096,
+              0.6,
+              43.8717,
+              18.0,
+              44.0214,
+              62.85,
+              78.1604,
+              46.2
+            ],
+            [
+              84.0,
+              0.0,
+              77.262,
+              0.0,
+              77.262,
+              87.9,
+              82.2032,
+              87.9
+            ],
+            [
+              44.0214,
+              19.2,
+              36.6845,
+              19.2,
+              35.9358,
+              107.55,
+              44.4706,
+              107.55
+            ]
+          ]
+        },
+        {
+          "rotation": 3,
+          "polygons": [
+            [
+              5.3904,
+              0.6,
+              40.1283,
+              18.0,
+              39.9786,
+              62.85,
+              5.8396,
+              46.2
+            ],
+            [
+              0.0,
+              0.0,
+              6.738,
+              0.0,
+              6.738,
+              87.9,
+              1.7968,
+              87.9
+            ],
+            [
+              39.9786,
+              19.2,
+              47.3155,
+              19.2,
+              48.0642,
+              107.55,
+              39.5294,
+              107.55
+            ]
+          ]
+        }
+      ]
+    }
   },
   "seatingBackrests": [
     {
       "rotation": 2,
       "polygons": [
         [
-          35,
-          0,
-          82,
-          0,
-          82,
-          56,
-          43,
-          76,
-          35,
-          70
+          78.6096,
+          0.6,
+          43.8717,
+          18.0,
+          44.0214,
+          62.85,
+          78.1604,
+          46.2
         ],
         [
-          35,
-          18,
-          45,
-          18,
-          45,
-          121,
-          37,
-          122
+          84.0,
+          0.0,
+          77.262,
+          0.0,
+          77.262,
+          87.9,
+          82.2032,
+          87.9
         ],
         [
-          73,
-          0,
-          82,
-          0,
-          82,
-          104,
-          73,
-          104
+          44.0214,
+          19.2,
+          36.6845,
+          19.2,
+          35.9358,
+          107.55,
+          44.4706,
+          107.55
         ]
       ]
     },
@@ -90,38 +213,58 @@
       "rotation": 3,
       "polygons": [
         [
-          47,
-          0,
-          0,
-          0,
-          0,
-          56,
-          39,
-          76,
-          47,
-          70
+          5.3904,
+          0.6,
+          40.1283,
+          18.0,
+          39.9786,
+          62.85,
+          5.8396,
+          46.2
         ],
         [
-          47,
-          18,
-          37,
-          18,
-          37,
-          121,
-          45,
-          122
+          0.0,
+          0.0,
+          6.738,
+          0.0,
+          6.738,
+          87.9,
+          1.7968,
+          87.9
         ],
         [
-          9,
-          0,
-          0,
-          0,
-          0,
-          104,
-          9,
-          104
+          39.9786,
+          19.2,
+          47.3155,
+          19.2,
+          48.0642,
+          107.55,
+          39.5294,
+          107.55
         ]
       ]
+    }
+  ],
+  "seatingAnchors": [
+    {
+      "rotation": 0,
+      "x": 4.0994,
+      "y": -1.3132
+    },
+    {
+      "rotation": 1,
+      "x": -4.0994,
+      "y": -1.3132
+    },
+    {
+      "rotation": 2,
+      "x": -4.2674,
+      "y": -1.8
+    },
+    {
+      "rotation": 3,
+      "x": 4.2674,
+      "y": -1.8
     }
   ]
 }

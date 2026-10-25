@@ -6,6 +6,7 @@ import type { Actor } from '../../world/Actor';
 import { ROOM_ASSET_SCALE, TILE_HEIGHT_HALF } from '../../world/iso';
 import { ACTOR_VISUAL_SCALE, createActorShadow } from './actor-appearance';
 import { setActorRoomDepth } from './RoomDepthSorter';
+import { DEFAULT_SEATING_ANCHOR, SEATING_HIP_CLEARANCE } from '../../game/seating-anchor';
 
 /** Avatar 2D usando o atlas renderizado. O relógio dos clipes é independente do frame rate da tela. */
 
@@ -25,6 +26,7 @@ export class AvatarActorView {
   private lastKey = '';
   private carrying = false;
   private carryingHand?: { x: number; y: number };
+  private seatingHip?: { x: number; y: number };
 
   constructor(
     private readonly actor: Actor,
@@ -76,12 +78,34 @@ export class AvatarActorView {
 
   setCarrying(carrying: boolean): void { this.carrying = carrying; }
 
+  /** Move only the seated body; the root and ground shadow must stay on the actor's ground support. */
+  setSeatingOffset(offset: { x: number; y: number }): void {
+    this.sprite.position.set(offset.x / this.view.scale.x, offset.y / this.view.scale.y);
+  }
+
+  /** Align the actual animated pelvis, rather than assuming every seated frame shares an idle foot anchor. */
+  setSeatingAnchor(anchor?: { x: number; y: number }): void {
+    if (!anchor) { this.setSeatingOffset({ x: 0, y: 0 }); return; }
+    if (!this.seatingHip) { this.setSeatingOffset({ x: anchor.x, y: anchor.y - DEFAULT_SEATING_ANCHOR.y }); return; }
+    this.sprite.position.set(
+      anchor.x / this.view.scale.x - (this.seatingHip.x - this.baked.ground.x) * this.sprite.scale.x,
+      (anchor.y - TILE_HEIGHT_HALF - SEATING_HIP_CLEARANCE) / this.view.scale.y - (this.seatingHip.y - this.baked.ground.y) * this.sprite.scale.y,
+    );
+  }
+
+  getSeatingHip(): { x: number; y: number } | undefined {
+    return this.seatingHip ? {
+      x: ((this.seatingHip.x - this.baked.ground.x) * this.sprite.scale.x + this.sprite.x) * this.view.scale.x,
+      y: TILE_HEIGHT_HALF + ((this.seatingHip.y - this.baked.ground.y) * this.sprite.scale.y + this.sprite.y) * this.view.scale.y,
+    } : undefined;
+  }
+
   /** Coordenadas relativas aos pés em pixels do mundo, no mesmo quadro da arte. */
   getCarriedDishHand(): { x: number; y: number } | undefined {
     if (!this.carryingHand) return undefined;
     return {
-      x: (this.carryingHand.x - this.baked.ground.x) * this.sprite.scale.x * this.view.scale.x,
-      y: (this.carryingHand.y - this.baked.ground.y) * this.sprite.scale.y * this.view.scale.y,
+      x: ((this.carryingHand.x - this.baked.ground.x) * this.sprite.scale.x + this.sprite.x) * this.view.scale.x,
+      y: ((this.carryingHand.y - this.baked.ground.y) * this.sprite.scale.y + this.sprite.y) * this.view.scale.y,
     };
   }
 
@@ -143,6 +167,7 @@ export class AvatarActorView {
     if (chave === this.lastKey) return;
     this.lastKey = chave;
     this.carryingHand = encontrado.mirrored ? encontrado.cell.carryingLeftHand : encontrado.cell.carryingHand;
+    this.seatingHip = encontrado.cell.seatingHip;
 
     const textura = this.cellTextures.get(`${encontrado.cell.x},${encontrado.cell.y}`);
     if (textura) this.sprite.texture = textura;

@@ -1,0 +1,30 @@
+[
+  {
+    "file": "tab-inactive-v2.png",
+    "source": "exec-a044cc56-bd77-4e1d-89e7-40d746917ab0.png",
+    "crop": [
+      15,
+      111,
+      2155,
+      608
+    ],
+    "size": [
+      596,
+      172
+    ]
+  },
+  {
+    "file": "tab-active-v2.png",
+    "source": "exec-9336fb36-c8c3-4cac-a953-0feab2c50fe4.png",
+    "crop": [
+      27,
+      81,
+      2145,
+      598
+    ],
+    "size": [
+      588,
+      188
+    ]
+  }
+]
