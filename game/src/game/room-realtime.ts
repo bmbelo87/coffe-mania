@@ -158,7 +158,7 @@ export class RoomRealtime {
   }
   private setConnected(value: boolean): void { this.connected = value; if (!value) this.pingMs = null; for (const listener of this.statuses) listener(value); }
   private retry(): void { if (this.stopped) return; clearTimeout(this.timer); this.timer = setTimeout(() => { void this.connect(); }, Math.min(10000, 500 * 2 ** Math.min(5, this.retries++))); }
-  command(type: 'walk' | 'sit' | 'stand' | 'serve_prepare' | 'edit_table', data: { tx?: number; ty?: number; chairId?: string; stoveId?: string; unitId?: string } = {}): Promise<void> {
+  command(type: 'walk' | 'sit' | 'stand' | 'serve_prepare' | 'edit_table', data: { tx?: number; ty?: number; chairId?: string; stoveId?: string; unitId?: string; path?: Tile[] } = {}): Promise<void> {
     if (!this.connected || this.socket?.readyState !== WebSocket.OPEN) return Promise.reject(new Error('Aguarde a conexão com o quarto.'));
     const requestId = crypto.randomUUID();
     return new Promise((resolve, reject) => {

@@ -1,3 +1,4 @@
+import type { BalanceDelta } from './optimistic';
 import { Assets, type Texture } from 'pixi.js';
 import type { PlayerState } from './player-state';
 
@@ -35,6 +36,53 @@ export interface SupplySnapshot {
   playerState: PlayerState;
   saveGranas: number;
   collectEnergy: number;
+}
+
+/** Prazo de uma caixa entregue (database/supplies.go, supplyShelfLife). */
+export const SUPPLY_SHELF_LIFE_MS = 24 * 60 * 60 * 1000;
+
+/**
+ * O resultado provável de uma ação de encomenda, mostrado na hora (o servidor confere tudo de
+ * novo). Devolve `undefined` quando a ação não dá para prever com o que a tela sabe.
+ */
+export function predictSupply(snapshot: SupplySnapshot, action: SupplyAction, body: { kind?: SupplyKindId; orderId?: string }, now: number):
+  { snapshot: SupplySnapshot; delta: BalanceDelta } | undefined {
+  const orders = snapshot.orders.map((order) => ({ ...order }));
+  const player = snapshot.playerState;
+  if (action === 'order') {
+    const kind = snapshot.kinds.find((candidate) => candidate.id === body.kind);
+    const taken = new Set(orders.map((order) => order.slot));
+    let slot = 0;
+    while (taken.has(slot)) slot++;
+    if (!kind || slot >= snapshot.slots || player.gold < kind.gold || player.level < kind.level) return undefined;
+    const arrivesAt = now + kind.seconds * 1000;
+    orders.push({ id: 'pending:' + kind.id + ':' + now, slot, kind: kind.id, quantity: kind.quantity, arrivesAt, spoilsAt: arrivesAt + SUPPLY_SHELF_LIFE_MS });
+    return { snapshot: { ...snapshot, orders }, delta: { gold: -kind.gold } };
+  }
+  const order = orders.find((candidate) => candidate.id === body.orderId);
+  if (!order) return undefined;
+  const kind = snapshot.kinds.find((candidate) => candidate.id === order.kind);
+  const fresh = (cost: number): { snapshot: SupplySnapshot; delta: BalanceDelta } | undefined => {
+    if (player.cash < cost) return undefined;
+    order.arrivesAt = now; order.spoilsAt = now + SUPPLY_SHELF_LIFE_MS;
+    return { snapshot: { ...snapshot, orders }, delta: { cash: -cost } };
+  };
+  switch (action) {
+    case 'rush': return kind ? fresh(kind.rushGranas) : undefined;
+    case 'save': return fresh(snapshot.saveGranas);
+    case 'discard': return { snapshot: { ...snapshot, orders: orders.filter((candidate) => candidate !== order) }, delta: {} };
+    case 'collect': {
+      const space = player.crates.maximum - player.crates.current;
+      if (space <= 0 || player.energy.current < snapshot.collectEnergy) return undefined;
+      const taken = Math.min(space, order.quantity);
+      order.quantity -= taken;
+      return {
+        snapshot: { ...snapshot, orders: order.quantity > 0 ? orders : orders.filter((candidate) => candidate !== order) },
+        delta: { crates: taken, energy: -snapshot.collectEnergy },
+      };
+    }
+    default: return undefined;
+  }
 }
 
 export function supplyStatus(order: SupplyOrder, serverNow: number): SupplyStatus {

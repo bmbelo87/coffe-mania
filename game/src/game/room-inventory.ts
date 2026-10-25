@@ -165,6 +165,10 @@ export function roomModelItems(snapshot: RoomSnapshot, art?: IndoorArt): RoomIte
 export class RoomInventoryClient {
   private pending?: { signature: string; body: string; path: string };
   constructor(readonly roomId?: string) {}
+  /** The last change got no clear answer: only the same change may be sent (and is safe to resend). */
+  get awaitingRetry(): boolean { return this.pending !== undefined; }
+  /** After reloading the room from the server, what happened to that change is on screen. */
+  forgetPending(): void { this.pending = undefined; }
   async refresh(): Promise<RoomSnapshot> {
     return this.read(await fetch('/api/coffe/room' + (this.roomId ? '?room=' + encodeURIComponent(this.roomId) : ''), { credentials: 'same-origin', cache: 'no-store', signal: AbortSignal.timeout(10000) }));
   }

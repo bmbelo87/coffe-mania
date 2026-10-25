@@ -853,6 +853,40 @@ func (r *room) route(a *entity, dest Tile, now time.Time) bool {
 	return true
 }
 
+// maxClientPath bounds the route a client may propose; a café is at most a few dozen tiles wide.
+const maxClientPath = 96
+
+// followClientPath adopts the route the player's client is already animating, so its
+// prediction and the shared movement match step by step. The route must start next to where
+// the actor stands (or is stepping to), move one tile at a time without cutting a blocked
+// corner, cross only free tiles and end at dest; otherwise the room plans its own.
+func (r *room) followClientPath(a *entity, path []Tile, dest Tile, now time.Time) bool {
+	if len(path) == 0 || len(path) > maxClientPath || path[len(path)-1] != dest {
+		return false
+	}
+	from := Tile{X: a.X, Y: a.Y}
+	if a.Move != nil {
+		from = a.Move.To
+	}
+	for _, t := range path {
+		if abs(t.X-from.X) > 1 || abs(t.Y-from.Y) > 1 || t == from || !r.canWalk(t, a) {
+			return false
+		}
+		if t.X != from.X && t.Y != from.Y && !r.canWalk(Tile{X: t.X, Y: from.Y}, a) && !r.canWalk(Tile{X: from.X, Y: t.Y}, a) {
+			return false
+		}
+		from = t
+	}
+	a.ghost = false
+	a.stuckSince = time.Time{}
+	a.blockedByActors = false
+	a.path = append([]Tile(nil), path...)
+	if a.Move == nil {
+		r.nextStep(a, now)
+	}
+	return true
+}
+
 // stepDuration keeps walking speed constant in the room: a diagonal step covers √2 tiles,
 // so it takes √2 times a straight step instead of the same time (which looked faster).
 func stepDuration(step time.Duration, from, to Tile) time.Duration {
@@ -946,7 +980,7 @@ func (r *room) command(p *Peer, c gamewire.Command) {
 		}
 		oldChair := a.ChairID
 		a.ChairID = ""
-		if !r.route(a, dest, now) {
+		if !r.followClientPath(a, c.Path, dest, now) && !r.route(a, dest, now) {
 			a.ChairID = oldChair
 			fail("Não há caminho livre.")
 			return

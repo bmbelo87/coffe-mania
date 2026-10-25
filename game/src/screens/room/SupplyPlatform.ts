@@ -1,11 +1,12 @@
 import { Container, Polygon, Sprite, type FederatedPointerEvent, type Texture } from 'pixi.js';
 import { itemDepth, POPUP_DRAW_PRIORITY, tileToScreenX, tileToScreenY } from '../../world/iso';
 import {
-  formatSupplyCountdown, SUPPLY_PIECES, supplyStatus,
+  formatSupplyCountdown, predictSupply, SUPPLY_PIECES, supplyStatus,
   type SupplyAction, type SupplyArt, type SupplyClient, type SupplyKindId, type SupplyOrder, type SupplySnapshot,
 } from '../../game/supplies';
 import { PLATFORM_SLOTS } from './cafe-scenery';
 import { HoverBalloon } from './HoverBalloon';
+import type { BalanceDelta } from '../../game/optimistic';
 
 /** O cone ocupa cerca de 80% da laje pequena, como no vídeo "level 400"; a caixa comum, 75%, como em P125_09. */
 const CONE_SCALE = 0.2;
@@ -20,6 +21,10 @@ export interface SupplyPlatformOptions {
   canInteract: () => boolean;
   confirm: (text: string) => Promise<boolean>;
   onSnapshot: (snapshot: SupplySnapshot) => void;
+  /** A predicted platform is on screen (its player state is not the server's). */
+  onPreview?: (snapshot: SupplySnapshot) => void;
+  predictBalance?: (delta: BalanceDelta) => number | undefined;
+  settleBalance?: (token: number | undefined, accepted: boolean) => void;
   onError: (message: string) => void;
 }
 
@@ -84,7 +89,27 @@ export class SupplyPlatform {
   }
 
   async act(action: SupplyAction, body: { kind?: SupplyKindId; orderId?: string }): Promise<void> {
-    this.apply(await this.options.client.act(action, body));
+    const previous = this.snapshot;
+    const predicted = previous ? predictSupply(previous, action, body, this.options.client.serverNowMs()) : undefined;
+    const token = predicted ? this.options.predictBalance?.(predicted.delta) : undefined;
+    if (predicted) this.preview(predicted.snapshot);
+    try {
+      const snapshot = await this.options.client.act(action, body);
+      this.options.settleBalance?.(token, true);
+      this.apply(snapshot);
+    } catch (error) {
+      this.options.settleBalance?.(token, false);
+      if (previous && predicted && this.snapshot === predicted.snapshot) this.preview(previous);
+      throw error;
+    }
+  }
+
+  /** Shows a predicted platform; the balance on screen comes from `predictBalance`. */
+  private preview(snapshot: SupplySnapshot): void {
+    if (this.destroyed) return;
+    this.snapshot = snapshot;
+    this.options.onPreview?.(snapshot);
+    this.rebuild();
   }
 
   private rebuild(): void {

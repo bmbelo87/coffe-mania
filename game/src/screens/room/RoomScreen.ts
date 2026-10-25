@@ -94,6 +94,7 @@ import { OutsideNpcManager, type PreparedNpcView } from './OutsideNpcManager';
 import { createProceduralWallView, type WallWallpaper } from './ProceduralWallView';
 import { TopBars, TOP_BAR_ICON_FRAMES, type TopBarsTextures } from './TopBars';
 import { loadPlayerState, type PlayerState } from '../../game/player-state';
+import { PredictedBalance, type BalanceDelta, type BalancePrediction } from '../../game/optimistic';
 import { canUseSpice, type SpiceId, type SpiceScreenTextures } from '../../game/spices';
 import { SpiceScreenModal } from './SpiceScreenModal';
 import { SupplyOrderModal } from './SupplyOrderModal';
@@ -144,6 +145,12 @@ const MOBILE_LANDSCAPE_HUD_SCALE = 1.15;
 const ACTION_BAR_UI_SCALE = 1.15;
 /** Isolated renderer preview only; gameplay duration always comes from the server. */
 const LOCAL_COOKING_PREVIEW_MS = 2000;
+/** How long the avatar takes to glide from a mispredicted position to the shared one. */
+const WALK_BLEND_MS = 200;
+/** Teto para uma previsão de saldo aceita sumir se o estado do servidor nunca a mostrar. */
+const BALANCE_CONFIRM_MS = 5000;
+/** Arrumar o prato no fogão antes do cozimento (database/cooking.go, cookingPlacementDuration). */
+const COOKING_PLACEMENT_MS = 2000;
 const LOCAL_COOKING_DURATION_MS = 30_000;
 const COOKING_PROGRESS_SCALE = 1.2;
 const STOVE_MENU_TOP_DROP = 14;
@@ -457,6 +464,20 @@ export class RoomScreen implements Screen {
   private selectedStove?: RoomItem;
   private readonly chefQueue = new ChefQueue<{ stoveKey: string; stove: RoomItem; kind: 'cook' | 'serve' | 'clean'; recipe?: CookRecipeEvent }>();
   private pendingCook?: { stove: RoomItem; recipe: CookRecipeEvent };
+  /**
+   * Walk prediction: the player's own avatar follows its route at once, while the room service
+   * receives the same route. `tiles` holds every tile of the route; the server's step must stay
+   * inside it, or the prediction ends and the avatar glides to the shared position.
+   */
+  private walkPrediction?: { id: number; tiles: Set<string>; destination: Tile; sentAt: number; tickedAt: number; acked: boolean; failed: boolean; arrivedAt?: number };
+  private walkPredictionId = 0;
+  /** caféOuros, caféGranas, energia e caixas previstos até o servidor mostrar a mudança. */
+  private readonly predictedBalance = new PredictedBalance();
+  private serverPlayerState?: PlayerState;
+  /** O prato mostrado ao chegar no fogão, enquanto o servidor ainda não confirmou o preparo. */
+  private optimisticCook?: { stove: RoomItem; recipe: CookRecipeEvent; job: StoveCooking; balance: number };
+  /** What is left of the gap between the predicted and the shared position, fading out. */
+  private walkBlend?: { dx: number; dy: number; startedAt: number };
   private stoveActions?: StoveActionMenu;
   private stoveActionsStove?: RoomItem;
   private cookCallout?: CookProgressCallout;
@@ -847,7 +868,11 @@ export class RoomScreen implements Screen {
             const art = stages?.find(value => value.stage === stage);
             return art ? machinePoseFor(art, rotation) : undefined;
           },
-          apply: (snapshot) => this.applyRoomSnapshot(snapshot),
+          apply: (snapshot) => this.applyRoomSnapshot(snapshot, false),
+          serverState: (state) => this.setPlayerState(state),
+          gold: () => this.playerState?.gold ?? 0,
+          predictBalance: (delta) => this.predictBalance(delta),
+          settleBalance: (token, accepted) => this.settleBalance(token, accepted),
           alpha: (id, alpha) => this.setUnitAlpha(id, alpha),
           prepareSelection: (_item, id) => this.realtime?.command('edit_table', { unitId: id }) ?? Promise.resolve(),
           releaseSelection: () => { void this.realtime?.command('edit_table').catch(() => { /* Disconnection also releases the table claim. */ }); },
@@ -927,9 +952,9 @@ export class RoomScreen implements Screen {
     }).catch(error => { if (!this.destroyed) console.warn('[stove-hover] arte indisponível', error); });
     if (options.realtime) {
       const frame=this.artProvider?.art.get('juice_machine')?.frames[0];
-      this.juiceModal=new JuiceScreenModal(this.juiceClient,frame?this.artProvider?.textureFor(frame.file):undefined,state=>{if(!this.destroyed)this.setPlayerState(state);});
+      this.juiceModal=new JuiceScreenModal(this.juiceClient,frame?this.artProvider?.textureFor(frame.file):undefined,state=>{if(!this.destroyed)this.setPlayerState(state);},this.balancePrediction);
       this.view.addChild(this.juiceModal.view);
-      this.coffeeModal = new CoffeeScreenModal(this.coffeeClient, state => { if (!this.destroyed) this.setPlayerState(state); });
+      this.coffeeModal = new CoffeeScreenModal(this.coffeeClient, state => { if (!this.destroyed) this.setPlayerState(state); }, this.balancePrediction);
       this.view.addChild(this.coffeeModal.view);
       void loadThoughtBubbleArt().then(art => {
         if (this.destroyed) return;
@@ -970,8 +995,16 @@ export class RoomScreen implements Screen {
         serverNow: () => this.cookingClient?.serverNowMs() ?? 0,
         onBuy: async (id) => {
           if (!this.cookingClient) return;
-          const state = await this.cookingClient.buySpice(id);
-          if (!this.destroyed) this.setPlayerState(state);
+          const price = this.cookingSpices.find((spice) => spice.id === id)?.granas;
+          const token = price ? this.predictBalance({ cash: -price }) : undefined;
+          try {
+            const state = await this.cookingClient.buySpice(id);
+            this.settleBalance(token, true);
+            if (!this.destroyed) this.setPlayerState(state);
+          } catch (error) {
+            this.settleBalance(token, false);
+            throw error;
+          }
         },
         onUse: (id) => this.useModalSpice(id),
         onClose: () => { this.spiceStove = undefined; },
@@ -1079,6 +1112,7 @@ export class RoomScreen implements Screen {
   private acceptRoomEvent(event: RoomEvent): void {
     if (this.destroyed || !this.realtime) return;
     if (event.type === 'welcome') {
+      this.walkPrediction = undefined; this.walkBlend = undefined;
       for (const [id, entry] of this.liveActors) if (id !== event.selfId) this.removeLiveActor(id, entry);
       this.liveActors.clear();
       if (event.world) this.acceptSharedWorld(event.world);
@@ -1245,6 +1279,15 @@ export class RoomScreen implements Screen {
   private acceptSharedCooking(snapshot: CookingSnapshot): void {
     this.cookingClient?.accept(snapshot);
     const current = this.cookingProcess;
+    const optimistic = this.optimisticCook;
+    if (optimistic && current?.stove === optimistic.stove) {
+      // The start may be confirmed here before its HTTP answer, or not be processed yet.
+      const job = snapshot.stoves.find((stove) => stove.id === optimistic.stove.instanceId)?.cooking;
+      this.acceptCookingSnapshot(snapshot, false);
+      if (job) this.adoptCookingJob(optimistic.stove, job);
+      else if (optimistic.stove.instanceId) this.occupiedStoves.set(optimistic.stove.instanceId, optimistic.job);
+      return;
+    }
     if (current && !snapshot.stoves.some((stove) => stove.id === current.stove.instanceId && stove.cooking?.id === this.occupiedStoves.get(stove.id)?.id)) this.clearCookingProcess();
     // Shared dishes are drawn for every stove; only local input controls the owner's modal.
     this.acceptCookingSnapshot(snapshot, false);
@@ -1284,8 +1327,16 @@ export class RoomScreen implements Screen {
     const occupiedChairs = new Set<RoomItem>();
     for (const [id, entry] of this.liveActors) {
       const state = entry.state;
-      if (this.realtime!.connected) entry.actor.syncAuthoritative(state.tx, state.ty, state.direction, state.outside, state.move, now);
-      else { entry.actor.speedX = 0; entry.actor.speedY = 0; }
+      const own = entry.actor === this.player;
+      if (!this.realtime!.connected) { entry.actor.speedX = 0; entry.actor.speedY = 0; if (own) this.walkPrediction = undefined; }
+      else if (!own || !this.advanceWalkPrediction(state, now)) {
+        entry.actor.syncAuthoritative(state.tx, state.ty, state.direction, state.outside, state.move, now);
+        if (own && this.walkBlend) {
+          const remaining = 1 - (performance.now() - this.walkBlend.startedAt) / WALK_BLEND_MS;
+          if (remaining <= 0) this.walkBlend = undefined;
+          else { this.player.x += this.walkBlend.dx * remaining; this.player.y += this.walkBlend.dy * remaining; }
+        }
+      }
       if (state.state === 'entering' && entry.actor.tileX >= 1 && entry.actor.tileY >= 1) entry.actor.outside = false;
       const action = state.state === 'eating' ? CLIP.EAT : ['seated','thirsty','drinking'].includes(state.state) ? CLIP.SIT :
         state.state === 'cooking' || state.state === 'serving' || state.state === 'cleaning' || state.state === 'placing' ? CLIP.COOKING : null;
@@ -1563,12 +1614,85 @@ export class RoomScreen implements Screen {
   private movePlayerAlong(path: readonly Tile[]): void {
     if (!this.realtime) { this.player.setMovePath(path); return; }
     const destination = path.at(-1); if (!destination) return;
+    const route = this.predictedRoute(destination);
+    const prediction = route && route.length > 0 ? this.startWalkPrediction(route, destination) : undefined;
     this.networkPending++;
-    void this.realtime.command('walk', destination).catch((error: unknown) => {
-      console.info('[room]', error); this.pendingCook = undefined; this.startingCook = false;
+    void this.realtime.command('walk', { ...destination, ...(route && route.length > 0 ? { path: route } : {}) }).then(() => {
+      if (prediction) prediction.acked = true;
+    }).catch((error: unknown) => {
+      if (prediction) prediction.failed = true;
+      console.info('[room]', error); this.pendingCook = undefined; this.startingCook = false; this.dropPredictedCook();
       if (this.servingProcess?.phase === 'walking') this.clearServingProcess();
       if (this.cleaningProcess?.phase === 'walking') this.cleaningProcess = undefined;
     }).finally(() => { this.networkPending--; });
+  }
+
+  /**
+   * The route the room service will walk: from the tile being entered (a started step always
+   * finishes there, on both sides), around furniture and the other people in the room.
+   */
+  private predictedRoute(destination: Tile): Tile[] | null {
+    const start = this.player.currentDestination ?? { tx: this.player.tileX, ty: this.player.tileY };
+    if (start.tx === destination.tx && start.ty === destination.ty) return [];
+    const busy = new Set<string>();
+    for (const [id, state] of this.realtime?.actors ?? []) {
+      if (id === this.realtime?.selfId) continue;
+      busy.add(state.tx + ',' + state.ty);
+      if (state.move) busy.add(state.move.to.tx + ',' + state.move.to.ty);
+    }
+    return findPath({
+      start, dest: destination,
+      isWalkable: (tx, ty) => this.model.isWalkable(tx, ty) && !busy.has(tx + ',' + ty),
+      maxTilesX: this.model.tilesX, maxTilesY: this.model.rowsY,
+    });
+  }
+
+  private startWalkPrediction(route: readonly Tile[], destination: Tile): NonNullable<RoomScreen['walkPrediction']> {
+    const tiles = new Set(route.map((tile) => tile.tx + ',' + tile.ty));
+    tiles.add(this.player.tileX + ',' + this.player.tileY);
+    const current = this.player.currentDestination;
+    if (current) tiles.add(current.tx + ',' + current.ty);
+    this.walkBlend = undefined;
+    this.player.predictPath(route);
+    const now = performance.now();
+    this.walkPrediction = { id: ++this.walkPredictionId, tiles, destination: { ...destination }, sentAt: now, tickedAt: now, acked: false, failed: false };
+    return this.walkPrediction;
+  }
+
+  /**
+   * Advances the predicted walk. It ends quietly when the room service stops on the same tile;
+   * when the service took another way (someone stepped in front, the command failed) it ends
+   * with a short glide to the shared position instead of a jump.
+   */
+  private advanceWalkPrediction(state: SharedActor, serverNow: number): boolean {
+    const prediction = this.walkPrediction;
+    if (!prediction) return false;
+    const now = performance.now();
+    // Wall-clock time, like the room service: Pixi caps a frame's delta, so a slow device would
+    // otherwise walk behind the shared movement.
+    const elapsed = now - prediction.tickedAt;
+    prediction.tickedAt = now;
+    const serverTile = state.move ? state.move.to : { tx: state.tx, ty: state.ty };
+    let diverged = prediction.failed || (!prediction.acked && now - prediction.sentAt > 4000) ||
+      (prediction.acked && !prediction.tiles.has(serverTile.tx + ',' + serverTile.ty));
+    this.player.tick(elapsed);
+    if (!diverged && this.player.reachedPathEnd()) {
+      prediction.arrivedAt ??= now;
+      if (prediction.acked && !state.move && state.tx === prediction.destination.tx && state.ty === prediction.destination.ty) {
+        this.walkPrediction = undefined;
+        this.player.syncAuthoritative(state.tx, state.ty, state.direction, state.outside, state.move, serverNow);
+        return false;
+      }
+      if (now - prediction.arrivedAt > 1500) diverged = true;
+    }
+    if (diverged) {
+      const fromX = this.player.x, fromY = this.player.y;
+      this.walkPrediction = undefined;
+      this.player.syncAuthoritative(state.tx, state.ty, state.direction, state.outside, state.move, serverNow);
+      this.walkBlend = { dx: fromX - this.player.x, dy: fromY - this.player.y, startedAt: now };
+      return false;
+    }
+    return true;
   }
 
   /** Inicia o processo de cozimento de uma receita no fogão da sala. */
@@ -1617,12 +1741,58 @@ export class RoomScreen implements Screen {
         this.movePlayerAlong(approach.path);
         this.drawTarget(approach.destination);
       } else {
+        this.showPredictedCook();
         this.beginServerPlacement();
       }
       return;
     }
     // Isolated room tests can still exercise the renderer without an HTTP server.
     this.showCooking(recipe, stove, undefined, false, approach);
+  }
+
+  /**
+   * O chef chegou ao fogão na tela: o prato começa a ser arrumado na hora, com o custo já
+   * descontado. O pedido sai quando o servidor também tem o chef ao lado do fogão.
+   */
+  private showPredictedCook(): void {
+    const pending = this.pendingCook;
+    if (!pending || !this.cookingClient || !pending.stove.instanceId || this.optimisticCook) return;
+    const now = this.cookingClient.serverNowMs();
+    const startedAt = now + COOKING_PLACEMENT_MS;
+    const readyAt = startedAt + pending.recipe.durationSeconds * 1000;
+    const job: StoveCooking = {
+      id: '', recipeId: pending.recipe.id, status: 'preparing',
+      preparingAt: new Date(now).toISOString(), startedAt: new Date(startedAt).toISOString(),
+      readyAt: new Date(readyAt).toISOString(), spoilsAt: new Date(readyAt + 24 * 3600_000).toISOString(),
+    };
+    this.optimisticCook = { stove: pending.stove, recipe: pending.recipe, job, balance: this.predictBalance({ gold: -pending.recipe.costGold }) ?? -1 };
+    this.occupiedStoves.set(pending.stove.instanceId, job);
+    this.showCooking(pending.recipe, pending.stove, job);
+  }
+
+  /** Desfaz o prato previsto: o servidor recusou ou a caminhada até o fogão falhou. */
+  private dropPredictedCook(): void {
+    const optimistic = this.optimisticCook;
+    if (!optimistic) return;
+    this.optimisticCook = undefined;
+    this.settleBalance(optimistic.balance < 0 ? undefined : optimistic.balance, false);
+    if (this.cookingProcess?.stove === optimistic.stove) this.clearCookingProcess();
+    if (optimistic.stove.instanceId && this.occupiedStoves.get(optimistic.stove.instanceId) === optimistic.job) this.occupiedStoves.delete(optimistic.stove.instanceId);
+    this.stoveViews.get(optimistic.stove)?.forEach((view) => { view.alpha = 1; });
+  }
+
+  /** Troca os horários previstos pelos do servidor, sem refazer o prato na tela. */
+  private adoptCookingJob(stove: RoomItem, job: StoveCooking): void {
+    const optimistic = this.optimisticCook;
+    if (!optimistic || optimistic.stove !== stove) return;
+    this.optimisticCook = undefined;
+    this.settleBalance(optimistic.balance < 0 ? undefined : optimistic.balance, true);
+    const process = this.cookingProcess;
+    if (process?.stove !== stove) { this.showCooking(optimistic.recipe, stove, job); return; }
+    const preparingAt = cookingTime(job.preparingAt ?? job.startedAt), startedAt = cookingTime(job.startedAt), readyAt = cookingTime(job.readyAt);
+    if (![preparingAt, startedAt, readyAt].every(Number.isFinite)) return;
+    process.preparingAtMs = preparingAt; process.startedAtMs = startedAt; process.readyAtMs = readyAt;
+    process.durationMs = process.phase === 'preparing' ? Math.max(1, startedAt - preparingAt) : Math.max(1, readyAt - startedAt);
   }
 
   private beginServerPlacement(): void {
@@ -1633,12 +1803,14 @@ export class RoomScreen implements Screen {
     void this.cookingClient.start(pending.stove.instanceId, pending.recipe.id).then((snapshot) => {
         this.startingCook = false;
         if (this.destroyed) return;
+        const job = snapshot.stoves.find((stove) => stove.id === pending.stove.instanceId)?.cooking;
         this.acceptCookingSnapshot(snapshot, false);
-        const job = this.occupiedStoves.get(pending.stove.instanceId!);
-        if (job) this.showCooking(pending.recipe, pending.stove, job);
-        else this.stoveViews.get(pending.stove)?.forEach((view) => { view.alpha = 1; });
+        if (job && this.optimisticCook?.stove === pending.stove) this.adoptCookingJob(pending.stove, job);
+        else if (job) this.showCooking(pending.recipe, pending.stove, job);
+        else { this.dropPredictedCook(); this.stoveViews.get(pending.stove)?.forEach((view) => { view.alpha = 1; }); }
       }).catch((error: unknown) => {
         this.startingCook = false;
+        this.dropPredictedCook();
         this.stoveViews.get(pending.stove)?.forEach((view) => { view.alpha = 1; });
         console.warn('[cooking] preparo rejeitado', error);
         if (error instanceof Error) this.showNotice(error.message);
@@ -1646,6 +1818,13 @@ export class RoomScreen implements Screen {
           if (!this.destroyed) this.acceptCookingSnapshot(snapshot, true);
         }).catch((refreshError: unknown) => console.warn('[cooking] falha ao atualizar fogões', refreshError));
       });
+  }
+
+  /** O servidor também deixou o chef parado: o pedido de preparo pode sair. */
+  private chefSettledOnServer(): boolean {
+    if (!this.realtime) return true;
+    const self = this.realtime.actors.get(this.realtime.selfId);
+    return !!self && !self.move;
   }
 
   /** Aplica um snapshot autenticado; ao reentrar, reconstitui o prato sem repetir som/caminhada. */
@@ -2048,19 +2227,18 @@ export class RoomScreen implements Screen {
       return;
     }
     this.cancellingCook = true;
+    if (this.cookingProcess?.stove === stove) this.clearCookingProcess();
+    this.occupiedStoves.delete(stove.instanceId);
     void this.cookingClient.cancel(stove.instanceId).then((snapshot) => {
       this.cancellingCook = false;
-      if (this.destroyed) return;
-      this.acceptCookingSnapshot(snapshot, false);
-      if (this.cookingProcess?.stove === stove) this.clearCookingProcess();
+      if (!this.destroyed) this.acceptCookingSnapshot(snapshot, false);
     }).catch((error: unknown) => {
       this.cancellingCook = false;
       console.warn('[cooking] não foi possível cancelar', error);
       if (this.destroyed) return;
+      if (error instanceof Error) this.showNotice(error.message);
       void this.cookingClient!.refresh().then((snapshot) => {
-        if (this.destroyed) return;
-        this.acceptCookingSnapshot(snapshot, false);
-        if (!this.occupiedStoves.has(stove.instanceId!) && this.cookingProcess?.stove === stove) this.clearCookingProcess();
+        if (!this.destroyed) this.acceptCookingSnapshot(snapshot, true);
       }).catch((refreshError: unknown) => console.warn('[cooking] falha ao atualizar fogão', refreshError));
     });
   }
@@ -2087,10 +2265,15 @@ export class RoomScreen implements Screen {
     if (!process || process.phase !== 'walking' || !this.cookingClient || !process.stove.instanceId) return;
     process.phase = 'requesting';
     this.target.clear();
+    this.dirtyStoves.delete(process.stove.instanceId);
     void this.cookingClient.clean(process.stove.instanceId).then((snapshot) => {
       if (!this.destroyed) this.acceptCookingSnapshot(snapshot, false);
     }).catch((error: unknown) => {
-      if (!this.destroyed && error instanceof Error) this.showNotice(error.message);
+      if (this.destroyed) return;
+      if (error instanceof Error) this.showNotice(error.message);
+      void this.cookingClient!.refresh().then((snapshot) => {
+        if (!this.destroyed) this.acceptCookingSnapshot(snapshot, false);
+      }).catch((refreshError: unknown) => console.warn('[cooking] falha ao atualizar fogão', refreshError));
     }).finally(() => {
       if (this.cleaningProcess === process) this.cleaningProcess = undefined;
     });
@@ -2194,22 +2377,18 @@ export class RoomScreen implements Screen {
       this.clearServingProcess();
       return;
     }
-    void this.cookingClient.serve(process.stove.instanceId).then((snapshot) => {
-      if (this.destroyed) return;
-      this.acceptCookingSnapshot(snapshot, false);
-      this.clearServingProcess();
-      this.clearCookingProcess();
+    const stoveId = process.stove.instanceId;
+    this.clearServingProcess();
+    if (this.cookingProcess?.stove === process.stove) this.clearCookingProcess();
+    this.occupiedStoves.delete(stoveId);
+    void this.cookingClient.serve(stoveId).then((snapshot) => {
+      if (!this.destroyed) this.acceptCookingSnapshot(snapshot, false);
     }).catch((error: unknown) => {
       console.warn('[cooking] não foi possível servir', error);
       if (this.destroyed) return;
       if (error instanceof Error) this.showNotice(error.message);
-      this.clearServingProcess();
       void this.cookingClient!.refresh().then((snapshot) => {
-        if (this.destroyed) return;
-        this.acceptCookingSnapshot(snapshot, false);
-        if (!this.occupiedStoves.has(process.stove.instanceId!) && this.cookingProcess?.stove === process.stove) {
-          this.clearCookingProcess();
-        }
+        if (!this.destroyed) this.acceptCookingSnapshot(snapshot, true);
       }).catch((refreshError: unknown) => console.warn('[cooking] falha ao atualizar fogão', refreshError));
     });
   }
@@ -2823,6 +3002,9 @@ export class RoomScreen implements Screen {
         canInteract: () => !this.storeBar?.isOpen && !this.isModalOpen && !this.dragCancelledTap,
         confirm: (text) => this.sellModal?.ask(text) ?? Promise.resolve(false),
         onSnapshot: (snapshot) => { this.setPlayerState(snapshot.playerState); this.supplyModal?.setSnapshot(snapshot); },
+        onPreview: (snapshot) => this.supplyModal?.setSnapshot(snapshot),
+        predictBalance: (delta) => this.predictBalance(delta),
+        settleBalance: (token, accepted) => this.settleBalance(token, accepted),
         onError: (message) => this.showNotice(message),
       });
       this.supplyModal = new SupplyOrderModal({
@@ -3639,13 +3821,47 @@ export class RoomScreen implements Screen {
   }
 
   /** Apply an authenticated snapshot to both HUDs without rebuilding the room. */
+  /** Estado vindo do servidor; as previsões de saldo ainda pendentes são somadas por cima. */
   setPlayerState(state: PlayerState): void {
+    this.serverPlayerState = state;
+    if (this.roomSnapshot) this.roomSnapshot.playerState = state;
+    this.showPlayerState(this.predictedBalance.apply(state));
+  }
+
+  /** The same pair for windows that predict their own results. */
+  private readonly balancePrediction: BalancePrediction = {
+    predict: (delta) => this.predictBalance(delta),
+    settle: (token, accepted) => this.settleBalance(token, accepted),
+  };
+
+  /** Mostra na hora o efeito provável de uma ação no saldo; devolve a marca para `settleBalance`. */
+  predictBalance(delta: BalanceDelta): number | undefined {
+    const server = this.serverPlayerState ?? this.playerState;
+    if (!server) return undefined;
+    const token = this.predictedBalance.add(delta, server);
+    this.showPlayerState(this.predictedBalance.apply(server));
+    return token;
+  }
+
+  /**
+   * Encerra uma previsão. Recusada, ela sai na hora; aceita, fica até o estado do servidor
+   * mostrar a mudança (ele pode chegar depois da resposta), com um limite de segurança.
+   */
+  settleBalance(token: number | undefined, accepted: boolean): void {
+    if (token === undefined) return;
+    const drop = () => {
+      this.predictedBalance.settle(token);
+      if (!this.destroyed && this.serverPlayerState) this.showPlayerState(this.predictedBalance.apply(this.serverPlayerState));
+    };
+    if (accepted) setTimeout(drop, BALANCE_CONFIRM_MS); else drop();
+  }
+
+  private showPlayerState(state: PlayerState): void {
     this.playerState = state;
     // Server-driven rewards take focus before their earlier Escape handler can
     // acknowledge a reward hidden underneath the link-invitation window.
     if (state.levelUps?.length) this.socialInviteModal?.close();
     this.levelUpModal?.sync(state.levelUps ?? []);
-    if (this.roomSnapshot) this.roomSnapshot.playerState = state;
     this.topBars?.setState(state);
     this.cookModal?.setPlayerState(state);
     this.spiceModal?.setPlayerState(state);
@@ -3724,7 +3940,10 @@ export class RoomScreen implements Screen {
 
     if (this.realtime) this.updateLiveActors(deltaMs); else this.player.tick(deltaMs);
     this.updateStoveActionTime();
-    if (this.pendingCook && this.networkPending === 0 && this.realtime?.connected !== false && this.player.reachedPathEnd()) this.beginServerPlacement();
+    if (this.pendingCook && this.realtime?.connected !== false && this.player.reachedPathEnd()) {
+      this.showPredictedCook();
+      if (this.networkPending === 0 && this.chefSettledOnServer()) this.beginServerPlacement();
+    }
     if (this.cookingProcess?.phase === 'walking' && this.player.reachedPathEnd()) {
       this.beginPreparing();
     } else if (this.cookingProcess?.phase === 'preparing') {

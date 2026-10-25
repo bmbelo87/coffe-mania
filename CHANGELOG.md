@@ -16,6 +16,39 @@ Logo depois de um lote, as correções usam `0.5.01`, `0.5.02`… A ordem de lan
 
 Seções usadas: **Adicionado**, **Alterado**, **Corrigido**, **Removido** e **Observações** (limites conhecidos e o que ficou para depois).
 
+## [0.6.4] — Resposta imediata (2026-10-25)
+
+Fase A5 do alpha fechado: as ações aparecem na hora e o servidor confirma ou desfaz depois. Ele continua decidindo tudo.
+
+### Adicionado
+
+- **Caminhada prevista.**
+  - O personagem sai no clique pelo caminho que o cliente calculou, e o comando `walk` leva esse caminho (`Command.Path`).
+  - O servidor segue o caminho quando cada passo é vizinho, livre e não corta canto bloqueado. Senão, calcula o dele, e o personagem desliza até a posição oficial em 200 ms.
+- **Cozinha imediata.**
+  - O prato começa a ser arrumado e o custo sai do ouro assim que o chef chega ao fogão na tela.
+  - O pedido sai quando o servidor também tem o chef ao lado do fogão, e os horários oficiais substituem os previstos sem refazer o prato.
+  - Servir, cancelar e limpar também são imediatos.
+- **Loja e pintura sem espera.**
+  - Comprar, mover, guardar e vender aparecem na hora, sem "Salvando…".
+  - Os pedidos saem em fila, cada um com a revisão devolvida pelo anterior.
+  - Pintar piso ou parede arrastando coloca todos os tiles na hora.
+- **Saldo previsto.** caféOuros, caféGranas, energia e caixas mudam na hora. Uma mudança só é contada uma vez, mesmo com várias pendentes.
+- **Janelas imediatas:** sucos, café, encomendas e temperos.
+- `docs/resposta-imediata.md` e testes:
+  - unidade: saldo previsto, fila, projeção da sala, encomendas e caminhada com quadros lentos;
+  - Go: caminho do cliente aceito ou recusado.
+
+### Alterado
+
+- Uma recusa do servidor desfaz só a ação recusada, na hora e com o motivo. A sala é recarregada logo depois.
+- A caminhada aproveita o tempo que sobra de um quadro longo no passo seguinte, em vez de atrasar.
+
+### Observações
+
+- **Teste com atraso:** a conferência rodou com 150 ms de ida e volta no WebSocket e cerca de 370 ms por pedido HTTP. A caminhada sai em menos de 50 ms, o prato aparece no quadro da chegada ao fogão, e pintar 10 tiles leva de 10 a 30 ms por clique.
+- **Saldo com receita no mesmo instante:** se um cliente pagar no mesmo instante em que um gasto é confirmado, o saldo previsto pode ficar errado por até 5 s, até a correção automática.
+
 ## [0.6.3] — Cafés, revestimentos e decoração livre (2026-10-25)
 
 ### Adicionado

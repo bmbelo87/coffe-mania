@@ -184,6 +184,9 @@ type Command struct {
 	ChairID   string `json:"chairId,omitempty"`
 	StoveID   string `json:"stoveId,omitempty"`
 	UnitID    string `json:"unitId,omitempty"`
+	// Path is the route the client already started showing for "walk" (without the start
+	// tile). The room follows it when every step is free and adjacent; otherwise it plans its own.
+	Path []Tile `json:"path,omitempty"`
 }
 
 // OperationStatus is the server-wide mode set by an admin. Maintenance starts at StartsAt

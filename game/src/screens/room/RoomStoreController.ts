@@ -11,6 +11,54 @@ import { createArtView, rotateFloorSprite, tileDiamond } from './iso-art';
 import { createProceduralWallView } from './ProceduralWallView';
 import { DoorView } from './DoorView';
 import { clearRoomDepth, inheritRoomDepth, setItemRoomDepth } from './RoomDepthSorter';
+import { SerialQueue, type BalanceDelta } from '../../game/optimistic';
+
+/** Units bought on screen but not yet confirmed carry this prefix instead of a server id. */
+const PENDING_UNIT = 'pending:';
+
+/**
+ * A room change already shown on screen and waiting in line for the server. The shown room is
+ * the server's last snapshot with these changes applied on top, in order.
+ */
+interface PendingRoomOp {
+  id: number;
+  action: 'purchase' | 'move' | 'store' | 'sell';
+  item: RoomCatalogItem;
+  unitId?: string;
+  tile?: Tile;
+  rotation: number;
+  balance?: number;
+}
+
+/**
+ * The server snapshot with the pending changes applied (purchases get a temporary unit). Like
+ * the server, a floor or wallpaper laid over another sends the old one to the inventory.
+ */
+export function projectRoom(server: RoomSnapshot, ops: readonly PendingRoomOp[]): RoomSnapshot {
+  if (ops.length === 0) return server;
+  let inventory = server.inventory.map((unit) => ({ ...unit }));
+  const typeOf = (itemId: number) => server.catalog?.find((item) => item.id === itemId)?.type;
+  const cover = (op: PendingRoomOp, unitId: string) => {
+    if (op.item.type > 1 || !op.tile) return;
+    for (const other of inventory) {
+      if (other.placed && other.unitId !== unitId && other.tx === op.tile.tx && other.ty === op.tile.ty && typeOf(other.itemId) === op.item.type) other.placed = false;
+    }
+  };
+  for (const op of ops) {
+    if (op.action === 'purchase' && op.tile) {
+      cover(op, PENDING_UNIT + op.id);
+      inventory.push({ unitId: PENDING_UNIT + op.id, itemId: op.item.id, placed: true, tx: op.tile.tx, ty: op.tile.ty, rotation: op.rotation });
+    } else if (op.action === 'sell') {
+      inventory = inventory.filter((unit) => unit.unitId !== op.unitId);
+    } else {
+      const unit = inventory.find((candidate) => candidate.unitId === op.unitId);
+      if (!unit) continue;
+      if (op.action === 'store') unit.placed = false;
+      else if (op.tile) { cover(op, unit.unitId); Object.assign(unit, { placed: true, tx: op.tile.tx, ty: op.tile.ty, rotation: op.rotation }); }
+    }
+  }
+  return { ...server, inventory };
+}
 
 function contains(points: readonly { x: number; y: number }[], x: number, y: number): boolean {
   let inside = false;
@@ -65,7 +113,14 @@ export function chairRotationTowardTable(tile: Tile, current: number, snapshot: 
 
 export class RoomStoreController {
   readonly cursorView = new Container();
+  /** What the screen shows: `server` plus `pendingOps`. Placement checks run against it. */
   private snapshot: RoomSnapshot;
+  private server: RoomSnapshot;
+  private pendingOps: PendingRoomOp[] = [];
+  private readonly requests = new SerialQueue();
+  private nextOp = 0;
+  /** Snapshots this controller handed to the room; when they come back they are not news. */
+  private readonly projections = new WeakSet<RoomSnapshot>();
   private selection?: StoreEntry;
   private selectionReady?: Promise<boolean>;
   private tile?: Tile;
@@ -105,8 +160,19 @@ export class RoomStoreController {
     onTransaction?(event: { item: RoomCatalogItem; tile: Tile; rotation: number; gold: number }): void;
     /** A card of the "Expansões" tab was clicked. */
     onExpansion?(step: RoomExpansionStep, currency: 'cash' | 'gold', next: boolean): void;
+    /** caféOuros now on screen, predictions included. */
+    gold?(): number;
+    /**
+     * A player state fresh from the server (an answer or a reload). `apply` never carries the
+     * balance: the room on screen may be built from an older snapshot.
+     */
+    serverState?(state: RoomSnapshot['playerState']): void;
+    /** Shows a balance change at once (see RoomScreen.predictBalance). */
+    predictBalance?(delta: BalanceDelta): number | undefined;
+    settleBalance?(token: number | undefined, accepted: boolean): void;
   }) {
     this.snapshot = options.snapshot;
+    this.server = options.snapshot;
     this.preview.label = 'store-placement-preview'; this.preview.eventMode = 'none';
     this.indicator.label = 'store-placement-indicator-layer'; this.indicator.eventMode = 'none';
     this.indicator.zIndex = FLOOR_DRAW_PRIORITY + 4;
@@ -115,8 +181,18 @@ export class RoomStoreController {
   }
   attach(store: StoreActionBar): void { this.store = store; this.refreshEntries(); }
   acceptShared(snapshot: RoomSnapshot): void {
-    if (snapshot.revision < this.snapshot.revision) return;
-    this.snapshot = snapshot; this.refreshEntries();
+    if (this.projections.has(snapshot)) { this.snapshot = snapshot; return; }
+    if (snapshot.revision < this.server.revision) return;
+    // Shared events merge into the room on screen, which holds the pending changes too. Units a
+    // pending change touches keep their server state: only that change's answer may move them.
+    const touched = new Set(this.pendingOps.flatMap((op) => op.unitId ? [op.unitId] : []));
+    const previous = new Map(this.server.inventory.map((unit) => [unit.unitId, unit]));
+    const inventory = snapshot.inventory.filter((unit) => !unit.unitId.startsWith(PENDING_UNIT) && !touched.has(unit.unitId));
+    for (const id of touched) { const unit = previous.get(id); if (unit) inventory.push(unit); }
+    this.server = { ...snapshot, inventory };
+    this.snapshot = projectRoom(this.server, this.pendingOps);
+    if (this.pendingOps.length > 0) this.show();
+    this.refreshEntries();
     if (!this.busy && this.selection) this.drawPreview();
   }
   onOpen(): void {
@@ -337,6 +413,7 @@ export class RoomStoreController {
       : this.snapshot.inventory.find((u) => u.placed && u.tx === tile.tx && u.ty === tile.ty && this.snapshot.catalog.find((i) => i.id === u.itemId)?.type === 0);
     const item = this.snapshot.catalog.find((i) => i.id === unit?.itemId);
     if (!unit || !item || (item.kind === 'wall' && item.type !== 1)) return false;
+    if (this.stillBuying(unit)) { event.stopPropagation(); return true; }
     this.select({ item, unit }); this.dragging = event.pointerId; this.hover(event); event.stopPropagation(); return true;
   }
   /**
@@ -397,6 +474,7 @@ export class RoomStoreController {
     const unit = this.snapshot.inventory.find((unit) => unit.unitId === unitId && unit.placed);
     const item = this.snapshot.catalog.find((item) => item.id === unit?.itemId);
     if (!unit || !item || (item.kind === 'wall' && item.type !== 1)) return true;
+    if (this.stillBuying(unit)) return true;
     this.select({ item, unit }); this.tile = { tx: unit.tx, ty: unit.ty };
     this.rotation = event.ctrlKey ? unit.rotation : (unit.rotation + 1) % 4;
     void this.commit(Boolean(event.ctrlKey)); return true;
@@ -411,6 +489,7 @@ export class RoomStoreController {
     const item = this.snapshot.catalog.find((item) => item.id === unit?.itemId);
     if (!unit || !item || item.type < 2 || item.kind === 'wall') return false;
     event.stopPropagation();
+    if (this.stillBuying(unit)) return true;
     // NPC use is resolved by the shared simulation only after a successful edit.
     if (!(item.kind === 'table' && this.options.prepareSelection) && !(this.options.canPlace?.(item, { tx: unit.tx, ty: unit.ty }, unit.rotation, unit.unitId) ?? true)) {
       this.message(`${item.name} está sendo usado por um cliente agora.`);
@@ -445,22 +524,10 @@ export class RoomStoreController {
     finally { this.busy = false; }
     if (this.destroyed || this.selection !== selection) return;
     if (!confirmed) { this.drawPreview(); this.message(`${item.name}: clique onde quer colocar. V: vender. Esc: cancelar.`); return; }
-    this.busy = true;
-    this.message('Vendendo…');
-    try {
-      const snapshot = await this.options.client.mutate('sell', this.snapshot.revision, { unitId: unit.unitId });
-      if (this.destroyed) return;
-      this.snapshot = snapshot; this.options.apply(snapshot); this.busy = false; this.cancel(); this.refreshEntries();
-      // A sale just removes the piece after the confirmation; the gold effect is for purchases.
-      this.message(`${item.name} vendido por ${gold} ouro.`);
-    } catch (error) {
-      if (this.destroyed) return;
-      const message = error instanceof Error ? error.message : 'Não foi possível vender.';
-      try { const snapshot = await this.options.client.refresh(); if (this.destroyed) return; this.snapshot = snapshot; this.options.apply(snapshot); this.refreshEntries(); } catch { /* The next action refreshes. */ }
-      this.busy = false;
-      if (this.selection) this.drawPreview();
-      this.message(message);
-    }
+    // A sale just removes the piece after the confirmation; the gold effect is for purchases.
+    this.enqueue({ action: 'sell', item, unitId: unit.unitId, rotation: unit.rotation, balance: this.options.predictBalance?.({ gold: gold }) });
+    this.cancel(); this.refreshEntries();
+    this.message(`${item.name} vendido por ${gold} ouro.`);
   }
   private async commit(store = false): Promise<void> {
     const selection = this.selection;
@@ -472,43 +539,108 @@ export class RoomStoreController {
       if (this.painting === undefined) this.message('Não dá para colocar aqui. Escolha outro lugar ou aperte Esc.');
       return;
     }
-    this.busy = true;
     const action = store ? 'store' : selection.unit ? 'move' : 'purchase';
     const target = this.tile ? { ...this.tile } : undefined;
-    this.message('Salvando…');
-    try {
-      const snapshot = await this.options.client.mutate(action, this.snapshot.revision, {
-        ...(selection.unit ? { unitId: selection.unit.unitId } : { itemId: selection.item.id }),
-        ...(!store ? { ...this.tile!, rotation: this.rotation } : {}),
-      });
-      if (this.destroyed) return;
-      // Pisos e papéis de parede continuam no mouse: cada clique compra e coloca mais um.
-      const keepPainting = action === 'purchase' && selection.item.type <= 1;
-      const { tile, pointer, rotation, painting } = this;
-      this.snapshot = snapshot; this.options.apply(snapshot); this.busy = false; this.cancel(); this.refreshEntries();
-      if (action === 'purchase' && target) {
-        this.options.onTransaction?.({ item: selection.item, tile: target, rotation, gold: -selection.item.priceGold });
-      }
-      if (keepPainting) {
-        this.selection = { item: selection.item, texture: selection.texture };
-        this.tile = tile; this.pointer = pointer; this.rotation = rotation; this.painting = painting;
-        this.drawPreview();
-        this.message(`${selection.item.name} comprado por ${selection.item.priceGold} ouro. Clique ou arraste para colocar mais; Esc para parar.`);
-        // Enquanto salvava, o mouse pode ter entrado em outro tile com o botão pressionado.
-        if (painting !== undefined && tile && target && (tile.tx !== target.tx || tile.ty !== target.ty)) void this.commit();
-        return;
-      }
-      this.message(action === 'purchase' ? `${selection.item.name} comprado por ${selection.item.priceGold} ouro.` : store ? 'Item guardado no inventário.' : 'Posição salva.');
-    } catch (error) {
-      if (this.destroyed) return;
-      const message = error instanceof Error ? error.message : 'Não foi possível salvar.';
-      // Revisions and balances come from the server, including after a conflicting tab.
-      try { const snapshot = await this.options.client.refresh(); if (this.destroyed) return; this.snapshot = snapshot; this.options.apply(snapshot); this.refreshEntries(); } catch { /* Keep the pending placement available for retry. */ }
-      this.busy = false; this.painting = undefined;
-      // Recusa do servidor (ouro, limite, alguém no caminho): a peça continua no mouse.
-      if (this.selection) this.drawPreview();
-      this.message(message);
+    if (action === 'purchase' && (this.options.gold?.() ?? Infinity) < selection.item.priceGold) {
+      this.painting = undefined;
+      this.message('Ouro insuficiente.');
+      return;
     }
+    // Pisos e papéis de parede continuam no mouse: cada clique compra e coloca mais um.
+    const keepPainting = action === 'purchase' && selection.item.type <= 1;
+    const { tile, pointer, rotation, painting } = this;
+    this.enqueue({
+      action, item: selection.item, unitId: selection.unit?.unitId, ...(!store && target ? { tile: target } : {}), rotation,
+      ...(action === 'purchase' ? { balance: this.options.predictBalance?.({ gold: -selection.item.priceGold }) } : {}),
+    });
+    this.cancel(); this.refreshEntries();
+    if (action === 'purchase' && target) {
+      this.options.onTransaction?.({ item: selection.item, tile: target, rotation, gold: -selection.item.priceGold });
+    }
+    if (keepPainting) {
+      this.selection = { item: selection.item, texture: selection.texture };
+      this.tile = tile; this.pointer = pointer; this.rotation = rotation; this.painting = painting;
+      this.drawPreview();
+      this.message(`${selection.item.name} comprado por ${selection.item.priceGold} ouro. Clique ou arraste para colocar mais; Esc para parar.`);
+      return;
+    }
+    this.message(action === 'purchase' ? `${selection.item.name} comprado por ${selection.item.priceGold} ouro.` : store ? 'Item guardado no inventário.' : 'Posição salva.');
+  }
+
+  private stillBuying(unit: RoomUnit): boolean {
+    if (!unit.unitId.startsWith(PENDING_UNIT)) return false;
+    this.message('Aguarde um instante: a compra desta peça ainda está sendo confirmada.');
+    return true;
+  }
+
+  /** Hands the room on screen to the renderer. */
+  private show(): void {
+    this.projections.add(this.snapshot);
+    this.options.apply(this.snapshot);
+  }
+
+  /** Shows the change at once and sends it after the ones already waiting. */
+  private enqueue(change: Omit<PendingRoomOp, 'id'>): void {
+    const op: PendingRoomOp = { ...change, id: ++this.nextOp };
+    this.pendingOps.push(op);
+    this.snapshot = projectRoom(this.server, this.pendingOps);
+    this.show();
+    void this.requests.run(() => this.send(op));
+  }
+
+  private async send(op: PendingRoomOp): Promise<void> {
+    if (this.destroyed || !this.pendingOps.includes(op)) return;
+    const body = {
+      ...(op.unitId ? { unitId: op.unitId } : { itemId: op.item.id }),
+      ...(op.tile ? { ...op.tile, rotation: op.rotation } : {}),
+    };
+    let failure: unknown;
+    // A lost answer is retried with the same request id: the server never applies it twice.
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const snapshot = await this.options.client.mutate(op.action, this.server.revision, body);
+        this.pendingOps = this.pendingOps.filter((other) => other !== op);
+        this.options.settleBalance?.(op.balance, true);
+        if (!this.destroyed) this.options.serverState?.(snapshot.playerState);
+        if (!this.destroyed && snapshot.revision >= this.server.revision) this.server = snapshot;
+        this.reconcile();
+        return;
+      } catch (error) {
+        failure = error;
+        if (!this.options.client.awaitingRetry) break;
+        await new Promise((resolve) => setTimeout(resolve, 1000 * (attempt + 1)));
+      }
+    }
+    // Refused (or still unreachable): this change goes away at once; later ones are still
+    // checked by the server against the real room. A reload then replaces whatever was assumed.
+    this.pendingOps = this.pendingOps.filter((other) => other !== op);
+    this.options.settleBalance?.(op.balance, false);
+    const uncertain = this.options.client.awaitingRetry;
+    if (uncertain) {
+      for (const other of this.pendingOps) this.options.settleBalance?.(other.balance, false);
+      this.pendingOps = [];
+    }
+    this.reconcile();
+    if (!this.destroyed) {
+      this.painting = undefined;
+      this.message(failure instanceof Error ? failure.message : 'Não foi possível salvar.');
+    }
+    try {
+      const snapshot = await this.options.client.refresh();
+      if (!this.destroyed) this.options.serverState?.(snapshot.playerState);
+      if (snapshot.revision >= this.server.revision) this.server = snapshot;
+      if (uncertain) this.options.client.forgetPending();
+    } catch { /* The next answer refreshes. */ }
+    this.reconcile();
+  }
+
+  /** Re-applies what is still waiting on top of the newest server room. */
+  private reconcile(): void {
+    if (this.destroyed) return;
+    this.snapshot = projectRoom(this.server, this.pendingOps);
+    this.show();
+    this.refreshEntries();
+    if (!this.busy && this.selection) this.drawPreview();
   }
   private validPlacement(item: RoomCatalogItem, tile: Tile, rotation: number, unitId?: string): boolean {
     return validStorePlacement(item, tile, rotation, this.options.model, this.snapshot, unitId) && (this.options.canPlace?.(item, tile, rotation, unitId) ?? true);

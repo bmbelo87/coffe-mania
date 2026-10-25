@@ -2,6 +2,7 @@ import { Container, Graphics, Rectangle, Sprite, type Texture } from 'pixi.js';
 import { STAGE_WIDTH, STAGE_HEIGHT } from '../../core/stage';
 import { JuiceClient, loadJuiceArt, loadJuiceInterfaceArt, type JuiceInterfaceArt, type JuiceSnapshot, type JuiceRecipe } from '../../game/juices';
 import type { PlayerState } from '../../game/player-state';
+import { withBalance, type BalanceDelta, type BalancePrediction } from '../../game/optimistic';
 import { PopupOpening } from './PopupOpening';
 import { fitJuiceImage, juiceButton, juiceCard, juicePart, juiceProgress, juiceSmile, juiceTab, juiceText, JUICE_ROWS, JUICE_SHEET, JUICE_TAB_X } from './JuiceInterfaceParts';
 
@@ -28,7 +29,8 @@ export class JuiceScreenModal {
   private message = '';
   private help = false;
 
-  constructor(private readonly client: JuiceClient, private readonly machineTexture: Texture | undefined, private readonly onState: (state: PlayerState) => void) {
+  constructor(private readonly client: JuiceClient, private readonly machineTexture: Texture | undefined, private readonly onState: (state: PlayerState) => void,
+    private readonly balance?: BalancePrediction) {
     this.view.label = 'juice-modal'; this.view.visible = false;
     const backdrop = new Graphics().rect(-12000, -12000, 24000, 24000).fill({ color: 0xfff7db, alpha: .64 });
     backdrop.eventMode = 'static'; backdrop.hitArea = new Rectangle(-12000, -12000, 24000, 24000);
@@ -76,16 +78,45 @@ export class JuiceScreenModal {
   }
   private async act(action: 'unlock' | 'prepare' | 'recharge', recipeId?: string) {
     if (this.busy) return;
-    this.busy = true; this.message = ''; this.draw();
-    const generation = this.generation, machineId = this.machineId;
+    const generation = this.generation, machineId = this.machineId, previous = this.state;
+    // The result is shown at once; the server's answer replaces it, or a refusal restores it.
+    const predicted = previous ? this.predict(previous, action, machineId, recipeId) : undefined;
+    const token = predicted ? this.balance?.predict(predicted.delta) : undefined;
+    this.busy = true; this.message = '';
+    if (predicted) { this.state = predicted.state; if (action === 'recharge') this.help = false; }
+    this.draw();
     try {
       const state = await this.client.act(action, machineId, { recipeId });
+      this.balance?.settle(token, true);
       if (this.disposed) return;
       this.onState(state.playerState);
       if (generation === this.generation) { this.state = state; if (action === 'recharge') this.help = false; }
     } catch (error) {
-      if (!this.disposed && generation === this.generation) this.message = error instanceof Error ? error.message : 'Ação recusada.';
+      this.balance?.settle(token, false);
+      if (!this.disposed && generation === this.generation) {
+        if (predicted && this.state === predicted.state) this.state = previous;
+        this.message = error instanceof Error ? error.message : 'Ação recusada.';
+      }
     } finally { this.busy = false; if (!this.disposed) this.draw(); }
+  }
+
+  /** Prices of database/juices.go: 20 caféGranas for the locksmith, 4 for a recharge. */
+  private predict(state: JuiceSnapshot, action: 'unlock' | 'prepare' | 'recharge', machineId: string, recipeId?: string): { state: JuiceSnapshot; delta: BalanceDelta } | undefined {
+    const player = state.playerState;
+    if (action === 'unlock') {
+      if (state.unlocked || player.cash < 20) return undefined;
+      return { state: { ...state, unlocked: true, playerState: withBalance(player, { cash: -20 }) }, delta: { cash: -20 } };
+    }
+    if (action === 'recharge') {
+      const missing = player.energy.maximum - player.energy.current;
+      if (missing <= 0 || player.cash < 4) return undefined;
+      const delta = { cash: -4, energy: missing };
+      return { state: { ...state, playerState: withBalance(player, delta) }, delta };
+    }
+    const recipe = this.recipes.find((candidate) => candidate.id === recipeId);
+    if (!recipe || (state.stock[machineId]?.portions ?? 0) > 0 || player.energy.current < recipe.energyCost) return undefined;
+    const delta = { energy: -recipe.energyCost };
+    return { state: { ...state, stock: { ...state.stock, [machineId]: { recipeId: recipe.id, portions: recipe.portions } }, playerState: withBalance(player, delta) }, delta };
   }
   private draw() {
     for (const child of this.panel.removeChildren()) child.destroy({ children: true });

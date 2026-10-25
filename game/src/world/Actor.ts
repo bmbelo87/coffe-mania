@@ -129,6 +129,17 @@ export class Actor {
     this.path = [];
   }
 
+  /**
+   * Starts a route at once, ahead of the server (walk prediction). Like the room service, a
+   * step already under way is finished first: the route starts next to the tile being entered.
+   */
+  predictPath(path: readonly Tile[]): void {
+    const current = this.currentDestination;
+    const route = path.map((tile) => ({ ...tile }));
+    if (current && route.length > 0 && (route[0].tx !== current.tx || route[0].ty !== current.ty)) route.unshift(current);
+    this.setMovePath(route);
+  }
+
   /** Render a server-owned step. The local renderer never advances the route. */
   syncAuthoritative(tx: number, ty: number, direction: number, outside: boolean,
     move: { from: Tile; to: Tile; startedAt: number; duration: number } | undefined, now: number): void {
@@ -182,41 +193,51 @@ export class Actor {
     return value === target;
   }
 
+  /**
+   * Walks for `deltaMs`. Time left over when a step ends carries into the next step of the
+   * route, so a long frame (a slow device, a hidden tab coming back) does not slow the walk
+   * down: the predicted walk must keep pace with the room service's clock.
+   */
   tick(deltaMs: number): void {
-    let moved = false;
-    const stepSpeedX = this.speedX, stepSpeedY = this.speedY;
-    let x = this.x + this.speedX * deltaMs;
-    let y = this.y + this.speedY * deltaMs;
-
-    if (this.speedX !== 0) {
-      moved = true;
-      if (Actor.reached(x, this.destX, this.speedX)) {
-        this.speedX = 0;
-        x = this.destX;
-      }
-    }
-
-    if (this.speedY !== 0) {
-      moved = true;
-      if (Actor.reached(y, this.destY, this.speedY)) {
-        this.speedY = 0;
-        y = this.destY;
-      }
-    }
-
-    if (moved) {
-      this.setPosition(x, y);
-      // Round the actual position, not half of the remaining duration: a
-      // redirected partial step must keep the same physical tile boundary.
-      const logicalTile = screenToMovementTile(x, y, stepSpeedX, stepSpeedY);
-      this.tileX = logicalTile.tx;
-      this.tileY = logicalTile.ty;
+    let remaining = Math.max(0, deltaMs);
+    for (let steps = 0; steps < 16; steps++) {
       if (!this.moving) {
-        this.tileX = this.segmentTargetTile.tx;
-        this.tileY = this.segmentTargetTile.ty;
+        if (this.path.length === 0) return;
+        if (steps > 0 && remaining <= 0) return;
+        this.popPath();
+        if (!this.moving) continue;
+      }
+      remaining -= this.advance(remaining);
+      if (this.moving || remaining <= 0) {
+        if (this.path.length > 0 && !this.moving) this.popPath();
+        return;
       }
     }
+  }
 
-    if (this.path.length > 0 && !this.moving) this.popPath();
+  /** Moves along the current step for up to `deltaMs`; returns the time it used. */
+  private advance(deltaMs: number): number {
+    const stepSpeedX = this.speedX, stepSpeedY = this.speedY;
+    const timeX = stepSpeedX !== 0 ? (this.destX - this.x) / stepSpeedX : 0;
+    const timeY = stepSpeedY !== 0 ? (this.destY - this.y) / stepSpeedY : 0;
+    const toEnd = Math.max(0, timeX, timeY);
+    const used = Math.min(deltaMs, toEnd);
+    let x = this.x + stepSpeedX * used;
+    let y = this.y + stepSpeedY * used;
+    if (used >= toEnd || Actor.reached(x, this.destX, stepSpeedX) && Actor.reached(y, this.destY, stepSpeedY)) {
+      x = this.destX; y = this.destY;
+      this.speedX = 0; this.speedY = 0;
+    }
+    this.setPosition(x, y);
+    // Round the actual position, not half of the remaining duration: a
+    // redirected partial step must keep the same physical tile boundary.
+    const logicalTile = screenToMovementTile(x, y, stepSpeedX, stepSpeedY);
+    this.tileX = logicalTile.tx;
+    this.tileY = logicalTile.ty;
+    if (!this.moving) {
+      this.tileX = this.segmentTargetTile.tx;
+      this.tileY = this.segmentTargetTile.ty;
+    }
+    return used;
   }
 }

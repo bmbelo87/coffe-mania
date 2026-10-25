@@ -3,9 +3,13 @@ import { STAGE_HEIGHT, STAGE_WIDTH } from '../../core/stage';
 import { COFFEE_GROUPS, CoffeeClient, coffeeMastery, loadCoffeeArt, loadCoffeeInterfaceArt,
   type CoffeeGroup, type CoffeeInterfaceArt, type CoffeeRecipe, type CoffeeSnapshot } from '../../game/coffees';
 import type { PlayerState } from '../../game/player-state';
+import { withBalance, type BalanceDelta, type BalancePrediction } from '../../game/optimistic';
 import { PopupOpening } from './PopupOpening';
 import { coffeeCard } from './CoffeeCardParts';
 import { coffeeTabSkin } from './CoffeeTabParts';
+
+/** caféGranas for a full energy recharge (shared/coffeecatalog, RechargeCash). */
+const COFFEE_RECHARGE_CASH = 4;
 
 export const COFFEE_LAYOUT = {
   width: 648, height: 586, scale: 1.4,
@@ -43,7 +47,7 @@ export class CoffeeScreenModal {
   private generation = 0;
   private snapshotSerial = 0;
 
-  constructor(private readonly client: CoffeeClient, private readonly onState: (state: PlayerState) => void) {
+  constructor(private readonly client: CoffeeClient, private readonly onState: (state: PlayerState) => void, private readonly balance?: BalancePrediction) {
     this.view.label = 'coffee-modal'; this.view.visible = false;
     const backdrop = new Graphics().rect(-12000, -12000, 24000, 24000).fill({ color: 0x000000, alpha: .3 });
     backdrop.eventMode = 'static'; backdrop.hitArea = new Rectangle(-12000, -12000, 24000, 24000);
@@ -92,15 +96,25 @@ export class CoffeeScreenModal {
   }
   private async act(action: 'select' | 'recharge', recipeId?: string) {
     if (this.busy || this.disposed) return;
-    this.busy = true; this.snapshotSerial++; this.message = ''; this.draw();
-    const generation = this.generation, machineId = this.machineId;
+    const generation = this.generation, machineId = this.machineId, previous = this.state;
+    // The choice shows at once; the server's answer replaces it, or a refusal restores it.
+    const predicted = previous ? this.predict(previous, action, machineId, recipeId) : undefined;
+    const token = predicted ? this.balance?.predict(predicted.delta) : undefined;
+    this.busy = true; this.snapshotSerial++; this.message = '';
+    if (predicted) { this.state = predicted.state; if (action === 'recharge') this.help = false; }
+    this.draw();
     try {
       const state = await this.client.act(action, machineId, { recipeId });
+      this.balance?.settle(token, true);
       if (this.disposed) return;
       this.onState(state.playerState);
       if (generation === this.generation) { this.state = state; if (action === 'recharge') this.help = false; }
     } catch (error) {
-      if (!this.disposed && generation === this.generation) this.message = error instanceof Error ? error.message : 'Ação recusada.';
+      this.balance?.settle(token, false);
+      if (!this.disposed && generation === this.generation) {
+        if (predicted && this.state === predicted.state) this.state = previous;
+        this.message = error instanceof Error ? error.message : 'Ação recusada.';
+      }
     } finally {
       this.busy = false;
       if (!this.disposed) {
@@ -109,6 +123,16 @@ export class CoffeeScreenModal {
       }
     }
   }
+  /** A recharge costs `RECHARGE_CASH` caféGranas (shared/coffeecatalog); choosing is free. */
+  private predict(state: CoffeeSnapshot, action: 'select' | 'recharge', machineId: string, recipeId?: string): { state: CoffeeSnapshot; delta: BalanceDelta } | undefined {
+    if (action === 'select') return recipeId ? { state: { ...state, selected: { ...state.selected, [machineId]: recipeId } }, delta: {} } : undefined;
+    const player = state.playerState;
+    const missing = player.energy.maximum - player.energy.current;
+    if (missing <= 0 || player.cash < COFFEE_RECHARGE_CASH) return undefined;
+    const delta = { cash: -COFFEE_RECHARGE_CASH, energy: missing };
+    return { state: { ...state, playerState: withBalance(player, delta) }, delta };
+  }
+
   private hit(name: string, x: number, y: number, width: number, height: number, activate: () => void) {
     const target = new Container(); target.label = name; target.position.set(x, y);
     target.hitArea = new Rectangle(0, 0, width, height); target.eventMode = 'static'; target.cursor = 'pointer';
