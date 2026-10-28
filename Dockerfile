@@ -20,7 +20,11 @@ RUN CGO_ENABLED=0 go build -o /app/bin/coffe-game ./game-server
 
 # Stage 3: Container final enxuto com Caddy
 FROM alpine:3.21
-RUN apk add --no-cache caddy bash ca-certificates tzdata
+ARG LITESTREAM_VERSION=0.5.17
+RUN apk add --no-cache caddy bash ca-certificates tzdata curl \
+  && curl -fsSL "https://github.com/benbjohnson/litestream/releases/download/v${LITESTREAM_VERSION}/litestream-${LITESTREAM_VERSION}-linux-x86_64.tar.gz" \
+     | tar -xz -C /usr/local/bin litestream \
+  && apk del curl
 
 WORKDIR /app
 
@@ -30,7 +34,8 @@ COPY --from=frontend-builder /app/game/dist /app/game/dist
 
 COPY Caddyfile /app/Caddyfile
 COPY entrypoint.sh /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh /app/coffe-database /app/coffe-game
+COPY deploy/litestream.render.yml /app/litestream.yml
+RUN chmod +x /app/entrypoint.sh /app/coffe-database /app/coffe-game /usr/local/bin/litestream
 
 EXPOSE 10000
 
