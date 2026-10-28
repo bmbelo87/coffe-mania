@@ -13,7 +13,7 @@ export COFFE_GAME_ADDR=127.0.0.1:8091
 export COFFE_PUBLIC_DIR=/app/game/dist
 export COFFE_DEV_SEED=true
 export COFFE_DEV_TOOLS=true
-export COFFE_SECURE_COOKIES=false
+export COFFE_SECURE_COOKIES=true
 
 echo "Iniciando PocketBase na porta 8090..."
 /app/coffe-database serve --http=127.0.0.1:8090 --dir=/app/pb_data &

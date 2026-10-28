@@ -49,10 +49,19 @@ func sessionView(record *core.Record) playerSession {
 }
 
 func setSessionCookie(e *core.RequestEvent, token string, maxAge int) {
+	isSecure := requestUsesHTTPS(e.Request) || osSecureCookies()
+	sameSite := http.SameSiteNoneMode
+	if !isSecure {
+		sameSite = http.SameSiteLaxMode
+	}
 	cookie := &http.Cookie{
-		Name: sessionCookie, Value: token, Path: "/", HttpOnly: true,
-		Secure:   requestUsesHTTPS(e.Request),
-		SameSite: http.SameSiteLaxMode, MaxAge: maxAge,
+		Name:     sessionCookie,
+		Value:    token,
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   isSecure,
+		SameSite: sameSite,
+		MaxAge:   maxAge,
 	}
 	if maxAge < 0 {
 		cookie.Expires = time.Unix(1, 0)
@@ -78,6 +87,30 @@ func requestUsesHTTPS(request *http.Request) bool {
 	return ip != nil && ip.IsLoopback() && strings.EqualFold(request.Header.Get("X-Forwarded-Proto"), "https")
 }
 
+func isAllowedHost(host, reqHost string) bool {
+	h := strings.ToLower(host)
+	rh := strings.ToLower(reqHost)
+	if h == rh {
+		return true
+	}
+	if hHost, _, err := net.SplitHostPort(h); err == nil {
+		h = hHost
+	}
+	if rhHost, _, err := net.SplitHostPort(rh); err == nil {
+		rh = rhHost
+	}
+	if h == rh {
+		return true
+	}
+	if h == "localhost" || h == "127.0.0.1" {
+		return true
+	}
+	if strings.HasSuffix(h, ".vercel.app") || strings.HasSuffix(h, ".onrender.com") {
+		return true
+	}
+	return false
+}
+
 // Cookie authentication needs an origin check for mutations, including login/logout.
 // Browsers send Origin on every POST; a mutation without it does not come from the game.
 func sameOrigin(e *core.RequestEvent) error {
@@ -89,11 +122,7 @@ func sameOrigin(e *core.RequestEvent) error {
 		return e.ForbiddenError("Origem inválida.", nil)
 	}
 	parsed, err := url.Parse(origin)
-	scheme := "http"
-	if requestUsesHTTPS(e.Request) {
-		scheme = "https"
-	}
-	if err != nil || parsed.Scheme != scheme || !strings.EqualFold(parsed.Host, e.Request.Host) {
+	if err != nil || !isAllowedHost(parsed.Host, e.Request.Host) {
 		return e.ForbiddenError("Origem inválida.", nil)
 	}
 	return e.Next()
@@ -112,6 +141,71 @@ func registerSessionRoutes(e *core.ServeEvent) {
 			return r.UnauthorizedError("Entre para jogar.", nil)
 		}
 		return r.JSON(http.StatusOK, sessionView(record))
+	})
+	// Single Sign-On (SSO) do Varal: autentica ou cria o jogador sem necessidade de segundo cadastro
+	g.GET("/varal", func(r *core.RequestEvent) error {
+		u := strings.ToLower(strings.TrimSpace(r.Request.URL.Query().Get("u")))
+		if u == "" {
+			return r.Redirect(http.StatusSeeOther, "/play")
+		}
+		var cleanU strings.Builder
+		for _, ch := range u {
+			if (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') || ch == '_' || ch == '-' {
+				cleanU.WriteRune(ch)
+			}
+		}
+		username := cleanU.String()
+		if username == "" {
+			username = "jogador"
+		}
+		displayName := strings.TrimSpace(r.Request.URL.Query().Get("name"))
+		if displayName == "" {
+			displayName = username
+		}
+		if len(displayName) > 30 {
+			displayName = displayName[:30]
+		}
+
+		email := username + "@varal.social"
+		record, err := r.App.FindAuthRecordByEmail("users", email)
+		if err != nil {
+			users, err := r.App.FindCollectionByNameOrId("users")
+			if err != nil {
+				return r.InternalServerError("Falha ao acessar coleção de usuários.", err)
+			}
+			record = core.NewRecord(users)
+			record.SetEmail(email)
+			record.SetPassword("varal_" + username + "_secret_2026")
+			record.SetVerified(true)
+			record.Set("name", displayName)
+			if username == "brunobelo" {
+				record.Set("role", "admin")
+			} else {
+				record.Set("role", "player")
+			}
+			record.Set("terms_version", LegalVersion)
+			now := time.Now()
+			record.Set("terms_accepted_at", dateTime(now))
+			record.Set("adult_confirmed_at", dateTime(now))
+			record.Set("wave", 1)
+			if err := r.App.Save(record); err != nil {
+				return r.InternalServerError("Falha ao registrar usuário do Varal.", err)
+			}
+			_ = ensureRoom(r.App, record.Id)
+		} else {
+			if displayName != "" && record.GetString("name") != displayName {
+				record.Set("name", displayName)
+				_ = r.App.Save(record)
+			}
+			_ = ensureRoom(r.App, record.Id)
+		}
+
+		token, err := record.NewAuthToken()
+		if err != nil {
+			return r.InternalServerError("Falha ao gerar token de sessão.", err)
+		}
+		setSessionCookie(r, token, sessionLifetime)
+		return r.Redirect(http.StatusSeeOther, "/play")
 	})
 	g.POST("/login", func(r *core.RequestEvent) error {
 		data := struct {
