@@ -1,0 +1,18 @@
+name: Keep Alive Render
+
+on:
+  schedule:
+    # Executa a cada 10 minutos (Render dorme com 15 minutos sem requisições)
+    - cron: '*/10 * * * *'
+  workflow_dispatch: # Permite disparar manualmente para testar
+
+jobs:
+  ping:
+    name: Ping Coffe Mania on Render
+    runs-on: ubuntu-latest
+    steps:
+      - name: Acordar ou manter ativo o servico
+        run: |
+          echo "Enviando ping para o Render..."
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -m 60 "https://coffe-mania.onrender.com/api/coffe/status" || echo "000")
+          echo "Status retornado: $STATUS"
