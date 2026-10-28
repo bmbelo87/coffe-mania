@@ -1,0 +1,20 @@
+{
+	admin off
+}
+
+:{$PORT:10000} {
+	encode gzip zstd
+
+	# WebSocket do servidor do jogo
+	@game path /game/*
+	reverse_proxy @game 127.0.0.1:8091
+
+	# PocketBase API e rotas de sessão
+	@api path /api/* /_/* /_
+	reverse_proxy @api 127.0.0.1:8090
+
+	# Frontend estático em Pixi.js
+	root * /app/game/dist
+	file_server
+	try_files {path} /index.html
+}
