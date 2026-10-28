@@ -9,10 +9,9 @@ COPY . .
 RUN npm run build --workspace game
 
 # Stage 2: Build dos binários em Go (PocketBase e WebSocket Game Server)
-FROM golang:1.24-alpine AS backend-builder
+FROM golang:1.27-alpine AS backend-builder
 RUN apk add --no-cache git
 WORKDIR /app
-ENV GOTOOLCHAIN=auto
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
