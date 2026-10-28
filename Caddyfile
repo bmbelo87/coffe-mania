@@ -5,16 +5,16 @@
 :{$PORT:10000} {
 	encode gzip zstd
 
-	# WebSocket do servidor do jogo
-	@game path /game/*
-	reverse_proxy @game 127.0.0.1:8091
+	header {
+		-X-Frame-Options
+		-Content-Security-Policy
+	}
 
-	# PocketBase API e rotas de sessão
-	@api path /api/* /_/* /_
-	reverse_proxy @api 127.0.0.1:8090
+	route {
+		# WebSocket do servidor do jogo
+		reverse_proxy /game/* 127.0.0.1:8091
 
-	# Frontend estático em Pixi.js
-	root * /app/game/dist
-	file_server
-	try_files {path} /index.html
+		# PocketBase cuida das APIs e de servir o frontend estático compilado
+		reverse_proxy 127.0.0.1:8090
+	}
 }
