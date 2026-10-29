@@ -4013,15 +4013,39 @@ export class RoomScreen implements Screen {
 
   private updateMobileHudLayout(): void {
     const scale = this.isMobileLandscape ? MOBILE_LANDSCAPE_HUD_SCALE : 1;
+    const stageScale = this.stageScale > 0 ? this.stageScale : 1;
+    const viewportWidth = typeof window === 'undefined' ? STAGE_WIDTH : window.innerWidth / stageScale;
+    const viewportHeight = typeof window === 'undefined' ? STAGE_HEIGHT : window.innerHeight / stageScale;
+    const overhangX = Math.max(0, (viewportWidth - STAGE_WIDTH) / 2);
+    const overhangY = Math.max(0, (viewportHeight - STAGE_HEIGHT) / 2);
+    const topY = -overhangY;
+    const bottomY = STAGE_HEIGHT + overhangY;
+
     if (this.topBars) {
       this.topBars.view.scale.set(scale);
-      this.topBars.view.x = (STAGE_WIDTH - this.topBarsBaseWidth * scale) / 2;
+      this.topBars.view.position.set(
+        (STAGE_WIDTH - this.topBarsBaseWidth * scale) / 2,
+        topY,
+      );
+      this.topBars.layoutForViewport(-overhangX, STAGE_WIDTH + overhangX, scale);
     }
     // Scale complete toolbars around their bottom-center pivots, including all contents.
     const actionBarScale = scale * ACTION_BAR_UI_SCALE;
     this.actionBarLayer.scale.set(actionBarScale);
+    this.actionBarLayer.position.set(STAGE_WIDTH / 2, bottomY);
     this.storeBar?.setHudScale(actionBarScale);
+    this.storeBar?.view.position.set(STAGE_WIDTH / 2, bottomY);
+    if (this.hud) {
+      this.hud.position.set(16 - overhangX, bottomY - 12);
+    }
+    if (this.connectionHint) {
+      this.connectionHint.position.set(25 - overhangX, bottomY - 50);
+    }
+    this.backdrop.position.set(-overhangX, topY);
+    this.backdrop.hitArea = new Rectangle(0, 0, STAGE_WIDTH + overhangX * 2, bottomY - topY);
   }
+
+  private stageScale = 1;
 
   /**
    * Escala do letterbox. Serve para duas coisas: reamostrar o texto do HUD e
@@ -4029,6 +4053,7 @@ export class RoomScreen implements Screen {
    * permite ela desfazer a reamostragem da arte.
    */
   setStageScale(scale: number): void {
+    this.stageScale = scale;
     this.wardrobeModal?.setStageScale(scale);
     this.settingsModal?.setStageScale(scale);
     const dpr = typeof window === 'undefined' ? 1 : window.devicePixelRatio || 1;
@@ -4036,9 +4061,11 @@ export class RoomScreen implements Screen {
     this.outerScale = scale * dpr;
     this.camera.setPixelScale(this.outerScale);
     const background = this.artProvider?.art.sceneBackground;
-    if (this.isMobileLandscape && background) {
+    const overhang = scale > 0 && typeof window !== 'undefined'
+      ? Math.max(0, (window.innerWidth / scale - STAGE_WIDTH) / 2)
+      : 0;
+    if ((this.isMobileLandscape || overhang > 0) && background) {
       const tiles = background.tiles ?? [background];
-      const overhang = scale > 0 ? Math.max(0, (window.innerWidth / scale - STAGE_WIDTH) / 2) : 0;
       this.camera.setHorizontalCover({
         left: background.horizontalCover?.left ?? Math.min(...tiles.map((tile) => tile.left)),
         right: background.horizontalCover?.right ?? Math.max(...tiles.map((tile) => tile.left + tile.width)),

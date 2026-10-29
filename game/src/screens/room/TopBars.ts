@@ -29,6 +29,9 @@ const ICON_HEIGHT = 48;
 const ICON_BORDER_OFFSET = 2;
 /** Visible outlines of the bars, excluding the atlas's 1600 x 900 transparent canvas. */
 const TOP_BARS_VISIBLE_FRAME = new Rectangle(265, 33, 1092, 47);
+const CURRENCIES_DEFAULT_X = 265;
+const RESOURCES_LEFT_X = 700;
+const RESOURCES_RIGHT_X = 1357;
 
 /** As duas primeiras são sólidas; as duas últimas usam os pares do barber pole. */
 export const TOP_BAR_PALETTES = [
@@ -55,6 +58,7 @@ export class TopBars {
 
   private readonly bars: ProgressBar[];
   private readonly currencies: CurrencyHud;
+  private readonly resourcesGroup = new Container();
   private readonly resourceTextures: readonly Texture[];
   private readonly labels: Text[];
   private readonly blueLevelLabel: Text;
@@ -68,6 +72,7 @@ export class TopBars {
     this.bonusEnergyTexture = textures.energyIcons?.bonus;
     this.view.label = 'room-top-bars';
     this.view.x = (STAGE_WIDTH - textures.back.width) / 2;
+    this.resourcesGroup.label = 'room-top-bars-resources';
 
     // As duas moedas têm sua própria moldura contínua; só os recursos usam o atlas.
     const resourceFrame = new Rectangle(700, 0, textures.back.width - 700, textures.back.height);
@@ -79,7 +84,7 @@ export class TopBars {
     back.x = resourceFrame.x;
     back.label = 'room-top-bars-back';
     back.eventMode = 'none';
-    this.view.addChild(back);
+    this.resourcesGroup.addChild(back);
 
     this.bars = TOP_BAR_SLOTS.slice(2).map((rect, resourceIndex) => {
       const index = resourceIndex + 2;
@@ -92,7 +97,7 @@ export class TopBars {
       });
       bar.view.label = `room-top-bar-progress-${index + 1}`;
       bar.view.eventMode = 'none';
-      this.view.addChild(bar.view);
+      this.resourcesGroup.addChild(bar.view);
       return bar;
     });
 
@@ -100,13 +105,13 @@ export class TopBars {
     front.x = resourceFrame.x;
     front.label = 'room-top-bars-front';
     front.eventMode = 'none';
-    this.view.addChild(front);
+    this.resourcesGroup.addChild(front);
 
     this.currencies = new CurrencyHud(
       { atlas: textures.icons, cash: TOP_BAR_ICON_FRAMES[0], gold: TOP_BAR_ICON_FRAMES[1] }, onAddCurrency, textures.currencyAdd,
     );
-    this.currencies.view.position.set(265, 35);
-    this.view.addChild(this.currencies.view);
+    this.currencies.view.position.set(CURRENCIES_DEFAULT_X, 35);
+    this.view.addChild(this.resourcesGroup, this.currencies.view);
 
     TOP_BAR_ICON_FRAMES.forEach((frame, index) => {
       if (index < 2) return;
@@ -125,7 +130,7 @@ export class TopBars {
         this.energyIcon = icon;
         this.normalEnergyTexture = icon.texture;
       }
-      this.view.addChild(icon);
+      this.resourcesGroup.addChild(icon);
     });
 
     this.labels = TOP_BAR_SLOTS.slice(2).map((slot, resourceIndex) => {
@@ -146,7 +151,7 @@ export class TopBars {
       label.anchor.set(0.5, 0.5);
       label.position.set(slot.left + slot.width / 2, slot.top + slot.height);
       label.eventMode = 'none';
-      this.view.addChild(label);
+      this.resourcesGroup.addChild(label);
       return label;
     });
     const blueSlot = TOP_BAR_SLOTS[2];
@@ -166,9 +171,39 @@ export class TopBars {
     this.blueLevelLabel.anchor.set(0, 0.5);
     this.blueLevelLabel.position.set(blueSlot.left + blueSlot.width - 12, blueSlot.top + blueSlot.height / 2);
     this.blueLevelLabel.eventMode = 'none';
-    this.view.addChild(this.blueLevelLabel);
+    this.resourcesGroup.addChild(this.blueLevelLabel);
     this.setState(state ?? emptyPlayerState(), true);
     this.view.visible = state !== undefined;
+  }
+
+  /**
+   * Ajusta os painéis de moedas (esquerda) e recursos (direita) às bordas visíveis
+   * da janela quando a tela é mais larga ou mais estreita que 16:9.
+   */
+  layoutForViewport(visibleLeft: number, visibleRight: number, hudScale = 1): void {
+    const safeScale = hudScale > 0 ? hudScale : 1;
+    const localLeft = (visibleLeft - this.view.x) / safeScale;
+    const localRight = (visibleRight - this.view.x) / safeScale;
+    const margin = 28;
+    const minGap = 28;
+    const currenciesWidth = 394;
+    const resourcesWidth = RESOURCES_RIGHT_X - RESOURCES_LEFT_X;
+
+    // Ancora moedas no canto superior esquerdo e recursos no canto superior direito da área visível,
+    // respeitando os limites originais como máximo de aproximação ao centro.
+    let targetCurrenciesX = Math.min(CURRENCIES_DEFAULT_X, localLeft + margin);
+    let targetResourcesRight = Math.max(RESOURCES_RIGHT_X, localRight - margin);
+    let targetResourcesLeft = targetResourcesRight - resourcesWidth;
+
+    if (targetCurrenciesX + currenciesWidth + minGap > targetResourcesLeft) {
+      const center = (localLeft + localRight) / 2;
+      const totalWidth = currenciesWidth + minGap + resourcesWidth;
+      targetCurrenciesX = center - totalWidth / 2;
+      targetResourcesLeft = targetCurrenciesX + currenciesWidth + minGap;
+    }
+
+    this.currencies.view.x = targetCurrenciesX;
+    this.resourcesGroup.x = targetResourcesLeft - RESOURCES_LEFT_X;
   }
 
   get percentages(): readonly number[] {
@@ -186,9 +221,16 @@ export class TopBars {
   containsGlobalPoint(global: { x: number; y: number }): boolean {
     if (!this.view.visible || !this.view.renderable) return false;
     if (this.currencies.containsGlobalPoint(global)) return true;
-    const point = this.view.toLocal(global);
-    if (TOP_BARS_VISIBLE_FRAME.contains(point.x, point.y)) return true;
-    return this.view.children.some((child) => {
+    const resPoint = this.resourcesGroup.toLocal(global);
+    if (
+      resPoint.x >= RESOURCES_LEFT_X &&
+      resPoint.x <= RESOURCES_RIGHT_X &&
+      resPoint.y >= TOP_BARS_VISIBLE_FRAME.y &&
+      resPoint.y <= TOP_BARS_VISIBLE_FRAME.y + TOP_BARS_VISIBLE_FRAME.height
+    ) {
+      return true;
+    }
+    return this.resourcesGroup.children.some((child) => {
       if (!(child instanceof Text) && !child.label.startsWith('room-top-bar-icon-')) return false;
       const bounds = child.getBounds();
       return global.x >= bounds.x && global.y >= bounds.y
