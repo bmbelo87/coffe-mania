@@ -75,7 +75,10 @@ async function boot(): Promise<void> {
   const app = await createApplication(host);
 
   // As coordenadas de projeto permanecem em 1920×1080; a stage aplica o letterbox.
-  const stage = new Stage(() => ({ width: window.innerWidth, height: window.innerHeight }));
+  const stage = new Stage(() => ({
+    width: window.visualViewport?.width ?? window.innerWidth,
+    height: window.visualViewport?.height ?? window.innerHeight,
+  }));
   app.stage.addChild(stage.root);
 
   const screens = new ScreenManager(stage.root);

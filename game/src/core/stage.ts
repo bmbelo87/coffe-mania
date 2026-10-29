@@ -51,6 +51,9 @@ export class Stage {
     this.viewport = viewport;
     window.addEventListener('resize', this.onWindowChange);
     window.addEventListener('orientationchange', this.onWindowChange);
+    document.addEventListener('fullscreenchange', this.onWindowChange);
+    window.visualViewport?.addEventListener('resize', this.onWindowChange);
+    window.visualViewport?.addEventListener('scroll', this.onWindowChange);
     this.layout();
   }
 
@@ -78,6 +81,9 @@ export class Stage {
   destroy(): void {
     window.removeEventListener('resize', this.onWindowChange);
     window.removeEventListener('orientationchange', this.onWindowChange);
+    document.removeEventListener('fullscreenchange', this.onWindowChange);
+    window.visualViewport?.removeEventListener('resize', this.onWindowChange);
+    window.visualViewport?.removeEventListener('scroll', this.onWindowChange);
     this.listeners.clear();
     this.root.destroy({ children: true });
   }

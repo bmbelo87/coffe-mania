@@ -4014,23 +4014,27 @@ export class RoomScreen implements Screen {
   private updateMobileHudLayout(): void {
     const scale = this.isMobileLandscape ? MOBILE_LANDSCAPE_HUD_SCALE : 1;
     const stageScale = this.stageScale > 0 ? this.stageScale : 1;
-    const viewportWidth = typeof window === 'undefined' ? STAGE_WIDTH : window.innerWidth / stageScale;
-    const viewportHeight = typeof window === 'undefined' ? STAGE_HEIGHT : window.innerHeight / stageScale;
+    const rawW = typeof window === 'undefined' ? STAGE_WIDTH : (window.visualViewport?.width ?? window.innerWidth);
+    const rawH = typeof window === 'undefined' ? STAGE_HEIGHT : (window.visualViewport?.height ?? window.innerHeight);
+    const isPortraitWindow = rawW < rawH;
+    const viewportWidth = rawW / stageScale;
+    const viewportHeight = rawH / stageScale;
     const overhangX = Math.max(0, (viewportWidth - STAGE_WIDTH) / 2);
     const overhangY = Math.max(0, (viewportHeight - STAGE_HEIGHT) / 2);
     const topY = -overhangY;
     const bottomY = STAGE_HEIGHT + overhangY;
 
     if (this.topBars) {
-      this.topBars.view.scale.set(scale);
+      const topScale = isPortraitWindow ? 1.55 : scale;
+      this.topBars.view.scale.set(topScale);
       this.topBars.view.position.set(
-        (STAGE_WIDTH - this.topBarsBaseWidth * scale) / 2,
+        (STAGE_WIDTH - this.topBarsBaseWidth * topScale) / 2,
         topY,
       );
-      this.topBars.layoutForViewport(-overhangX, STAGE_WIDTH + overhangX, scale);
+      this.topBars.layoutForViewport(-overhangX, STAGE_WIDTH + overhangX, topScale);
     }
     // Scale complete toolbars around their bottom-center pivots, including all contents.
-    const actionBarScale = scale * ACTION_BAR_UI_SCALE;
+    const actionBarScale = isPortraitWindow ? 1.8 : scale * ACTION_BAR_UI_SCALE;
     this.actionBarLayer.scale.set(actionBarScale);
     this.actionBarLayer.position.set(STAGE_WIDTH / 2, bottomY);
     this.storeBar?.setHudScale(actionBarScale);
@@ -4061,8 +4065,9 @@ export class RoomScreen implements Screen {
     this.outerScale = scale * dpr;
     this.camera.setPixelScale(this.outerScale);
     const background = this.artProvider?.art.sceneBackground;
-    const overhang = scale > 0 && typeof window !== 'undefined'
-      ? Math.max(0, (window.innerWidth / scale - STAGE_WIDTH) / 2)
+    const rawW = typeof window === 'undefined' ? STAGE_WIDTH : (window.visualViewport?.width ?? window.innerWidth);
+    const overhang = scale > 0
+      ? Math.max(0, (rawW / scale - STAGE_WIDTH) / 2)
       : 0;
     if ((this.isMobileLandscape || overhang > 0) && background) {
       const tiles = background.tiles ?? [background];

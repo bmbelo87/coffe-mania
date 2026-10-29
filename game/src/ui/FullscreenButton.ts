@@ -126,8 +126,21 @@ export class FullscreenButton {
 
   async toggle(): Promise<void> {
     try {
-      if (this.isFullscreen) await document.exitFullscreen();
-      else await this.target.requestFullscreen?.();
+      if (this.isFullscreen) {
+        try {
+          (screen.orientation as ScreenOrientation & { unlock?: () => void })?.unlock?.();
+        } catch {
+          // Alguns navegadores não suportam unlock de orientação.
+        }
+        await document.exitFullscreen();
+      } else {
+        await this.target.requestFullscreen?.();
+        try {
+          await (screen.orientation as ScreenOrientation & { lock?: (orientation: string) => Promise<void> })?.lock?.('landscape');
+        } catch {
+          // Em desktop ou iOS o lock pode não estar disponível; segue em tela cheia normalmente.
+        }
+      }
     } catch (error) {
       // Navegador pode negar (sem gesto do usuário, iframe sem allow, iOS).
       console.warn('[fullscreen] recusado', error);

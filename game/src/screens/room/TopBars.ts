@@ -189,17 +189,14 @@ export class TopBars {
     const currenciesWidth = 394;
     const resourcesWidth = RESOURCES_RIGHT_X - RESOURCES_LEFT_X;
 
-    // Ancora moedas no canto superior esquerdo e recursos no canto superior direito da área visível,
-    // respeitando os limites originais como máximo de aproximação ao centro.
-    let targetCurrenciesX = Math.min(CURRENCIES_DEFAULT_X, localLeft + margin);
-    let targetResourcesRight = Math.max(RESOURCES_RIGHT_X, localRight - margin);
+    // Ancora moedas no canto superior esquerdo e recursos no canto superior direito da área visível.
+    let targetCurrenciesX = localLeft + margin;
+    let targetResourcesRight = localRight - margin;
     let targetResourcesLeft = targetResourcesRight - resourcesWidth;
 
     if (targetCurrenciesX + currenciesWidth + minGap > targetResourcesLeft) {
-      const center = (localLeft + localRight) / 2;
-      const totalWidth = currenciesWidth + minGap + resourcesWidth;
-      targetCurrenciesX = center - totalWidth / 2;
-      targetResourcesLeft = targetCurrenciesX + currenciesWidth + minGap;
+      targetCurrenciesX = localLeft + 10;
+      targetResourcesLeft = localRight - 10 - resourcesWidth;
     }
 
     this.currencies.view.x = targetCurrenciesX;
