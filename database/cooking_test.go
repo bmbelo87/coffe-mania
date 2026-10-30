@@ -436,3 +436,19 @@ func TestSpicesSpeedUpAndRecoverDishes(t *testing.T) {
 		t.Fatalf("sem unidade no estoque não usa: %v", err)
 	}
 }
+
+func TestKitchenLimitGrowsWithLevelAndFloor(t *testing.T) {
+	cases := []struct {
+		kind              string
+		level, x, y, want int
+	}{
+		{"stove", 1, 6, 9, 3}, {"stove", 6, 6, 9, 4}, {"stove", 14, 6, 9, 6}, {"stove", 99, 6, 9, 6},
+		{"counter", 1, 6, 9, 3}, {"counter", 5, 6, 9, 4}, {"counter", 9, 6, 9, 5}, {"counter", 99, 6, 9, 5},
+		{"stove", 99, 7, 9, 7}, {"stove", 99, 13, 14, 20}, {"counter", 99, 13, 14, 16},
+	}
+	for _, c := range cases {
+		if got := kitchenLimit(c.kind, c.level, c.x, c.y); got != c.want {
+			t.Errorf("%s nível %d, piso %dx%d: %d, esperado %d", c.kind, c.level, c.x, c.y, got, c.want)
+		}
+	}
+}

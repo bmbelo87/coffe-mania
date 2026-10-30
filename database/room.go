@@ -27,7 +27,7 @@ var errRoomOperation = errors.New("Identificador de operação já utilizado em 
 var errRoomBusy = errors.New("Não é possível guardar um fogão com comida.")
 var errRoomNotSellable = errors.New("Este item não pode ser vendido.")
 var errCounterBusy = errors.New("Não é possível guardar um balcão com comida.")
-var errKitchenLimit = errors.New("Você já tem o máximo de itens deste tipo permitido no seu nível.")
+var errKitchenLimit = errors.New("Você já tem o máximo de itens deste tipo permitido no seu nível e no tamanho do seu café.")
 
 const starterCounterItemID = 3020069
 
@@ -267,24 +267,21 @@ func ensureStarterCounter(app core.App, userID string) error {
 	})
 }
 
-// kitchenLimit is how many stoves or counters a level may own (stored ones included), as in the
-// original: the FAQ ties both to the level; players report 3 of each at level 1, +1 counter at
-// level 5 and +1 stove at level 6. Later steps are not documented yet. 0 means no limit.
-func kitchenLimit(kind string, level int) int {
+// kitchenLimit is how many stoves or counters a player may own (stored ones included). It is the
+// smaller of a level cap and a café floor cap. The level cap follows the original (3 of each at
+// level 1, +1 counter at level 5, +1 stove at level 6) and keeps going: +1 every 4 levels. The
+// floor cap is proportional to the café floor (walls and patio excluded): the 6x9 starter floor
+// holds 6 stoves and 5 counters, and each expansion raises it. 0 means no limit.
+func kitchenLimit(kind string, level, floorX, floorY int) int {
+	area := floorX * floorY
 	switch kind {
 	case "coffee_machine":
 		// Provisional local ownership cap; it is not inferred from the number of supplied art stages.
 		return coffeecatalog.MaximumOwned
 	case "stove":
-		if level >= 6 {
-			return 4
-		}
-		return 3
+		return min(3+max(0, level-2)/4, max(3, area/9))
 	case "counter":
-		if level >= 5 {
-			return 4
-		}
-		return 3
+		return min(3+max(0, level-1)/4, max(3, area*5/54))
 	}
 	return 0
 }
@@ -391,7 +388,11 @@ func mutateRoom(app core.App, userID, action string, command roomCommand) (roomS
 			if err != nil {
 				return err
 			}
-			if limit := kitchenLimit(item.Kind, state.GetInt("level")); limit > 0 {
+			room, err := tx.FindFirstRecordByData("player_rooms", "user", userID)
+			if err != nil {
+				return err
+			}
+			if limit := kitchenLimit(item.Kind, state.GetInt("level"), room.GetInt("tiles_x")-1, room.GetInt("tiles_y")-1); limit > 0 {
 				owned, err := tx.FindRecordsByFilter("player_inventory", "user={:user}", "", 0, 0, dbx.Params{"user": userID})
 				if err != nil {
 					return err
